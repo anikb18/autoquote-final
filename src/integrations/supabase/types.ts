@@ -14,19 +14,25 @@ export type Database = {
           active: boolean | null
           dealer_name: string
           id: string
-          subscription_type: string | null
+          subscription_type:
+            | Database["public"]["Enums"]["subscription_level"]
+            | null
         }
         Insert: {
           active?: boolean | null
           dealer_name: string
           id: string
-          subscription_type?: string | null
+          subscription_type?:
+            | Database["public"]["Enums"]["subscription_level"]
+            | null
         }
         Update: {
           active?: boolean | null
           dealer_name?: string
           id?: string
-          subscription_type?: string | null
+          subscription_type?:
+            | Database["public"]["Enums"]["subscription_level"]
+            | null
         }
         Relationships: []
       }
@@ -68,7 +74,11 @@ export type Database = {
           created_at: string | null
           has_trade_in: boolean | null
           id: string
+          price_paid: number | null
+          pricing_option: string | null
           status: string | null
+          trade_in_visibility_days: number | null
+          trade_in_visibility_start: string | null
           user_id: string
         }
         Insert: {
@@ -76,7 +86,11 @@ export type Database = {
           created_at?: string | null
           has_trade_in?: boolean | null
           id?: string
+          price_paid?: number | null
+          pricing_option?: string | null
           status?: string | null
+          trade_in_visibility_days?: number | null
+          trade_in_visibility_start?: string | null
           user_id: string
         }
         Update: {
@@ -84,7 +98,11 @@ export type Database = {
           created_at?: string | null
           has_trade_in?: boolean | null
           id?: string
+          price_paid?: number | null
+          pricing_option?: string | null
           status?: string | null
+          trade_in_visibility_days?: number | null
+          trade_in_visibility_start?: string | null
           user_id?: string
         }
         Relationships: []
@@ -115,7 +133,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      subscription_level: "basic" | "premium"
     }
     CompositeTypes: {
       [_ in never]: never

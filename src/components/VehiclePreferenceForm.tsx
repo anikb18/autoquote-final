@@ -1,26 +1,73 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Car } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Label } from "@/components/ui/label";
 
 const VehiclePreferenceForm = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [hasTradeIn, setHasTradeIn] = useState(false);
+  const [pricingOption, setPricingOption] = useState<string>("");
+  const [formData, setFormData] = useState({
+    make: "",
+    model: "",
+    year: "",
+    minBudget: "",
+    maxBudget: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
+      const carDetails = {
+        make: formData.make,
+        model: formData.model,
+        year: parseInt(formData.year),
+        budget: {
+          min: parseInt(formData.minBudget),
+          max: parseInt(formData.maxBudget),
+        },
+      };
+
+      const { error } = await supabase.from('quotes').insert({
+        user_id: user.id,
+        car_details: carDetails,
+        has_trade_in: hasTradeIn,
+        pricing_option: hasTradeIn ? pricingOption : 'basic',
+        trade_in_visibility_start: hasTradeIn ? new Date().toISOString() : null,
+      });
+
+      if (error) throw error;
+
       toast({
-        title: "Preferences Submitted",
+        title: "Quote Request Submitted",
         description: "We'll connect you with dealers shortly.",
       });
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to submit quote request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   return (
@@ -31,32 +78,93 @@ const VehiclePreferenceForm = () => {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Make</label>
-        <Input placeholder="e.g., Toyota" className="w-full" />
+        <Label htmlFor="make">Make</Label>
+        <Input 
+          id="make"
+          placeholder="e.g., Toyota" 
+          value={formData.make}
+          onChange={(e) => handleInputChange('make', e.target.value)}
+          className="w-full" 
+        />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Model</label>
-        <Input placeholder="e.g., Camry" className="w-full" />
+        <Label htmlFor="model">Model</Label>
+        <Input 
+          id="model"
+          placeholder="e.g., Camry" 
+          value={formData.model}
+          onChange={(e) => handleInputChange('model', e.target.value)}
+          className="w-full" 
+        />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Year</label>
-        <Input type="number" min="2000" max="2025" placeholder="2024" className="w-full" />
+        <Label htmlFor="year">Year</Label>
+        <Input 
+          id="year"
+          type="number" 
+          min="2000" 
+          max="2025" 
+          placeholder="2024" 
+          value={formData.year}
+          onChange={(e) => handleInputChange('year', e.target.value)}
+          className="w-full" 
+        />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Budget Range</label>
+        <Label>Budget Range</Label>
         <div className="flex gap-4">
-          <Input type="number" placeholder="Min" className="w-1/2" />
-          <Input type="number" placeholder="Max" className="w-1/2" />
+          <Input 
+            type="number" 
+            placeholder="Min" 
+            value={formData.minBudget}
+            onChange={(e) => handleInputChange('minBudget', e.target.value)}
+            className="w-1/2" 
+          />
+          <Input 
+            type="number" 
+            placeholder="Max" 
+            value={formData.maxBudget}
+            onChange={(e) => handleInputChange('maxBudget', e.target.value)}
+            className="w-1/2" 
+          />
         </div>
       </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="tradeIn">Trade-In Option</Label>
+        <Select onValueChange={(value) => setHasTradeIn(value === 'yes')}>
+          <SelectTrigger id="tradeIn">
+            <SelectValue placeholder="Do you have a trade-in?" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="no">No Trade-In</SelectItem>
+            <SelectItem value="yes">Yes, I Have a Trade-In</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {hasTradeIn && (
+        <div className="space-y-2">
+          <Label htmlFor="pricingOption">Trade-In Visibility</Label>
+          <Select onValueChange={setPricingOption} value={pricingOption}>
+            <SelectTrigger id="pricingOption">
+              <SelectValue placeholder="Select visibility option" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="trade_in_10">10-Day Visibility ($10)</SelectItem>
+              <SelectItem value="trade_in_40">Unlimited Visibility ($40)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <Button 
         type="submit" 
         className="w-full bg-accent hover:bg-accent/90"
-        disabled={loading}
+        disabled={loading || (hasTradeIn && !pricingOption)}
       >
         {loading ? "Submitting..." : "Get Quotes"}
       </Button>
