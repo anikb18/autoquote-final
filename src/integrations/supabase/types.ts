@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          quote_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          quote_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          quote_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dealer_profiles: {
         Row: {
           active: boolean | null
@@ -41,6 +73,7 @@ export type Database = {
           created_at: string | null
           dealer_id: string | null
           id: string
+          is_accepted: boolean | null
           quote_id: string | null
           status: string | null
         }
@@ -48,6 +81,7 @@ export type Database = {
           created_at?: string | null
           dealer_id?: string | null
           id?: string
+          is_accepted?: boolean | null
           quote_id?: string | null
           status?: string | null
         }
@@ -55,6 +89,7 @@ export type Database = {
           created_at?: string | null
           dealer_id?: string | null
           id?: string
+          is_accepted?: boolean | null
           quote_id?: string | null
           status?: string | null
         }

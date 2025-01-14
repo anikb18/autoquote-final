@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import ChatInterface from "./ChatInterface";
 
 const BuyerDashboard = () => {
   const { data: quotes, isLoading } = useQuery({
@@ -15,6 +16,7 @@ const BuyerDashboard = () => {
             id,
             status,
             dealer_id,
+            is_accepted,
             dealer_profiles (
               dealer_name
             )
@@ -47,14 +49,26 @@ const BuyerDashboard = () => {
             </TableHeader>
             <TableBody>
               {quotes?.map((quote) => (
-                <TableRow key={quote.id}>
-                  <TableCell>{JSON.stringify(quote.car_details)}</TableCell>
-                  <TableCell>{quote.has_trade_in ? "Yes" : "No"}</TableCell>
-                  <TableCell>{quote.status}</TableCell>
-                  <TableCell>
-                    {quote.dealer_quotes?.length || 0} responses
-                  </TableCell>
-                </TableRow>
+                <>
+                  <TableRow key={quote.id}>
+                    <TableCell>{JSON.stringify(quote.car_details)}</TableCell>
+                    <TableCell>{quote.has_trade_in ? "Yes" : "No"}</TableCell>
+                    <TableCell>{quote.status}</TableCell>
+                    <TableCell>
+                      {quote.dealer_quotes?.length || 0} responses
+                    </TableCell>
+                  </TableRow>
+                  {quote.dealer_quotes?.some(dq => dq.is_accepted) && (
+                    <TableRow>
+                      <TableCell colSpan={4} className="p-4">
+                        <ChatInterface 
+                          quoteId={quote.id} 
+                          dealerId={quote.dealer_quotes.find(dq => dq.is_accepted)?.dealer_id}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
               ))}
             </TableBody>
           </Table>
