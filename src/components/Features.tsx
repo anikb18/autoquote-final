@@ -1,38 +1,41 @@
 import { Shield, Clock, DollarSign, MessageSquare } from "lucide-react";
-
-const features = [
-  {
-    icon: Shield,
-    title: "Trusted Dealers",
-    description: "All dealers are verified and rated by our community",
-  },
-  {
-    icon: Clock,
-    title: "Save Time",
-    description: "Get multiple quotes without visiting dealerships",
-  },
-  {
-    icon: DollarSign,
-    title: "Best Prices",
-    description: "Dealers compete to offer you the best deal",
-  },
-  {
-    icon: MessageSquare,
-    title: "Direct Communication",
-    description: "Chat directly with dealers after accepting quotes",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const Features = () => {
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      icon: Shield,
+      title: t('features.items.trusted.title'),
+      description: t('features.items.trusted.description'),
+    },
+    {
+      icon: Clock,
+      title: t('features.items.time.title'),
+      description: t('features.items.time.description'),
+    },
+    {
+      icon: DollarSign,
+      title: t('features.items.prices.title'),
+      description: t('features.items.prices.description'),
+    },
+    {
+      icon: MessageSquare,
+      title: t('features.items.communication.title'),
+      description: t('features.items.communication.description'),
+    },
+  ];
+
   return (
     <section className="py-24 bg-secondary/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Why Choose Us
+            {t('features.title')}
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We make car buying simple, transparent, and stress-free
+            {t('features.subtitle')}
           </p>
         </div>
 

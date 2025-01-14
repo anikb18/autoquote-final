@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Label } from "@/components/ui/label";
 
 const VehiclePreferenceForm = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [hasTradeIn, setHasTradeIn] = useState(false);
@@ -74,14 +76,14 @@ const VehiclePreferenceForm = () => {
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4 bg-white p-6 rounded-lg shadow-lg">
       <div className="flex items-center gap-2 text-primary mb-6">
         <Car className="w-6 h-6" />
-        <h3 className="text-xl font-semibold">Find Your Perfect Car</h3>
+        <h3 className="text-xl font-semibold">{t('form.title')}</h3>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="make">Make</Label>
+        <Label htmlFor="make">{t('form.make.label')}</Label>
         <Input 
           id="make"
-          placeholder="e.g., Toyota" 
+          placeholder={t('form.make.placeholder')}
           value={formData.make}
           onChange={(e) => handleInputChange('make', e.target.value)}
           className="w-full" 
@@ -89,10 +91,10 @@ const VehiclePreferenceForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="model">Model</Label>
+        <Label htmlFor="model">{t('form.model.label')}</Label>
         <Input 
           id="model"
-          placeholder="e.g., Camry" 
+          placeholder={t('form.model.placeholder')}
           value={formData.model}
           onChange={(e) => handleInputChange('model', e.target.value)}
           className="w-full" 
@@ -100,13 +102,13 @@ const VehiclePreferenceForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="year">Year</Label>
+        <Label htmlFor="year">{t('form.year.label')}</Label>
         <Input 
           id="year"
           type="number" 
           min="2000" 
           max="2025" 
-          placeholder="2024" 
+          placeholder={t('form.year.placeholder')}
           value={formData.year}
           onChange={(e) => handleInputChange('year', e.target.value)}
           className="w-full" 
@@ -114,18 +116,18 @@ const VehiclePreferenceForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label>Budget Range</Label>
+        <Label>{t('form.budget.label')}</Label>
         <div className="flex gap-4">
           <Input 
             type="number" 
-            placeholder="Min" 
+            placeholder={t('form.budget.min')}
             value={formData.minBudget}
             onChange={(e) => handleInputChange('minBudget', e.target.value)}
             className="w-1/2" 
           />
           <Input 
             type="number" 
-            placeholder="Max" 
+            placeholder={t('form.budget.max')}
             value={formData.maxBudget}
             onChange={(e) => handleInputChange('maxBudget', e.target.value)}
             className="w-1/2" 
@@ -134,28 +136,28 @@ const VehiclePreferenceForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tradeIn">Trade-In Option</Label>
+        <Label htmlFor="tradeIn">{t('form.tradeIn.label')}</Label>
         <Select onValueChange={(value) => setHasTradeIn(value === 'yes')}>
           <SelectTrigger id="tradeIn">
-            <SelectValue placeholder="Do you have a trade-in?" />
+            <SelectValue placeholder={t('form.tradeIn.placeholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="no">No Trade-In</SelectItem>
-            <SelectItem value="yes">Yes, I Have a Trade-In</SelectItem>
+            <SelectItem value="no">{t('form.tradeIn.no')}</SelectItem>
+            <SelectItem value="yes">{t('form.tradeIn.yes')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       {hasTradeIn && (
         <div className="space-y-2">
-          <Label htmlFor="pricingOption">Trade-In Visibility</Label>
+          <Label htmlFor="pricingOption">{t('form.visibility.label')}</Label>
           <Select onValueChange={setPricingOption} value={pricingOption}>
             <SelectTrigger id="pricingOption">
-              <SelectValue placeholder="Select visibility option" />
+              <SelectValue placeholder={t('form.visibility.placeholder')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="trade_in_10">10-Day Visibility ($10)</SelectItem>
-              <SelectItem value="trade_in_40">Unlimited Visibility ($40)</SelectItem>
+              <SelectItem value="trade_in_10">{t('form.visibility.tenDays')}</SelectItem>
+              <SelectItem value="trade_in_40">{t('form.visibility.unlimited')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -166,7 +168,7 @@ const VehiclePreferenceForm = () => {
         className="w-full bg-accent hover:bg-accent/90"
         disabled={loading || (hasTradeIn && !pricingOption)}
       >
-        {loading ? "Submitting..." : "Get Quotes"}
+        {loading ? t('form.submitting') : t('form.submit')}
       </Button>
     </form>
   );
