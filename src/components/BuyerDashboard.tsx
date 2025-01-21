@@ -1,14 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { Quote, CarDetails } from "@/types/quotes";
+import { BuyerQuoteOverview } from "./dashboard/buyer/BuyerQuoteOverview";
+import { BuyerActionCards } from "./dashboard/buyer/BuyerActionCards";
 
 const BuyerDashboard = () => {
-  const navigate = useNavigate();
-
   const { data: activeQuote, error: quoteError } = useQuery({
     queryKey: ['activeQuote'],
     queryFn: async () => {
@@ -24,7 +21,10 @@ const BuyerDashboard = () => {
             response_date,
             response_notes,
             is_accepted,
-            created_at
+            created_at,
+            dealer_profiles (
+              dealer_name
+            )
           )
         `)
         .eq('status', 'active')
@@ -65,7 +65,8 @@ const BuyerDashboard = () => {
           response_date: dq.response_date,
           response_notes: dq.response_notes,
           is_accepted: dq.is_accepted,
-          created_at: dq.created_at
+          created_at: dq.created_at,
+          dealer_profile: dq.dealer_profiles
         })),
         status: data.status,
         created_at: data.created_at
@@ -83,70 +84,8 @@ const BuyerDashboard = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="grid gap-6">
-        {/* Active Quote Section */}
-        {activeQuote && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Quote</CardTitle>
-              <CardDescription>
-                {activeQuote.car_details.year} {activeQuote.car_details.make} {activeQuote.car_details.model}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <p className="text-sm text-gray-500">Dealer Responses: {activeQuote.dealer_quotes.length}</p>
-                  <p className="text-sm text-gray-500">Created: {new Date(activeQuote.created_at).toLocaleDateString()}</p>
-                </div>
-                <Button onClick={() => navigate(`/quotes/${activeQuote.id}`)}>
-                  View Details
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Action Cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {/* New Quote Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Start New Quote</CardTitle>
-              <CardDescription>Get quotes from dealers for your next vehicle</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button onClick={() => navigate('/quotes/new')}>
-                Start Quote
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Support Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Need Help?</CardTitle>
-              <CardDescription>Contact our support team</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button onClick={() => navigate('/support')}>
-                Contact Support
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Chat Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Chat with Us</CardTitle>
-              <CardDescription>Get instant help from our AI assistant</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button onClick={() => navigate('/chat')}>
-                Start Chat
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        <BuyerQuoteOverview activeQuote={activeQuote} />
+        <BuyerActionCards />
       </div>
     </div>
   );

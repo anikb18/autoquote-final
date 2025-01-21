@@ -5,9 +5,11 @@ import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { BlogManagement } from "./dashboard/BlogManagement";
 import { NewsletterManagement } from "./dashboard/NewsletterManagement";
 import { UserManagement } from "./dashboard/UserManagement";
+import { AdminSettings } from "./settings/AdminSettings";
 import { Button } from "./ui/button";
 import { Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 interface AdminDashboardProps {
   onSettingsClick: () => void;
@@ -15,6 +17,11 @@ interface AdminDashboardProps {
 
 const AdminDashboard = ({ onSettingsClick }: AdminDashboardProps) => {
   const { t } = useTranslation('admin');
+  const [showSettings, setShowSettings] = useState(false);
+
+  if (showSettings) {
+    return <AdminSettings />;
+  }
 
   return (
     <div className="p-6 space-y-8 bg-background min-h-screen">
@@ -30,7 +37,7 @@ const AdminDashboard = ({ onSettingsClick }: AdminDashboardProps) => {
             {t('dashboard.overview')}
           </p>
         </div>
-        <Button variant="outline" size="icon" onClick={onSettingsClick}>
+        <Button variant="outline" size="icon" onClick={() => setShowSettings(true)}>
           <Settings className="h-4 w-4" />
         </Button>
       </div>
