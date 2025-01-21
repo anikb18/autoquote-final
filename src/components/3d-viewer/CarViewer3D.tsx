@@ -4,8 +4,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '../ui/card';
 import { Loader2 } from 'lucide-react';
-import { CarModel } from './CarModel';
+import { useTranslation } from 'react-i18next';
 import { SceneSetup } from './SceneSetup';
+import { CarModel } from './CarModel';
 import { Hotspots } from './Hotspots';
 
 interface CarViewer3DProps {
@@ -24,6 +25,7 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const { data: carData, isLoading } = useQuery({
     queryKey: ['car-data', carDetails?.make, carDetails?.model],
@@ -58,27 +60,27 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     );
     cameraRef.current.position.set(3, 2, 5);
 
-    // Setup renderer
+    // Setup renderer with improved visuals
     rendererRef.current = new THREE.WebGLRenderer({ 
       antialias: true,
-      alpha: true 
+      alpha: true,
+      powerPreference: "high-performance",
     });
+    rendererRef.current.setPixelRatio(window.devicePixelRatio);
     rendererRef.current.setSize(
       containerRef.current.clientWidth,
       containerRef.current.clientHeight
     );
     rendererRef.current.shadowMap.enabled = true;
+    rendererRef.current.shadowMap.type = THREE.PCFSoftShadowMap;
+    rendererRef.current.outputEncoding = THREE.sRGBEncoding;
     containerRef.current.appendChild(rendererRef.current.domElement);
 
     // Add scene elements
     if (sceneRef.current) {
-      // Setup scene, lights, and ground
       SceneSetup({ scene: sceneRef.current });
-      
-      // Add car model
       CarModel({ scene: sceneRef.current });
       
-      // Add hotspots if enabled
       if (showHotspots) {
         Hotspots({ 
           scene: sceneRef.current, 
@@ -88,7 +90,7 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
       }
     }
 
-    // Add OrbitControls
+    // Add OrbitControls with smooth damping
     if (rendererRef.current && cameraRef.current) {
       controlsRef.current = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
       controlsRef.current.enableDamping = true;
@@ -96,6 +98,7 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
       controlsRef.current.minDistance = 3;
       controlsRef.current.maxDistance = 10;
       controlsRef.current.maxPolarAngle = Math.PI / 2;
+      controlsRef.current.enablePan = false;
     }
 
     // Animation loop
@@ -120,11 +123,11 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
         containerRef.current.clientWidth,
         containerRef.current.clientHeight
       );
+      rendererRef.current.setPixelRatio(window.devicePixelRatio);
     };
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
       if (containerRef.current && rendererRef.current) {
@@ -137,19 +140,21 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
   if (isLoading) {
     return (
       <Card className="p-4">
-        <div className="flex items-center justify-center h-[400px]">
-          <Loader2 className="h-8 w-8 animate-spin" />
+        <div className="flex items-center justify-center h-[400px] bg-background/80 backdrop-blur-sm rounded-lg">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       </Card>
     );
   }
 
   return (
-    <Card className="p-4">
-      <div ref={containerRef} className="h-[400px] w-full relative">
+    <Card className="overflow-hidden border border-border/50 bg-background/80 backdrop-blur-sm">
+      <div ref={containerRef} className="h-[500px] w-full relative">
         {activeHotspot && (
-          <div className="absolute top-4 right-4 bg-black/75 text-white p-2 rounded">
-            {activeHotspot}
+          <div className="absolute top-4 right-4 px-4 py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-lg shadow-lg animate-fade-in">
+            <p className="text-sm font-medium text-foreground">
+              {t(`car.hotspots.${activeHotspot}`)}
+            </p>
           </div>
         )}
       </div>

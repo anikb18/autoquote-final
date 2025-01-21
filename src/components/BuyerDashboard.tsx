@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { useTranslation } from "react-i18next";
 import ChatInterface from "./ChatInterface";
-import CarViewer3D from "./CarViewer3D";
+import CarViewer3D from "./3d-viewer/CarViewer3D";
+import { Separator } from "./ui/separator";
 
 interface CarDetails {
   make?: string;
@@ -12,6 +14,8 @@ interface CarDetails {
 }
 
 const BuyerDashboard = () => {
+  const { t } = useTranslation();
+  
   const { data: quotes, isLoading } = useQuery({
     queryKey: ['buyer-quotes'],
     queryFn: async () => {
@@ -36,7 +40,7 @@ const BuyerDashboard = () => {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>{t('common.loading')}</div>;
 
   const activeQuote = quotes?.find(quote => 
     quote.status === 'active' || 
@@ -46,7 +50,6 @@ const BuyerDashboard = () => {
   const getCarDetails = (carDetails: any): CarDetails => {
     if (!carDetails) return {};
     
-    // If it's a string, try to parse it
     if (typeof carDetails === 'string') {
       try {
         const parsed = JSON.parse(carDetails);
@@ -60,7 +63,6 @@ const BuyerDashboard = () => {
       }
     }
     
-    // If it's already an object
     return {
       make: carDetails.make,
       model: carDetails.model,
@@ -69,62 +71,68 @@ const BuyerDashboard = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {activeQuote && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Vehicle Preview</CardTitle>
+    <div className="container mx-auto p-6 space-y-6 animate-fade-in">
+      <h1 className="text-3xl font-bold tracking-tight">
+        {t('dashboard.welcome')}
+      </h1>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {activeQuote && (
+          <Card className="col-span-1 lg:col-span-2 glass dark-mode-transition hover-card">
+            <CardHeader>
+              <CardTitle>{t('dashboard.vehiclePreview')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CarViewer3D 
+                carDetails={getCarDetails(activeQuote.car_details)}
+                showHotspots={activeQuote.status === 'active'}
+              />
+            </CardContent>
+          </Card>
+        )}
+
+        <Card className="col-span-1 lg:col-span-2 glass dark-mode-transition hover-card">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>{t('dashboard.quoteRequests')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <CarViewer3D 
-              carDetails={getCarDetails(activeQuote.car_details)}
-              showHotspots={activeQuote.status === 'active'}
-            />
-          </CardContent>
-        </Card>
-      )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>My Quote Requests</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Car Details</TableHead>
-                <TableHead>Trade-In</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Dealer Responses</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {quotes?.map((quote) => (
-                <>
-                  <TableRow key={quote.id}>
-                    <TableCell>{JSON.stringify(quote.car_details)}</TableCell>
-                    <TableCell>{quote.has_trade_in ? "Yes" : "No"}</TableCell>
-                    <TableCell>{quote.status}</TableCell>
-                    <TableCell>
-                      {quote.dealer_quotes?.length || 0} responses
-                    </TableCell>
-                  </TableRow>
-                  {quote.dealer_quotes?.some(dq => dq.is_accepted) && (
-                    <TableRow>
-                      <TableCell colSpan={4} className="p-4">
-                        <ChatInterface 
-                          quoteId={quote.id} 
-                          dealerId={quote.dealer_quotes.find(dq => dq.is_accepted)?.dealer_id}
-                        />
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('quotes.carDetails')}</TableHead>
+                  <TableHead>{t('quotes.tradeIn')}</TableHead>
+                  <TableHead>{t('quotes.status')}</TableHead>
+                  <TableHead>{t('quotes.dealerResponses')}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {quotes?.map((quote) => (
+                  <>
+                    <TableRow key={quote.id} className="hover:bg-muted/50 transition-colors">
+                      <TableCell>{JSON.stringify(quote.car_details)}</TableCell>
+                      <TableCell>{quote.has_trade_in ? t('common.yes') : t('common.no')}</TableCell>
+                      <TableCell>{t(`quotes.status.${quote.status}`)}</TableCell>
+                      <TableCell>
+                        {quote.dealer_quotes?.length || 0} {t('quotes.responses')}
                       </TableCell>
                     </TableRow>
-                  )}
-                </>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+                    {quote.dealer_quotes?.some(dq => dq.is_accepted) && (
+                      <TableRow>
+                        <TableCell colSpan={4} className="p-4 bg-muted/30">
+                          <ChatInterface 
+                            quoteId={quote.id} 
+                            dealerId={quote.dealer_quotes.find(dq => dq.is_accepted)?.dealer_id}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
