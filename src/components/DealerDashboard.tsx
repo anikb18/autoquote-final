@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ChatInterface from "./ChatInterface";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useEffect, useState } from "react";
+import { DateRange } from "react-day-picker";
+import MetricsCard from "./dashboard/MetricsCard";
+import PerformanceChart from "./dashboard/PerformanceChart";
 import { Database } from "@/integrations/supabase/types";
 
 type DealerStats = {
@@ -18,6 +21,7 @@ type DealerStats = {
 
 const DealerDashboard = () => {
   const queryClient = useQueryClient();
+  const [dateRange, setDateRange] = useState<DateRange>();
   
   const { data: dealerQuotes, isLoading: isQuotesLoading } = useQuery({
     queryKey: ['dealer-quotes'],
@@ -41,7 +45,7 @@ const DealerDashboard = () => {
   });
 
   const { data: dealerMetrics, isLoading: isMetricsLoading } = useQuery<DealerStats>({
-    queryKey: ['dealer-metrics'],
+    queryKey: ['dealer-metrics', dateRange],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       const { data, error } = await supabase
@@ -56,19 +60,50 @@ const DealerDashboard = () => {
   });
 
   const { data: dealerAnalytics, isLoading: isAnalyticsLoading } = useQuery({
-    queryKey: ['dealer-analytics'],
+    queryKey: ['dealer-analytics', dateRange],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const query = supabase
         .from('dealer_analytics')
         .select('*')
         .eq('dealer_id', (await supabase.auth.getUser()).data.user?.id)
         .order('period_start', { ascending: false })
         .limit(6);
-      
+
+      if (dateRange?.from) {
+        query.gte('period_start', dateRange.from.toISOString());
+      }
+      if (dateRange?.to) {
+        query.lte('period_end', dateRange.to.toISOString());
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
   });
+
+  // Set up real-time subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel('dealer-analytics-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'dealer_analytics'
+        },
+        (payload) => {
+          console.log('Real-time update:', payload);
+          queryClient.invalidateQueries({ queryKey: ['dealer-analytics'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 
   const acceptQuote = useMutation({
     mutationFn: async (quoteId: string) => {
@@ -102,57 +137,25 @@ const DealerDashboard = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Quotes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{dealerMetrics?.active_quotes_count || 0}</div>
-            <div className="text-sm text-muted-foreground">
-              {dealerMetrics?.quote_change > 0 ? '+' : ''}{dealerMetrics?.quote_change || 0}% from last period
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Won Bids</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{dealerMetrics?.won_bids_count || 0}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Revenue</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">${dealerMetrics?.total_revenue?.toLocaleString() || 0}</div>
-          </CardContent>
-        </Card>
+        <MetricsCard
+          title="Active Quotes"
+          value={dealerMetrics?.active_quotes_count || 0}
+          change={dealerMetrics?.quote_change}
+        />
+        <MetricsCard
+          title="Won Bids"
+          value={dealerMetrics?.won_bids_count || 0}
+        />
+        <MetricsCard
+          title="Total Revenue"
+          value={`$${dealerMetrics?.total_revenue?.toLocaleString() || 0}`}
+        />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Performance Metrics</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="period" />
-                <YAxis yAxisId="left" />
-                <YAxis yAxisId="right" orientation="right" />
-                <Tooltip />
-                <Bar yAxisId="left" dataKey="conversionRate" name="Conversion Rate (%)" fill="#8884d8" />
-                <Bar yAxisId="right" dataKey="revenue" name="Revenue ($)" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
+      <PerformanceChart 
+        data={performanceData}
+        onDateRangeChange={setDateRange}
+      />
 
       <Card>
         <CardHeader>

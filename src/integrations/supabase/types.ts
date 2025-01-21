@@ -141,7 +141,10 @@ export type Database = {
         Row: {
           conversion_rate: number | null
           created_at: string | null
+          date_range_end: string | null
+          date_range_start: string | null
           dealer_id: string | null
+          drill_down_data: Json | null
           id: string
           metric_type: string
           period_end: string
@@ -154,7 +157,10 @@ export type Database = {
         Insert: {
           conversion_rate?: number | null
           created_at?: string | null
+          date_range_end?: string | null
+          date_range_start?: string | null
           dealer_id?: string | null
+          drill_down_data?: Json | null
           id?: string
           metric_type: string
           period_end: string
@@ -167,7 +173,10 @@ export type Database = {
         Update: {
           conversion_rate?: number | null
           created_at?: string | null
+          date_range_end?: string | null
+          date_range_start?: string | null
           dealer_id?: string | null
+          drill_down_data?: Json | null
           id?: string
           metric_type?: string
           period_end?: string
