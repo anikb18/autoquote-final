@@ -3,7 +3,19 @@
     "appName": "Auto Trade Nexus",
     "dashboard": "Tableau de bord",
     "signIn": "Connexion",
-    "signOut": "Déconnexion"
+    "signOut": "Déconnexion",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "actions": "Actions"
   },
   "dealer": {
     "welcome": "Bienvenue",
@@ -11,9 +23,40 @@
       "activeQuotes": "Devis actifs",
       "wonBids": "Offres gagnées",
       "totalRevenue": "Revenu total",
-      "fromLastMonth": "par rapport au mois dernier"
+      "fromLastMonth": "par rapport au mois dernier",
+      "todayActivity": "Voici votre activité aujourd'hui"
     },
     "recentQuotes": "Devis récents",
     "performance": "Aperçu des performances"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Tableau de bord administrateur"
+    },
+    "tabs": {
+      "analytics": "Analytique",
+      "blog": "Gestion du blog",
+      "newsletter": "Infolettre"
+    },
+    "metrics": {
+      "totalUsers": "Nombre total d'utilisateurs",
+      "activeDeals": "Transactions actives",
+      "monthlyRevenue": "Revenu mensuel",
+      "conversionRate": "Taux de conversion"
+    }
+  },
+  "auth": {
+    "emailPlaceholder": "Entrez votre courriel",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Vous n'avez pas de compte?",
+    "signUp": "S'inscrire",
+    "alreadyHaveAccount": "Vous avez déjà un compte?"
+  },
+  "notifications": {
+    "newMessage": "Nouveau message",
+    "newQuote": "Nouveau devis",
+    "quoteAccepted": "Devis accepté",
+    "quoteDenied": "Devis refusé"
   }
 }

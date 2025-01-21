@@ -3,7 +3,19 @@
     "appName": "Auto Trade Nexus",
     "dashboard": "Dashboard",
     "signIn": "Sign In",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "actions": "Actions"
   },
   "dealer": {
     "welcome": "Welcome",
@@ -11,9 +23,40 @@
       "activeQuotes": "Active Quotes",
       "wonBids": "Won Bids",
       "totalRevenue": "Total Revenue",
-      "fromLastMonth": "from last month"
+      "fromLastMonth": "from last month",
+      "todayActivity": "Here's your activity today"
     },
     "recentQuotes": "Recent Quotes",
     "performance": "Performance Overview"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard"
+    },
+    "tabs": {
+      "analytics": "Analytics",
+      "blog": "Blog Management",
+      "newsletter": "Newsletter"
+    },
+    "metrics": {
+      "totalUsers": "Total Users",
+      "activeDeals": "Active Deals",
+      "monthlyRevenue": "Monthly Revenue",
+      "conversionRate": "Conversion Rate"
+    }
+  },
+  "auth": {
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "notifications": {
+    "newMessage": "New Message",
+    "newQuote": "New Quote",
+    "quoteAccepted": "Quote Accepted",
+    "quoteDenied": "Quote Denied"
   }
 }

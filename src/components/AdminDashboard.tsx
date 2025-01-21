@@ -4,19 +4,22 @@ import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { BlogManagement } from "./dashboard/BlogManagement";
 import { NewsletterManagement } from "./dashboard/NewsletterManagement";
+import { useTranslation } from "react-i18next";
 
 const AdminDashboard = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="p-6 space-y-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-      <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600">
-        Admin Dashboard
+    <div className="p-6 space-y-8 bg-background min-h-screen">
+      <h1 className="text-4xl font-bold text-foreground">
+        {t('admin.dashboard.title')}
       </h1>
       
       <Tabs defaultValue="analytics" className="space-y-6">
-        <TabsList className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-sm">
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="blog">Blog Management</TabsTrigger>
-          <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
+        <TabsList className="bg-background/50 backdrop-blur-sm border">
+          <TabsTrigger value="analytics">{t('admin.tabs.analytics')}</TabsTrigger>
+          <TabsTrigger value="blog">{t('admin.tabs.blog')}</TabsTrigger>
+          <TabsTrigger value="newsletter">{t('admin.tabs.newsletter')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="analytics" className="space-y-6">
