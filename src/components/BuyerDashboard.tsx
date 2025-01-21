@@ -4,8 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Quote } from "@/types/quotes";
-import { CarDetails } from "@/types/quotes";
+import { Quote, CarDetails } from "@/types/quotes";
 
 export const BuyerDashboard = () => {
   const navigate = useNavigate();
@@ -34,22 +33,30 @@ export const BuyerDashboard = () => {
       if (error) throw error;
       if (!data) return null;
 
-      // Safely cast car_details to CarDetails type with type checking
-      const carDetails = data.car_details as { year: number; make: string; model: string } | null;
-      
-      if (!carDetails) {
-        console.error('Car details are missing or invalid');
+      // Type guard function to validate car_details
+      const isValidCarDetails = (details: any): details is CarDetails => {
+        return (
+          details &&
+          typeof details === 'object' &&
+          'year' in details &&
+          typeof details.year === 'number' &&
+          'make' in details &&
+          typeof details.make === 'string' &&
+          'model' in details &&
+          typeof details.model === 'string'
+        );
+      };
+
+      // Validate car_details
+      if (!isValidCarDetails(data.car_details)) {
+        console.error('Invalid car details format:', data.car_details);
         return null;
       }
 
       // Transform the data to match the Quote type
       const quote: Quote = {
         id: data.id,
-        car_details: {
-          year: carDetails.year,
-          make: carDetails.make,
-          model: carDetails.model
-        },
+        car_details: data.car_details,
         dealer_quotes: data.dealer_quotes.map((dq: any) => ({
           id: dq.id,
           dealer_id: dq.dealer_id,
