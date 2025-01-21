@@ -7,6 +7,7 @@ import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DealershipLanding from "./components/DealershipLanding";
 import DealerSignup from "./pages/DealerSignup";
+import { ThemeProvider } from "@/hooks/use-theme";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -20,32 +21,34 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/dealership" element={<DealershipLanding />} />
-          <Route path="/dealer-signup" element={<DealerSignup />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/subscription"
-            element={
-              <ProtectedRoute requireSubscription={false}>
-                <SubscriptionManagement />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </Router>
-    </QueryClientProvider>
+    <ThemeProvider defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/dealership" element={<DealershipLanding />} />
+            <Route path="/dealer-signup" element={<DealerSignup />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/subscription"
+              element={
+                <ProtectedRoute requireSubscription={false}>
+                  <SubscriptionManagement />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
