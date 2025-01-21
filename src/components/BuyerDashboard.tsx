@@ -1,47 +1,18 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { BuyerActiveQuotes } from "./dashboard/buyer/BuyerActiveQuotes";
-import { BuyerCarListings } from "./dashboard/buyer/BuyerCarListings";
-import { BuyerActiveChats } from "./dashboard/buyer/BuyerActiveChats";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { PlusCircle, Car, Calculator, AlertCircle, MessageSquareText, HelpCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import CarViewer3D from "./CarViewer3D";
-import { Quote, CarDetails } from "@/types/quotes";
-import { ChatbotPopup } from "./chat/ChatbotPopup";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Quote } from "@/types/quotes";
+import { CarDetails } from "@/types/quotes";
 
-const BuyerDashboard = () => {
-  const { t } = useTranslation();
+export const BuyerDashboard = () => {
   const navigate = useNavigate();
 
-  const { data: incompleteQuotes } = useQuery({
-    queryKey: ['incomplete-quotes'],
+  const { data: activeQuote, error: quoteError } = useQuery({
+    queryKey: ['activeQuote'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      const { data, error } = await supabase
-        .from('quotes')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'pending')
-        .is('price_paid', null);
-
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const { data: activeQuote } = useQuery<Quote | null>({
-    queryKey: ['active-quote'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
       const { data, error } = await supabase
         .from('quotes')
         .select(`
@@ -49,157 +20,127 @@ const BuyerDashboard = () => {
           dealer_quotes (
             id,
             dealer_id,
+            status,
+            response_status,
+            response_date,
+            response_notes,
             is_accepted,
-            dealer_profile:dealer_profiles (*)
+            created_at
           )
         `)
-        .eq('user_id', user.id)
         .eq('status', 'active')
         .maybeSingle();
 
       if (error) throw error;
       if (!data) return null;
 
-      // Safely cast car_details to CarDetails type
-      const carDetailsJson = data.car_details as { year: number; make: string; model: string };
+      // Safely cast car_details to CarDetails type with type checking
+      const carDetails = data.car_details as { year: number; make: string; model: string } | null;
       
+      if (!carDetails) {
+        console.error('Car details are missing or invalid');
+        return null;
+      }
+
       // Transform the data to match the Quote type
       const quote: Quote = {
         id: data.id,
         car_details: {
-          year: carDetailsJson.year,
-          make: carDetailsJson.make,
-          model: carDetailsJson.model
+          year: carDetails.year,
+          make: carDetails.make,
+          model: carDetails.model
         },
         dealer_quotes: data.dealer_quotes.map((dq: any) => ({
           id: dq.id,
           dealer_id: dq.dealer_id,
+          status: dq.status,
+          response_status: dq.response_status,
+          response_date: dq.response_date,
+          response_notes: dq.response_notes,
           is_accepted: dq.is_accepted,
-          dealer_profile: dq.dealer_profile
-        }))
+          created_at: dq.created_at
+        })),
+        status: data.status,
+        created_at: data.created_at
       };
 
       return quote;
-    },
+    }
   });
 
-  // Parse car_details to ensure it matches CarDetails type
-  const carDetails: CarDetails | undefined = activeQuote?.car_details;
+  if (quoteError) {
+    console.error('Error fetching active quote:', quoteError);
+    return <div>Error loading dashboard</div>;
+  }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">
-        {t('dashboard.welcome')}
-      </h1>
-      
-      {incompleteQuotes?.length ? (
-        <Alert variant="destructive" className="animate-fade-in">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Incomplete Quotes</AlertTitle>
-          <AlertDescription>
-            You have {incompleteQuotes.length} incomplete quote{incompleteQuotes.length > 1 ? 's' : ''}. 
-            Complete them to start receiving dealer responses.
-          </AlertDescription>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mt-2"
-            onClick={() => navigate('/quotes/' + incompleteQuotes[0].id)}
-          >
-            Complete Quote
-          </Button>
-        </Alert>
-      ) : null}
+    <div className="container mx-auto p-6">
+      <div className="grid gap-6">
+        {/* Active Quote Section */}
+        {activeQuote && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Active Quote</CardTitle>
+              <CardDescription>
+                {activeQuote.car_details.year} {activeQuote.car_details.make} {activeQuote.car_details.model}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-500">Dealer Responses: {activeQuote.dealer_quotes.length}</p>
+                  <p className="text-sm text-gray-500">Created: {new Date(activeQuote.created_at).toLocaleDateString()}</p>
+                </div>
+                <Button onClick={() => navigate(`/quotes/${activeQuote.id}`)}>
+                  View Details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-      {activeQuote && carDetails && (
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Your Active Quote</CardTitle>
-            <CardDescription>
-              {carDetails.year} {carDetails.make} {carDetails.model}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CarViewer3D carDetails={carDetails} showHotspots={true} />
-          </CardContent>
-        </Card>
-      )}
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="transition-all hover:shadow-lg">
-          <CardHeader>
-            <CardTitle>Request Quote</CardTitle>
-            <CardDescription>Get quotes from dealers ($40)</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              className="w-full group" 
-              onClick={() => navigate('/request-quote')}
-            >
-              <PlusCircle className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
-              New Quote Request
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Action Cards */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {/* New Quote Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Start New Quote</CardTitle>
+              <CardDescription>Get quotes from dealers for your next vehicle</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={() => navigate('/quotes/new')}>
+                Start Quote
+              </Button>
+            </CardContent>
+          </Card>
 
-        <Card className="transition-all hover:shadow-lg">
-          <CardHeader>
-            <CardTitle>Sell Your Car</CardTitle>
-            <CardDescription>List your car for dealers</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              className="w-full group" 
-              onClick={() => navigate('/sell-car')}
-            >
-              <Car className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
-              Create Listing
-            </Button>
-          </CardContent>
-        </Card>
+          {/* Support Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Need Help?</CardTitle>
+              <CardDescription>Contact our support team</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={() => navigate('/support')}>
+                Contact Support
+              </Button>
+            </CardContent>
+          </Card>
 
-        <Card className="transition-all hover:shadow-lg">
-          <CardHeader>
-            <CardTitle>Trade-in Valuation</CardTitle>
-            <CardDescription>Get your car valued ($10)</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              className="w-full group" 
-              onClick={() => navigate('/trade-in')}
-            >
-              <Calculator className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
-              Value My Car
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="transition-all hover:shadow-lg">
-          <CardHeader>
-            <CardTitle>Support</CardTitle>
-            <CardDescription>Get help or report issues</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              className="w-full group" 
-              onClick={() => navigate('/support')}
-            >
-              <MessageSquareText className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
-              Contact Support
-            </Button>
-          </CardContent>
-        </Card>
+          {/* Chat Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Chat with Us</CardTitle>
+              <CardDescription>Get instant help from our AI assistant</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={() => navigate('/chat')}>
+                Start Chat
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-      
-      <div className="grid grid-cols-1 gap-6">
-        <BuyerActiveQuotes />
-        <BuyerCarListings />
-        <BuyerActiveChats />
-      </div>
-
-      <ChatbotPopup />
     </div>
   );
 };
-
-export default BuyerDashboard;
