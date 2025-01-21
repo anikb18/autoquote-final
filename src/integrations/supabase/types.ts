@@ -465,7 +465,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           down_payment?: number | null
-          id: string
+          id?: string
           interest_rate: number
           loan_amount: number
           monthly_payment: number
@@ -516,7 +516,7 @@ export type Database = {
           coverage_type: string
           created_at?: string | null
           deductible: number
-          id: string
+          id?: string
           provider?: string | null
           quote_id?: string | null
           updated_at?: string | null
@@ -783,7 +783,7 @@ export type Database = {
           account_subtype?: string | null
           account_type?: string | null
           created_at?: string | null
-          id: string
+          id?: string
           institution_id?: string | null
           institution_name?: string | null
           plaid_access_token?: string | null
@@ -1157,34 +1157,34 @@ export type Database = {
       }
       support_tickets: {
         Row: {
-          id: string
-          user_id: string | null
-          subject: string
           category: string
+          created_at: string | null
+          id: string
           message: string
           status: string | null
-          created_at: string | null
+          subject: string
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
-          id?: string
-          user_id?: string | null
-          subject: string
           category: string
+          created_at?: string | null
+          id?: string
           message: string
           status?: string | null
-          created_at?: string | null
+          subject: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          id?: string
-          user_id?: string | null
-          subject?: string
           category?: string
+          created_at?: string | null
+          id?: string
           message?: string
           status?: string | null
-          created_at?: string | null
+          subject?: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1453,7 +1453,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {

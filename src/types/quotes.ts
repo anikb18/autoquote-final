@@ -13,12 +13,15 @@ export interface DealerQuote {
   response_notes?: string;
   is_accepted: boolean;
   created_at: string;
+  dealer_profile?: {
+    dealer_name: string;
+  };
 }
 
 export interface Quote {
   id: string;
   car_details: CarDetails;
   dealer_quotes: DealerQuote[];
-  status?: string;
+  status: string;
   created_at: string;
 }

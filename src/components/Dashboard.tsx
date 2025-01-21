@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
-import BuyerDashboard from "./BuyerDashboard";
+import { BuyerDashboard } from "./BuyerDashboard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 type ViewMode = "admin" | "dealer" | "buyer";

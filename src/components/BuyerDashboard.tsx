@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Quote, CarDetails } from "@/types/quotes";
 
-export const BuyerDashboard = () => {
+const BuyerDashboard = () => {
   const navigate = useNavigate();
 
   const { data: activeQuote, error: quoteError } = useQuery({
@@ -151,3 +151,5 @@ export const BuyerDashboard = () => {
     </div>
   );
 };
+
+export { BuyerDashboard };
