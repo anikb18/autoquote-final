@@ -7,10 +7,15 @@ import BuyerDashboard from "./BuyerDashboard";
 const Dashboard = () => {
   const { role } = useUserRole();
 
+  const handleSettingsClick = () => {
+    // Handle settings click - you can implement the actual functionality later
+    console.log("Settings clicked");
+  };
+
   // Render the appropriate dashboard based on user role
   switch (role) {
     case "admin":
-      return <AdminDashboard />;
+      return <AdminDashboard onSettingsClick={handleSettingsClick} />;
     case "dealer":
       return <DealerDashboard />;
     default:
