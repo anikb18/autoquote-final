@@ -37,8 +37,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
             )
           )
         `)
-        .eq('quote_id', quoteId)
-        .order('created_at', { ascending: true });
+        .eq('quote_id', quoteId);
       
       if (messagesError) throw messagesError;
       return messagesData;
@@ -53,7 +52,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
         .select('is_accepted')
         .eq('quote_id', quoteId)
         .eq('dealer_id', dealerId)
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
       return data;
@@ -147,7 +146,13 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
           {messages?.map((msg) => (
             <ChatMessage
               key={msg.id}
-              message={msg}
+              message={{
+                ...msg,
+                sender: {
+                  email: msg.sender?.email,
+                  dealer_profiles: msg.sender?.dealer_profiles || []
+                }
+              }}
               isDealer={msg.sender_id === dealerId}
               quoteAccepted={quoteDetails?.is_accepted ?? false}
               showTranslate={autoTranslate}
