@@ -1,24 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type MetricsCardProps = {
+interface MetricsCardProps {
   title: string;
   value: string | number;
-  change?: number;
-  className?: string;
-};
+  description?: string;
+  prefix?: string;
+}
 
-const MetricsCard = ({ title, value, change, className }: MetricsCardProps) => {
+export const MetricsCard = ({ title, value, description, prefix = '' }: MetricsCardProps) => {
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-bold">{value}</div>
-        {change !== undefined && (
-          <div className="text-sm text-muted-foreground">
-            {change > 0 ? '+' : ''}{change}% from last period
-          </div>
+        <div className="text-2xl font-bold">{prefix}{value}</div>
+        {description && (
+          <p className="text-xs text-muted-foreground">{description}</p>
         )}
       </CardContent>
     </Card>

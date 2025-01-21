@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card } from "../ui/card";
 import { MetricsCard } from "./MetricsCard";
 import { useToast } from "@/hooks/use-toast";
 
@@ -55,12 +55,10 @@ export const DealerMetricsSection = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[...Array(4)].map((_, i) => (
           <Card key={i} className="animate-pulse">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Loading...</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">--</div>
-            </CardContent>
+            <div className="p-6">
+              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+              <div className="h-8 bg-gray-200 rounded"></div>
+            </div>
           </Card>
         ))}
       </div>
