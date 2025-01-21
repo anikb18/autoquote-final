@@ -13,6 +13,7 @@ import Header from "./components/Header";
 import Auth from "./pages/Auth";
 import BlogPost from "./components/BlogPost";
 import BlogList from "./components/BlogList";
+import QuoteDetails from "./components/QuoteDetails";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -64,6 +65,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <BlogPost />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/quotes/:id"
+                element={
+                  <ProtectedRoute>
+                    <QuoteDetails />
                   </ProtectedRoute>
                 }
               />

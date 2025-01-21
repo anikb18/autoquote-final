@@ -1,33 +1,14 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTranslation } from "react-i18next";
 import { ChatHeader } from "./chat/ChatHeader";
-import { ChatMessage } from "./chat/ChatMessage";
+import { MessageList } from "./chat/MessageList";
 import { ChatInput } from "./chat/ChatInput";
+import { translateMessage } from "@/services/translation";
+import { ChatProps, MessageType } from "@/types/chat";
 
-interface ChatInterfaceProps {
-  quoteId: string;
-  dealerId?: string;
-}
-
-interface MessageType {
-  id: string;
-  content: string;
-  sender_id: string;
-  created_at: string;
-  sender?: {
-    email?: string;
-    dealer_profiles?: Array<{
-      first_name?: string;
-      last_name?: string;
-      dealer_name?: string;
-    }>;
-  };
-}
-
-const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
+const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
   const [autoTranslate, setAutoTranslate] = useState(false);
   const queryClient = useQueryClient();
   const { i18n } = useTranslation();
@@ -117,34 +98,16 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
     },
   });
 
-  const translateMessage = async (text: string, targetLang: string) => {
-    try {
-      const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4",
-          messages: [
-            {
-              role: "system",
-              content: `You are a translator. Translate the following text to ${targetLang}:`
-            },
-            {
-              role: "user",
-              content: text
-            }
-          ]
-        })
-      });
-      const data = await response.json();
-      return data.choices[0].message.content;
-    } catch (error) {
-      console.error('Translation error:', error);
-      return text;
-    }
+  const handleTranslate = async (messageId: string) => {
+    const message = messages?.find(m => m.id === messageId);
+    if (!message) return;
+
+    const translated = await translateMessage(message.content, i18n.language);
+    queryClient.setQueryData(['chat-messages', quoteId], (old: any) =>
+      old.map((m: any) =>
+        m.id === messageId ? { ...m, content: translated } : m
+      )
+    );
   };
 
   if (isLoading) return <div>Loading chat...</div>;
@@ -156,27 +119,13 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
         onAutoTranslateChange={setAutoTranslate}
       />
       
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4">
-          {messages?.map((msg) => (
-            <ChatMessage
-              key={msg.id}
-              message={msg}
-              isDealer={msg.sender_id === dealerId}
-              quoteAccepted={quoteDetails?.is_accepted ?? false}
-              showTranslate={autoTranslate}
-              onTranslate={async () => {
-                const translated = await translateMessage(msg.content, i18n.language);
-                queryClient.setQueryData(['chat-messages', quoteId], (old: any) =>
-                  old.map((m: any) =>
-                    m.id === msg.id ? { ...m, content: translated } : m
-                  )
-                );
-              }}
-            />
-          ))}
-        </div>
-      </ScrollArea>
+      <MessageList
+        messages={messages || []}
+        dealerId={dealerId}
+        quoteAccepted={quoteDetails?.is_accepted ?? false}
+        autoTranslate={autoTranslate}
+        onTranslate={handleTranslate}
+      />
 
       <ChatInput onSendMessage={(message) => sendMessage.mutate(message)} />
     </div>
