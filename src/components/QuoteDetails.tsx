@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useParams } from "react-router-dom";
 import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { Quote } from "@/types/quotes";
+import { Quote, CarDetails } from "@/types/quotes";
 import { QuoteHeader } from "./quotes/QuoteHeader";
 import { DealerQuoteItem } from "./quotes/DealerQuoteItem";
 
