@@ -35,13 +35,18 @@ const BlogPost = () => {
       
       if (error) throw error;
       
-      // Ensure the data matches our expected type
+      // Return null if no data found
       if (!data) return null;
+      
+      // Safely transform the profiles data
+      const profileData = data.profiles && typeof data.profiles === 'object' && 'full_name' in data.profiles
+        ? { full_name: data.profiles.full_name }
+        : null;
       
       // Transform the data to match our expected type
       const transformedData: BlogPost = {
         ...data,
-        profiles: data.profiles as Profile | null
+        profiles: profileData
       };
       
       return transformedData;
