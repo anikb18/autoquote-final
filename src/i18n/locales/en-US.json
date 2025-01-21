@@ -83,7 +83,8 @@
         "expired": "Expired"
       },
       "error": {
-        "title": "Error Loading Quotes"
+        "title": "Error Loading Quotes",
+        "description": "There was an error loading your quotes. Please try again."
       },
       "expiration": {
         "title": "Quote Expired",

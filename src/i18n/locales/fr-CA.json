@@ -83,7 +83,8 @@
         "expired": "Expiré"
       },
       "error": {
-        "title": "Erreur de chargement des devis"
+        "title": "Erreur de chargement des devis",
+        "description": "Une erreur s'est produite lors du chargement de vos devis. Veuillez réessayer."
       },
       "expiration": {
         "title": "Devis expiré",
