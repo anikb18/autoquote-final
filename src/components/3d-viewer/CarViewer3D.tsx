@@ -73,7 +73,8 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     );
     rendererRef.current.shadowMap.enabled = true;
     rendererRef.current.shadowMap.type = THREE.PCFSoftShadowMap;
-    rendererRef.current.outputEncoding = THREE.sRGBEncoding;
+    // Replace deprecated outputEncoding with the new colorSpace property
+    rendererRef.current.outputColorSpace = THREE.SRGBColorSpace;
     containerRef.current.appendChild(rendererRef.current.domElement);
 
     // Add scene elements
