@@ -15,12 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { PlusCircle, User, Settings, LogOut, Home, MessageSquare, Car } from "lucide-react";
+import { useUserRole } from "@/hooks/use-user-role";
 
 const Header = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const { t } = useTranslation();
+  const { role } = useUserRole();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -78,6 +80,38 @@ const Header = () => {
     navigate("/settings");
   };
 
+  const renderAuthenticatedNav = () => {
+    if (!session) return null;
+
+    // Only show quote-related actions for regular users (buyers)
+    if (role === 'user') {
+      return (
+        <div className="hidden md:flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleRequestQuote}
+            className="flex items-center gap-2"
+          >
+            <PlusCircle className="h-4 w-4" />
+            {t('common.requestQuote')}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleMyQuotes}
+            className="flex items-center gap-2"
+          >
+            <MessageSquare className="h-4 w-4" />
+            {t('common.myQuotes')}
+          </Button>
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
   return (
     <header className="border-b sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 py-3">
@@ -91,28 +125,7 @@ const Header = () => {
               AutoQuote24
             </button>
             
-            {session && (
-              <div className="hidden md:flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleRequestQuote}
-                  className="flex items-center gap-2"
-                >
-                  <PlusCircle className="h-4 w-4" />
-                  {t('common.requestQuote')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleMyQuotes}
-                  className="flex items-center gap-2"
-                >
-                  <MessageSquare className="h-4 w-4" />
-                  {t('common.myQuotes')}
-                </Button>
-              </div>
-            )}
+            {renderAuthenticatedNav()}
           </div>
 
           <div className="flex items-center gap-4">

@@ -47,8 +47,12 @@ const QuoteDetails = () => {
           id: dq.id,
           dealer_id: dq.dealer_id,
           is_accepted: dq.is_accepted,
-          dealer_profile: dq.dealer_profile
-        }))
+          dealer_profile: dq.dealer_profile,
+          created_at: dq.created_at,
+          status: dq.status
+        })),
+        status: data.status,
+        created_at: data.created_at
       };
 
       return transformedData;
