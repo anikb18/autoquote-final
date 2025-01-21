@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import CarViewer3D from "./CarViewer3D";
 
 const BuyerDashboard = () => {
   const { t } = useTranslation();
@@ -29,6 +30,24 @@ const BuyerDashboard = () => {
         .is('price_paid', null);
 
       if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: activeQuote } = useQuery({
+    queryKey: ['active-quote'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      const { data, error } = await supabase
+        .from('quotes')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
       return data;
     },
   });
@@ -57,6 +76,20 @@ const BuyerDashboard = () => {
           </Button>
         </Alert>
       ) : null}
+
+      {activeQuote && (
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Your Active Quote</CardTitle>
+            <CardDescription>
+              {activeQuote.car_details?.year} {activeQuote.car_details?.make} {activeQuote.car_details?.model}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CarViewer3D carDetails={activeQuote.car_details} showHotspots={true} />
+          </CardContent>
+        </Card>
+      )}
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="transition-all hover:shadow-lg">
