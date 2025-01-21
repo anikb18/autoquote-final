@@ -36,6 +36,7 @@ const DealerSignup = () => {
           data: {
             dealership_name: dealershipName,
             location: location,
+            user_type: 'dealer' // Add this to help identify user type
           }
         }
       });
@@ -51,12 +52,13 @@ const DealerSignup = () => {
               id: user.id,
               dealer_name: dealershipName,
               active: true,
+              subscription_type: 'basic'
             }
           ]);
 
         if (profileError) throw profileError;
 
-        // Set user role
+        // Set user role as dealer
         const { error: roleError } = await supabase
           .from('user_roles')
           .insert([
@@ -73,6 +75,7 @@ const DealerSignup = () => {
           description: t("signup.success.description"),
         });
 
+        // Redirect to dealer dashboard
         navigate("/dashboard");
       }
     } catch (err: any) {
