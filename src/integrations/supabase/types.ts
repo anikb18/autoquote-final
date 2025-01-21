@@ -310,6 +310,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "dealer_quotes_dealer_profiles_fk"
+            columns: ["dealer_id"]
+            isOneToOne: false
+            referencedRelation: "dealer_profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "dealer_quotes_quote_id_fkey"
             columns: ["quote_id"]
             isOneToOne: false
