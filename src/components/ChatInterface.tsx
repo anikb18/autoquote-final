@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, Send, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { ChatHeader } from "./chat/ChatHeader";
+import { ChatMessage } from "./chat/ChatMessage";
+import { ChatInput } from "./chat/ChatInput";
 
 interface ChatInterfaceProps {
   quoteId: string;
@@ -15,10 +13,9 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
-  const [message, setMessage] = useState("");
   const [autoTranslate, setAutoTranslate] = useState(false);
   const queryClient = useQueryClient();
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
 
   const { data: messages, isLoading } = useQuery({
     queryKey: ['chat-messages', quoteId],
@@ -44,7 +41,21 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
     },
   });
 
-  // Subscribe to real-time updates
+  const { data: quoteDetails } = useQuery({
+    queryKey: ['quote-details', quoteId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('dealer_quotes')
+        .select('is_accepted')
+        .eq('quote_id', quoteId)
+        .eq('dealer_id', dealerId)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
   useEffect(() => {
     const channel = supabase
       .channel('chat-updates')
@@ -56,7 +67,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
           table: 'chat_messages',
           filter: `quote_id=eq.${quoteId}`
         },
-        (payload) => {
+        () => {
           queryClient.invalidateQueries({ queryKey: ['chat-messages', quoteId] });
         }
       )
@@ -85,16 +96,8 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chat-messages', quoteId] });
-      setMessage("");
     },
   });
-
-  const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim()) {
-      sendMessage.mutate(message);
-    }
-  };
 
   const translateMessage = async (text: string, targetLang: string) => {
     try {
@@ -105,7 +108,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o",
           messages: [
             {
               role: "system",
@@ -126,99 +129,38 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
     }
   };
 
-  const getDealerName = (message: any) => {
-    const dealerProfile = message.sender?.dealer_profiles?.[0];
-    if (!dealerProfile) return message.sender?.email;
-
-    // If this dealer's quote is accepted, show full name
-    if (message.sender_id === dealerId) {
-      return `${dealerProfile.first_name} ${dealerProfile.last_name}`;
-    }
-    // Otherwise only show first name
-    return dealerProfile.first_name;
-  };
-
   if (isLoading) return <div>Loading chat...</div>;
 
   return (
     <div className="flex flex-col h-[400px] border rounded-lg">
-      <div className="p-4 border-b bg-muted/50">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5" />
-            <h3 className="font-semibold">Chat</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
-            <Switch
-              checked={autoTranslate}
-              onCheckedChange={setAutoTranslate}
-              id="auto-translate"
-            />
-            <Label htmlFor="auto-translate">Auto-translate</Label>
-          </div>
-        </div>
-      </div>
+      <ChatHeader 
+        autoTranslate={autoTranslate}
+        onAutoTranslateChange={setAutoTranslate}
+      />
       
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages?.map((msg) => (
-            <div
+            <ChatMessage
               key={msg.id}
-              className={`flex ${
-                msg.sender_id === (dealerId ?? '') ? 'justify-start' : 'justify-end'
-              }`}
-            >
-              <div
-                className={`max-w-[80%] rounded-lg p-3 ${
-                  msg.sender_id === (dealerId ?? '')
-                    ? 'bg-muted'
-                    : 'bg-primary text-primary-foreground'
-                }`}
-              >
-                <p className="text-sm font-semibold">{getDealerName(msg)}</p>
-                <p className="text-sm">{msg.content}</p>
-                {autoTranslate && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mt-2"
-                    onClick={async () => {
-                      const translated = await translateMessage(msg.content, i18n.language);
-                      // Update the message content in the UI
-                      queryClient.setQueryData(['chat-messages', quoteId], (old: any) =>
-                        old.map((m: any) =>
-                          m.id === msg.id ? { ...m, content: translated } : m
-                        )
-                      );
-                    }}
-                  >
-                    <Globe className="h-3 w-3 mr-1" />
-                    Translate
-                  </Button>
-                )}
-                <span className="text-xs opacity-70">
-                  {new Date(msg.created_at!).toLocaleTimeString()}
-                </span>
-              </div>
-            </div>
+              message={msg}
+              isDealer={msg.sender_id === dealerId}
+              quoteAccepted={quoteDetails?.is_accepted ?? false}
+              showTranslate={autoTranslate}
+              onTranslate={async () => {
+                const translated = await translateMessage(msg.content, i18n.language);
+                queryClient.setQueryData(['chat-messages', quoteId], (old: any) =>
+                  old.map((m: any) =>
+                    m.id === msg.id ? { ...m, content: translated } : m
+                  )
+                );
+              }}
+            />
           ))}
         </div>
       </ScrollArea>
 
-      <form onSubmit={handleSend} className="p-4 border-t">
-        <div className="flex gap-2">
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1"
-          />
-          <Button type="submit" size="icon">
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
-      </form>
+      <ChatInput onSendMessage={(message) => sendMessage.mutate(message)} />
     </div>
   );
 };

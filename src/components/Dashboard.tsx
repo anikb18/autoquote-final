@@ -102,6 +102,8 @@ const Dashboard = () => {
       ) : (
         <BuyerDashboard />
       )}
+
+      <ChatbotPopup />
     </div>
   );
 };
