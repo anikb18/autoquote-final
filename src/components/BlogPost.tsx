@@ -6,10 +6,13 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Database } from "@/integrations/supabase/types";
 
+// Define a more specific type for the profiles data
+type Profile = {
+  full_name: string | null;
+};
+
 type BlogPost = Database['public']['Tables']['blog_posts']['Row'] & {
-  profiles?: {
-    full_name: string | null;
-  } | null;
+  profiles: Profile | null;
 };
 
 const BlogPost = () => {
@@ -31,7 +34,17 @@ const BlogPost = () => {
         .maybeSingle();
       
       if (error) throw error;
-      return data as BlogPost;
+      
+      // Ensure the data matches our expected type
+      if (!data) return null;
+      
+      // Transform the data to match our expected type
+      const transformedData: BlogPost = {
+        ...data,
+        profiles: data.profiles as Profile | null
+      };
+      
+      return transformedData;
     }
   });
 
