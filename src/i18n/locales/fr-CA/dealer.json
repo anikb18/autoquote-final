@@ -3,6 +3,10 @@
     "title": "Arrêtez de perdre des clients qualifiés face à vos concurrents",
     "subtitle": "Pendant que vous lisez ceci, 3 autres concessionnaires font des offres à vos clients potentiels",
     "urgency": "Votre territoire local est en cours d'attribution - Ne manquez pas l'accès exclusif",
+    "stats": {
+      "dealers": "Concessionnaires Leaders",
+      "customers": "Clients Satisfaits"
+    },
     "cta": {
       "signup": "Rejoignez les concessionnaires leaders",
       "demo": "Planifiez votre démo maintenant"
@@ -26,27 +30,44 @@
       "description": "Support 24/7 avec garantie de satisfaction"
     }
   },
-  "signup": {
-    "title": "Rejoignez AutoQuote24",
-    "subtitle": "Obtenez un accès exclusif aux clients pré-qualifiés dans votre territoire",
+  "trust": {
+    "title": "Rejoignez les concessionnaires leaders",
+    "metrics": {
+      "network": {
+        "title": "Croissance du réseau",
+        "value": "250+",
+        "label": "Concessionnaires actifs"
+      },
+      "success": {
+        "title": "Taux de réussite",
+        "value": "35%",
+        "label": "Conversion moyenne des leads"
+      },
+      "value": {
+        "title": "Valeur du marché",
+        "value": "10K+",
+        "label": "Valeur mensuelle des leads"
+      }
+    }
+  },
+  "contact": {
+    "title": "Sécurisez votre territoire maintenant",
+    "subtitle": "Prix de pré-lancement limités - Rejoignez-nous avant que votre marché ne soit verrouillé",
     "form": {
       "dealershipName": "Nom de la concession",
       "dealershipNamePlaceholder": "Entrez le nom de la concession",
       "location": "Emplacement",
       "locationPlaceholder": "Ville, Province",
-      "email": "Courriel",
-      "emailPlaceholder": "Entrez votre courriel professionnel",
-      "password": "Mot de passe",
-      "passwordPlaceholder": "Créez un mot de passe sécurisé",
-      "submit": "Commencer maintenant"
-    },
-    "success": {
-      "title": "Bienvenue sur AutoQuote24",
-      "description": "Votre compte a été créé avec succès. Vous serez redirigé vers votre tableau de bord."
-    },
-    "error": {
-      "title": "Erreur d'inscription",
-      "description": "Une erreur s'est produite lors de la création de votre compte. Veuillez réessayer."
+      "volume": "Volume mensuel de ventes",
+      "volumeOptions": {
+        "small": "0-50 véhicules",
+        "medium": "51-100 véhicules",
+        "large": "101-200 véhicules",
+        "xlarge": "200+ véhicules"
+      },
+      "brands": "Marques représentées",
+      "brandsPlaceholder": "ex: Toyota, Honda, Ford",
+      "submit": "Obtenir un accès exclusif"
     }
   }
 }

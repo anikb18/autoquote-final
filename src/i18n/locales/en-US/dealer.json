@@ -3,6 +3,10 @@
     "title": "Stop Losing Pre-Qualified Leads to Your Competition",
     "subtitle": "While you're reading this, 3 other dealers are bidding on your potential customers",
     "urgency": "Your local territory is being assigned now - Don't miss out on exclusive access",
+    "stats": {
+      "dealers": "Leading Dealers",
+      "customers": "Happy Customers"
+    },
     "cta": {
       "signup": "Join Leading Dealers",
       "demo": "Schedule Your Demo Now"
@@ -26,27 +30,44 @@
       "description": "24/7 dealer support with satisfaction guarantee"
     }
   },
-  "signup": {
-    "title": "Join AutoQuote24",
-    "subtitle": "Get exclusive access to pre-qualified leads in your territory",
+  "trust": {
+    "title": "Join Leading Dealerships",
+    "metrics": {
+      "network": {
+        "title": "Network Growth",
+        "value": "250+",
+        "label": "Active Dealerships"
+      },
+      "success": {
+        "title": "Success Rate",
+        "value": "35%",
+        "label": "Average Lead Conversion"
+      },
+      "value": {
+        "title": "Market Value",
+        "value": "10K+",
+        "label": "Monthly Lead Value"
+      }
+    }
+  },
+  "contact": {
+    "title": "Secure Your Territory Now",
+    "subtitle": "Limited pre-launch pricing available - Join before your market is locked",
     "form": {
       "dealershipName": "Dealership Name",
       "dealershipNamePlaceholder": "Enter dealership name",
       "location": "Location",
-      "locationPlaceholder": "City, State",
-      "email": "Email",
-      "emailPlaceholder": "Enter your business email",
-      "password": "Password",
-      "passwordPlaceholder": "Create a secure password",
-      "submit": "Get Started Now"
-    },
-    "success": {
-      "title": "Welcome to AutoQuote24",
-      "description": "Your account has been created successfully. You'll be redirected to your dashboard."
-    },
-    "error": {
-      "title": "Registration Error",
-      "description": "There was an error creating your account. Please try again."
+      "locationPlaceholder": "City, Province",
+      "volume": "Monthly Sales Volume",
+      "volumeOptions": {
+        "small": "0-50 vehicles",
+        "medium": "51-100 vehicles",
+        "large": "101-200 vehicles",
+        "xlarge": "200+ vehicles"
+      },
+      "brands": "Brands Represented",
+      "brandsPlaceholder": "e.g., Toyota, Honda, Ford",
+      "submit": "Get Exclusive Access"
     }
   }
 }
