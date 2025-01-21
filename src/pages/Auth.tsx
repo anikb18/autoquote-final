@@ -11,14 +11,18 @@ const Auth = () => {
   const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN') {
+        // Update user metadata with newsletter preference after sign in
+        await supabase.auth.updateUser({
+          data: { subscribe_newsletter: subscribeNewsletter }
+        });
         navigate("/dashboard");
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, subscribeNewsletter]);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-md">
@@ -39,14 +43,6 @@ const Auth = () => {
           appearance={{ theme: ThemeSupa }}
           providers={["google"]}
           theme="light"
-          onSignUp={({ data, error }) => {
-            if (!error && data.user) {
-              // Update user metadata with newsletter preference
-              supabase.auth.updateUser({
-                data: { subscribe_newsletter: subscribeNewsletter }
-              });
-            }
-          }}
         />
       </div>
     </div>
