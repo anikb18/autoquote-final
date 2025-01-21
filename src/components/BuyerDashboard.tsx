@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import ChatInterface from "./ChatInterface";
+import CarViewer3D from "./CarViewer3D";
 
 const BuyerDashboard = () => {
   const { data: quotes, isLoading } = useQuery({
@@ -31,8 +32,27 @@ const BuyerDashboard = () => {
 
   if (isLoading) return <div>Loading...</div>;
 
+  const activeQuote = quotes?.find(quote => 
+    quote.status === 'active' || 
+    quote.dealer_quotes?.some(dq => dq.is_accepted)
+  );
+
   return (
     <div className="space-y-6">
+      {activeQuote && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Vehicle Preview</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CarViewer3D 
+              carDetails={activeQuote.car_details}
+              showHotspots={activeQuote.status === 'active'}
+            />
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle>My Quote Requests</CardTitle>
