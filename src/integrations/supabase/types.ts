@@ -311,6 +311,9 @@ export type Database = {
           id: string
           is_accepted: boolean | null
           quote_id: string | null
+          response_date: string | null
+          response_notes: string | null
+          response_status: string | null
           status: string | null
         }
         Insert: {
@@ -319,6 +322,9 @@ export type Database = {
           id?: string
           is_accepted?: boolean | null
           quote_id?: string | null
+          response_date?: string | null
+          response_notes?: string | null
+          response_status?: string | null
           status?: string | null
         }
         Update: {
@@ -327,6 +333,9 @@ export type Database = {
           id?: string
           is_accepted?: boolean | null
           quote_id?: string | null
+          response_date?: string | null
+          response_notes?: string | null
+          response_status?: string | null
           status?: string | null
         }
         Relationships: [
@@ -627,6 +636,51 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "quote_alerts_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quote_responses: {
+        Row: {
+          created_at: string | null
+          dealer_quote_id: string | null
+          id: string
+          notes: string | null
+          quote_id: string | null
+          response_date: string | null
+          response_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          dealer_quote_id?: string | null
+          id?: string
+          notes?: string | null
+          quote_id?: string | null
+          response_date?: string | null
+          response_type: string
+        }
+        Update: {
+          created_at?: string | null
+          dealer_quote_id?: string | null
+          id?: string
+          notes?: string | null
+          quote_id?: string | null
+          response_date?: string | null
+          response_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_responses_dealer_quote_id_fkey"
+            columns: ["dealer_quote_id"]
+            isOneToOne: false
+            referencedRelation: "dealer_quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_responses_quote_id_fkey"
             columns: ["quote_id"]
             isOneToOne: false
             referencedRelation: "quotes"
