@@ -1,60 +1,82 @@
 {
   "dashboard": {
     "title": "Admin Dashboard",
-    "welcome": "Welcome back, Admin"
+    "welcome": "Welcome back to your admin dashboard",
+    "overview": "Here's an overview of your platform's performance"
   },
   "tabs": {
-    "analytics": "Analytics & Insights",
-    "blog": "Blog Management",
-    "newsletter": "Newsletter"
+    "analytics": "Analytics & Reports",
+    "blog": "Blog Content",
+    "newsletter": "Email Marketing"
   },
   "metrics": {
     "totalSales": {
       "title": "Total Sales",
-      "description": "Revenue from all transactions"
+      "description": "Total revenue from all transactions",
+      "prefix": "$"
     },
     "activeDealers": {
       "title": "Active Dealers",
-      "description": "Currently registered dealers"
+      "description": "Currently registered & active dealers",
+      "prefix": ""
     },
     "totalUsers": {
       "title": "Active Users",
-      "description": "Total registered users"
+      "description": "Total registered platform users",
+      "prefix": ""
     },
     "conversionRate": {
       "title": "Success Rate",
-      "description": "Quote to sale conversion"
+      "description": "Quote to sale conversion rate",
+      "prefix": ""
     }
   },
   "blog": {
     "title": "Blog Posts",
-    "createNew": "Write New Post",
+    "createNew": "Create New Post",
+    "form": {
+      "titlePlaceholder": "Enter a compelling title for your post",
+      "contentPlaceholder": "Start writing your blog post here..."
+    },
     "status": {
+      "label": "Status",
       "draft": "Draft",
       "published": "Published",
       "scheduled": "Scheduled"
     },
+    "created": "Created",
     "actions": {
       "edit": "Edit Post",
-      "publish": "Publish",
-      "schedule": "Schedule",
-      "preview": "Preview"
+      "publish": "Publish Now",
+      "schedule": "Schedule Post",
+      "preview": "Preview Post",
+      "create": "Create Post"
+    },
+    "success": {
+      "create": "Blog post created successfully",
+      "publish": "Blog post published successfully",
+      "schedule": "Blog post scheduled successfully"
+    },
+    "error": {
+      "create": "Failed to create blog post",
+      "publish": "Failed to publish blog post",
+      "schedule": "Failed to schedule blog post"
     }
   },
   "newsletter": {
     "create": {
       "title": "Create Newsletter",
-      "description": "Compose a new newsletter to send to your subscribers",
-      "titlePlaceholder": "Enter newsletter title",
+      "description": "Compose a new newsletter campaign",
+      "titlePlaceholder": "Enter newsletter subject line",
       "contentPlaceholder": "Write your newsletter content here..."
     },
     "drafts": {
       "title": "Newsletter Drafts",
-      "description": "Manage your drafts and scheduled sends",
+      "description": "Manage your drafts and scheduled campaigns",
       "empty": "No drafts found"
     },
     "subscribers": {
-      "title": "Subscribers",
+      "title": "Subscriber List",
       "description": "Manage your newsletter subscribers",
       "totalCount": "Total Subscribers: {{count}}",
       "status": {
@@ -63,10 +85,21 @@
       }
     },
     "actions": {
-      "saveDraft": "Save as Draft",
-      "preview": "Preview",
+      "saveDraft": "Save Draft",
+      "preview": "Preview Email",
       "schedule": "Schedule Send",
-      "sendNow": "Send Now"
+      "sendNow": "Send Now",
+      "test": "Send Test Email"
+    },
+    "success": {
+      "saved": "Newsletter saved as draft",
+      "scheduled": "Newsletter scheduled successfully",
+      "sent": "Newsletter sent successfully"
+    },
+    "error": {
+      "save": "Failed to save newsletter",
+      "schedule": "Failed to schedule newsletter",
+      "send": "Failed to send newsletter"
     }
   }
 }

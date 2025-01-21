@@ -65,7 +65,8 @@ export const AdminMetricsCards = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            ${salesData?.reduce((acc, curr) => acc + (curr.selling_price || 0), 0).toLocaleString()}
+            {t('metrics.totalSales.prefix')}
+            {salesData?.reduce((acc, curr) => acc + (curr.selling_price || 0), 0).toLocaleString()}
           </div>
         </CardContent>
       </Card>
@@ -77,6 +78,7 @@ export const AdminMetricsCards = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
+            {t('metrics.activeDealers.prefix')}
             {dealerStats?.length || 0}
           </div>
         </CardContent>
@@ -89,6 +91,7 @@ export const AdminMetricsCards = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
+            {t('metrics.totalUsers.prefix')}
             {userStats?.length || 0}
           </div>
         </CardContent>

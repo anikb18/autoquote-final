@@ -18,6 +18,9 @@ const AdminDashboard = () => {
         <p className="text-muted-foreground">
           {t('dashboard.welcome')}
         </p>
+        <p className="text-sm text-muted-foreground">
+          {t('dashboard.overview')}
+        </p>
       </div>
       
       <Tabs defaultValue="analytics" className="space-y-6">

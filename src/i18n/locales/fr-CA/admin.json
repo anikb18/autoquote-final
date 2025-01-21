@@ -1,60 +1,82 @@
 {
   "dashboard": {
     "title": "Tableau de Bord Admin",
-    "welcome": "Bon retour, Admin"
+    "welcome": "Bienvenue sur votre tableau de bord administrateur",
+    "overview": "Voici un aperçu des performances de votre plateforme"
   },
   "tabs": {
-    "analytics": "Analyses et Aperçus",
-    "blog": "Gestion du Blog",
-    "newsletter": "Infolettre"
+    "analytics": "Analyses & Rapports",
+    "blog": "Contenu Blog",
+    "newsletter": "Marketing par Courriel"
   },
   "metrics": {
     "totalSales": {
       "title": "Ventes Totales",
-      "description": "Revenus de toutes les transactions"
+      "description": "Revenus totaux de toutes les transactions",
+      "prefix": "$"
     },
     "activeDealers": {
       "title": "Concessionnaires Actifs",
-      "description": "Concessionnaires actuellement inscrits"
+      "description": "Concessionnaires actuellement inscrits et actifs",
+      "prefix": ""
     },
     "totalUsers": {
       "title": "Utilisateurs Actifs",
-      "description": "Total des utilisateurs inscrits"
+      "description": "Nombre total d'utilisateurs inscrits",
+      "prefix": ""
     },
     "conversionRate": {
       "title": "Taux de Réussite",
-      "description": "Conversion devis en vente"
+      "description": "Taux de conversion devis en vente",
+      "prefix": ""
     }
   },
   "blog": {
     "title": "Articles du Blog",
-    "createNew": "Écrire un Nouvel Article",
+    "createNew": "Créer un Nouvel Article",
+    "form": {
+      "titlePlaceholder": "Entrez un titre accrocheur pour votre article",
+      "contentPlaceholder": "Commencez à rédiger votre article ici..."
+    },
     "status": {
+      "label": "Statut",
       "draft": "Brouillon",
       "published": "Publié",
       "scheduled": "Programmé"
     },
+    "created": "Créé le",
     "actions": {
       "edit": "Modifier",
       "publish": "Publier",
       "schedule": "Programmer",
-      "preview": "Aperçu"
+      "preview": "Aperçu",
+      "create": "Créer l'Article"
+    },
+    "success": {
+      "create": "Article créé avec succès",
+      "publish": "Article publié avec succès",
+      "schedule": "Article programmé avec succès"
+    },
+    "error": {
+      "create": "Échec de la création de l'article",
+      "publish": "Échec de la publication de l'article",
+      "schedule": "Échec de la programmation de l'article"
     }
   },
   "newsletter": {
     "create": {
       "title": "Créer une Infolettre",
-      "description": "Composez une nouvelle infolettre pour vos abonnés",
-      "titlePlaceholder": "Entrez le titre de l'infolettre",
+      "description": "Composez une nouvelle campagne d'infolettre",
+      "titlePlaceholder": "Entrez l'objet de l'infolettre",
       "contentPlaceholder": "Rédigez le contenu de votre infolettre ici..."
     },
     "drafts": {
       "title": "Brouillons d'Infolettre",
-      "description": "Gérez vos brouillons et envois programmés",
+      "description": "Gérez vos brouillons et campagnes programmées",
       "empty": "Aucun brouillon trouvé"
     },
     "subscribers": {
-      "title": "Abonnés",
+      "title": "Liste des Abonnés",
       "description": "Gérez vos abonnés à l'infolettre",
       "totalCount": "Total des abonnés : {{count}}",
       "status": {
@@ -63,10 +85,21 @@
       }
     },
     "actions": {
-      "saveDraft": "Enregistrer comme Brouillon",
-      "preview": "Aperçu",
+      "saveDraft": "Enregistrer le Brouillon",
+      "preview": "Aperçu du Courriel",
       "schedule": "Programmer l'Envoi",
-      "sendNow": "Envoyer Maintenant"
+      "sendNow": "Envoyer Maintenant",
+      "test": "Envoyer un Test"
+    },
+    "success": {
+      "saved": "Infolettre enregistrée comme brouillon",
+      "scheduled": "Infolettre programmée avec succès",
+      "sent": "Infolettre envoyée avec succès"
+    },
+    "error": {
+      "save": "Échec de l'enregistrement de l'infolettre",
+      "schedule": "Échec de la programmation de l'infolettre",
+      "send": "Échec de l'envoi de l'infolettre"
     }
   }
 }
