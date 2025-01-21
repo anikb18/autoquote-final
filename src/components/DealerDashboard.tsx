@@ -71,13 +71,15 @@ const DealerDashboard = () => {
       
       return data[0] as DealerStats;
     },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to load dealer metrics",
-        variant: "destructive",
-      });
-    },
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to load dealer metrics",
+          variant: "destructive",
+        });
+      }
+    }
   });
 
   const { data: dealerAnalytics, isLoading: isAnalyticsLoading, error: analyticsError } = useQuery({
