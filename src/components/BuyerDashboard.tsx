@@ -78,7 +78,7 @@ const BuyerDashboard = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {activeQuote && (
-          <Card className="col-span-1 lg:col-span-2 glass dark-mode-transition hover-card">
+          <Card className="col-span-1 lg:col-span-2 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader>
               <CardTitle>{t('dashboard.vehiclePreview')}</CardTitle>
             </CardHeader>
@@ -91,7 +91,7 @@ const BuyerDashboard = () => {
           </Card>
         )}
 
-        <Card className="col-span-1 lg:col-span-2 glass dark-mode-transition hover-card">
+        <Card className="col-span-1 lg:col-span-2 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>{t('dashboard.quoteRequests')}</CardTitle>
           </CardHeader>
@@ -107,8 +107,8 @@ const BuyerDashboard = () => {
               </TableHeader>
               <TableBody>
                 {quotes?.map((quote) => (
-                  <>
-                    <TableRow key={quote.id} className="hover:bg-muted/50 transition-colors">
+                  <React.Fragment key={quote.id}>
+                    <TableRow className="hover:bg-muted/50 transition-colors">
                       <TableCell>{JSON.stringify(quote.car_details)}</TableCell>
                       <TableCell>{quote.has_trade_in ? t('common.yes') : t('common.no')}</TableCell>
                       <TableCell>{t(`quotes.status.${quote.status}`)}</TableCell>
@@ -126,7 +126,7 @@ const BuyerDashboard = () => {
                         </TableCell>
                       </TableRow>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </TableBody>
             </Table>
