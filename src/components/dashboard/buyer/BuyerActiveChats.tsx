@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import ChatInterface from "@/components/ChatInterface";
+import { formatCarDetails } from "@/lib/utils";
 
 export const BuyerActiveChats = () => {
   const { t } = useTranslation();

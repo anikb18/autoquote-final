@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatCarDetails } from "@/lib/utils";
 
 export const BuyerCarListings = () => {
   const { t } = useTranslation();
@@ -40,7 +41,7 @@ export const BuyerCarListings = () => {
           <TableBody>
             {auctions?.map((auction) => (
               <TableRow key={auction.id}>
-                <TableCell>{auction.vehicle_details?.make} {auction.vehicle_details?.model}</TableCell>
+                <TableCell>{formatCarDetails(auction.vehicle_details)}</TableCell>
                 <TableCell>${auction.current_price || auction.start_price}</TableCell>
                 <TableCell>
                   {new Date(auction.enddate) > new Date() 
