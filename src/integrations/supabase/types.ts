@@ -390,6 +390,150 @@ export type Database = {
           },
         ]
       }
+      financing_calculations: {
+        Row: {
+          created_at: string | null
+          down_payment: number | null
+          id: string
+          interest_rate: number
+          loan_amount: number
+          monthly_payment: number
+          province: string | null
+          quote_id: string | null
+          tax_rate: number
+          term_months: number
+          total_with_tax: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          down_payment?: number | null
+          id?: string
+          interest_rate: number
+          loan_amount: number
+          monthly_payment: number
+          province?: string | null
+          quote_id?: string | null
+          tax_rate: number
+          term_months: number
+          total_with_tax: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          down_payment?: number | null
+          id?: string
+          interest_rate?: number
+          loan_amount?: number
+          monthly_payment?: number
+          province?: string | null
+          quote_id?: string | null
+          tax_rate?: number
+          term_months?: number
+          total_with_tax?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financing_calculations_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insurance_quotes: {
+        Row: {
+          annual_premium: number
+          coverage_type: string
+          created_at: string | null
+          deductible: number
+          id: string
+          provider: string | null
+          quote_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          annual_premium: number
+          coverage_type: string
+          created_at?: string | null
+          deductible: number
+          id?: string
+          provider?: string | null
+          quote_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          annual_premium?: number
+          coverage_type?: string
+          created_at?: string | null
+          deductible?: number
+          id?: string
+          provider?: string | null
+          quote_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_quotes_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loan_pre_approvals: {
+        Row: {
+          annual_income: number | null
+          approved_amount: number | null
+          created_at: string | null
+          credit_score: number | null
+          id: string
+          interest_rate: number | null
+          monthly_obligations: number | null
+          quote_id: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          annual_income?: number | null
+          approved_amount?: number | null
+          created_at?: string | null
+          credit_score?: number | null
+          id?: string
+          interest_rate?: number | null
+          monthly_obligations?: number | null
+          quote_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          annual_income?: number | null
+          approved_amount?: number | null
+          created_at?: string | null
+          credit_score?: number | null
+          id?: string
+          interest_rate?: number | null
+          monthly_obligations?: number | null
+          quote_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loan_pre_approvals_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_sends: {
         Row: {
           error_message: string | null
