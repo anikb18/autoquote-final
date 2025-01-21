@@ -11,6 +11,8 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { ChatbotPopup } from "./chat/ChatbotPopup";
 import { useNavigate } from "react-router-dom";
+import { SettingsLayout } from "./settings/SettingsLayout";
+import { SettingsForm } from "./settings/SettingsForm";
 import { 
   ResizableHandle, 
   ResizablePanel, 
@@ -22,6 +24,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [viewAs, setViewAs] = useState<'admin' | 'dealer' | 'buyer'>('admin');
   const [collapsed, setCollapsed] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   // First check if user is authenticated
   const { data: session, isLoading: isSessionLoading } = useQuery({
@@ -103,6 +106,24 @@ const Dashboard = () => {
     );
   }
 
+  const renderDashboardContent = () => {
+    if (showSettings && userRole === 'admin') {
+      return (
+        <SettingsLayout>
+          <SettingsForm />
+        </SettingsLayout>
+      );
+    }
+
+    if ((userRole === 'admin' && viewAs === 'admin')) {
+      return <AdminDashboard onSettingsClick={() => setShowSettings(true)} />;
+    } else if ((userRole === 'admin' && viewAs === 'dealer') || userRole === 'dealer') {
+      return <DealerDashboard />;
+    } else {
+      return <BuyerDashboard />;
+    }
+  };
+
   return (
     <ResizablePanelGroup direction="horizontal" className="min-h-screen">
       <ResizablePanel 
@@ -117,7 +138,10 @@ const Dashboard = () => {
         {userRole === 'admin' && (
           <div className="space-y-4">
             <h3 className="font-semibold mb-2">View As</h3>
-            <Select value={viewAs} onValueChange={(value: 'admin' | 'dealer' | 'buyer') => setViewAs(value)}>
+            <Select value={viewAs} onValueChange={(value: 'admin' | 'dealer' | 'buyer') => {
+              setViewAs(value);
+              setShowSettings(false);
+            }}>
               <SelectTrigger>
                 <SelectValue placeholder="Select view..." />
               </SelectTrigger>
@@ -139,13 +163,7 @@ const Dashboard = () => {
       
       <ResizablePanel defaultSize={80}>
         <div className="p-6">
-          {(userRole === 'admin' && viewAs === 'admin') ? (
-            <AdminDashboard />
-          ) : (userRole === 'admin' && viewAs === 'dealer') || userRole === 'dealer' ? (
-            <DealerDashboard />
-          ) : (
-            <BuyerDashboard />
-          )}
+          {renderDashboardContent()}
         </div>
       </ResizablePanel>
 
