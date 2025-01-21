@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import SubscriptionStatus from "./SubscriptionStatus";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

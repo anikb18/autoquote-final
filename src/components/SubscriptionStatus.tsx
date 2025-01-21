@@ -58,7 +58,7 @@ const SubscriptionStatus = () => {
         </div>
         <div className="flex items-center gap-4">
           <span>Status:</span>
-          <Badge variant={profile?.subscription_status === 'active' ? 'success' : 'destructive'}>
+          <Badge variant={profile?.subscription_status === 'active' ? 'default' : 'destructive'}>
             {profile?.subscription_status || 'Inactive'}
           </Badge>
         </div>
