@@ -28,7 +28,13 @@ export const ContactForm = () => {
         .from('dealer_leads')
         .insert([
           {
-            ...formData,
+            dealership_name: formData.dealershipName,
+            location: formData.location,
+            volume: formData.volume,
+            brands: formData.brands,
+            phone: formData.phone,
+            email: formData.email,
+            preferred_contact: formData.preferredContact,
             status: 'new',
             source: 'website'
           }

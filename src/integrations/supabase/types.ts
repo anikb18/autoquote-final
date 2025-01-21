@@ -235,6 +235,54 @@ export type Database = {
           },
         ]
       }
+      dealer_leads: {
+        Row: {
+          id: string
+          dealership_name: string
+          location: string
+          volume: string
+          brands: string
+          phone: string
+          email: string
+          preferred_contact: string
+          status: Database["public"]["Enums"]["dealer_lead_status"] | null
+          source: string
+          notes: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          dealership_name: string
+          location: string
+          volume: string
+          brands: string
+          phone: string
+          email: string
+          preferred_contact: string
+          status?: Database["public"]["Enums"]["dealer_lead_status"] | null
+          source: string
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          dealership_name?: string
+          location?: string
+          volume?: string
+          brands?: string
+          phone?: string
+          email?: string
+          preferred_contact?: string
+          status?: Database["public"]["Enums"]["dealer_lead_status"] | null
+          source?: string
+          notes?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       dealer_notifications: {
         Row: {
           created_at: string | null
@@ -417,7 +465,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           down_payment?: number | null
-          id?: string
+          id: string
           interest_rate: number
           loan_amount: number
           monthly_payment: number
@@ -468,7 +516,7 @@ export type Database = {
           coverage_type: string
           created_at?: string | null
           deductible: number
-          id?: string
+          id: string
           provider?: string | null
           quote_id?: string | null
           updated_at?: string | null
@@ -1176,8 +1224,8 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          id?: string
-          role?: string
+          id: string
+          role: string
         }
         Relationships: []
       }
@@ -1194,7 +1242,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          id?: string
+          id: string
           name?: string
         }
         Relationships: []
@@ -1216,7 +1264,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          id?: string
+          id: string
           make_id?: string | null
           name?: string
           year?: number
@@ -1348,6 +1396,12 @@ export type Database = {
     Enums: {
       bid_visibility: "private" | "public"
       blog_post_status: "draft" | "published" | "archived"
+      dealer_lead_status:
+        | "new"
+        | "contacted"
+        | "qualified"
+        | "converted"
+        | "lost"
       newsletter_status: "draft" | "scheduled" | "sent"
       subscription_level: "basic" | "premium"
     }
@@ -1366,7 +1420,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
