@@ -45,15 +45,19 @@ const Dashboard = () => {
       return existingRole?.role;
     },
     retry: 1,
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to load dashboard. Please try again later.",
-        variant: "destructive",
-      });
-      console.error('Dashboard error:', error);
-    },
+    meta: {
+      errorMessage: "Failed to load dashboard. Please try again later."
+    }
   });
+
+  // Handle error state with toast
+  if (error) {
+    toast({
+      title: "Error",
+      description: "Failed to load dashboard. Please try again later.",
+      variant: "destructive",
+    });
+  }
 
   if (isLoading) {
     return (
