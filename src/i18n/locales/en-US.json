@@ -64,20 +64,28 @@
   },
   "dashboard": {
     "welcome": "Welcome to Your Dashboard",
+    "activeQuotes": "Active Quote Requests",
+    "myListings": "My Car Listings",
+    "activeChats": "Active Conversations",
     "vehiclePreview": "Vehicle Preview",
     "quoteRequests": "Quote Requests"
   },
   "quotes": {
     "carDetails": "Vehicle Details",
     "tradeIn": "Trade-In",
+    "dealerResponses": "Dealer Responses",
+    "responses": "Response(s)",
     "status": {
       "active": "Active",
       "pending": "Pending",
       "completed": "Completed",
       "cancelled": "Cancelled"
-    },
-    "dealerResponses": "Dealer Responses",
-    "responses": "Response(s)",
-    "status": "Status"
+    }
+  },
+  "auctions": {
+    "vehicle": "Vehicle",
+    "currentPrice": "Current Price",
+    "timeLeft": "Time Remaining",
+    "ended": "Auction Ended"
   }
 }

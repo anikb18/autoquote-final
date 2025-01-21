@@ -64,20 +64,28 @@
   },
   "dashboard": {
     "welcome": "Bienvenue sur votre tableau de bord",
+    "activeQuotes": "Demandes de devis actives",
+    "myListings": "Mes annonces de voitures",
+    "activeChats": "Conversations actives",
     "vehiclePreview": "Aperçu du véhicule",
     "quoteRequests": "Demandes de devis"
   },
   "quotes": {
     "carDetails": "Détails du véhicule",
     "tradeIn": "Reprise",
+    "dealerResponses": "Réponses des concessionnaires",
+    "responses": "Réponse(s)",
     "status": {
       "active": "Actif",
       "pending": "En attente",
       "completed": "Terminé",
       "cancelled": "Annulé"
-    },
-    "dealerResponses": "Réponses des concessionnaires",
-    "responses": "Réponse(s)",
-    "status": "Statut"
+    }
+  },
+  "auctions": {
+    "vehicle": "Véhicule",
+    "currentPrice": "Prix actuel",
+    "timeLeft": "Temps restant",
+    "ended": "Enchère terminée"
   }
 }
