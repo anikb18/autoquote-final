@@ -43,18 +43,41 @@ const BuyerDashboard = () => {
 
       const { data, error } = await supabase
         .from('quotes')
-        .select('*')
+        .select(`
+          *,
+          dealer_quotes (
+            id,
+            dealer_id,
+            is_accepted,
+            dealer_profile:dealer_profiles (*)
+          )
+        `)
         .eq('user_id', user.id)
         .eq('status', 'active')
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
-      return data as Quote;
+      if (error) throw error;
+      
+      if (!data) return null;
+
+      // Transform the data to match the Quote type
+      const quote: Quote = {
+        id: data.id,
+        car_details: data.car_details as CarDetails,
+        dealer_quotes: data.dealer_quotes.map((dq: any) => ({
+          id: dq.id,
+          dealer_id: dq.dealer_id,
+          is_accepted: dq.is_accepted,
+          dealer_profile: dq.dealer_profile
+        }))
+      };
+
+      return quote;
     },
   });
 
   // Parse car_details to ensure it matches CarDetails type
-  const carDetails: CarDetails | undefined = activeQuote?.car_details as CarDetails;
+  const carDetails: CarDetails | undefined = activeQuote?.car_details;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
