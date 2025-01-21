@@ -51,7 +51,28 @@ const QuoteDetails = () => {
         .single();
 
       if (error) throw error;
-      return data as Quote;
+      
+      // Ensure car_details has the correct shape
+      const carDetails = data?.car_details as CarDetails;
+      if (!carDetails?.year || !carDetails?.make || !carDetails?.model) {
+        throw new Error('Invalid car details format');
+      }
+
+      // Transform the data to match the Quote interface
+      const transformedData: Quote = {
+        id: data.id,
+        car_details: carDetails,
+        dealer_quotes: data.dealer_quotes.map((dq: any) => ({
+          id: dq.id,
+          dealer_id: dq.dealer_id,
+          is_accepted: dq.is_accepted,
+          dealer: dq.dealer ? {
+            dealer_profiles: dq.dealer.dealer_profiles
+          } : undefined
+        }))
+      };
+
+      return transformedData;
     },
     enabled: !!id
   });
