@@ -11,9 +11,14 @@ const AdminDashboard = () => {
 
   return (
     <div className="p-6 space-y-8 bg-background min-h-screen">
-      <h1 className="text-4xl font-bold text-foreground">
-        {t('dashboard.title')}
-      </h1>
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold text-foreground">
+          {t('dashboard.title')}
+        </h1>
+        <p className="text-muted-foreground">
+          {t('dashboard.welcome')}
+        </p>
+      </div>
       
       <Tabs defaultValue="analytics" className="space-y-6">
         <TabsList className="bg-background/50 backdrop-blur-sm border">

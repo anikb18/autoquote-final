@@ -1,69 +1,72 @@
 {
   "dashboard": {
     "title": "Admin Dashboard",
-    "welcome": "Welcome to the Admin Dashboard"
+    "welcome": "Welcome back, Admin"
   },
   "tabs": {
-    "analytics": "Analytics",
+    "analytics": "Analytics & Insights",
     "blog": "Blog Management",
     "newsletter": "Newsletter"
   },
   "metrics": {
     "totalSales": {
       "title": "Total Sales",
-      "description": "Monthly overview"
+      "description": "Revenue from all transactions"
     },
     "activeDealers": {
       "title": "Active Dealers",
-      "description": "Currently registered"
+      "description": "Currently registered dealers"
     },
     "totalUsers": {
-      "title": "Total Users",
-      "description": "All registered users"
+      "title": "Active Users",
+      "description": "Total registered users"
     },
     "conversionRate": {
-      "title": "Conversion Rate",
-      "description": "Quotes to Sales"
+      "title": "Success Rate",
+      "description": "Quote to sale conversion"
     }
   },
   "blog": {
     "title": "Blog Posts",
-    "createNew": "Create New Post",
-    "form": {
-      "title": "Post Title",
-      "content": "Post Content",
-      "save": "Save as Draft",
-      "preview": "Preview & Send"
-    },
+    "createNew": "Write New Post",
     "status": {
       "draft": "Draft",
-      "published": "Published"
+      "published": "Published",
+      "scheduled": "Scheduled"
+    },
+    "actions": {
+      "edit": "Edit Post",
+      "publish": "Publish",
+      "schedule": "Schedule",
+      "preview": "Preview"
     }
   },
   "newsletter": {
-    "title": "Newsletter Management",
-    "subscribers": {
-      "title": "Newsletter Subscribers",
-      "total": "Total Subscribers: {{count}}",
-      "subscribedOn": "Subscribed: {{date}}"
-    },
     "create": {
       "title": "Create Newsletter",
       "description": "Compose a new newsletter to send to your subscribers",
-      "form": {
-        "title": "Newsletter Title",
-        "content": "Newsletter Content",
-        "save": "Save Draft",
-        "send": "Send Newsletter"
-      }
+      "titlePlaceholder": "Enter newsletter title",
+      "contentPlaceholder": "Write your newsletter content here..."
     },
     "drafts": {
       "title": "Newsletter Drafts",
-      "description": "Manage your newsletter drafts and scheduled sends",
-      "actions": {
-        "edit": "Edit",
-        "send": "Send"
+      "description": "Manage your drafts and scheduled sends",
+      "empty": "No drafts found"
+    },
+    "subscribers": {
+      "title": "Subscribers",
+      "description": "Manage your newsletter subscribers",
+      "totalCount": "Total Subscribers: {{count}}",
+      "status": {
+        "active": "Active",
+        "unsubscribed": "Unsubscribed"
       }
+    },
+    "actions": {
+      "saveDraft": "Save as Draft",
+      "preview": "Preview",
+      "schedule": "Schedule Send",
+      "sendNow": "Send Now"
     }
   }
 }

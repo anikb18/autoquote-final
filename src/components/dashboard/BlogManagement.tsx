@@ -7,8 +7,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const BlogManagement = () => {
+  const { t } = useTranslation('admin');
   const { toast } = useToast();
   const [newBlogTitle, setNewBlogTitle] = useState("");
   const [newBlogContent, setNewBlogContent] = useState("");
@@ -43,14 +45,14 @@ export const BlogManagement = () => {
 
     if (error) {
       toast({
-        title: "Error",
-        description: "Failed to create blog post. Please try again.",
+        title: t('common:error'),
+        description: t('blog.error.create'),
         variant: "destructive",
       });
     } else {
       toast({
-        title: "Success",
-        description: "Blog post created successfully!",
+        title: t('common:success'),
+        description: t('blog.success.create'),
       });
       setNewBlogTitle("");
       setNewBlogContent("");
@@ -60,31 +62,33 @@ export const BlogManagement = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Blog Posts</h2>
+        <h2 className="text-2xl font-semibold">{t('blog.title')}</h2>
         <Dialog>
           <DialogTrigger asChild>
             <Button className="bg-white shadow-lg hover:shadow-xl transition-shadow">
-              Create New Post
+              {t('blog.createNew')}
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-white/80 backdrop-blur-lg">
             <DialogHeader>
-              <DialogTitle>Create New Blog Post</DialogTitle>
+              <DialogTitle>{t('blog.createNew')}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <Input
-                placeholder="Post Title"
+                placeholder={t('blog.form.titlePlaceholder')}
                 value={newBlogTitle}
                 onChange={(e) => setNewBlogTitle(e.target.value)}
                 className="bg-white/50"
               />
               <Textarea
-                placeholder="Post Content"
+                placeholder={t('blog.form.contentPlaceholder')}
                 value={newBlogContent}
                 onChange={(e) => setNewBlogContent(e.target.value)}
                 className="min-h-[200px] bg-white/50"
               />
-              <Button onClick={handleCreateBlogPost}>Create Post</Button>
+              <Button onClick={handleCreateBlogPost}>
+                {t('blog.actions.create')}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -96,11 +100,20 @@ export const BlogManagement = () => {
             <CardHeader>
               <CardTitle>{post.title}</CardTitle>
               <CardDescription>
-                Status: {post.status} | Created: {new Date(post.created_at).toLocaleDateString()}
+                {t('blog.status.label')}: {t(`blog.status.${post.status}`)} | 
+                {t('blog.created')}: {new Date(post.created_at).toLocaleDateString()}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="line-clamp-2">{post.content}</p>
+              <div className="flex gap-2 mt-4">
+                <Button variant="outline" size="sm">
+                  {t('blog.actions.edit')}
+                </Button>
+                <Button size="sm">
+                  {t(`blog.actions.${post.status === 'draft' ? 'publish' : 'preview'}`)}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}

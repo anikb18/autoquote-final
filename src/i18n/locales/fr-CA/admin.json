@@ -1,69 +1,72 @@
 {
   "dashboard": {
-    "title": "Tableau de bord administrateur",
-    "welcome": "Bienvenue dans le tableau de bord administrateur"
+    "title": "Tableau de Bord Admin",
+    "welcome": "Bon retour, Admin"
   },
   "tabs": {
-    "analytics": "Analytique",
-    "blog": "Gestion du blog",
+    "analytics": "Analyses et Aperçus",
+    "blog": "Gestion du Blog",
     "newsletter": "Infolettre"
   },
   "metrics": {
     "totalSales": {
-      "title": "Ventes totales",
-      "description": "Aperçu mensuel"
+      "title": "Ventes Totales",
+      "description": "Revenus de toutes les transactions"
     },
     "activeDealers": {
-      "title": "Concessionnaires actifs",
-      "description": "Actuellement inscrits"
+      "title": "Concessionnaires Actifs",
+      "description": "Concessionnaires actuellement inscrits"
     },
     "totalUsers": {
-      "title": "Utilisateurs totaux",
-      "description": "Tous les utilisateurs inscrits"
+      "title": "Utilisateurs Actifs",
+      "description": "Total des utilisateurs inscrits"
     },
     "conversionRate": {
-      "title": "Taux de conversion",
-      "description": "Devis aux ventes"
+      "title": "Taux de Réussite",
+      "description": "Conversion devis en vente"
     }
   },
   "blog": {
-    "title": "Articles du blog",
-    "createNew": "Créer un nouvel article",
-    "form": {
-      "title": "Titre de l'article",
-      "content": "Contenu de l'article",
-      "save": "Enregistrer comme brouillon",
-      "preview": "Aperçu et envoi"
-    },
+    "title": "Articles du Blog",
+    "createNew": "Écrire un Nouvel Article",
     "status": {
       "draft": "Brouillon",
-      "published": "Publié"
+      "published": "Publié",
+      "scheduled": "Programmé"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "publish": "Publier",
+      "schedule": "Programmer",
+      "preview": "Aperçu"
     }
   },
   "newsletter": {
-    "title": "Gestion de l'infolettre",
-    "subscribers": {
-      "title": "Abonnés à l'infolettre",
-      "total": "Total des abonnés: {{count}}",
-      "subscribedOn": "Inscrit le: {{date}}"
-    },
     "create": {
-      "title": "Créer une infolettre",
-      "description": "Composez une nouvelle infolettre à envoyer à vos abonnés",
-      "form": {
-        "title": "Titre de l'infolettre",
-        "content": "Contenu de l'infolettre",
-        "save": "Enregistrer le brouillon",
-        "send": "Envoyer l'infolettre"
-      }
+      "title": "Créer une Infolettre",
+      "description": "Composez une nouvelle infolettre pour vos abonnés",
+      "titlePlaceholder": "Entrez le titre de l'infolettre",
+      "contentPlaceholder": "Rédigez le contenu de votre infolettre ici..."
     },
     "drafts": {
-      "title": "Brouillons d'infolettre",
-      "description": "Gérez vos brouillons d'infolettre et envois programmés",
-      "actions": {
-        "edit": "Modifier",
-        "send": "Envoyer"
+      "title": "Brouillons d'Infolettre",
+      "description": "Gérez vos brouillons et envois programmés",
+      "empty": "Aucun brouillon trouvé"
+    },
+    "subscribers": {
+      "title": "Abonnés",
+      "description": "Gérez vos abonnés à l'infolettre",
+      "totalCount": "Total des abonnés : {{count}}",
+      "status": {
+        "active": "Actif",
+        "unsubscribed": "Désabonné"
       }
+    },
+    "actions": {
+      "saveDraft": "Enregistrer comme Brouillon",
+      "preview": "Aperçu",
+      "schedule": "Programmer l'Envoi",
+      "sendNow": "Envoyer Maintenant"
     }
   }
 }
