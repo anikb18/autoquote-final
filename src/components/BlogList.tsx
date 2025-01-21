@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Editor } from '@tinymce/tinymce-react';
 
 const blogFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -112,7 +112,7 @@ const BlogList = () => {
               Create Post
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-4xl">
             <DialogHeader>
               <DialogTitle>Create New Blog Post</DialogTitle>
             </DialogHeader>
@@ -151,10 +151,23 @@ const BlogList = () => {
                     <FormItem>
                       <FormLabel>Content</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="Write your post content here..."
-                          className="min-h-[200px]"
-                          {...field}
+                        <Editor
+                          apiKey="your-api-key-here"
+                          init={{
+                            height: 500,
+                            menubar: true,
+                            plugins: [
+                              'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                              'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                              'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                            ],
+                            toolbar: 'undo redo | blocks | ' +
+                              'bold italic forecolor | alignleft aligncenter ' +
+                              'alignright alignjustify | bullist numlist outdent indent | ' +
+                              'removeformat | help',
+                          }}
+                          value={field.value}
+                          onEditorChange={(content) => field.onChange(content)}
                         />
                       </FormControl>
                       <FormMessage />

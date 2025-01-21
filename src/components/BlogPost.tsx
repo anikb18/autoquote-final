@@ -6,12 +6,10 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Database } from "@/integrations/supabase/types";
 
-type Profile = {
-  full_name: string | null;
-};
-
 type BlogPost = Database['public']['Tables']['blog_posts']['Row'] & {
-  profiles: Profile;
+  profiles: {
+    full_name: string | null;
+  };
 };
 
 const BlogPost = () => {
@@ -35,12 +33,7 @@ const BlogPost = () => {
       if (error) throw error;
       if (!data) return null;
       
-      return {
-        ...data,
-        profiles: {
-          full_name: data.profiles?.full_name ?? null
-        }
-      } as BlogPost;
+      return data as BlogPost;
     }
   });
 
@@ -86,16 +79,15 @@ const BlogPost = () => {
         <CardHeader>
           <CardTitle className="text-3xl">{post.title}</CardTitle>
           <CardDescription>
-            By {post.profiles.full_name || 'Unknown'} | 
+            By {post.profiles?.full_name || 'Unknown'} | 
             Published: {new Date(post.published_at || post.created_at).toLocaleDateString()}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="prose max-w-none">
-            {post.content.split('\n').map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          <div 
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </CardContent>
       </Card>
     </div>
