@@ -5,13 +5,14 @@ import { BuyerCarListings } from "./dashboard/buyer/BuyerCarListings";
 import { BuyerActiveChats } from "./dashboard/buyer/BuyerActiveChats";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { PlusCircle, Car, Calculator, AlertCircle } from "lucide-react";
+import { PlusCircle, Car, Calculator, AlertCircle, MessageSquareText, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import CarViewer3D from "./CarViewer3D";
 import { Quote, CarDetails } from "@/types/quotes";
+import { ChatbotPopup } from "./chat/ChatbotPopup";
 
 const BuyerDashboard = () => {
   const { t } = useTranslation();
@@ -63,7 +64,11 @@ const BuyerDashboard = () => {
       // Transform the data to match the Quote type
       const quote: Quote = {
         id: data.id,
-        car_details: data.car_details as CarDetails,
+        car_details: {
+          year: data.car_details?.year as number,
+          make: data.car_details?.make as string,
+          model: data.car_details?.model as string
+        },
         dealer_quotes: data.dealer_quotes.map((dq: any) => ({
           id: dq.id,
           dealer_id: dq.dealer_id,
@@ -118,7 +123,7 @@ const BuyerDashboard = () => {
         </Card>
       )}
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="transition-all hover:shadow-lg">
           <CardHeader>
             <CardTitle>Request Quote</CardTitle>
@@ -166,6 +171,22 @@ const BuyerDashboard = () => {
             </Button>
           </CardContent>
         </Card>
+
+        <Card className="transition-all hover:shadow-lg">
+          <CardHeader>
+            <CardTitle>Support</CardTitle>
+            <CardDescription>Get help or report issues</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              className="w-full group" 
+              onClick={() => navigate('/support')}
+            >
+              <MessageSquareText className="mr-2 h-4 w-4 transition-transform group-hover:scale-110" />
+              Contact Support
+            </Button>
+          </CardContent>
+        </Card>
       </div>
       
       <div className="grid grid-cols-1 gap-6">
@@ -173,6 +194,8 @@ const BuyerDashboard = () => {
         <BuyerCarListings />
         <BuyerActiveChats />
       </div>
+
+      <ChatbotPopup />
     </div>
   );
 };
