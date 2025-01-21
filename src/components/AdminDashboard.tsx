@@ -8,6 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { ChartContainer, ChartTooltip } from "./ui/chart";
 
 const AdminDashboard = () => {
   const { toast } = useToast();
@@ -34,6 +36,19 @@ const AdminDashboard = () => {
         .from('newsletter_subscribers')
         .select('*')
         .order('subscribed_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const { data: salesData } = useQuery({
+    queryKey: ['sales-transactions'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('sales_transactions')
+        .select('*')
+        .order('created_at', { ascending: true });
       
       if (error) throw error;
       return data;
@@ -72,24 +87,52 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+    <div className="p-6 space-y-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+      <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600">
+        Admin Dashboard
+      </h1>
       
-      <Tabs defaultValue="blog">
-        <TabsList>
+      <Tabs defaultValue="analytics" className="space-y-6">
+        <TabsList className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-sm">
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="blog">Blog Management</TabsTrigger>
           <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
-          <TabsTrigger value="email">Email Management</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="blog" className="space-y-4">
+        <TabsContent value="analytics" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <CardTitle>Total Sales</CardTitle>
+                <CardDescription>Monthly overview</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer className="h-[200px]" config={{}}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={salesData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="created_at" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="selling_price" stroke="#8884d8" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="blog" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-semibold">Blog Posts</h2>
             <Dialog>
               <DialogTrigger asChild>
-                <Button>Create New Post</Button>
+                <Button className="bg-white shadow-lg hover:shadow-xl transition-shadow">
+                  Create New Post
+                </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="bg-white/80 backdrop-blur-lg">
                 <DialogHeader>
                   <DialogTitle>Create New Blog Post</DialogTitle>
                 </DialogHeader>
@@ -98,12 +141,13 @@ const AdminDashboard = () => {
                     placeholder="Post Title"
                     value={newBlogTitle}
                     onChange={(e) => setNewBlogTitle(e.target.value)}
+                    className="bg-white/50"
                   />
                   <Textarea
                     placeholder="Post Content"
                     value={newBlogContent}
                     onChange={(e) => setNewBlogContent(e.target.value)}
-                    className="min-h-[200px]"
+                    className="min-h-[200px] bg-white/50"
                   />
                   <Button onClick={handleCreateBlogPost}>Create Post</Button>
                 </div>
@@ -113,7 +157,7 @@ const AdminDashboard = () => {
           
           <div className="grid gap-4">
             {blogPosts?.map((post) => (
-              <Card key={post.id}>
+              <Card key={post.id} className="bg-white/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
                 <CardHeader>
                   <CardTitle>{post.title}</CardTitle>
                   <CardDescription>
@@ -129,7 +173,7 @@ const AdminDashboard = () => {
         </TabsContent>
 
         <TabsContent value="newsletter">
-          <Card>
+          <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg">
             <CardHeader>
               <CardTitle>Newsletter Subscribers</CardTitle>
               <CardDescription>
@@ -139,7 +183,10 @@ const AdminDashboard = () => {
             <CardContent>
               <div className="space-y-2">
                 {subscribers?.map((subscriber) => (
-                  <div key={subscriber.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                  <div 
+                    key={subscriber.id} 
+                    className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                  >
                     <span>{subscriber.email}</span>
                     <span className="text-sm text-gray-500">
                       Subscribed: {new Date(subscriber.subscribed_at).toLocaleDateString()}
@@ -147,20 +194,6 @@ const AdminDashboard = () => {
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="email">
-          <Card>
-            <CardHeader>
-              <CardTitle>Email Management</CardTitle>
-              <CardDescription>
-                Manage email templates and campaigns
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-500">Email management features coming soon...</p>
             </CardContent>
           </Card>
         </TabsContent>

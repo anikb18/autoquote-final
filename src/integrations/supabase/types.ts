@@ -139,30 +139,42 @@ export type Database = {
       }
       dealer_analytics: {
         Row: {
+          conversion_rate: number | null
           created_at: string | null
           dealer_id: string | null
           id: string
           metric_type: string
           period_end: string
           period_start: string
+          profit_margin: number | null
+          quote_response_time: unknown | null
+          total_revenue: number | null
           value: number
         }
         Insert: {
+          conversion_rate?: number | null
           created_at?: string | null
           dealer_id?: string | null
           id?: string
           metric_type: string
           period_end: string
           period_start: string
+          profit_margin?: number | null
+          quote_response_time?: unknown | null
+          total_revenue?: number | null
           value: number
         }
         Update: {
+          conversion_rate?: number | null
           created_at?: string | null
           dealer_id?: string | null
           id?: string
           metric_type?: string
           period_end?: string
           period_start?: string
+          profit_margin?: number | null
+          quote_response_time?: unknown | null
+          total_revenue?: number | null
           value?: number
         }
         Relationships: []
@@ -567,6 +579,60 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      sales_transactions: {
+        Row: {
+          created_at: string | null
+          dealer_id: string | null
+          gross_profit_percentage: number | null
+          id: string
+          invoice_price: number
+          quote_id: string | null
+          selling_price: number
+          status: string | null
+          transaction_date: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          dealer_id?: string | null
+          gross_profit_percentage?: number | null
+          id?: string
+          invoice_price: number
+          quote_id?: string | null
+          selling_price: number
+          status?: string | null
+          transaction_date?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          dealer_id?: string | null
+          gross_profit_percentage?: number | null
+          id?: string
+          invoice_price?: number
+          quote_id?: string | null
+          selling_price?: number
+          status?: string | null
+          transaction_date?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_transactions_dealer_id_fkey"
+            columns: ["dealer_id"]
+            isOneToOne: false
+            referencedRelation: "dealer_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_transactions_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trade_in_valuations: {
         Row: {
