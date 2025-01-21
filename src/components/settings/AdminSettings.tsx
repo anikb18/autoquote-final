@@ -1,16 +1,19 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SeoManagement } from "@/components/dashboard/SeoManagement";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Settings2 } from "lucide-react";
+import { Settings2, Globe, DollarSign, Mail, BellRing } from "lucide-react";
+import { useState } from "react";
 
 export const AdminSettings = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data: settings } = useQuery({
     queryKey: ['site-settings'],
@@ -25,19 +28,31 @@ export const AdminSettings = () => {
   });
 
   const handleSave = async () => {
-    toast({
-      title: "Settings saved",
-      description: "Your settings have been saved successfully."
-    });
+    setIsLoading(true);
+    try {
+      // Save settings logic here
+      toast({
+        title: "Settings saved",
+        description: "Your changes have been saved successfully."
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save settings",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="container mx-auto py-10">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Business Settings</h2>
           <p className="text-muted-foreground">
-            Manage your application settings and configurations.
+            Manage your platform settings and configurations
           </p>
         </div>
         <Settings2 className="h-6 w-6 text-muted-foreground" />
@@ -46,89 +61,145 @@ export const AdminSettings = () => {
       <Tabs defaultValue="general" className="space-y-4">
         <TabsList>
           <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="seo">SEO</TabsTrigger>
-          <TabsTrigger value="api">API Keys</TabsTrigger>
-          <TabsTrigger value="email">Email</TabsTrigger>
+          <TabsTrigger value="pricing">Pricing & Fees</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="dealership">Dealership Settings</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
           <Card>
             <CardHeader>
-              <CardTitle>General Settings</CardTitle>
+              <CardTitle>Business Information</CardTitle>
               <CardDescription>
-                Configure basic application settings
+                Update your business details and contact information
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="siteName">Site Name</Label>
-                <Input id="siteName" placeholder="Enter site name" />
+                <Label htmlFor="businessName">Business Name</Label>
+                <Input id="businessName" placeholder="Your business name" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="supportEmail">Support Email</Label>
-                <Input id="supportEmail" type="email" placeholder="support@example.com" />
+                <Input id="supportEmail" type="email" placeholder="support@yourbusiness.com" />
               </div>
-              <Button onClick={handleSave}>Save Changes</Button>
+              <div className="space-y-2">
+                <Label htmlFor="supportPhone">Support Phone</Label>
+                <Input id="supportPhone" placeholder="+1 (555) 000-0000" />
+              </div>
+              <div className="flex items-center space-x-2">
+                <Switch id="maintenance" />
+                <Label htmlFor="maintenance">Enable Maintenance Mode</Label>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="seo">
-          <SeoManagement />
-        </TabsContent>
-
-        <TabsContent value="api">
+        <TabsContent value="pricing">
           <Card>
             <CardHeader>
-              <CardTitle>API Configuration</CardTitle>
+              <CardTitle>Pricing & Commission Settings</CardTitle>
               <CardDescription>
-                Manage API keys and integrations
+                Configure your platform's pricing and commission structure
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="stripeKey">Stripe Secret Key</Label>
-                <Input id="stripeKey" type="password" placeholder="sk_..." />
+                <Label htmlFor="platformFee">Platform Fee (%)</Label>
+                <Input id="platformFee" type="number" placeholder="2.5" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="googleMapsKey">Google Maps API Key</Label>
-                <Input id="googleMapsKey" type="password" />
+                <Label htmlFor="dealerCommission">Dealer Commission (%)</Label>
+                <Input id="dealerCommission" type="number" placeholder="5" />
               </div>
-              <Button onClick={handleSave}>Save API Keys</Button>
+              <div className="space-y-2">
+                <Label>Premium Features</Label>
+                <div className="flex items-center space-x-2">
+                  <Switch id="enableTradeIn" />
+                  <Label htmlFor="enableTradeIn">Enable Trade-In Feature</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch id="enableFinancing" />
+                  <Label htmlFor="enableFinancing">Enable Financing Calculator</Label>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="email">
+        <TabsContent value="notifications">
           <Card>
             <CardHeader>
-              <CardTitle>Email Configuration</CardTitle>
+              <CardTitle>Notification Settings</CardTitle>
               <CardDescription>
-                Configure email settings and templates
+                Configure automated notifications and alerts
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="smtpHost">SMTP Host</Label>
-                <Input id="smtpHost" placeholder="smtp.example.com" />
+                <Label>Email Notifications</Label>
+                <div className="flex items-center space-x-2">
+                  <Switch id="newQuoteNotif" />
+                  <Label htmlFor="newQuoteNotif">New Quote Notifications</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch id="dealerResponseNotif" />
+                  <Label htmlFor="dealerResponseNotif">Dealer Response Notifications</Label>
+                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="smtpPort">SMTP Port</Label>
-                <Input id="smtpPort" type="number" placeholder="587" />
+                <Label htmlFor="quoteExpiry">Quote Expiry Time (hours)</Label>
+                <Input id="quoteExpiry" type="number" placeholder="48" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="smtpUser">SMTP Username</Label>
-                <Input id="smtpUser" />
+                <Label htmlFor="reminderTemplate">Quote Reminder Template</Label>
+                <Textarea 
+                  id="reminderTemplate" 
+                  placeholder="Dear {dealer_name}, you have a pending quote from {customer_name}..."
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="dealership">
+          <Card>
+            <CardHeader>
+              <CardTitle>Dealership Requirements</CardTitle>
+              <CardDescription>
+                Set requirements and verification settings for dealerships
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Verification Requirements</Label>
+                <div className="flex items-center space-x-2">
+                  <Switch id="requireLicense" />
+                  <Label htmlFor="requireLicense">Require Business License</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Switch id="requireInsurance" />
+                  <Label htmlFor="requireInsurance">Require Insurance Proof</Label>
+                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="smtpPass">SMTP Password</Label>
-                <Input id="smtpPass" type="password" />
+                <Label htmlFor="responseTime">Maximum Response Time (hours)</Label>
+                <Input id="responseTime" type="number" placeholder="24" />
               </div>
-              <Button onClick={handleSave}>Save Email Settings</Button>
+              <div className="space-y-2">
+                <Label htmlFor="minQuoteValidity">Minimum Quote Validity (days)</Label>
+                <Input id="minQuoteValidity" type="number" placeholder="7" />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      <div className="mt-6 flex justify-end">
+        <Button onClick={handleSave} disabled={isLoading}>
+          {isLoading ? "Saving..." : "Save All Settings"}
+        </Button>
+      </div>
     </div>
   );
 };
