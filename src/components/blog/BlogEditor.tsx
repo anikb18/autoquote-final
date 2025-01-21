@@ -117,7 +117,7 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
       )}
 
       <Editor
-        apiKey={process.env.TINYMCE_API_KEY}
+        apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
         value={content}
         onEditorChange={(newContent) => setContent(newContent)}
         init={{
