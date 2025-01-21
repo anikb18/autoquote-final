@@ -5,6 +5,7 @@ import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { BlogManagement } from "./dashboard/BlogManagement";
 import { NewsletterManagement } from "./dashboard/NewsletterManagement";
 import { UserManagement } from "./dashboard/UserManagement";
+import { SeoManagement } from "./dashboard/SeoManagement";
 import { useTranslation } from "react-i18next";
 
 const AdminDashboard = () => {
@@ -30,6 +31,7 @@ const AdminDashboard = () => {
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
           <TabsTrigger value="blog">{t('tabs.blog')}</TabsTrigger>
           <TabsTrigger value="newsletter">{t('tabs.newsletter')}</TabsTrigger>
+          <TabsTrigger value="seo">{t('tabs.seo')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="analytics" className="space-y-6">
@@ -48,6 +50,10 @@ const AdminDashboard = () => {
 
         <TabsContent value="newsletter">
           <NewsletterManagement />
+        </TabsContent>
+
+        <TabsContent value="seo">
+          <SeoManagement />
         </TabsContent>
       </Tabs>
     </div>

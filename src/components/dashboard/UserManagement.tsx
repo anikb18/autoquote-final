@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -35,7 +35,7 @@ export const UserManagement = () => {
     },
   });
 
-  const { data: profiles } = useQuery({
+  const { data: profiles, refetch: refetchProfiles } = useQuery({
     queryKey: ['user-profiles'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -45,6 +45,28 @@ export const UserManagement = () => {
       return data;
     },
   });
+
+  // Set up real-time subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles'
+        },
+        () => {
+          refetchProfiles();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refetchProfiles]);
 
   const handlePasswordReset = async (email: string) => {
     try {
