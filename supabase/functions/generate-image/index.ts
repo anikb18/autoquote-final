@@ -14,7 +14,7 @@ serve(async (req) => {
   try {
     const { prompt } = await req.json()
 
-    const hf = new HfInference(Deno.env.get('HUGGING_FACE_ACCESS_TOKEN'))
+    const hf = new HfInference(Deno.env.get('HUGGINGFACE_API'))
 
     const image = await hf.textToImage({
       inputs: prompt,
