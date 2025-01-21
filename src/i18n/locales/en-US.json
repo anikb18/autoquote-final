@@ -87,5 +87,64 @@
     "currentPrice": "Current Price",
     "timeLeft": "Time Remaining",
     "ended": "Auction Ended"
+  },
+  "form": {
+    "title": "Vehicle Quote Request",
+    "desiredVehicle": {
+      "title": "Desired Vehicle"
+    },
+    "make": {
+      "label": "Make",
+      "placeholder": "Select make"
+    },
+    "model": {
+      "label": "Model",
+      "placeholder": "Select model"
+    },
+    "year": {
+      "label": "Year"
+    },
+    "trim": {
+      "label": "Trim Level",
+      "placeholder": "Select trim"
+    },
+    "financing": {
+      "title": "Financing Options",
+      "cash": "Cash",
+      "loan": "Financing",
+      "lease": "Lease",
+      "term": "Term",
+      "termPlaceholder": "Select term",
+      "months": "months",
+      "annualKm": "Annual Kilometers",
+      "kmPlaceholder": "Select annual kilometers"
+    },
+    "tradeIn": {
+      "question": "Do you have a trade-in vehicle?",
+      "placeholder": "Select an option",
+      "yes": "Yes",
+      "no": "No",
+      "details": "Trade-in Vehicle Details",
+      "vin": "VIN (Serial Number)",
+      "make": "Make",
+      "model": "Model",
+      "year": "Year",
+      "mileage": "Mileage",
+      "loan": "Outstanding Loan",
+      "photos": "Vehicle Photos",
+      "photoSelected": "photo selected",
+      "photosSelected": "photos selected",
+      "accidentFree": "This vehicle has never been in an accident"
+    },
+    "success": {
+      "title": "Quote Submitted",
+      "description": "Your quote request has been submitted successfully. We'll be in touch soon!"
+    },
+    "error": {
+      "title": "Error",
+      "description": "There was an error submitting your quote. Please try again."
+    },
+    "submitting": "Submitting...",
+    "submit": "Submit Quote Request"
   }
 }

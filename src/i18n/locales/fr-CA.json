@@ -87,5 +87,64 @@
     "currentPrice": "Prix actuel",
     "timeLeft": "Temps restant",
     "ended": "Enchère terminée"
+  },
+  "form": {
+    "title": "Demande de soumission de véhicule",
+    "desiredVehicle": {
+      "title": "Véhicule désiré"
+    },
+    "make": {
+      "label": "Marque",
+      "placeholder": "Sélectionnez la marque"
+    },
+    "model": {
+      "label": "Modèle",
+      "placeholder": "Sélectionnez le modèle"
+    },
+    "year": {
+      "label": "Année"
+    },
+    "trim": {
+      "label": "Sous-modèle",
+      "placeholder": "Sélectionnez le sous-modèle"
+    },
+    "financing": {
+      "title": "Options de financement",
+      "cash": "Comptant",
+      "loan": "Financement",
+      "lease": "Location",
+      "term": "Terme",
+      "termPlaceholder": "Sélectionnez le terme",
+      "months": "mois",
+      "annualKm": "Kilométrage annuel",
+      "kmPlaceholder": "Sélectionnez le kilométrage annuel"
+    },
+    "tradeIn": {
+      "question": "Avez-vous un véhicule d'échange?",
+      "placeholder": "Sélectionnez une option",
+      "yes": "Oui",
+      "no": "Non",
+      "details": "Détails du véhicule d'échange",
+      "vin": "NIV (Numéro de série)",
+      "make": "Marque",
+      "model": "Modèle",
+      "year": "Année",
+      "mileage": "Kilométrage",
+      "loan": "Solde dû",
+      "photos": "Photos du véhicule",
+      "photoSelected": "photo sélectionnée",
+      "photosSelected": "photos sélectionnées",
+      "accidentFree": "Ce véhicule n'a jamais été accidenté"
+    },
+    "success": {
+      "title": "Soumission envoyée",
+      "description": "Votre demande de soumission a été envoyée avec succès. Nous vous contacterons bientôt!"
+    },
+    "error": {
+      "title": "Erreur",
+      "description": "Une erreur s'est produite lors de l'envoi de votre soumission. Veuillez réessayer."
+    },
+    "submitting": "Envoi en cours...",
+    "submit": "Envoyer la demande de soumission"
   }
 }
