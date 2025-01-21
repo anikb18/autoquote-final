@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { InsuranceQuoteForm } from "./forms/InsuranceQuoteForm";
 
 interface InsuranceQuoteProps {
   quoteId?: string;
@@ -26,7 +23,6 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
     setLoading(true);
 
     try {
-      // Simulate insurance quote calculation
       const annualPremium = calculatePremium(formData.coverageType, parseFloat(formData.deductible));
 
       if (quoteId) {
@@ -37,7 +33,7 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
             coverage_type: formData.coverageType,
             deductible: parseFloat(formData.deductible),
             annual_premium: annualPremium,
-            provider: "Sample Insurance Co." // This would come from actual provider in production
+            provider: "Sample Insurance Co."
           });
 
         if (error) throw error;
@@ -58,7 +54,6 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
     }
   };
 
-  // Simplified premium calculation for demonstration
   const calculatePremium = (coverageType: string, deductible: number): number => {
     const basePremium = 1200;
     const coverageMultiplier = coverageType === 'full' ? 1.5 : 1;
@@ -72,44 +67,12 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
         <CardTitle>{t('insurance.title')}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label>{t('insurance.coverageType')}</Label>
-            <Select
-              value={formData.coverageType}
-              onValueChange={(value) => setFormData(prev => ({ ...prev, coverageType: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={t('insurance.selectCoverage')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="basic">{t('insurance.basic')}</SelectItem>
-                <SelectItem value="full">{t('insurance.full')}</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('insurance.deductible')}</Label>
-            <Select
-              value={formData.deductible}
-              onValueChange={(value) => setFormData(prev => ({ ...prev, deductible: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={t('insurance.selectDeductible')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="500">$500</SelectItem>
-                <SelectItem value="1000">$1,000</SelectItem>
-                <SelectItem value="2000">$2,000</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? t('insurance.calculating') : t('insurance.getQuote')}
-          </Button>
-        </form>
+        <InsuranceQuoteForm
+          formData={formData}
+          setFormData={setFormData}
+          loading={loading}
+          onSubmit={handleSubmit}
+        />
       </CardContent>
     </Card>
   );

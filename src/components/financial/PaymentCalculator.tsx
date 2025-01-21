@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { PaymentCalculatorForm } from "./forms/PaymentCalculatorForm";
+import { PaymentResults } from "./displays/PaymentResults";
 
 interface PaymentCalculatorProps {
   quoteId?: string;
@@ -22,7 +24,7 @@ const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorP
   const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
   const [totalWithTax, setTotalWithTax] = useState<number>(0);
 
-  const QC_TAX_RATE = 0.14975; // Combined GST (5%) and QST (9.975%)
+  const QC_TAX_RATE = 0.14975;
 
   const calculatePayments = async () => {
     const loanAmount = price - downPayment;
@@ -73,77 +75,25 @@ const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorP
       <CardHeader>
         <CardTitle>{t('calculator.title')}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label>{t('calculator.vehiclePrice')}</Label>
-          <Input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-            className={quoteId ? "bg-gray-100" : ""}
-            disabled={!!quoteId}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>{t('calculator.downPayment')}</Label>
-          <Input
-            type="number"
-            value={downPayment}
-            onChange={(e) => setDownPayment(Number(e.target.value))}
-            min="0"
-            max={price}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>{t('calculator.interestRate')}</Label>
-          <Input
-            type="number"
-            value={interestRate}
-            onChange={(e) => setInterestRate(Number(e.target.value))}
-            step="0.01"
-            min="0"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label>{t('calculator.term')}</Label>
-          <Input
-            type="number"
-            value={term}
-            onChange={(e) => setTerm(Number(e.target.value))}
-            min="12"
-            max="96"
-            step="12"
-          />
-        </div>
-
-        <Button onClick={calculatePayments} className="w-full">
-          {t('calculator.calculate')}
-        </Button>
-
+      <CardContent>
+        <PaymentCalculatorForm
+          price={price}
+          setPrice={setPrice}
+          downPayment={downPayment}
+          setDownPayment={setDownPayment}
+          interestRate={interestRate}
+          setInterestRate={setInterestRate}
+          term={term}
+          setTerm={setTerm}
+          onCalculate={calculatePayments}
+          isQuoteContext={!!quoteId}
+        />
         {monthlyPayment > 0 && (
-          <div className="mt-4 space-y-2 p-4 bg-gray-50 rounded-lg">
-            <div className="flex justify-between">
-              <span>{t('calculator.monthlyPayment')}:</span>
-              <span className="font-semibold">
-                ${monthlyPayment.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>{t('calculator.totalWithTax')}:</span>
-              <span className="font-semibold">
-                ${totalWithTax.toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>{t('calculator.taxAmount')}:</span>
-              <span className="font-semibold">
-                ${(totalWithTax - price).toFixed(2)}
-              </span>
-            </div>
-          </div>
+          <PaymentResults
+            monthlyPayment={monthlyPayment}
+            totalWithTax={totalWithTax}
+            price={price}
+          />
         )}
       </CardContent>
     </Card>

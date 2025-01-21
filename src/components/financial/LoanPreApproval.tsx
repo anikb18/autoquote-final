@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { LoanPreApprovalForm } from "./forms/LoanPreApprovalForm";
 
 interface LoanPreApprovalProps {
   quoteId?: string;
@@ -64,45 +65,12 @@ const LoanPreApproval = ({ quoteId }: LoanPreApprovalProps) => {
         <CardTitle>{t('preApproval.title')}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label>{t('preApproval.creditScore')}</Label>
-            <Input
-              type="number"
-              value={formData.creditScore}
-              onChange={(e) => setFormData(prev => ({ ...prev, creditScore: e.target.value }))}
-              min="300"
-              max="900"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('preApproval.annualIncome')}</Label>
-            <Input
-              type="number"
-              value={formData.annualIncome}
-              onChange={(e) => setFormData(prev => ({ ...prev, annualIncome: e.target.value }))}
-              min="0"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('preApproval.monthlyObligations')}</Label>
-            <Input
-              type="number"
-              value={formData.monthlyObligations}
-              onChange={(e) => setFormData(prev => ({ ...prev, monthlyObligations: e.target.value }))}
-              min="0"
-              required
-            />
-          </div>
-
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? t('preApproval.submitting') : t('preApproval.submit')}
-          </Button>
-        </form>
+        <LoanPreApprovalForm
+          formData={formData}
+          setFormData={setFormData}
+          loading={loading}
+          onSubmit={handleSubmit}
+        />
       </CardContent>
     </Card>
   );
