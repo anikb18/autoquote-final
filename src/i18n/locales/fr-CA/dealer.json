@@ -15,6 +15,28 @@
       "signup": "Regarder la démo de 2 minutes"
     }
   },
+  "features": {
+    "title": "Pourquoi choisir AutoQuote24",
+    "subtitle": "Optimisez vos opérations et augmentez vos ventes avec notre plateforme complète",
+    "items": {
+      "trusted": {
+        "title": "Système d'enchères privé",
+        "description": "Assure une concurrence équitable et de meilleures marges"
+      },
+      "time": {
+        "title": "Prospects pré-qualifiés",
+        "description": "Recevez uniquement des acheteurs vérifiés prêts à acheter"
+      },
+      "prices": {
+        "title": "Gestion automatisée",
+        "description": "Gagnez du temps avec la gestion intelligente des devis"
+      },
+      "communication": {
+        "title": "Support dédié",
+        "description": "Obtenez une assistance experte 24/7 avec notre équipe de support"
+      }
+    }
+  },
   "benefits": {
     "bidding": {
       "title": "Système d'enchères privé",
@@ -51,26 +73,6 @@
         "value": "1,000+",
         "label": "Acheteurs qualifiés"
       }
-    }
-  },
-  "pricing": {
-    "newCar": {
-      "title": "Forfait véhicules neufs",
-      "features": [
-        "Accès aux enchères privées",
-        "Prospects pré-qualifiés",
-        "Analytiques de base",
-        "Support par courriel"
-      ]
-    },
-    "fullService": {
-      "title": "Forfait service complet",
-      "features": [
-        "Annonces de véhicules neufs + usagés",
-        "Accès prioritaire aux prospects",
-        "Analytiques avancées",
-        "Support 24/7 dédié"
-      ]
     }
   }
 }

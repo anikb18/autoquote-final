@@ -1,6 +1,8 @@
 import { DealershipHeader } from "./dealership/DealershipHeader";
 import { HeroSection } from "./dealership/HeroSection";
 import { TrustSection } from "./dealership/TrustSection";
+import Features from "./Features";
+import SubscriptionPlans from "./SubscriptionPlans";
 
 const DealershipLanding = () => {
   return (
@@ -8,7 +10,9 @@ const DealershipLanding = () => {
       <DealershipHeader />
       <main>
         <HeroSection />
+        <Features />
         <TrustSection />
+        <SubscriptionPlans />
       </main>
     </div>
   );

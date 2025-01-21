@@ -15,6 +15,28 @@
       "signup": "Watch 2-Minute Demo Video"
     }
   },
+  "features": {
+    "title": "Why Choose AutoQuote24",
+    "subtitle": "Streamline your dealership operations and boost your sales with our comprehensive platform",
+    "items": {
+      "trusted": {
+        "title": "Private Bidding System",
+        "description": "Ensures fair competition and better margins with our exclusive bidding platform"
+      },
+      "time": {
+        "title": "Pre-Qualified Leads",
+        "description": "Only receive credit-verified buyers who are ready to purchase"
+      },
+      "prices": {
+        "title": "Automated Management",
+        "description": "Save time with smart quote handling and automated responses"
+      },
+      "communication": {
+        "title": "Dedicated Support",
+        "description": "Get expert assistance whenever you need it with our 24/7 support team"
+      }
+    }
+  },
   "benefits": {
     "bidding": {
       "title": "Private Bidding System",
@@ -51,26 +73,6 @@
         "value": "1,000+",
         "label": "Qualified Buyers"
       }
-    }
-  },
-  "pricing": {
-    "newCar": {
-      "title": "New Car Package",
-      "features": [
-        "Private bidding access",
-        "Pre-qualified leads",
-        "Basic analytics",
-        "Email support"
-      ]
-    },
-    "fullService": {
-      "title": "Full Service Package",
-      "features": [
-        "New + Used car listings",
-        "Priority lead access",
-        "Advanced analytics",
-        "24/7 dedicated support"
-      ]
     }
   }
 }
