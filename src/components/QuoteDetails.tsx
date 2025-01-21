@@ -1,30 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import ChatInterface from "./ChatInterface";
-
-interface CarDetails {
-  year: number;
-  make: string;
-  model: string;
-}
-
-interface DealerProfile {
-  dealer_name: string;
-}
-
-interface Quote {
-  id: string;
-  car_details: CarDetails;
-  dealer_quotes: Array<{
-    id: string;
-    dealer_id: string;
-    is_accepted: boolean;
-    dealer_profile?: DealerProfile;
-  }>;
-}
+import { Quote } from "@/types/quotes";
+import { QuoteHeader } from "./quotes/QuoteHeader";
+import { DealerQuoteItem } from "./quotes/DealerQuoteItem";
 
 const QuoteDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,7 +29,6 @@ const QuoteDetails = () => {
 
       if (error) throw error;
       
-      // First cast to unknown, then to the expected shape
       const rawCarDetails = data?.car_details as unknown;
       const carDetails = rawCarDetails as CarDetails;
       
@@ -56,7 +36,6 @@ const QuoteDetails = () => {
         throw new Error('Invalid car details format');
       }
 
-      // Transform the data to match the Quote interface
       const transformedData: Quote = {
         id: data.id,
         car_details: carDetails,
@@ -88,25 +67,15 @@ const QuoteDetails = () => {
   return (
     <div className="container mx-auto py-8">
       <Card>
-        <CardHeader>
-          <CardTitle>
-            {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
-          </CardTitle>
-        </CardHeader>
+        <QuoteHeader carDetails={quote.car_details} />
         <CardContent>
           <div className="space-y-4">
             {quote.dealer_quotes?.map((dealerQuote) => (
-              <div key={dealerQuote.id} className="border-t pt-4">
-                <h3 className="font-semibold">
-                  {dealerQuote.dealer_profile?.dealer_name}
-                </h3>
-                {dealerQuote.is_accepted && (
-                  <ChatInterface
-                    quoteId={quote.id}
-                    dealerId={dealerQuote.dealer_id}
-                  />
-                )}
-              </div>
+              <DealerQuoteItem 
+                key={dealerQuote.id}
+                dealerQuote={dealerQuote}
+                quoteId={quote.id}
+              />
             ))}
           </div>
         </CardContent>
