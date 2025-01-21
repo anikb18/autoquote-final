@@ -58,16 +58,18 @@ const BuyerDashboard = () => {
         .maybeSingle();
 
       if (error) throw error;
-      
       if (!data) return null;
 
+      // Safely cast car_details to CarDetails type
+      const carDetailsJson = data.car_details as { year: number; make: string; model: string };
+      
       // Transform the data to match the Quote type
       const quote: Quote = {
         id: data.id,
         car_details: {
-          year: data.car_details?.year as number,
-          make: data.car_details?.make as string,
-          model: data.car_details?.model as string
+          year: carDetailsJson.year,
+          make: carDetailsJson.make,
+          model: carDetailsJson.model
         },
         dealer_quotes: data.dealer_quotes.map((dq: any) => ({
           id: dq.id,
