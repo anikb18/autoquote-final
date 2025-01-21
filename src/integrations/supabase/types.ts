@@ -56,8 +56,11 @@ export type Database = {
           author_id: string | null
           content: string
           created_at: string | null
+          excerpt: string | null
+          featured_image: string | null
           id: string
-          status: string | null
+          published_at: string | null
+          status: Database["public"]["Enums"]["blog_post_status"] | null
           title: string
           updated_at: string | null
         }
@@ -65,8 +68,11 @@ export type Database = {
           author_id?: string | null
           content: string
           created_at?: string | null
+          excerpt?: string | null
+          featured_image?: string | null
           id?: string
-          status?: string | null
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["blog_post_status"] | null
           title: string
           updated_at?: string | null
         }
@@ -74,8 +80,11 @@ export type Database = {
           author_id?: string | null
           content?: string
           created_at?: string | null
+          excerpt?: string | null
+          featured_image?: string | null
           id?: string
-          status?: string | null
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["blog_post_status"] | null
           title?: string
           updated_at?: string | null
         }
@@ -664,6 +673,7 @@ export type Database = {
       }
     }
     Enums: {
+      blog_post_status: "draft" | "published" | "archived"
       subscription_level: "basic" | "premium"
     }
     CompositeTypes: {
