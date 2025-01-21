@@ -22,7 +22,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
     queryFn: async () => {
       const { data: messagesData, error: messagesError } = await supabase
         .from('chat_messages')
-        .select('*, sender:profiles!chat_messages_sender_id_fkey(email, dealer_profiles:dealer_profiles(first_name, last_name, dealer_name))')
+        .select('*, sender:profiles(email, dealer_profiles(first_name, last_name, dealer_name))')
         .eq('quote_id', quoteId)
         .order('created_at', { ascending: true });
       
