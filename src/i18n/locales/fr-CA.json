@@ -15,7 +15,10 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "sort": "Trier",
-    "actions": "Actions"
+    "actions": "Actions",
+    "yes": "Oui",
+    "no": "Non",
+    "notAvailable": "Non disponible"
   },
   "dealer": {
     "welcome": "Bienvenue",
@@ -58,5 +61,23 @@
     "newQuote": "Nouveau devis",
     "quoteAccepted": "Devis accepté",
     "quoteDenied": "Devis refusé"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue sur votre tableau de bord",
+    "vehiclePreview": "Aperçu du véhicule",
+    "quoteRequests": "Demandes de devis"
+  },
+  "quotes": {
+    "carDetails": "Détails du véhicule",
+    "tradeIn": "Reprise",
+    "status": {
+      "active": "Actif",
+      "pending": "En attente",
+      "completed": "Terminé",
+      "cancelled": "Annulé"
+    },
+    "dealerResponses": "Réponses des concessionnaires",
+    "responses": "Réponse(s)",
+    "status": "Statut"
   }
 }

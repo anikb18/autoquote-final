@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import ChatInterface from "./ChatInterface";
 import CarViewer3D from "./3d-viewer/CarViewer3D";
 import { Separator } from "./ui/separator";
+import { Loader2 } from "lucide-react";
 
 interface CarDetails {
   make?: string;
@@ -41,7 +42,13 @@ const BuyerDashboard = () => {
     },
   });
 
-  if (isLoading) return <div>{t('common.loading')}</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   const activeQuote = quotes?.find(quote => 
     quote.status === 'active' || 
@@ -51,24 +58,26 @@ const BuyerDashboard = () => {
   const getCarDetails = (carDetails: any): CarDetails => {
     if (!carDetails) return {};
     
-    if (typeof carDetails === 'string') {
-      try {
-        const parsed = JSON.parse(carDetails);
-        return {
-          make: parsed.make,
-          model: parsed.model,
-          year: parsed.year ? Number(parsed.year) : undefined
-        };
-      } catch {
-        return {};
-      }
+    try {
+      const details = typeof carDetails === 'string' ? JSON.parse(carDetails) : carDetails;
+      return {
+        make: details.make,
+        model: details.model,
+        year: details.year ? Number(details.year) : undefined
+      };
+    } catch {
+      console.error('Failed to parse car details:', carDetails);
+      return {};
     }
-    
-    return {
-      make: carDetails.make,
-      model: carDetails.model,
-      year: carDetails.year ? Number(carDetails.year) : undefined
-    };
+  };
+
+  const formatCarDetails = (carDetails: any): string => {
+    try {
+      const details = typeof carDetails === 'string' ? JSON.parse(carDetails) : carDetails;
+      return `${details.year} ${details.make} ${details.model}`;
+    } catch {
+      return t('common.notAvailable');
+    }
   };
 
   return (
@@ -83,7 +92,7 @@ const BuyerDashboard = () => {
             <CardHeader>
               <CardTitle>{t('dashboard.vehiclePreview')}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="min-h-[400px]">
               <CarViewer3D 
                 carDetails={getCarDetails(activeQuote.car_details)}
                 showHotspots={activeQuote.status === 'active'}
@@ -110,7 +119,7 @@ const BuyerDashboard = () => {
                 {quotes?.map((quote) => (
                   <React.Fragment key={quote.id}>
                     <TableRow className="hover:bg-muted/50 transition-colors">
-                      <TableCell>{JSON.stringify(quote.car_details)}</TableCell>
+                      <TableCell>{formatCarDetails(quote.car_details)}</TableCell>
                       <TableCell>{quote.has_trade_in ? t('common.yes') : t('common.no')}</TableCell>
                       <TableCell>{t(`quotes.status.${quote.status}`)}</TableCell>
                       <TableCell>

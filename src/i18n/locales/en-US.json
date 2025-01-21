@@ -15,7 +15,10 @@
     "search": "Search",
     "filter": "Filter",
     "sort": "Sort",
-    "actions": "Actions"
+    "actions": "Actions",
+    "yes": "Yes",
+    "no": "No",
+    "notAvailable": "Not Available"
   },
   "dealer": {
     "welcome": "Welcome",
@@ -58,5 +61,23 @@
     "newQuote": "New Quote",
     "quoteAccepted": "Quote Accepted",
     "quoteDenied": "Quote Denied"
+  },
+  "dashboard": {
+    "welcome": "Welcome to Your Dashboard",
+    "vehiclePreview": "Vehicle Preview",
+    "quoteRequests": "Quote Requests"
+  },
+  "quotes": {
+    "carDetails": "Vehicle Details",
+    "tradeIn": "Trade-In",
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "dealerResponses": "Dealer Responses",
+    "responses": "Response(s)",
+    "status": "Status"
   }
 }
