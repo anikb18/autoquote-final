@@ -4,6 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { ArrowLeft, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { useTranslation } from "react-i18next";
+import { translateBlogPost } from "@/services/translation";
+import { useEffect, useState } from "react";
 
 interface BlogPost {
   id: string;
@@ -24,6 +27,8 @@ interface BlogPost {
 const BlogPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const [translatedPost, setTranslatedPost] = useState<BlogPost | null>(null);
 
   const { data: post, isLoading } = useQuery({
     queryKey: ['blog-post', id],
@@ -46,6 +51,19 @@ const BlogPost = () => {
     }
   });
 
+  useEffect(() => {
+    const translatePost = async () => {
+      if (post && i18n.language !== 'en-US') {
+        const translated = await translateBlogPost(post, i18n.language);
+        setTranslatedPost({ ...post, ...translated });
+      } else {
+        setTranslatedPost(post);
+      }
+    };
+
+    translatePost();
+  }, [post, i18n.language]);
+
   if (isLoading) {
     return (
       <div className="container mx-auto py-8">
@@ -57,7 +75,7 @@ const BlogPost = () => {
     );
   }
 
-  if (!post) {
+  if (!translatedPost) {
     return (
       <div className="container mx-auto py-8">
         <div className="text-center">
@@ -86,16 +104,16 @@ const BlogPost = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl">{post.title}</CardTitle>
+          <CardTitle className="text-3xl">{translatedPost.title}</CardTitle>
           <CardDescription>
-            By {post.profiles?.full_name || 'Unknown'} | 
-            Published: {new Date(post.published_at || post.created_at).toLocaleDateString()}
+            By {translatedPost.profiles?.full_name || 'Unknown'} | 
+            Published: {new Date(translatedPost.published_at || translatedPost.created_at).toLocaleDateString()}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div 
             className="prose max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: translatedPost.content }}
           />
         </CardContent>
       </Card>

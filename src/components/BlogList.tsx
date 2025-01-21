@@ -6,13 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Editor } from '@tinymce/tinymce-react';
+import { useTranslation } from "react-i18next";
+import { translateBlogPost } from "@/services/translation";
 
 const blogFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -24,6 +26,8 @@ const BlogList = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const { i18n } = useTranslation();
+  const [translatedPosts, setTranslatedPosts] = useState<any[]>([]);
 
   const form = useForm<z.infer<typeof blogFormSchema>>({
     resolver: zodResolver(blogFormSchema),
@@ -46,6 +50,24 @@ const BlogList = () => {
       return data;
     }
   });
+
+  useEffect(() => {
+    const translatePosts = async () => {
+      if (blogPosts && i18n.language !== 'en-US') {
+        const translated = await Promise.all(
+          blogPosts.map(async (post) => {
+            const translatedContent = await translateBlogPost(post, i18n.language);
+            return { ...post, ...translatedContent };
+          })
+        );
+        setTranslatedPosts(translated);
+      } else {
+        setTranslatedPosts(blogPosts || []);
+      }
+    };
+
+    translatePosts();
+  }, [blogPosts, i18n.language]);
 
   const handleCreatePost = async (values: z.infer<typeof blogFormSchema>) => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -182,7 +204,7 @@ const BlogList = () => {
       </div>
 
       <div className="grid gap-4">
-        {blogPosts?.map((post) => (
+        {translatedPosts.map((post) => (
           <Card key={post.id} className="relative">
             <CardHeader>
               <div className="flex justify-between items-start">
