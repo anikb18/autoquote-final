@@ -9,6 +9,72 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      affiliate_referrals: {
+        Row: {
+          commission_earned: number | null
+          converted_at: string | null
+          created_at: string | null
+          id: string
+          referred_user_id: string
+          referrer_id: string
+          status: string | null
+        }
+        Insert: {
+          commission_earned?: number | null
+          converted_at?: string | null
+          created_at?: string | null
+          id?: string
+          referred_user_id: string
+          referrer_id: string
+          status?: string | null
+        }
+        Update: {
+          commission_earned?: number | null
+          converted_at?: string | null
+          created_at?: string | null
+          id?: string
+          referred_user_id?: string
+          referrer_id?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      affiliate_settings: {
+        Row: {
+          commission_rate: number
+          created_at: string | null
+          id: string
+          paid_earnings: number | null
+          pending_earnings: number | null
+          referral_code: string
+          total_earnings: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          commission_rate?: number
+          created_at?: string | null
+          id?: string
+          paid_earnings?: number | null
+          pending_earnings?: number | null
+          referral_code: string
+          total_earnings?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          commission_rate?: number
+          created_at?: string | null
+          id?: string
+          paid_earnings?: number | null
+          pending_earnings?: number | null
+          referral_code?: string
+          total_earnings?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       auctions: {
         Row: {
           created_at: string | null
@@ -127,6 +193,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      coupons: {
+        Row: {
+          active: boolean | null
+          code: string
+          conditions: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          discount_type: Database["public"]["Enums"]["coupon_discount_type"]
+          discount_value: number
+          expires_at: string | null
+          id: string
+          name: string
+          usage_count: number | null
+          usage_limit: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          code: string
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          discount_type: Database["public"]["Enums"]["coupon_discount_type"]
+          discount_value: number
+          expires_at?: string | null
+          id?: string
+          name: string
+          usage_count?: number | null
+          usage_limit?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          code?: string
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          discount_type?: Database["public"]["Enums"]["coupon_discount_type"]
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          name?: string
+          usage_count?: number | null
+          usage_limit?: number | null
+        }
+        Relationships: []
       }
       deadline: {
         Row: {
@@ -1429,6 +1543,12 @@ export type Database = {
     Enums: {
       bid_visibility: "private" | "public"
       blog_post_status: "draft" | "published" | "archived"
+      coupon_condition_type:
+        | "subscription_type"
+        | "time_limited"
+        | "first_time_user"
+        | "specific_user"
+      coupon_discount_type: "percentage" | "fixed"
       dealer_lead_status:
         | "new"
         | "contacted"

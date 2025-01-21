@@ -8,8 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Settings2, Globe, DollarSign, Mail, BellRing } from "lucide-react";
+import { Settings2, Globe, DollarSign, Mail, BellRing, Ticket, Users } from "lucide-react";
 import { useState } from "react";
+import { CouponManagement } from "./CouponManagement";
+import { AffiliateSettings } from "./AffiliateSettings";
 
 export const AdminSettings = () => {
   const { toast } = useToast();
@@ -64,6 +66,8 @@ export const AdminSettings = () => {
           <TabsTrigger value="pricing">Pricing & Fees</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="dealership">Dealership Settings</TabsTrigger>
+          <TabsTrigger value="coupons">Coupons</TabsTrigger>
+          <TabsTrigger value="affiliate">Affiliate Program</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
@@ -193,13 +197,15 @@ export const AdminSettings = () => {
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
 
-      <div className="mt-6 flex justify-end">
-        <Button onClick={handleSave} disabled={isLoading}>
-          {isLoading ? "Saving..." : "Save All Settings"}
-        </Button>
-      </div>
+        <TabsContent value="coupons">
+          <CouponManagement />
+        </TabsContent>
+
+        <TabsContent value="affiliate">
+          <AffiliateSettings />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
