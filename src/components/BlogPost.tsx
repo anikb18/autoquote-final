@@ -36,10 +36,11 @@ const BlogPost = () => {
       if (!data) return null;
       
       // Safely transform the profiles data with proper null checking
-      const profileData = data.profiles ? 
+      const profileData: Profile | null = data.profiles ? 
         (typeof data.profiles === 'object' && 
          data.profiles !== null && 
-         'full_name' in data.profiles
+         'full_name' in data.profiles && 
+         data.profiles.full_name !== undefined
           ? { full_name: data.profiles.full_name }
           : null)
         : null;
