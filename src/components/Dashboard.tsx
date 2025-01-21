@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Skeleton } from "./ui/skeleton";
 import { Alert, AlertDescription } from "./ui/alert";
 import { AlertTriangle } from "lucide-react";
+import { ChatbotPopup } from "./chat/ChatbotPopup";
 
 const Dashboard = () => {
   const { toast } = useToast();

@@ -20,24 +20,14 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
   const { data: messages, isLoading } = useQuery({
     queryKey: ['chat-messages', quoteId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: messagesData, error: messagesError } = await supabase
         .from('chat_messages')
-        .select(`
-          *,
-          sender:sender_id (
-            email,
-            dealer_profiles (
-              first_name,
-              last_name,
-              dealer_name
-            )
-          )
-        `)
+        .select('*, sender:profiles!chat_messages_sender_id_fkey(email, dealer_profiles:dealer_profiles(first_name, last_name, dealer_name))')
         .eq('quote_id', quoteId)
         .order('created_at', { ascending: true });
       
-      if (error) throw error;
-      return data;
+      if (messagesError) throw messagesError;
+      return messagesData;
     },
   });
 
