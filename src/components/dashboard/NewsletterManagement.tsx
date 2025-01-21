@@ -13,6 +13,7 @@ export const NewsletterManagement = () => {
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [selectedNewsletter, setSelectedNewsletter] = useState<string | null>(null);
 
   const { data: subscribers } = useQuery({
     queryKey: ['newsletter-subscribers'],
@@ -27,7 +28,7 @@ export const NewsletterManagement = () => {
     }
   });
 
-  const { data: newsletters } = useQuery({
+  const { data: newsletters, refetch: refetchNewsletters } = useQuery({
     queryKey: ['newsletters'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -76,6 +77,30 @@ export const NewsletterManagement = () => {
 
     setTitle("");
     setContent("");
+    refetchNewsletters();
+  };
+
+  const handleSendNewsletter = async (newsletterId: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('send-newsletter', {
+        body: { newsletterId }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Newsletter sending started"
+      });
+
+      refetchNewsletters();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send newsletter",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -157,7 +182,7 @@ export const NewsletterManagement = () => {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">Edit</Button>
-                    <Button size="sm">
+                    <Button size="sm" onClick={() => handleSendNewsletter(newsletter.id)}>
                       <Send className="mr-2 h-4 w-4" />
                       Send
                     </Button>
