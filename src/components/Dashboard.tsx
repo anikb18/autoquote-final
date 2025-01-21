@@ -11,11 +11,17 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { ChatbotPopup } from "./chat/ChatbotPopup";
 import { useNavigate } from "react-router-dom";
+import { 
+  ResizableHandle, 
+  ResizablePanel, 
+  ResizablePanelGroup 
+} from "@/components/ui/resizable";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [viewAs, setViewAs] = useState<'admin' | 'dealer' | 'buyer'>('admin');
+  const [collapsed, setCollapsed] = useState(false);
 
   // First check if user is authenticated
   const { data: session, isLoading: isSessionLoading } = useQuery({
@@ -98,32 +104,53 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container mx-auto py-8">
-      {userRole === 'admin' && (
-        <div className="mb-6">
-          <Select value={viewAs} onValueChange={(value: 'admin' | 'dealer' | 'buyer') => setViewAs(value)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="View dashboard as..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="admin">Admin View</SelectItem>
-              <SelectItem value="dealer">Dealer View</SelectItem>
-              <SelectItem value="buyer">Buyer View</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
+    <ResizablePanelGroup direction="horizontal" className="min-h-screen">
+      <ResizablePanel 
+        defaultSize={20} 
+        minSize={15} 
+        maxSize={25} 
+        collapsible={true}
+        onCollapse={() => setCollapsed(true)}
+        onExpand={() => setCollapsed(false)}
+        className="bg-muted/50 p-4"
+      >
+        {userRole === 'admin' && (
+          <div className="space-y-4">
+            <h3 className="font-semibold mb-2">View As</h3>
+            <Select value={viewAs} onValueChange={(value: 'admin' | 'dealer' | 'buyer') => setViewAs(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select view..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="admin">Admin View</SelectItem>
+                <SelectItem value="dealer">Dealer View</SelectItem>
+                <SelectItem value="buyer">Buyer View</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+        
+        <nav className="space-y-2 mt-6">
+          {/* Add navigation items based on role */}
+        </nav>
+      </ResizablePanel>
       
-      {(userRole === 'admin' && viewAs === 'admin') ? (
-        <AdminDashboard />
-      ) : (userRole === 'admin' && viewAs === 'dealer') || userRole === 'dealer' ? (
-        <DealerDashboard />
-      ) : (
-        <BuyerDashboard />
-      )}
+      <ResizableHandle />
+      
+      <ResizablePanel defaultSize={80}>
+        <div className="p-6">
+          {(userRole === 'admin' && viewAs === 'admin') ? (
+            <AdminDashboard />
+          ) : (userRole === 'admin' && viewAs === 'dealer') || userRole === 'dealer' ? (
+            <DealerDashboard />
+          ) : (
+            <BuyerDashboard />
+          )}
+        </div>
+      </ResizablePanel>
 
       <ChatbotPopup />
-    </div>
+    </ResizablePanelGroup>
   );
 };
 

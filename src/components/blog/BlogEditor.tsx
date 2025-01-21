@@ -4,7 +4,8 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { generateImage } from "@/utils/imageGeneration";
+import { Loader2 } from "lucide-react";
 
 interface BlogEditorProps {
   onSave: (values: { 
@@ -32,23 +33,34 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
   const [title, setTitle] = useState(initialValues?.title || "");
   const [content, setContent] = useState(initialValues?.content || "");
   const [excerpt, setExcerpt] = useState(initialValues?.excerpt || "");
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const { toast } = useToast();
 
-  const searchImages = async () => {
-    try {
-      const response = await fetch(`https://api.pexels.com/v1/search?query=${searchQuery}&per_page=12`, {
-        headers: {
-          Authorization: process.env.PEXELS_API_KEY || "",
-        },
+  const handleGenerateImage = async () => {
+    if (!searchQuery) {
+      toast({
+        title: "Error",
+        description: "Please enter a description for the image",
+        variant: "destructive",
       });
-      const data = await response.json();
-      setImages(data.photos || []);
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    try {
+      const generatedImage = await generateImage(searchQuery);
+      if (generatedImage) {
+        setSelectedImage(generatedImage);
+        setIsImagePickerOpen(false);
+      }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to fetch images",
+        description: "Failed to generate image",
         variant: "destructive",
       });
+    } finally {
+      setIsGeneratingImage(false);
     }
   };
 
@@ -127,38 +139,52 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
       <Dialog open={isImagePickerOpen} onOpenChange={setIsImagePickerOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle>Choose Featured Image</DialogTitle>
+            <DialogTitle>Generate or Choose Featured Image</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex gap-2">
               <Input
-                placeholder="Search images..."
+                placeholder="Describe the image you want..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && searchImages()}
+                onKeyDown={(e) => e.key === "Enter" && handleGenerateImage()}
               />
-              <Button onClick={searchImages}>Search</Button>
+              <Button 
+                onClick={handleGenerateImage}
+                disabled={isGeneratingImage}
+              >
+                {isGeneratingImage ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  "Generate"
+                )}
+              </Button>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              {images.map((image) => (
-                <div
-                  key={image.id}
-                  className={`cursor-pointer relative ${
-                    selectedImage === image.src.medium ? "ring-2 ring-primary" : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedImage(image.src.medium);
-                    setIsImagePickerOpen(false);
-                  }}
-                >
-                  <img
-                    src={image.src.tiny}
-                    alt={image.alt}
-                    className="w-full h-32 object-cover rounded"
-                  />
-                </div>
-              ))}
-            </div>
+            {images.length > 0 && (
+              <div className="grid grid-cols-3 gap-4">
+                {images.map((image) => (
+                  <div
+                    key={image.id}
+                    className={`cursor-pointer relative ${
+                      selectedImage === image.src.medium ? "ring-2 ring-primary" : ""
+                    }`}
+                    onClick={() => {
+                      setSelectedImage(image.src.medium);
+                      setIsImagePickerOpen(false);
+                    }}
+                  >
+                    <img
+                      src={image.src.tiny}
+                      alt={image.alt}
+                      className="w-full h-32 object-cover rounded"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
