@@ -306,6 +306,12 @@ export type Database = {
           full_name: string | null
           id: string
           role: string | null
+          stripe_customer_id: string | null
+          subscription_id: string | null
+          subscription_status: string | null
+          subscription_type:
+            | Database["public"]["Enums"]["subscription_level"]
+            | null
         }
         Insert: {
           created_at?: string
@@ -313,6 +319,12 @@ export type Database = {
           full_name?: string | null
           id: string
           role?: string | null
+          stripe_customer_id?: string | null
+          subscription_id?: string | null
+          subscription_status?: string | null
+          subscription_type?:
+            | Database["public"]["Enums"]["subscription_level"]
+            | null
         }
         Update: {
           created_at?: string
@@ -320,6 +332,12 @@ export type Database = {
           full_name?: string | null
           id?: string
           role?: string | null
+          stripe_customer_id?: string | null
+          subscription_id?: string | null
+          subscription_status?: string | null
+          subscription_type?:
+            | Database["public"]["Enums"]["subscription_level"]
+            | null
         }
         Relationships: []
       }
