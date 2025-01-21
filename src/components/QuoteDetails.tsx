@@ -22,9 +22,7 @@ interface Quote {
     id: string;
     dealer_id: string;
     is_accepted: boolean;
-    dealer?: {
-      dealer_profiles?: DealerProfile[];
-    };
+    dealer_profile?: DealerProfile;
   }>;
 }
 
@@ -42,9 +40,7 @@ const QuoteDetails = () => {
           *,
           dealer_quotes(
             *,
-            dealer:dealer_id(
-              dealer_profiles(*)
-            )
+            dealer_profile:dealer_profiles(*)
           )
         `)
         .eq('id', id)
@@ -68,9 +64,7 @@ const QuoteDetails = () => {
           id: dq.id,
           dealer_id: dq.dealer_id,
           is_accepted: dq.is_accepted,
-          dealer: dq.dealer ? {
-            dealer_profiles: dq.dealer.dealer_profiles
-          } : undefined
+          dealer_profile: dq.dealer_profile
         }))
       };
 
@@ -104,7 +98,7 @@ const QuoteDetails = () => {
             {quote.dealer_quotes?.map((dealerQuote) => (
               <div key={dealerQuote.id} className="border-t pt-4">
                 <h3 className="font-semibold">
-                  {dealerQuote.dealer?.dealer_profiles?.[0]?.dealer_name}
+                  {dealerQuote.dealer_profile?.dealer_name}
                 </h3>
                 {dealerQuote.is_accepted && (
                   <ChatInterface
