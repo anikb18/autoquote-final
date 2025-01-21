@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Database } from "@/integrations/supabase/types";
 
 type BlogPost = Database['public']['Tables']['blog_posts']['Row'] & {
-  profiles: {
+  profiles?: {
     full_name: string | null;
-  };
+  } | null;
 };
 
 const BlogPost = () => {
@@ -23,7 +23,7 @@ const BlogPost = () => {
         .from('blog_posts')
         .select(`
           *,
-          profiles (
+          profiles:author_id (
             full_name
           )
         `)
