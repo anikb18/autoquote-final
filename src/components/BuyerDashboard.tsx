@@ -44,14 +44,28 @@ const BuyerDashboard = () => {
   );
 
   const getCarDetails = (carDetails: any): CarDetails => {
+    if (!carDetails) return {};
+    
+    // If it's a string, try to parse it
     if (typeof carDetails === 'string') {
       try {
-        return JSON.parse(carDetails);
+        const parsed = JSON.parse(carDetails);
+        return {
+          make: parsed.make,
+          model: parsed.model,
+          year: parsed.year ? Number(parsed.year) : undefined
+        };
       } catch {
         return {};
       }
     }
-    return carDetails || {};
+    
+    // If it's already an object
+    return {
+      make: carDetails.make,
+      model: carDetails.model,
+      year: carDetails.year ? Number(carDetails.year) : undefined
+    };
   };
 
   return (
