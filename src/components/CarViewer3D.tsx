@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
 import { Card } from './ui/card';
 import { Loader2 } from 'lucide-react';
+import { Tooltip } from './ui/tooltip';
 
 interface CarViewer3DProps {
   carDetails?: {
@@ -14,11 +15,19 @@ interface CarViewer3DProps {
   showHotspots?: boolean;
 }
 
+interface Hotspot {
+  position: THREE.Vector3;
+  label: string;
+  description: string;
+}
+
 const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const controlsRef = useRef<OrbitControls | null>(null);
+  const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
   const { data: carData, isLoading } = useQuery({
     queryKey: ['car-data', carDetails?.make, carDetails?.model],
@@ -39,54 +48,141 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     enabled: !!carDetails?.make && !!carDetails?.model,
   });
 
+  const getHotspots = (carType: string): Hotspot[] => {
+    // Customize hotspots based on car type
+    return [
+      {
+        position: new THREE.Vector3(1, 0.5, 2),
+        label: 'Engine',
+        description: 'High-performance engine with advanced cooling system',
+      },
+      {
+        position: new THREE.Vector3(-1, 0.5, -2),
+        label: 'Trunk',
+        description: 'Spacious cargo area with smart storage solutions',
+      },
+      {
+        position: new THREE.Vector3(1, 0.5, 0),
+        label: 'Door',
+        description: 'Reinforced side impact protection system',
+      },
+      {
+        position: new THREE.Vector3(0, 1.2, 0),
+        label: 'Roof',
+        description: 'Panoramic sunroof with UV protection',
+      },
+    ];
+  };
+
   useEffect(() => {
     if (!containerRef.current) return;
 
     // Setup scene
     sceneRef.current = new THREE.Scene();
+    sceneRef.current.background = new THREE.Color(0xf0f0f0);
+
+    // Setup camera
     cameraRef.current = new THREE.PerspectiveCamera(
       75,
       containerRef.current.clientWidth / containerRef.current.clientHeight,
       0.1,
       1000
     );
-    rendererRef.current = new THREE.WebGLRenderer({ antialias: true });
+
+    // Setup renderer
+    rendererRef.current = new THREE.WebGLRenderer({ 
+      antialias: true,
+      alpha: true 
+    });
     rendererRef.current.setSize(
       containerRef.current.clientWidth,
       containerRef.current.clientHeight
     );
+    rendererRef.current.shadowMap.enabled = true;
     containerRef.current.appendChild(rendererRef.current.domElement);
 
     // Add lights
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const ambientLight = new THREE.AmbientLight(0x404040, 2);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(1, 1, 1);
-    sceneRef.current.add(ambientLight);
-    sceneRef.current.add(directionalLight);
+    directionalLight.castShadow = true;
+    const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 2);
+    sceneRef.current.add(ambientLight, directionalLight, hemisphereLight);
 
-    // Add car model placeholder (cube for now)
-    const geometry = new THREE.BoxGeometry(2, 1, 4);
-    const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-    const carMesh = new THREE.Mesh(geometry, material);
-    sceneRef.current.add(carMesh);
+    // Add car model (enhanced placeholder)
+    const bodyGeometry = new THREE.BoxGeometry(2, 1, 4);
+    const wheelGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32);
+    const bodyMaterial = new THREE.MeshPhongMaterial({ 
+      color: 0x00ff00,
+      specular: 0x555555,
+      shininess: 30 
+    });
+    const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+
+    const carBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    carBody.castShadow = true;
+    carBody.receiveShadow = true;
+
+    // Add wheels
+    const wheels = [];
+    const wheelPositions = [
+      { x: -1, y: -0.5, z: 1.5 },
+      { x: 1, y: -0.5, z: 1.5 },
+      { x: -1, y: -0.5, z: -1.5 },
+      { x: 1, y: -0.5, z: -1.5 },
+    ];
+
+    wheelPositions.forEach(pos => {
+      const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+      wheel.position.set(pos.x, pos.y, pos.z);
+      wheel.rotation.z = Math.PI / 2;
+      wheel.castShadow = true;
+      wheels.push(wheel);
+      sceneRef.current?.add(wheel);
+    });
+
+    sceneRef.current.add(carBody);
+
+    // Add ground plane
+    const groundGeometry = new THREE.PlaneGeometry(20, 20);
+    const groundMaterial = new THREE.MeshPhongMaterial({ 
+      color: 0xcccccc,
+      side: THREE.DoubleSide 
+    });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = Math.PI / 2;
+    ground.position.y = -1;
+    ground.receiveShadow = true;
+    sceneRef.current.add(ground);
 
     // Position camera
     cameraRef.current.position.z = 5;
     cameraRef.current.position.y = 2;
+    cameraRef.current.position.x = 3;
+
+    // Add OrbitControls
+    if (rendererRef.current) {
+      controlsRef.current = new OrbitControls(cameraRef.current, rendererRef.current.domElement);
+      controlsRef.current.enableDamping = true;
+      controlsRef.current.dampingFactor = 0.05;
+      controlsRef.current.minDistance = 3;
+      controlsRef.current.maxDistance = 10;
+      controlsRef.current.maxPolarAngle = Math.PI / 2;
+    }
 
     // Add hotspots if enabled
     if (showHotspots) {
-      const hotspotPositions = [
-        { x: 1, y: 0.5, z: 2, label: 'Engine' },
-        { x: -1, y: 0.5, z: -2, label: 'Trunk' },
-        { x: 1, y: 0.5, z: 0, label: 'Door' },
-      ];
-
-      hotspotPositions.forEach(({ x, y, z, label }) => {
+      const hotspots = getHotspots(carDetails?.model || 'default');
+      hotspots.forEach(({ position, label }) => {
         const hotspotGeometry = new THREE.SphereGeometry(0.1);
-        const hotspotMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+        const hotspotMaterial = new THREE.MeshPhongMaterial({ 
+          color: 0xff0000,
+          emissive: 0xff0000,
+          emissiveIntensity: 0.5
+        });
         const hotspot = new THREE.Mesh(hotspotGeometry, hotspotMaterial);
-        hotspot.position.set(x, y, z);
+        hotspot.position.copy(position);
+        hotspot.userData = { label };
         sceneRef.current?.add(hotspot);
       });
     }
@@ -94,19 +190,38 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
+      if (controlsRef.current) {
+        controlsRef.current.update();
+      }
       if (sceneRef.current && cameraRef.current && rendererRef.current) {
         rendererRef.current.render(sceneRef.current, cameraRef.current);
       }
     };
     animate();
 
+    // Handle window resize
+    const handleResize = () => {
+      if (!containerRef.current || !cameraRef.current || !rendererRef.current) return;
+      
+      cameraRef.current.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight;
+      cameraRef.current.updateProjectionMatrix();
+      rendererRef.current.setSize(
+        containerRef.current.clientWidth,
+        containerRef.current.clientHeight
+      );
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Cleanup
     return () => {
+      window.removeEventListener('resize', handleResize);
       if (containerRef.current && rendererRef.current) {
         containerRef.current.removeChild(rendererRef.current.domElement);
       }
+      controlsRef.current?.dispose();
     };
-  }, [showHotspots]);
+  }, [showHotspots, carDetails]);
 
   if (isLoading) {
     return (
@@ -120,7 +235,13 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
 
   return (
     <Card className="p-4">
-      <div ref={containerRef} className="h-[400px] w-full" />
+      <div ref={containerRef} className="h-[400px] w-full relative">
+        {activeHotspot && (
+          <div className="absolute top-4 right-4 bg-black/75 text-white p-2 rounded">
+            {activeHotspot}
+          </div>
+        )}
+      </div>
     </Card>
   );
 };

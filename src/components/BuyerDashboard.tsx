@@ -5,6 +5,12 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import ChatInterface from "./ChatInterface";
 import CarViewer3D from "./CarViewer3D";
 
+interface CarDetails {
+  make?: string;
+  model?: string;
+  year?: number;
+}
+
 const BuyerDashboard = () => {
   const { data: quotes, isLoading } = useQuery({
     queryKey: ['buyer-quotes'],
@@ -37,6 +43,17 @@ const BuyerDashboard = () => {
     quote.dealer_quotes?.some(dq => dq.is_accepted)
   );
 
+  const getCarDetails = (carDetails: any): CarDetails => {
+    if (typeof carDetails === 'string') {
+      try {
+        return JSON.parse(carDetails);
+      } catch {
+        return {};
+      }
+    }
+    return carDetails || {};
+  };
+
   return (
     <div className="space-y-6">
       {activeQuote && (
@@ -46,7 +63,7 @@ const BuyerDashboard = () => {
           </CardHeader>
           <CardContent>
             <CarViewer3D 
-              carDetails={activeQuote.car_details}
+              carDetails={getCarDetails(activeQuote.car_details)}
               showHotspots={activeQuote.status === 'active'}
             />
           </CardContent>
