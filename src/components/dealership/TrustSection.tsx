@@ -30,9 +30,9 @@ export const TrustSection = () => {
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {metrics.map((metric) => (
-            <Card key={metric.title}>
+            <Card key={metric.title} className="text-center">
               <CardHeader>
-                <CardTitle>{metric.title}</CardTitle>
+                <CardTitle className="text-xl">{metric.title}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-primary mb-2">{metric.value}</p>

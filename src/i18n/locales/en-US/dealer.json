@@ -6,74 +6,71 @@
     "contact": "Contact",
     "signIn": "Sign In"
   },
-  "welcome": "Welcome",
-  "metrics": {
-    "activeQuotes": "Active Quotes",
-    "wonBids": "Won Bids",
-    "totalRevenue": "Total Revenue",
-    "fromLastMonth": "from last month",
-    "todayActivity": "Here's your activity today"
+  "hero": {
+    "title": "Get Pre-Qualified Leads Without The Bidding War",
+    "subtitle": "Join AutoQuote24's Exclusive Dealer Network - Limited Spots Available",
+    "urgency": "Only 3 dealer spots left in your area",
+    "cta": {
+      "demo": "Schedule Your Private Demo",
+      "signup": "Watch 2-Minute Demo Video"
+    }
   },
-  "recentQuotes": "Recent Quotes",
-  "performance": "Performance Overview",
-  "quoteResponse": {
-    "title": "Respond to Quote Request",
-    "newVehicle": {
-      "title": "New Vehicle Quote",
-      "price": "Offered Price",
-      "availability": "Vehicle Availability",
-      "availabilityOptions": {
-        "inStock": "In Stock",
-        "ordered": "Need to Order",
-        "transit": "In Transit"
-      },
-      "estimatedDelivery": "Estimated Delivery",
-      "additionalNotes": "Additional Notes",
-      "features": "Additional Features",
-      "color": "Available Colors"
+  "benefits": {
+    "bidding": {
+      "title": "Private Bidding System",
+      "description": "Ensures fair competition and better margins"
     },
-    "tradeIn": {
-      "title": "Trade-In Evaluation",
-      "estimatedValue": "Estimated Value",
-      "condition": "Vehicle Condition",
-      "conditionOptions": {
-        "excellent": "Excellent",
-        "good": "Good",
-        "fair": "Fair",
-        "poor": "Poor"
-      },
-      "additionalNotes": "Evaluation Notes",
-      "requireInspection": "Requires Physical Inspection"
+    "verification": {
+      "title": "Pre-Qualified Leads",
+      "description": "Credit-verified buyers ready to purchase"
     },
-    "submit": "Submit Quote",
-    "saving": "Saving Quote...",
-    "success": "Quote submitted successfully",
-    "error": "Error submitting quote",
-    "premiumRequired": "Premium subscription required for trade-in evaluations"
+    "automation": {
+      "title": "Automated Management",
+      "description": "Save time with smart quote handling"
+    },
+    "support": {
+      "title": "Dedicated Support",
+      "description": "Expert assistance whenever you need it"
+    }
   },
-  "quotes": {
-    "recentTitle": "Recent Quotes",
-    "vehicle": "Vehicle",
-    "status": "Status",
-    "timeLeft": "Time Remaining",
-    "actions": {
-      "respond": "Respond to Quote",
-      "view": "View Quote"
+  "trust": {
+    "title": "Trusted by Leading Dealerships",
+    "metrics": {
+      "network": {
+        "title": "Dealer Network",
+        "value": "200+",
+        "label": "Trusted Partners"
+      },
+      "success": {
+        "title": "Faster Closing",
+        "value": "35%",
+        "label": "Average Improvement"
+      },
+      "value": {
+        "title": "Monthly Leads",
+        "value": "1,000+",
+        "label": "Qualified Buyers"
+      }
+    }
+  },
+  "pricing": {
+    "newCar": {
+      "title": "New Car Package",
+      "features": [
+        "Private bidding access",
+        "Pre-qualified leads",
+        "Basic analytics",
+        "Email support"
+      ]
     },
-    "status": {
-      "pending": "Pending",
-      "responded": "Responded",
-      "accepted": "Accepted",
-      "declined": "Declined",
-      "expired": "Expired"
-    },
-    "error": {
-      "title": "Error Loading Quotes",
-      "description": "There was an error loading your quotes. Please try again."
-    },
-    "expiration": {
-      "title": "Quote Expired",
-      "description": "This quote is no longer available for response."
+    "fullService": {
+      "title": "Full Service Package",
+      "features": [
+        "New + Used car listings",
+        "Priority lead access",
+        "Advanced analytics",
+        "24/7 dedicated support"
+      ]
     }
   }
 }

@@ -18,17 +18,14 @@ export const HeroSection = () => {
         <p className="text-xl md:text-2xl text-muted-foreground mb-4">
           {t("hero.subtitle")}
         </p>
-        <p className="text-lg text-muted-foreground mb-8">
+        <p className="text-lg text-muted-foreground mb-8 text-red-600 font-semibold">
           {t("hero.urgency")}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" onClick={() => navigate("/dealer-signup")}>
-            {t("hero.cta.signup")}
-          </Button>
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="lg" variant="outline">
+              <Button size="lg">
                 <Calendar className="mr-2 h-4 w-4" />
                 {t("hero.cta.demo")}
               </Button>
@@ -37,6 +34,9 @@ export const HeroSection = () => {
               <InlineWidget url="https://calendly.com/your-calendly-url" />
             </DialogContent>
           </Dialog>
+          <Button size="lg" variant="outline" onClick={() => navigate("/dealer-signup")}>
+            {t("hero.cta.signup")}
+          </Button>
         </div>
       </div>
     </section>

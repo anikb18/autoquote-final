@@ -6,74 +6,71 @@
     "contact": "Contact",
     "signIn": "Connexion"
   },
-  "welcome": "Bienvenue",
-  "metrics": {
-    "activeQuotes": "Devis actifs",
-    "wonBids": "Offres gagnées",
-    "totalRevenue": "Revenu total",
-    "fromLastMonth": "par rapport au mois dernier",
-    "todayActivity": "Voici votre activité aujourd'hui"
+  "hero": {
+    "title": "Obtenez des prospects qualifiés sans guerre d'enchères",
+    "subtitle": "Rejoignez le réseau exclusif de concessionnaires AutoQuote24 - Places limitées",
+    "urgency": "Seulement 3 places de concessionnaire disponibles dans votre région",
+    "cta": {
+      "demo": "Planifier une démo privée",
+      "signup": "Regarder la démo de 2 minutes"
+    }
   },
-  "recentQuotes": "Devis récents",
-  "performance": "Aperçu des performances",
-  "quoteResponse": {
-    "title": "Répondre à la demande de soumission",
-    "newVehicle": {
-      "title": "Soumission véhicule neuf",
-      "price": "Prix offert",
-      "availability": "Disponibilité du véhicule",
-      "availabilityOptions": {
-        "inStock": "En stock",
-        "ordered": "À commander",
-        "transit": "En transit"
-      },
-      "estimatedDelivery": "Livraison estimée",
-      "additionalNotes": "Notes additionnelles",
-      "features": "Caractéristiques additionnelles",
-      "color": "Couleurs disponibles"
+  "benefits": {
+    "bidding": {
+      "title": "Système d'enchères privé",
+      "description": "Assure une concurrence équitable et de meilleures marges"
     },
-    "tradeIn": {
-      "title": "Évaluation de l'échange",
-      "estimatedValue": "Valeur estimée",
-      "condition": "État du véhicule",
-      "conditionOptions": {
-        "excellent": "Excellent",
-        "good": "Bon",
-        "fair": "Passable",
-        "poor": "Mauvais"
-      },
-      "additionalNotes": "Notes d'évaluation",
-      "requireInspection": "Inspection physique requise"
+    "verification": {
+      "title": "Prospects pré-qualifiés",
+      "description": "Acheteurs vérifiés prêts à acheter"
     },
-    "submit": "Soumettre la soumission",
-    "saving": "Enregistrement...",
-    "success": "Soumission envoyée avec succès",
-    "error": "Erreur lors de l'envoi de la soumission",
-    "premiumRequired": "Abonnement premium requis pour les évaluations d'échange"
+    "automation": {
+      "title": "Gestion automatisée",
+      "description": "Gagnez du temps avec la gestion intelligente des devis"
+    },
+    "support": {
+      "title": "Support dédié",
+      "description": "Assistance experte à votre disposition"
+    }
   },
-  "quotes": {
-    "recentTitle": "Devis récents",
-    "vehicle": "Véhicule",
-    "status": "Statut",
-    "timeLeft": "Temps restant",
-    "actions": {
-      "respond": "Répondre au devis",
-      "view": "Voir le devis"
+  "trust": {
+    "title": "Approuvé par les concessionnaires leaders",
+    "metrics": {
+      "network": {
+        "title": "Réseau de concessionnaires",
+        "value": "200+",
+        "label": "Partenaires de confiance"
+      },
+      "success": {
+        "title": "Ventes plus rapides",
+        "value": "35%",
+        "label": "Amélioration moyenne"
+      },
+      "value": {
+        "title": "Prospects mensuels",
+        "value": "1,000+",
+        "label": "Acheteurs qualifiés"
+      }
+    }
+  },
+  "pricing": {
+    "newCar": {
+      "title": "Forfait véhicules neufs",
+      "features": [
+        "Accès aux enchères privées",
+        "Prospects pré-qualifiés",
+        "Analytiques de base",
+        "Support par courriel"
+      ]
     },
-    "status": {
-      "pending": "En attente",
-      "responded": "Répondu",
-      "accepted": "Accepté",
-      "declined": "Refusé",
-      "expired": "Expiré"
-    },
-    "error": {
-      "title": "Erreur de chargement des devis",
-      "description": "Une erreur s'est produite lors du chargement de vos devis. Veuillez réessayer."
-    },
-    "expiration": {
-      "title": "Devis expiré",
-      "description": "Ce devis n'est plus disponible pour une réponse."
+    "fullService": {
+      "title": "Forfait service complet",
+      "features": [
+        "Annonces de véhicules neufs + usagés",
+        "Accès prioritaire aux prospects",
+        "Analytiques avancées",
+        "Support 24/7 dédié"
+      ]
     }
   }
 }
