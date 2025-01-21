@@ -8,12 +8,13 @@ import Index from "./pages/Index";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
+import Header from "./components/Header";
+import Auth from "./pages/Auth";
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 5 * 60 * 1000,
       retry: 1,
     },
   },
@@ -27,8 +28,10 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <Header />
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
               <Route
                 path="/dashboard"
                 element={
