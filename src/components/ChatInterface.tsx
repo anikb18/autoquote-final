@@ -12,6 +12,21 @@ interface ChatInterfaceProps {
   dealerId?: string;
 }
 
+interface MessageType {
+  id: string;
+  content: string;
+  sender_id: string;
+  created_at: string;
+  sender?: {
+    email?: string;
+    dealer_profiles?: Array<{
+      first_name?: string;
+      last_name?: string;
+      dealer_name?: string;
+    }>;
+  };
+}
+
 const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
   const [autoTranslate, setAutoTranslate] = useState(false);
   const queryClient = useQueryClient();
@@ -40,7 +55,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
         .eq('quote_id', quoteId);
       
       if (messagesError) throw messagesError;
-      return messagesData;
+      return messagesData as MessageType[];
     },
   });
 
@@ -146,13 +161,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
           {messages?.map((msg) => (
             <ChatMessage
               key={msg.id}
-              message={{
-                ...msg,
-                sender: {
-                  email: msg.sender?.email,
-                  dealer_profiles: msg.sender?.dealer_profiles || []
-                }
-              }}
+              message={msg}
               isDealer={msg.sender_id === dealerId}
               quoteAccepted={quoteDetails?.is_accepted ?? false}
               showTranslate={autoTranslate}
