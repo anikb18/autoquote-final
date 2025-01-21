@@ -6,6 +6,9 @@ import AdminDashboard from "./AdminDashboard";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Skeleton } from "./ui/skeleton";
+import { Alert, AlertDescription } from "./ui/alert";
+import { AlertTriangle } from "lucide-react";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -24,7 +27,6 @@ const Dashboard = () => {
         .single();
 
       if (roleError && roleError.code === 'PGRST116') {
-        // If no role exists, create a default 'buyer' role
         const { data: newRole, error: insertError } = await supabase
           .from('user_roles')
           .insert([
@@ -53,22 +55,12 @@ const Dashboard = () => {
     }
   });
 
-  // Handle error state with toast
-  if (error) {
-    toast({
-      title: "Error",
-      description: "Failed to load dashboard. Please try again later.",
-      variant: "destructive",
-    });
-  }
-
   if (isLoading) {
     return (
-      <div className="container mx-auto py-8">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
-        </div>
+      <div className="container mx-auto py-8 space-y-4">
+        <Skeleton className="h-8 w-1/4" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-32 w-full" />
       </div>
     );
   }
@@ -76,10 +68,12 @@ const Dashboard = () => {
   if (error) {
     return (
       <div className="container mx-auto py-8">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Something went wrong</h2>
-          <p className="text-gray-600">Please try refreshing the page or sign in again.</p>
-        </div>
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            Failed to load dashboard. Please try refreshing the page or sign in again.
+          </AlertDescription>
+        </Alert>
       </div>
     );
   }

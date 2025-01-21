@@ -1,33 +1,18 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-interface CarDetails {
-  make?: string;
-  model?: string;
-  year?: number;
-  trim?: string;
-}
-
-export const formatCarDetails = (details: any): string => {
-  if (!details) return 'No details available';
+export function formatCarDetails(carDetails: any) {
+  if (!carDetails) return "N/A";
   
   try {
-    const carDetails = typeof details === 'string' ? JSON.parse(details) : details;
-    const { make, model, year, trim } = carDetails as CarDetails;
-    
-    const parts = [];
-    if (year) parts.push(year);
-    if (make) parts.push(make);
-    if (model) parts.push(model);
-    if (trim) parts.push(trim);
-    
-    return parts.join(' ') || 'No details available';
+    const details = typeof carDetails === 'string' ? JSON.parse(carDetails) : carDetails;
+    return `${details.year} ${details.make} ${details.model}`;
   } catch (error) {
     console.error('Error formatting car details:', error);
-    return 'Invalid car details';
+    return "Invalid car details";
   }
 }
