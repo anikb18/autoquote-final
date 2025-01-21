@@ -9,7 +9,8 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { ChartContainer, ChartTooltip } from "./ui/chart";
+import { ChartContainer } from "./ui/chart";
+import { DealershipComparison } from "./dashboard/DealershipComparison";
 
 const AdminDashboard = () => {
   const { toast } = useToast();
@@ -197,6 +198,8 @@ const AdminDashboard = () => {
               </ChartContainer>
             </CardContent>
           </Card>
+
+          <DealershipComparison />
         </TabsContent>
 
         <TabsContent value="blog" className="space-y-6">
