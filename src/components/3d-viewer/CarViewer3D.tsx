@@ -78,10 +78,6 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (containerRef.current && sceneState.renderer) {
-        containerRef.current.removeChild(sceneState.renderer.domElement);
-      }
-      sceneState.controls?.dispose();
     };
   }, [sceneState]);
 

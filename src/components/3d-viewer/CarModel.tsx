@@ -37,17 +37,5 @@ export const CarModel = ({ scene, color = '#00ff00' }: CarModelProps) => {
 
   scene.add(carBody);
 
-  // Add ground plane
-  const groundGeometry = new THREE.PlaneGeometry(20, 20);
-  const groundMaterial = new THREE.MeshPhongMaterial({ 
-    color: 0xcccccc,
-    side: THREE.DoubleSide 
-  });
-  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-  ground.rotation.x = Math.PI / 2;
-  ground.position.y = -1;
-  ground.receiveShadow = true;
-  scene.add(ground);
-
   return null;
 };
