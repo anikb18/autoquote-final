@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { ThemeSwitcher } from "./ThemeSwitcher";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -36,7 +38,9 @@ const Header = () => {
     <header className="border-b">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Auto Trade Nexus</h1>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-4">
+          <LanguageSwitcher />
+          <ThemeSwitcher />
           {session ? (
             <>
               <Button onClick={handleDashboard}>Dashboard</Button>

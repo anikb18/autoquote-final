@@ -6,8 +6,6 @@ import { DealerQuotesTable } from "./dashboard/DealerQuotesTable";
 import { PerformanceChart, type PerformanceData } from "./dashboard/PerformanceChart";
 import { WelcomeHeader } from "./dashboard/dealer/WelcomeHeader";
 import { NotificationHandler } from "./dashboard/dealer/NotificationHandler";
-import { ThemeSwitcher } from "./ThemeSwitcher";
-import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const DealerDashboard = () => {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
@@ -72,11 +70,6 @@ const DealerDashboard = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-8">
-      <div className="flex justify-end gap-4 mb-6">
-        <LanguageSwitcher />
-        <ThemeSwitcher />
-      </div>
-      
       <WelcomeHeader unreadNotifications={unreadNotifications} />
       
       <NotificationHandler 
