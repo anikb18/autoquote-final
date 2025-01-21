@@ -707,6 +707,92 @@ export type Database = {
           },
         ]
       }
+      plaid_accounts: {
+        Row: {
+          account_mask: string | null
+          account_subtype: string | null
+          account_type: string | null
+          created_at: string | null
+          id: string
+          institution_id: string | null
+          institution_name: string | null
+          plaid_access_token: string | null
+          plaid_item_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          account_mask?: string | null
+          account_subtype?: string | null
+          account_type?: string | null
+          created_at?: string | null
+          id?: string
+          institution_id?: string | null
+          institution_name?: string | null
+          plaid_access_token?: string | null
+          plaid_item_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          account_mask?: string | null
+          account_subtype?: string | null
+          account_type?: string | null
+          created_at?: string | null
+          id?: string
+          institution_id?: string | null
+          institution_name?: string | null
+          plaid_access_token?: string | null
+          plaid_item_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plaid_transactions: {
+        Row: {
+          amount: number | null
+          category: string[] | null
+          created_at: string | null
+          date: string | null
+          id: string
+          merchant_name: string | null
+          pending: boolean | null
+          plaid_account_id: string
+          transaction_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          category?: string[] | null
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          merchant_name?: string | null
+          pending?: boolean | null
+          plaid_account_id: string
+          transaction_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          category?: string[] | null
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          merchant_name?: string | null
+          pending?: boolean | null
+          plaid_account_id?: string
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plaid_transactions_plaid_account_id_fkey"
+            columns: ["plaid_account_id"]
+            isOneToOne: false
+            referencedRelation: "plaid_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

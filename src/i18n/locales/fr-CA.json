@@ -30,7 +30,42 @@
       "todayActivity": "Voici votre activité aujourd'hui"
     },
     "recentQuotes": "Devis récents",
-    "performance": "Aperçu des performances"
+    "performance": "Aperçu des performances",
+    "quoteResponse": {
+      "title": "Répondre à la demande de soumission",
+      "newVehicle": {
+        "title": "Soumission véhicule neuf",
+        "price": "Prix offert",
+        "availability": "Disponibilité du véhicule",
+        "availabilityOptions": {
+          "inStock": "En stock",
+          "ordered": "À commander",
+          "transit": "En transit"
+        },
+        "estimatedDelivery": "Livraison estimée",
+        "additionalNotes": "Notes additionnelles",
+        "features": "Caractéristiques additionnelles",
+        "color": "Couleurs disponibles"
+      },
+      "tradeIn": {
+        "title": "Évaluation de l'échange",
+        "estimatedValue": "Valeur estimée",
+        "condition": "État du véhicule",
+        "conditionOptions": {
+          "excellent": "Excellent",
+          "good": "Bon",
+          "fair": "Passable",
+          "poor": "Mauvais"
+        },
+        "additionalNotes": "Notes d'évaluation",
+        "requireInspection": "Inspection physique requise"
+      },
+      "submit": "Soumettre la soumission",
+      "saving": "Enregistrement...",
+      "success": "Soumission envoyée avec succès",
+      "error": "Erreur lors de l'envoi de la soumission",
+      "premiumRequired": "Abonnement premium requis pour les évaluations d'échange"
+    }
   },
   "admin": {
     "dashboard": {

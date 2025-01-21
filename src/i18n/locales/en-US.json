@@ -30,7 +30,42 @@
       "todayActivity": "Here's your activity today"
     },
     "recentQuotes": "Recent Quotes",
-    "performance": "Performance Overview"
+    "performance": "Performance Overview",
+    "quoteResponse": {
+      "title": "Respond to Quote Request",
+      "newVehicle": {
+        "title": "New Vehicle Quote",
+        "price": "Offered Price",
+        "availability": "Vehicle Availability",
+        "availabilityOptions": {
+          "inStock": "In Stock",
+          "ordered": "Need to Order",
+          "transit": "In Transit"
+        },
+        "estimatedDelivery": "Estimated Delivery",
+        "additionalNotes": "Additional Notes",
+        "features": "Additional Features",
+        "color": "Available Colors"
+      },
+      "tradeIn": {
+        "title": "Trade-In Evaluation",
+        "estimatedValue": "Estimated Value",
+        "condition": "Vehicle Condition",
+        "conditionOptions": {
+          "excellent": "Excellent",
+          "good": "Good",
+          "fair": "Fair",
+          "poor": "Poor"
+        },
+        "additionalNotes": "Evaluation Notes",
+        "requireInspection": "Requires Physical Inspection"
+      },
+      "submit": "Submit Quote",
+      "saving": "Saving Quote...",
+      "success": "Quote submitted successfully",
+      "error": "Error submitting quote",
+      "premiumRequired": "Premium subscription required for trade-in evaluations"
+    }
   },
   "admin": {
     "dashboard": {
