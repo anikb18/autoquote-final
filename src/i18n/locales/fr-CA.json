@@ -70,7 +70,7 @@
       "recentTitle": "Devis récents",
       "vehicle": "Véhicule",
       "status": "Statut",
-      "date": "Date",
+      "timeLeft": "Temps restant",
       "actions": {
         "respond": "Répondre au devis",
         "view": "Voir le devis"
@@ -79,10 +79,15 @@
         "pending": "En attente",
         "responded": "Répondu",
         "accepted": "Accepté",
-        "declined": "Refusé"
+        "declined": "Refusé",
+        "expired": "Expiré"
       },
       "error": {
         "title": "Erreur de chargement des devis"
+      },
+      "expiration": {
+        "title": "Devis expiré",
+        "description": "Ce devis n'est plus disponible pour une réponse."
       }
     }
   },

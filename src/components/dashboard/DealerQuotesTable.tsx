@@ -117,8 +117,8 @@ export const DealerQuotesTable = () => {
                   endDate={getExpirationTime(quote.created_at)}
                   onExpire={() => {
                     toast({
-                      title: "Quote Expired",
-                      description: "This quote is no longer available for response.",
+                      title: t("dealer.quotes.expiration.title"),
+                      description: t("dealer.quotes.expiration.description"),
                       variant: "destructive",
                     });
                   }}
