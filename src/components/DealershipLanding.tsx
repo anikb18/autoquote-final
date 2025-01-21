@@ -1,10 +1,24 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Calendar, ChartBar, Shield, Users } from "lucide-react";
+import { Calendar } from "./ui/calendar";
+import { ChartBar, Shield, Users, Calendar as CalendarIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const DealershipLanding = () => {
   const navigate = useNavigate();
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    if (selectedDate) {
+      // Here you would typically integrate with your booking system
+      // For now, we'll just show a success message
+      alert("Thank you! We'll contact you to confirm your demo on " + selectedDate.toLocaleDateString());
+      setShowCalendar(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,10 +35,36 @@ const DealershipLanding = () => {
             <Button size="lg" onClick={() => navigate("/dealer-signup")}>
               Join Our Dealer Network
             </Button>
-            <Button size="lg" variant="outline" onClick={() => window.open("https://calendly.com/your-link", "_blank")}>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={() => setShowCalendar(!showCalendar)}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
               Schedule a Demo
             </Button>
           </div>
+          
+          {/* Embedded Calendar */}
+          {showCalendar && (
+            <Card className="mt-8 max-w-md mx-auto animate-fade-in">
+              <CardHeader>
+                <CardTitle>Select a Date for Your Demo</CardTitle>
+                <CardDescription>
+                  Choose a date and we'll follow up with available time slots
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-center">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  className="rounded-md border"
+                  disabled={(date) => date < new Date() || date.getDay() === 0 || date.getDay() === 6}
+                />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </section>
 
@@ -58,7 +98,7 @@ const DealershipLanding = () => {
 
             <Card>
               <CardHeader>
-                <Calendar className="w-10 h-10 text-primary mb-2" />
+                <CalendarIcon className="w-10 h-10 text-primary mb-2" />
                 <CardTitle>Dedicated Support</CardTitle>
                 <CardDescription>24/7 dealer support with satisfaction guarantee</CardDescription>
               </CardHeader>
