@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ChatInterface from "./ChatInterface";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Database } from "@/integrations/supabase/types";
+
+type DealerStats = {
+  active_quotes_count: number;
+  quote_change: number;
+  recent_quotes: any[];
+  won_bids_count: number;
+  total_revenue: number;
+};
 
 const DealerDashboard = () => {
   const queryClient = useQueryClient();
@@ -31,18 +40,18 @@ const DealerDashboard = () => {
     },
   });
 
-  const { data: dealerMetrics, isLoading: isMetricsLoading } = useQuery({
+  const { data: dealerMetrics, isLoading: isMetricsLoading } = useQuery<DealerStats>({
     queryKey: ['dealer-metrics'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       const { data, error } = await supabase
         .rpc('get_dealer_stats', { 
           p_dealer_id: user?.id,
-          p_subscription_type: 'premium' // You might want to get this from user profile
+          p_subscription_type: 'premium'
         });
       
       if (error) throw error;
-      return data?.[0];
+      return data?.[0] as DealerStats;
     },
   });
 
