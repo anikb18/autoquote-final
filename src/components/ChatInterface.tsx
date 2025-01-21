@@ -28,7 +28,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
           sender_id,
           created_at,
           quote_id,
-          sender:profiles!sender_id(
+          sender:profiles(
             email,
             dealer_profiles(
               first_name,
