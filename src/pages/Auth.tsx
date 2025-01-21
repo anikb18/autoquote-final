@@ -20,24 +20,6 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Update Supabase client options to include newsletter preference
-  const supabaseClientWithNewsletter = {
-    ...supabase,
-    auth: {
-      ...supabase.auth,
-      signUp: async (credentials: any) => {
-        return supabase.auth.signUp({
-          ...credentials,
-          options: {
-            data: {
-              subscribe_newsletter: subscribeNewsletter
-            }
-          }
-        });
-      }
-    }
-  };
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-md">
       <div className="bg-white p-8 rounded-lg shadow">
@@ -53,10 +35,18 @@ const Auth = () => {
           </Label>
         </div>
         <SupabaseAuth 
-          supabaseClient={supabaseClientWithNewsletter}
+          supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
           providers={["google"]}
           theme="light"
+          onSignUp={({ data, error }) => {
+            if (!error && data.user) {
+              // Update user metadata with newsletter preference
+              supabase.auth.updateUser({
+                data: { subscribe_newsletter: subscribeNewsletter }
+              });
+            }
+          }}
         />
       </div>
     </div>
