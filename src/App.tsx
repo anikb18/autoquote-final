@@ -10,6 +10,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
 import Header from "./components/Header";
 import Auth from "./pages/Auth";
+import BlogPost from "./components/BlogPost";
+import BlogList from "./components/BlogList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +47,22 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <SubscriptionManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/blog"
+                element={
+                  <ProtectedRoute>
+                    <BlogList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/blog/:id"
+                element={
+                  <ProtectedRoute>
+                    <BlogPost />
                   </ProtectedRoute>
                 }
               />
