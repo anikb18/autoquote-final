@@ -690,37 +690,52 @@ export type Database = {
       }
       quotes: {
         Row: {
+          annual_kilometers: number | null
           car_details: Json | null
           created_at: string | null
+          desired_vehicle_details: Json | null
+          financing_preference: string | null
           has_trade_in: boolean | null
           id: string
+          lease_term: number | null
           price_paid: number | null
           pricing_option: string | null
           status: string | null
+          trade_in_details: Json | null
           trade_in_visibility_days: number | null
           trade_in_visibility_start: string | null
           user_id: string
         }
         Insert: {
+          annual_kilometers?: number | null
           car_details?: Json | null
           created_at?: string | null
+          desired_vehicle_details?: Json | null
+          financing_preference?: string | null
           has_trade_in?: boolean | null
           id?: string
+          lease_term?: number | null
           price_paid?: number | null
           pricing_option?: string | null
           status?: string | null
+          trade_in_details?: Json | null
           trade_in_visibility_days?: number | null
           trade_in_visibility_start?: string | null
           user_id: string
         }
         Update: {
+          annual_kilometers?: number | null
           car_details?: Json | null
           created_at?: string | null
+          desired_vehicle_details?: Json | null
+          financing_preference?: string | null
           has_trade_in?: boolean | null
           id?: string
+          lease_term?: number | null
           price_paid?: number | null
           pricing_option?: string | null
           status?: string | null
+          trade_in_details?: Json | null
           trade_in_visibility_days?: number | null
           trade_in_visibility_start?: string | null
           user_id?: string
@@ -905,6 +920,35 @@ export type Database = {
           },
         ]
       }
+      vehicle_photos: {
+        Row: {
+          created_at: string | null
+          id: string
+          photo_url: string
+          quote_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          photo_url: string
+          quote_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          photo_url?: string
+          quote_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_photos_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicle_trims: {
         Row: {
           body_style: string | null
@@ -913,6 +957,7 @@ export type Database = {
           id: string
           model_id: string | null
           name: string
+          trim_level: string | null
         }
         Insert: {
           body_style?: string | null
@@ -921,6 +966,7 @@ export type Database = {
           id: string
           model_id?: string | null
           name: string
+          trim_level?: string | null
         }
         Update: {
           body_style?: string | null
@@ -929,6 +975,7 @@ export type Database = {
           id?: string
           model_id?: string | null
           name?: string
+          trim_level?: string | null
         }
         Relationships: [
           {
