@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { translateBlogPost } from "@/services/translation";
 import { BlogEditor } from "./blog/BlogEditor";
