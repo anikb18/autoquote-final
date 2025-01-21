@@ -381,6 +381,51 @@ export type Database = {
           },
         ]
       }
+      newsletter_sends: {
+        Row: {
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          newsletter_id: string | null
+          sent_at: string | null
+          status: string | null
+          subscriber_id: string | null
+        }
+        Insert: {
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          newsletter_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subscriber_id?: string | null
+        }
+        Update: {
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          newsletter_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subscriber_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_sends_newsletter_id_fkey"
+            columns: ["newsletter_id"]
+            isOneToOne: false
+            referencedRelation: "newsletters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "newsletter_sends_subscriber_id_fkey"
+            columns: ["subscriber_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_subscribers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_subscribers: {
         Row: {
           email: string
@@ -405,6 +450,45 @@ export type Database = {
           subscribed_at?: string | null
           subscribed_from?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      newsletters: {
+        Row: {
+          content: string
+          created_at: string | null
+          filter_criteria: Json | null
+          id: string
+          metadata: Json | null
+          scheduled_for: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["newsletter_status"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          filter_criteria?: Json | null
+          id?: string
+          metadata?: Json | null
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["newsletter_status"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          filter_criteria?: Json | null
+          id?: string
+          metadata?: Json | null
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["newsletter_status"] | null
+          title?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -852,6 +936,7 @@ export type Database = {
     Enums: {
       bid_visibility: "private" | "public"
       blog_post_status: "draft" | "published" | "archived"
+      newsletter_status: "draft" | "scheduled" | "sent"
       subscription_level: "basic" | "premium"
     }
     CompositeTypes: {
