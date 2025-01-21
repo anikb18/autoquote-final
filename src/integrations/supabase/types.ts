@@ -137,6 +137,77 @@ export type Database = {
         }
         Relationships: []
       }
+      dealer_analytics: {
+        Row: {
+          created_at: string | null
+          dealer_id: string | null
+          id: string
+          metric_type: string
+          period_end: string
+          period_start: string
+          value: number
+        }
+        Insert: {
+          created_at?: string | null
+          dealer_id?: string | null
+          id?: string
+          metric_type: string
+          period_end: string
+          period_start: string
+          value: number
+        }
+        Update: {
+          created_at?: string | null
+          dealer_id?: string | null
+          id?: string
+          metric_type?: string
+          period_end?: string
+          period_start?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      dealer_bids: {
+        Row: {
+          amount: number
+          created_at: string | null
+          dealer_id: string | null
+          id: string
+          quote_id: string | null
+          status: string | null
+          updated_at: string | null
+          visibility: Database["public"]["Enums"]["bid_visibility"] | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          dealer_id?: string | null
+          id?: string
+          quote_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          visibility?: Database["public"]["Enums"]["bid_visibility"] | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          dealer_id?: string | null
+          id?: string
+          quote_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          visibility?: Database["public"]["Enums"]["bid_visibility"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dealer_bids_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dealer_notifications: {
         Row: {
           created_at: string | null
@@ -642,6 +713,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_dealer_metrics: {
+        Args: {
+          dealer_id: string
+          start_date: string
+        }
+        Returns: {
+          total_bids: number
+          won_bids: number
+          total_revenue: number
+          average_response_time: unknown
+        }[]
+      }
       get_dealer_stats:
         | {
             Args: Record<PropertyKey, never>
@@ -673,6 +756,7 @@ export type Database = {
       }
     }
     Enums: {
+      bid_visibility: "private" | "public"
       blog_post_status: "draft" | "published" | "archived"
       subscription_level: "basic" | "premium"
     }
