@@ -1,117 +1,128 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ChatInterface from "../ChatInterface";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Button } from "../ui/button";
+import { useToast } from "@/hooks/use-toast";
+
+interface Quote {
+  id: string;
+  car_details: {
+    make: string;
+    model: string;
+    year: number;
+  };
+  status: string;
+  created_at: string;
+}
 
 export const DealerQuotesTable = () => {
-  const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const { data: dealerQuotes, isLoading, error } = useQuery({
+  const { data: quotes, isLoading } = useQuery({
     queryKey: ['dealer-quotes'],
     queryFn: async () => {
+      const { data: profile } = await supabase.auth.getUser();
+      if (!profile.user) throw new Error("Not authenticated");
+
       const { data, error } = await supabase
         .from('dealer_quotes')
         .select(`
-          *,
-          quotes (
+          quote_id,
+          quotes:quote_id (
+            id,
             car_details,
-            has_trade_in,
             status,
-            user_id
+            created_at
           )
         `)
-        .eq('dealer_id', (await supabase.auth.getUser()).data.user?.id);
-      
+        .eq('dealer_id', profile.user.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
       if (error) throw error;
-      return data;
+      return data.map(q => q.quotes) as Quote[];
+    },
+    meta: {
+      onError: (error: Error) => {
+        toast({
+          title: "Error fetching quotes",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
     },
   });
 
-  const acceptQuote = useMutation({
-    mutationFn: async (quoteId: string) => {
-      const { data, error } = await supabase
+  const handleAcceptQuote = async (quoteId: string) => {
+    try {
+      const { error } = await supabase
         .from('dealer_quotes')
-        .update({ is_accepted: true })
-        .eq('quote_id', quoteId)
-        .eq('dealer_id', (await supabase.auth.getUser()).data.user?.id)
-        .select();
-      
+        .update({ status: 'accepted' })
+        .eq('quote_id', quoteId);
+
       if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dealer-quotes'] });
+
       toast({
-        title: "Success",
-        description: "Quote accepted successfully",
+        title: "Quote accepted",
+        description: "You have successfully accepted the quote.",
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to accept quote",
+        title: "Error accepting quote",
+        description: error instanceof Error ? error.message : "An error occurred",
         variant: "destructive",
       });
-    },
-  });
+    }
+  };
 
-  if (isLoading) return <div>Loading quotes...</div>;
-  if (error) return <div className="text-red-500">Error loading quotes</div>;
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="animate-pulse h-8 bg-gray-200 rounded w-1/4"></div>
+        <div className="animate-pulse h-64 bg-gray-200 rounded"></div>
+      </div>
+    );
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Active Quote Requests</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Car Details</TableHead>
-              <TableHead>Trade-In</TableHead>
-              <TableHead>Quote Status</TableHead>
-              <TableHead>Your Response Status</TableHead>
-              <TableHead>Actions</TableHead>
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold">Recent Quotes</h2>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Vehicle</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {quotes?.map((quote) => (
+            <TableRow key={quote.id}>
+              <TableCell>
+                {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
+              </TableCell>
+              <TableCell>{quote.status}</TableCell>
+              <TableCell>{new Date(quote.created_at).toLocaleDateString()}</TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => handleAcceptQuote(quote.id)}
+                  disabled={quote.status === 'accepted'}
+                >
+                  Accept
+                </Button>
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {dealerQuotes?.map((dealerQuote) => (
-              <>
-                <TableRow key={dealerQuote.id}>
-                  <TableCell>{JSON.stringify(dealerQuote.quotes?.car_details)}</TableCell>
-                  <TableCell>{dealerQuote.quotes?.has_trade_in ? "Yes" : "No"}</TableCell>
-                  <TableCell>{dealerQuote.quotes?.status}</TableCell>
-                  <TableCell>{dealerQuote.status}</TableCell>
-                  <TableCell>
-                    {!dealerQuote.is_accepted && (
-                      <Button 
-                        onClick={() => acceptQuote.mutate(dealerQuote.quote_id!)}
-                        size="sm"
-                      >
-                        Accept Quote
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-                {dealerQuote.is_accepted && (
-                  <TableRow>
-                    <TableCell colSpan={5} className="p-4">
-                      <ChatInterface 
-                        quoteId={dealerQuote.quote_id!} 
-                        dealerId={(dealerQuote.quotes?.user_id as string)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )}
-              </>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };

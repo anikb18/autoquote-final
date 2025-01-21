@@ -1,73 +1,87 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
-import MetricsCard from "./MetricsCard";
-import { Database } from "@/integrations/supabase/types";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { MetricsCard } from "./MetricsCard";
+import { useToast } from "@/hooks/use-toast";
 
-type DealerStats = {
+interface DealerStats {
   active_quotes_count: number;
   quote_change: number;
-  recent_quotes: {
-    id: string;
-    car_details: Database['public']['Tables']['quotes']['Row']['car_details'];
-    has_trade_in?: boolean;
-    created_at: string;
-  }[];
   won_bids_count: number;
   total_revenue: number;
-};
+}
 
 export const DealerMetricsSection = () => {
   const { toast } = useToast();
 
-  const { data: dealerMetrics, isLoading, error } = useQuery<DealerStats>({
-    queryKey: ['dealer-metrics'],
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ['dealer-stats'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      const { data: profile } = await supabase.auth.getUser();
+      if (!profile.user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase
-        .rpc('get_dealer_stats', { 
-          p_dealer_id: user.id,
-          p_subscription_type: 'premium'
-        });
-      
-      if (error) {
-        console.error('Error fetching dealer stats:', error);
-        throw new Error('Failed to fetch dealer statistics');
-      }
-      if (!data?.[0]) throw new Error('No dealer statistics found');
-      
-      return data[0] as DealerStats;
+      const { data: dealerProfile } = await supabase
+        .from('dealer_profiles')
+        .select('subscription_type')
+        .eq('id', profile.user.id)
+        .single();
+
+      if (!dealerProfile) throw new Error("Dealer profile not found");
+
+      const { data, error } = await supabase.rpc(
+        'get_dealer_stats',
+        {
+          p_dealer_id: profile.user.id,
+          p_subscription_type: dealerProfile.subscription_type
+        }
+      );
+
+      if (error) throw error;
+      return data as DealerStats;
     },
     meta: {
       onError: (error: Error) => {
         toast({
-          title: "Error",
-          description: error.message || "Failed to load dealer metrics",
+          title: "Error fetching dealer stats",
+          description: error.message,
           variant: "destructive",
         });
-      }
-    }
+      },
+    },
   });
 
-  if (isLoading) return <div>Loading metrics...</div>;
-  if (error) return null;
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(4)].map((_, i) => (
+          <Card key={i} className="animate-pulse">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Loading...</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">--</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <MetricsCard
         title="Active Quotes"
-        value={dealerMetrics?.active_quotes_count || 0}
-        change={dealerMetrics?.quote_change}
+        value={stats?.active_quotes_count || 0}
+        description={`${stats?.quote_change || 0}% from last month`}
       />
       <MetricsCard
         title="Won Bids"
-        value={dealerMetrics?.won_bids_count || 0}
+        value={stats?.won_bids_count || 0}
       />
       <MetricsCard
         title="Total Revenue"
-        value={`$${dealerMetrics?.total_revenue?.toLocaleString() || 0}`}
+        value={stats?.total_revenue || 0}
+        prefix="$"
       />
     </div>
   );

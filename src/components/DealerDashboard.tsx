@@ -1,67 +1,42 @@
-import { useState } from "react";
-import { DateRange } from "react-day-picker";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import PerformanceChart from "./dashboard/PerformanceChart";
 import { DealerMetricsSection } from "./dashboard/DealerMetricsSection";
 import { DealerQuotesTable } from "./dashboard/DealerQuotesTable";
+import { PerformanceChart, type PerformanceData } from "./dashboard/PerformanceChart";
 
 const DealerDashboard = () => {
-  const [dateRange, setDateRange] = useState<DateRange>();
-
-  const { data: dealerAnalytics, isLoading: isAnalyticsLoading, error: analyticsError } = useQuery({
-    queryKey: ['dealer-analytics', dateRange],
+  const { data: performanceData } = useQuery({
+    queryKey: ['dealer-performance'],
     queryFn: async () => {
-      const query = supabase
+      const { data: profile } = await supabase.auth.getUser();
+      if (!profile.user) throw new Error("Not authenticated");
+
+      const { data, error } = await supabase
         .from('dealer_analytics')
         .select('*')
-        .eq('dealer_id', (await supabase.auth.getUser()).data.user?.id)
-        .order('period_start', { ascending: false })
-        .limit(6);
+        .eq('dealer_id', profile.user.id)
+        .order('period_start', { ascending: true });
 
-      if (dateRange?.from) {
-        query.gte('period_start', dateRange.from.toISOString());
-      }
-      if (dateRange?.to) {
-        query.lte('period_end', dateRange.to.toISOString());
-      }
-
-      const { data, error } = await query;
       if (error) throw error;
-      return data;
+
+      return data.map(record => ({
+        period: new Date(record.period_start).toLocaleDateString('en-US', { month: 'short' }),
+        conversionRate: record.conversion_rate || 0,
+        responseTime: typeof record.quote_response_time === 'number' ? record.quote_response_time : 0,
+        revenue: record.total_revenue || 0,
+      })) as PerformanceData[];
     },
   });
 
-  if (isAnalyticsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (analyticsError) {
-    return (
-      <div className="p-4 text-red-500">
-        Error loading dashboard data. Please try again later.
-      </div>
-    );
-  }
-
-  const performanceData = dealerAnalytics?.map(metric => ({
-    period: new Date(metric.period_start).toLocaleDateString(),
-    conversionRate: metric.conversion_rate || 0,
-    responseTime: metric.quote_response_time ? 
-      typeof metric.quote_response_time === 'string' ? 
-        parseFloat(metric.quote_response_time.split(':')[0]) : 
-        Number(metric.quote_response_time) : 0,
-    revenue: metric.total_revenue || 0
-  })) || [];
-
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto p-6 space-y-8">
+      <h1 className="text-3xl font-bold">Dealer Dashboard</h1>
+      
       <DealerMetricsSection />
-      <PerformanceChart 
-        data={performanceData}
-        onDateRangeChange={setDateRange}
-      />
+      
       <DealerQuotesTable />
+      
+      <PerformanceChart data={performanceData || []} />
     </div>
   );
 };

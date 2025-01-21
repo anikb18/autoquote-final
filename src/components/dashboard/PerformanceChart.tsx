@@ -1,58 +1,61 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { DatePickerWithRange } from "@/components/ui/date-range-picker";
-import { addDays } from "date-fns";
-import { useState } from "react";
-import { DateRange } from "react-day-picker";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
-type PerformanceData = {
+export interface PerformanceData {
   period: string;
   conversionRate: number;
   responseTime: number;
   revenue: number;
-};
+}
 
-type PerformanceChartProps = {
+interface PerformanceChartProps {
   data: PerformanceData[];
-  onDateRangeChange?: (range: DateRange | undefined) => void;
-};
+}
 
-const PerformanceChart = ({ data, onDateRangeChange }: PerformanceChartProps) => {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: addDays(new Date(), -30),
-    to: new Date(),
-  });
-
-  const handleDateRangeChange = (range: DateRange | undefined) => {
-    setDate(range);
-    if (onDateRangeChange) {
-      onDateRangeChange(range);
-    }
-  };
-
+export const PerformanceChart = ({ data }: PerformanceChartProps) => {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Performance Metrics</CardTitle>
-        <DatePickerWithRange date={date} onDateChange={handleDateRangeChange} />
+    <Card className="col-span-4">
+      <CardHeader>
+        <CardTitle>Performance Overview</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
+        <div className="h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
+            <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="period" />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
+              <YAxis />
               <Tooltip />
-              <Bar yAxisId="left" dataKey="conversionRate" name="Conversion Rate (%)" fill="#8884d8" />
-              <Bar yAxisId="right" dataKey="revenue" name="Revenue ($)" fill="#82ca9d" />
-            </BarChart>
+              <Line
+                type="monotone"
+                dataKey="conversionRate"
+                stroke="#8884d8"
+                name="Conversion Rate"
+              />
+              <Line
+                type="monotone"
+                dataKey="responseTime"
+                stroke="#82ca9d"
+                name="Response Time"
+              />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#ffc658"
+                name="Revenue"
+              />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
     </Card>
   );
 };
-
-export default PerformanceChart;
