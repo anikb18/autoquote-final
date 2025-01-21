@@ -10,11 +10,17 @@ import { DateRange } from "react-day-picker";
 import MetricsCard from "./dashboard/MetricsCard";
 import PerformanceChart from "./dashboard/PerformanceChart";
 import { Database } from "@/integrations/supabase/types";
+import { useToast } from "@/components/ui/use-toast";
 
 type DealerStats = {
   active_quotes_count: number;
   quote_change: number;
-  recent_quotes: any[];
+  recent_quotes: {
+    id: string;
+    car_details: Database['public']['Tables']['quotes']['Row']['car_details'];
+    has_trade_in?: boolean;
+    created_at: string;
+  }[];
   won_bids_count: number;
   total_revenue: number;
 };
@@ -22,8 +28,9 @@ type DealerStats = {
 const DealerDashboard = () => {
   const queryClient = useQueryClient();
   const [dateRange, setDateRange] = useState<DateRange>();
+  const { toast } = useToast();
   
-  const { data: dealerQuotes, isLoading: isQuotesLoading } = useQuery({
+  const { data: dealerQuotes, isLoading: isQuotesLoading, error: quotesError } = useQuery({
     queryKey: ['dealer-quotes'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -44,22 +51,36 @@ const DealerDashboard = () => {
     },
   });
 
-  const { data: dealerMetrics, isLoading: isMetricsLoading } = useQuery<DealerStats>({
+  const { data: dealerMetrics, isLoading: isMetricsLoading, error: metricsError } = useQuery<DealerStats>({
     queryKey: ['dealer-metrics', dateRange],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+
       const { data, error } = await supabase
         .rpc('get_dealer_stats', { 
-          p_dealer_id: user?.id,
+          p_dealer_id: user.id,
           p_subscription_type: 'premium'
         });
       
-      if (error) throw error;
-      return data?.[0] as DealerStats;
+      if (error) {
+        console.error('Error fetching dealer stats:', error);
+        throw new Error('Failed to fetch dealer statistics');
+      }
+      if (!data?.[0]) throw new Error('No dealer statistics found');
+      
+      return data[0] as DealerStats;
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to load dealer metrics",
+        variant: "destructive",
+      });
     },
   });
 
-  const { data: dealerAnalytics, isLoading: isAnalyticsLoading } = useQuery({
+  const { data: dealerAnalytics, isLoading: isAnalyticsLoading, error: analyticsError } = useQuery({
     queryKey: ['dealer-analytics', dateRange],
     queryFn: async () => {
       const query = supabase
@@ -119,10 +140,31 @@ const DealerDashboard = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['dealer-quotes'] });
+      toast({
+        title: "Success",
+        description: "Quote accepted successfully",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to accept quote",
+        variant: "destructive",
+      });
     },
   });
 
-  if (isQuotesLoading || isMetricsLoading || isAnalyticsLoading) return <div>Loading...</div>;
+  if (isQuotesLoading || isMetricsLoading || isAnalyticsLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (quotesError || metricsError || analyticsError) {
+    return (
+      <div className="p-4 text-red-500">
+        Error loading dashboard data. Please try again later.
+      </div>
+    );
+  }
 
   const performanceData = dealerAnalytics?.map(metric => ({
     period: new Date(metric.period_start).toLocaleDateString(),
