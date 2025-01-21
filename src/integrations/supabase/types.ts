@@ -254,7 +254,9 @@ export type Database = {
         Row: {
           active: boolean | null
           dealer_name: string
+          first_name: string | null
           id: string
+          last_name: string | null
           subscription_type:
             | Database["public"]["Enums"]["subscription_level"]
             | null
@@ -262,7 +264,9 @@ export type Database = {
         Insert: {
           active?: boolean | null
           dealer_name: string
+          first_name?: string | null
           id: string
+          last_name?: string | null
           subscription_type?:
             | Database["public"]["Enums"]["subscription_level"]
             | null
@@ -270,7 +274,9 @@ export type Database = {
         Update: {
           active?: boolean | null
           dealer_name?: string
+          first_name?: string | null
           id?: string
+          last_name?: string | null
           subscription_type?:
             | Database["public"]["Enums"]["subscription_level"]
             | null
