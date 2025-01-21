@@ -9,7 +9,7 @@ type ViewMode = "admin" | "dealer" | "buyer";
 
 const Dashboard = () => {
   const { role } = useUserRole();
-  const [viewMode, setViewMode] = useState<ViewMode>(role || "buyer");
+  const [viewMode, setViewMode] = useState<ViewMode>(role as ViewMode || "buyer");
 
   const handleSettingsClick = () => {
     console.log("Settings clicked");

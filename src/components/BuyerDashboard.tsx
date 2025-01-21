@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import CarViewer3D from "./CarViewer3D";
+import { Quote, CarDetails } from "@/types/quotes";
 
 const BuyerDashboard = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const BuyerDashboard = () => {
     },
   });
 
-  const { data: activeQuote } = useQuery({
+  const { data: activeQuote } = useQuery<Quote | null>({
     queryKey: ['active-quote'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -48,9 +49,12 @@ const BuyerDashboard = () => {
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
-      return data;
+      return data as Quote;
     },
   });
+
+  // Parse car_details to ensure it matches CarDetails type
+  const carDetails: CarDetails | undefined = activeQuote?.car_details as CarDetails;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -77,16 +81,16 @@ const BuyerDashboard = () => {
         </Alert>
       ) : null}
 
-      {activeQuote && (
+      {activeQuote && carDetails && (
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Your Active Quote</CardTitle>
             <CardDescription>
-              {activeQuote.car_details?.year} {activeQuote.car_details?.make} {activeQuote.car_details?.model}
+              {carDetails.year} {carDetails.make} {carDetails.model}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <CarViewer3D carDetails={activeQuote.car_details} showHotspots={true} />
+            <CarViewer3D carDetails={carDetails} showHotspots={true} />
           </CardContent>
         </Card>
       )}
