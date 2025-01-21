@@ -25,7 +25,6 @@ interface Quote {
   };
   status: string;
   created_at: string;
-  deadline?: string;
 }
 
 export const DealerQuotesTable = () => {
@@ -47,8 +46,7 @@ export const DealerQuotesTable = () => {
             id,
             car_details,
             status,
-            created_at,
-            deadline
+            created_at
           )
         `)
         .eq('dealer_id', profile.user.id)
@@ -82,6 +80,12 @@ export const DealerQuotesTable = () => {
     );
   }
 
+  // Calculate expiration time (24 hours from creation)
+  const getExpirationTime = (createdAt: string) => {
+    const created = new Date(createdAt);
+    return new Date(created.getTime() + (24 * 60 * 60 * 1000));
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">{t("dealer.quotes.recentTitle")}</h2>
@@ -95,50 +99,46 @@ export const DealerQuotesTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {quotes?.map((quote) => {
-            const deadline = quote.deadline ? new Date(quote.deadline) : new Date(new Date(quote.created_at).getTime() + (24 * 60 * 60 * 1000));
-            
-            return (
-              <TableRow key={quote.id} className="group">
-                <TableCell>
-                  {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
-                </TableCell>
-                <TableCell>
-                  <Badge 
-                    variant={quote.status === 'pending' ? 'secondary' : 'default'}
-                    className="transition-all group-hover:scale-105"
-                  >
-                    {t(`dealer.quotes.status.${quote.status}`)}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <CountdownTimer 
-                    endDate={deadline}
-                    onExpire={() => {
-                      toast({
-                        title: "Quote Expired",
-                        description: "This quote is no longer available for response.",
-                        variant: "destructive",
-                      });
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => handleQuoteResponse(quote.id)}
-                    variant={quote.status === 'pending' ? 'default' : 'secondary'}
-                    className="flex items-center gap-2 transition-all hover:scale-105"
-                  >
-                    <MessageSquarePlus className="h-4 w-4" />
-                    {quote.status === 'pending' 
-                      ? t("dealer.quotes.actions.respond")
-                      : t("dealer.quotes.actions.view")
-                    }
-                  </Button>
-                </TableCell>
-              </TableRow>
-            );
-          })}
+          {quotes?.map((quote) => (
+            <TableRow key={quote.id} className="group">
+              <TableCell>
+                {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
+              </TableCell>
+              <TableCell>
+                <Badge 
+                  variant={quote.status === 'pending' ? 'secondary' : 'default'}
+                  className="transition-all group-hover:scale-105"
+                >
+                  {t(`dealer.quotes.status.${quote.status}`)}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <CountdownTimer 
+                  endDate={getExpirationTime(quote.created_at)}
+                  onExpire={() => {
+                    toast({
+                      title: "Quote Expired",
+                      description: "This quote is no longer available for response.",
+                      variant: "destructive",
+                    });
+                  }}
+                />
+              </TableCell>
+              <TableCell>
+                <Button
+                  onClick={() => handleQuoteResponse(quote.id)}
+                  variant={quote.status === 'pending' ? 'default' : 'secondary'}
+                  className="flex items-center gap-2 transition-all hover:scale-105"
+                >
+                  <MessageSquarePlus className="h-4 w-4" />
+                  {quote.status === 'pending' 
+                    ? t("dealer.quotes.actions.respond")
+                    : t("dealer.quotes.actions.view")
+                  }
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
