@@ -366,18 +366,24 @@ export type Database = {
           id: string
           status: string | null
           subscribed_at: string | null
+          subscribed_from: string | null
+          user_id: string | null
         }
         Insert: {
           email: string
           id?: string
           status?: string | null
           subscribed_at?: string | null
+          subscribed_from?: string | null
+          user_id?: string | null
         }
         Update: {
           email?: string
           id?: string
           status?: string | null
           subscribed_at?: string | null
+          subscribed_from?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
