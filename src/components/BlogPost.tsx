@@ -5,6 +5,17 @@ import { Button } from "./ui/button";
 import { ArrowLeft, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
+type BlogPost = {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+  published_at: string | null;
+  profiles: {
+    full_name: string | null;
+  } | null;
+}
+
 const BlogPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,7 +35,7 @@ const BlogPost = () => {
         .single();
       
       if (error) throw error;
-      return data;
+      return data as BlogPost;
     }
   });
 
