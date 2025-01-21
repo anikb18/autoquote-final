@@ -306,6 +306,7 @@ export type Database = {
       }
       dealer_quotes: {
         Row: {
+          alternative_options: Json | null
           created_at: string | null
           dealer_id: string | null
           id: string
@@ -317,6 +318,7 @@ export type Database = {
           status: string | null
         }
         Insert: {
+          alternative_options?: Json | null
           created_at?: string | null
           dealer_id?: string | null
           id?: string
@@ -328,6 +330,7 @@ export type Database = {
           status?: string | null
         }
         Update: {
+          alternative_options?: Json | null
           created_at?: string | null
           dealer_id?: string | null
           id?: string
@@ -927,9 +930,11 @@ export type Database = {
           financing_preference: string | null
           has_trade_in: boolean | null
           id: string
+          interested_in_alternatives: boolean | null
           lease_term: number | null
           price_paid: number | null
           pricing_option: string | null
+          selected_colors: string[] | null
           status: string | null
           trade_in_details: Json | null
           trade_in_visibility_days: number | null
@@ -944,9 +949,11 @@ export type Database = {
           financing_preference?: string | null
           has_trade_in?: boolean | null
           id?: string
+          interested_in_alternatives?: boolean | null
           lease_term?: number | null
           price_paid?: number | null
           pricing_option?: string | null
+          selected_colors?: string[] | null
           status?: string | null
           trade_in_details?: Json | null
           trade_in_visibility_days?: number | null
@@ -961,9 +968,11 @@ export type Database = {
           financing_preference?: string | null
           has_trade_in?: boolean | null
           id?: string
+          interested_in_alternatives?: boolean | null
           lease_term?: number | null
           price_paid?: number | null
           pricing_option?: string | null
+          selected_colors?: string[] | null
           status?: string | null
           trade_in_details?: Json | null
           trade_in_visibility_days?: number | null
