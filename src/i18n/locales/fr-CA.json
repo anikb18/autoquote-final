@@ -65,6 +65,25 @@
       "success": "Soumission envoyée avec succès",
       "error": "Erreur lors de l'envoi de la soumission",
       "premiumRequired": "Abonnement premium requis pour les évaluations d'échange"
+    },
+    "quotes": {
+      "recentTitle": "Devis récents",
+      "vehicle": "Véhicule",
+      "status": "Statut",
+      "date": "Date",
+      "actions": {
+        "respond": "Répondre au devis",
+        "view": "Voir le devis"
+      },
+      "status": {
+        "pending": "En attente",
+        "responded": "Répondu",
+        "accepted": "Accepté",
+        "declined": "Refusé"
+      },
+      "error": {
+        "title": "Erreur de chargement des devis"
+      }
     }
   },
   "admin": {

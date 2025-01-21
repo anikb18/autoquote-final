@@ -10,6 +10,10 @@ import {
 } from "../ui/table";
 import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { MessageSquarePlus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "../ui/badge";
+import { useTranslation } from "react-i18next";
 
 interface Quote {
   id: string;
@@ -24,6 +28,8 @@ interface Quote {
 
 export const DealerQuotesTable = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { data: quotes, isLoading } = useQuery({
     queryKey: ['dealer-quotes'],
@@ -52,7 +58,7 @@ export const DealerQuotesTable = () => {
     meta: {
       onError: (error: Error) => {
         toast({
-          title: "Error fetching quotes",
+          title: t("dealer.quotes.error.title"),
           description: error.message,
           variant: "destructive",
         });
@@ -60,26 +66,8 @@ export const DealerQuotesTable = () => {
     },
   });
 
-  const handleAcceptQuote = async (quoteId: string) => {
-    try {
-      const { error } = await supabase
-        .from('dealer_quotes')
-        .update({ status: 'accepted' })
-        .eq('quote_id', quoteId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Quote accepted",
-        description: "You have successfully accepted the quote.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error accepting quote",
-        description: error instanceof Error ? error.message : "An error occurred",
-        variant: "destructive",
-      });
-    }
+  const handleQuoteResponse = (quoteId: string) => {
+    navigate(`/quotes/${quoteId}`);
   };
 
   if (isLoading) {
@@ -93,14 +81,14 @@ export const DealerQuotesTable = () => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Recent Quotes</h2>
+      <h2 className="text-2xl font-bold">{t("dealer.quotes.recentTitle")}</h2>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Vehicle</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t("dealer.quotes.vehicle")}</TableHead>
+            <TableHead>{t("dealer.quotes.status")}</TableHead>
+            <TableHead>{t("dealer.quotes.date")}</TableHead>
+            <TableHead>{t("dealer.quotes.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -109,14 +97,25 @@ export const DealerQuotesTable = () => {
               <TableCell>
                 {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
               </TableCell>
-              <TableCell>{quote.status}</TableCell>
+              <TableCell>
+                <Badge 
+                  variant={quote.status === 'pending' ? 'secondary' : 'default'}
+                >
+                  {t(`dealer.quotes.status.${quote.status}`)}
+                </Badge>
+              </TableCell>
               <TableCell>{new Date(quote.created_at).toLocaleDateString()}</TableCell>
               <TableCell>
                 <Button
-                  onClick={() => handleAcceptQuote(quote.id)}
-                  disabled={quote.status === 'accepted'}
+                  onClick={() => handleQuoteResponse(quote.id)}
+                  variant={quote.status === 'pending' ? 'default' : 'secondary'}
+                  className="flex items-center gap-2"
                 >
-                  Accept
+                  <MessageSquarePlus className="h-4 w-4" />
+                  {quote.status === 'pending' 
+                    ? t("dealer.quotes.actions.respond")
+                    : t("dealer.quotes.actions.view")
+                  }
                 </Button>
               </TableCell>
             </TableRow>
