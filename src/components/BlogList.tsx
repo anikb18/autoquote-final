@@ -6,21 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { useState, useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Editor } from '@tinymce/tinymce-react';
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { translateBlogPost } from "@/services/translation";
-
-const blogFormSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(10, "Content must be at least 10 characters"),
-  excerpt: z.string().min(1, "Excerpt is required"),
-});
+import { BlogEditor } from "./blog/BlogEditor";
 
 const BlogList = () => {
   const { toast } = useToast();
@@ -28,15 +17,6 @@ const BlogList = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const { i18n } = useTranslation();
   const [translatedPosts, setTranslatedPosts] = useState<any[]>([]);
-
-  const form = useForm<z.infer<typeof blogFormSchema>>({
-    resolver: zodResolver(blogFormSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      excerpt: "",
-    },
-  });
 
   const { data: blogPosts, refetch } = useQuery({
     queryKey: ['blog-posts'],
@@ -69,7 +49,13 @@ const BlogList = () => {
     translatePosts();
   }, [blogPosts, i18n.language]);
 
-  const handleCreatePost = async (values: z.infer<typeof blogFormSchema>) => {
+  const handleCreatePost = async (values: { 
+    title: string; 
+    content: string; 
+    excerpt: string;
+    featured_image?: string;
+    image_alt?: string;
+  }) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -80,6 +66,8 @@ const BlogList = () => {
           title: values.title,
           content: values.content,
           excerpt: values.excerpt,
+          featured_image: values.featured_image,
+          image_alt: values.image_alt,
           author_id: user.id,
           status: 'draft'
         }
@@ -97,7 +85,6 @@ const BlogList = () => {
         description: "Blog post created successfully",
       });
       setIsCreateDialogOpen(false);
-      form.reset();
       refetch();
     }
   };
@@ -138,67 +125,7 @@ const BlogList = () => {
             <DialogHeader>
               <DialogTitle>Create New Blog Post</DialogTitle>
             </DialogHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleCreatePost)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Post title" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="excerpt"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Excerpt</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Brief description" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Content</FormLabel>
-                      <FormControl>
-                        <Editor
-                          apiKey="your-api-key-here"
-                          init={{
-                            height: 500,
-                            menubar: true,
-                            plugins: [
-                              'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                              'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                              'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                            ],
-                            toolbar: 'undo redo | blocks | ' +
-                              'bold italic forecolor | alignleft aligncenter ' +
-                              'alignright alignjustify | bullist numlist outdent indent | ' +
-                              'removeformat | help',
-                          }}
-                          value={field.value}
-                          onEditorChange={(content) => field.onChange(content)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Create Post</Button>
-              </form>
-            </Form>
+            <BlogEditor onSave={handleCreatePost} />
           </DialogContent>
         </Dialog>
       </div>
@@ -208,13 +135,25 @@ const BlogList = () => {
           <Card key={post.id} className="relative">
             <CardHeader>
               <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="hover:text-primary cursor-pointer" onClick={() => navigate(`/blog/${post.id}`)}>
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription>
-                    Status: {post.status} | Created: {new Date(post.created_at).toLocaleDateString()}
-                  </CardDescription>
+                <div className="flex gap-4">
+                  {post.featured_image && (
+                    <img 
+                      src={post.featured_image} 
+                      alt={post.image_alt || post.title}
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                  )}
+                  <div>
+                    <CardTitle 
+                      className="hover:text-primary cursor-pointer" 
+                      onClick={() => navigate(`/blog/${post.id}`)}
+                    >
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription>
+                      Status: {post.status} | Created: {new Date(post.created_at).toLocaleDateString()}
+                    </CardDescription>
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="icon" onClick={() => navigate(`/blog/${post.id}/edit`)}>

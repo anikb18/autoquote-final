@@ -18,6 +18,7 @@ interface BlogPost {
   updated_at: string;
   excerpt: string;
   featured_image: string;
+  image_alt: string;
   published_at: string;
   profiles?: {
     full_name: string | null;
@@ -104,6 +105,15 @@ const BlogPost = () => {
 
       <Card>
         <CardHeader>
+          {translatedPost.featured_image && (
+            <div className="mb-6">
+              <img
+                src={translatedPost.featured_image}
+                alt={translatedPost.image_alt || translatedPost.title}
+                className="w-full h-64 object-cover rounded"
+              />
+            </div>
+          )}
           <CardTitle className="text-3xl">{translatedPost.title}</CardTitle>
           <CardDescription>
             By {translatedPost.profiles?.full_name || 'Unknown'} | 

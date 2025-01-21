@@ -59,6 +59,8 @@ export type Database = {
           excerpt: string | null
           featured_image: string | null
           id: string
+          image_alt: string | null
+          image_metadata: Json | null
           published_at: string | null
           status: Database["public"]["Enums"]["blog_post_status"] | null
           title: string
@@ -71,6 +73,8 @@ export type Database = {
           excerpt?: string | null
           featured_image?: string | null
           id?: string
+          image_alt?: string | null
+          image_metadata?: Json | null
           published_at?: string | null
           status?: Database["public"]["Enums"]["blog_post_status"] | null
           title: string
@@ -83,6 +87,8 @@ export type Database = {
           excerpt?: string | null
           featured_image?: string | null
           id?: string
+          image_alt?: string | null
+          image_metadata?: Json | null
           published_at?: string | null
           status?: Database["public"]["Enums"]["blog_post_status"] | null
           title?: string
