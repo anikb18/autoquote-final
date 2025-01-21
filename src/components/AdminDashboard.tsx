@@ -4,6 +4,7 @@ import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { BlogManagement } from "./dashboard/BlogManagement";
 import { NewsletterManagement } from "./dashboard/NewsletterManagement";
+import { UserManagement } from "./dashboard/UserManagement";
 import { useTranslation } from "react-i18next";
 
 const AdminDashboard = () => {
@@ -26,6 +27,7 @@ const AdminDashboard = () => {
       <Tabs defaultValue="analytics" className="space-y-6">
         <TabsList className="bg-background/50 backdrop-blur-sm border">
           <TabsTrigger value="analytics">{t('tabs.analytics')}</TabsTrigger>
+          <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
           <TabsTrigger value="blog">{t('tabs.blog')}</TabsTrigger>
           <TabsTrigger value="newsletter">{t('tabs.newsletter')}</TabsTrigger>
         </TabsList>
@@ -34,6 +36,10 @@ const AdminDashboard = () => {
           <AdminMetricsCards />
           <SalesTrendChart />
           <DealershipComparison />
+        </TabsContent>
+
+        <TabsContent value="users">
+          <UserManagement />
         </TabsContent>
 
         <TabsContent value="blog">
