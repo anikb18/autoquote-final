@@ -1041,6 +1041,45 @@ export type Database = {
           },
         ]
       }
+      seo_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          meta_description: string | null
+          meta_keywords: string[] | null
+          og_description: string | null
+          og_image: string | null
+          og_title: string | null
+          page_identifier: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          page_identifier: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          page_identifier?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       trade_in_valuations: {
         Row: {
           created_at: string | null

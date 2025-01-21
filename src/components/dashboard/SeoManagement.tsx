@@ -39,7 +39,32 @@ export const SeoManagement = () => {
     setIsLoading(true);
 
     try {
-      // Here you would typically save the SEO data to your database
+      const { error: homeError } = await supabase
+        .from('seo_settings')
+        .upsert({
+          page_identifier: 'home',
+          title: formData.homeTitle,
+          meta_description: formData.homeDescription,
+        });
+
+      const { error: blogError } = await supabase
+        .from('seo_settings')
+        .upsert({
+          page_identifier: 'blog',
+          title: formData.blogTitle,
+          meta_description: formData.blogDescription,
+        });
+
+      const { error: dealerError } = await supabase
+        .from('seo_settings')
+        .upsert({
+          page_identifier: 'dealers',
+          title: formData.dealerTitle,
+          meta_description: formData.dealerDescription,
+        });
+
+      if (homeError || blogError || dealerError) throw new Error('Failed to update SEO settings');
+
       toast({
         title: "Success",
         description: "SEO settings have been updated successfully.",
