@@ -42,7 +42,7 @@ const BlogPost = () => {
       if (error) throw error;
       if (!data) return null;
       
-      return data as BlogPost;
+      return data as unknown as BlogPost;
     }
   });
 

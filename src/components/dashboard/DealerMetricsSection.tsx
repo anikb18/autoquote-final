@@ -9,6 +9,12 @@ interface DealerStats {
   quote_change: number;
   won_bids_count: number;
   total_revenue: number;
+  recent_quotes: Array<{
+    id: string;
+    car_details: Record<string, any>;
+    has_trade_in: boolean;
+    created_at: string;
+  }>;
 }
 
 export const DealerMetricsSection = () => {
@@ -37,7 +43,9 @@ export const DealerMetricsSection = () => {
       );
 
       if (error) throw error;
-      return data as DealerStats;
+      
+      // Since the function returns a single row array, we take the first element
+      return data[0] as DealerStats;
     },
     meta: {
       onError: (error: Error) => {
