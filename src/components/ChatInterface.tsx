@@ -23,8 +23,12 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
       const { data: messagesData, error: messagesError } = await supabase
         .from('chat_messages')
         .select(`
-          *,
-          sender:profiles!inner(
+          id,
+          content,
+          sender_id,
+          created_at,
+          quote_id,
+          sender:profiles(
             email,
             dealer_profiles(
               first_name,
@@ -108,7 +112,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatInterfaceProps) => {
           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4",
           messages: [
             {
               role: "system",
