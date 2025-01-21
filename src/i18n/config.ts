@@ -15,17 +15,17 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'fr-CA',
+    fallbackLng: 'en-US',
     resources: {
-      'fr-CA': {
-        common: frCACommon,
-        dealer: frCADealer,
-        admin: frCAAdmin
-      },
       'en-US': {
         common: enUSCommon,
         dealer: enUSDealer,
         admin: enUSAdmin
+      },
+      'fr-CA': {
+        common: frCACommon,
+        dealer: frCADealer,
+        admin: frCAAdmin
       }
     },
     detection: {
@@ -35,7 +35,6 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-    // Add namespaces
     ns: ['common', 'dealer', 'admin'],
     defaultNS: 'common'
   });

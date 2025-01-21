@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { useTranslation } from "react-i18next";
 
 export const ContactForm = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dealer');
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -11,10 +11,10 @@ export const ContactForm = () => {
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl text-center">
-              {t("dealer.contact.title")}
+              {t("contact.title")}
             </CardTitle>
             <CardDescription className="text-center">
-              {t("dealer.contact.subtitle")}
+              {t("contact.subtitle")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -22,48 +22,48 @@ export const ContactForm = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">
-                    {t("dealer.contact.form.dealershipName")}
+                    {t("contact.form.dealershipName")}
                   </label>
                   <input
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
-                    placeholder={t("dealer.contact.form.dealershipNamePlaceholder")}
+                    placeholder={t("contact.form.dealershipNamePlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">
-                    {t("dealer.contact.form.location")}
+                    {t("contact.form.location")}
                   </label>
                   <input
                     type="text"
                     className="w-full px-3 py-2 border rounded-md"
-                    placeholder={t("dealer.contact.form.locationPlaceholder")}
+                    placeholder={t("contact.form.locationPlaceholder")}
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  {t("dealer.contact.form.volume")}
+                  {t("contact.form.volume")}
                 </label>
                 <select className="w-full px-3 py-2 border rounded-md">
-                  <option value="">{t("dealer.contact.form.volumeOptions.small")}</option>
-                  <option value="">{t("dealer.contact.form.volumeOptions.medium")}</option>
-                  <option value="">{t("dealer.contact.form.volumeOptions.large")}</option>
-                  <option value="">{t("dealer.contact.form.volumeOptions.xlarge")}</option>
+                  <option value="">{t("contact.form.volumeOptions.small")}</option>
+                  <option value="">{t("contact.form.volumeOptions.medium")}</option>
+                  <option value="">{t("contact.form.volumeOptions.large")}</option>
+                  <option value="">{t("contact.form.volumeOptions.xlarge")}</option>
                 </select>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  {t("dealer.contact.form.brands")}
+                  {t("contact.form.brands")}
                 </label>
                 <input
                   type="text"
                   className="w-full px-3 py-2 border rounded-md"
-                  placeholder={t("dealer.contact.form.brandsPlaceholder")}
+                  placeholder={t("contact.form.brandsPlaceholder")}
                 />
               </div>
               <Button className="w-full" size="lg">
-                {t("dealer.contact.form.submit")}
+                {t("contact.form.submit")}
               </Button>
             </form>
           </CardContent>

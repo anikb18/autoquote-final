@@ -3,28 +3,28 @@ import { ChartBar, Shield, Users, Calendar } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const BenefitsSection = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dealer');
 
   const benefits = [
     {
       icon: ChartBar,
-      title: t("dealer.benefits.bidding.title"),
-      description: t("dealer.benefits.bidding.description")
+      title: t("benefits.bidding.title"),
+      description: t("benefits.bidding.description")
     },
     {
       icon: Shield,
-      title: t("dealer.benefits.verification.title"),
-      description: t("dealer.benefits.verification.description")
+      title: t("benefits.verification.title"),
+      description: t("benefits.verification.description")
     },
     {
       icon: Users,
-      title: t("dealer.benefits.automation.title"),
-      description: t("dealer.benefits.automation.description")
+      title: t("benefits.automation.title"),
+      description: t("benefits.automation.description")
     },
     {
       icon: Calendar,
-      title: t("dealer.benefits.support.title"),
-      description: t("dealer.benefits.support.description")
+      title: t("benefits.support.title"),
+      description: t("benefits.support.description")
     }
   ];
 

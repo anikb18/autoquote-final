@@ -2,23 +2,23 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 
 export const TrustSection = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dealer');
 
   const metrics = [
     {
-      title: t("dealer.trust.metrics.network.title"),
-      value: t("dealer.trust.metrics.network.value"),
-      label: t("dealer.trust.metrics.network.label")
+      title: t("trust.metrics.network.title"),
+      value: t("trust.metrics.network.value"),
+      label: t("trust.metrics.network.label")
     },
     {
-      title: t("dealer.trust.metrics.success.title"),
-      value: t("dealer.trust.metrics.success.value"),
-      label: t("dealer.trust.metrics.success.label")
+      title: t("trust.metrics.success.title"),
+      value: t("trust.metrics.success.value"),
+      label: t("trust.metrics.success.label")
     },
     {
-      title: t("dealer.trust.metrics.value.title"),
-      value: t("dealer.trust.metrics.value.value"),
-      label: t("dealer.trust.metrics.value.label")
+      title: t("trust.metrics.value.title"),
+      value: t("trust.metrics.value.value"),
+      label: t("trust.metrics.value.label")
     }
   ];
 
@@ -26,7 +26,7 @@ export const TrustSection = () => {
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-12">
-          {t("dealer.trust.title")}
+          {t("trust.title")}
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {metrics.map((metric) => (
