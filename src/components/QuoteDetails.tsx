@@ -5,6 +5,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import ChatInterface from "./ChatInterface";
 
+interface CarDetails {
+  year: number;
+  make: string;
+  model: string;
+}
+
+interface DealerProfile {
+  dealer_name: string;
+}
+
+interface Quote {
+  id: string;
+  car_details: CarDetails;
+  dealer_quotes: Array<{
+    id: string;
+    dealer_id: string;
+    is_accepted: boolean;
+    dealer?: {
+      dealer_profiles?: DealerProfile[];
+    };
+  }>;
+}
+
 const QuoteDetails = () => {
   const { id } = useParams<{ id: string }>();
 
@@ -28,7 +51,7 @@ const QuoteDetails = () => {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as Quote;
     },
     enabled: !!id
   });
