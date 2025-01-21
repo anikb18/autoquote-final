@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 const DealerSignup = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dealer');
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -69,8 +69,8 @@ const DealerSignup = () => {
         if (roleError) throw roleError;
 
         toast({
-          title: t("dealer.signup.success.title"),
-          description: t("dealer.signup.success.description"),
+          title: t("signup.success.title"),
+          description: t("signup.success.description"),
         });
 
         navigate("/dashboard");
@@ -79,7 +79,7 @@ const DealerSignup = () => {
       setError(err.message);
       toast({
         variant: "destructive",
-        title: t("dealer.signup.error.title"),
+        title: t("signup.error.title"),
         description: err.message,
       });
     } finally {
@@ -92,8 +92,8 @@ const DealerSignup = () => {
       <div className="max-w-md mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>{t("dealer.signup.title")}</CardTitle>
-            <CardDescription>{t("dealer.signup.subtitle")}</CardDescription>
+            <CardTitle>{t("signup.title")}</CardTitle>
+            <CardDescription>{t("signup.subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
             {error && (
@@ -103,46 +103,46 @@ const DealerSignup = () => {
             )}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="dealershipName">{t("dealer.signup.form.dealershipName")}</Label>
+                <Label htmlFor="dealershipName">{t("signup.form.dealershipName")}</Label>
                 <Input
                   id="dealershipName"
                   name="dealershipName"
                   required
-                  placeholder={t("dealer.signup.form.dealershipNamePlaceholder")}
+                  placeholder={t("signup.form.dealershipNamePlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="location">{t("dealer.signup.form.location")}</Label>
+                <Label htmlFor="location">{t("signup.form.location")}</Label>
                 <Input
                   id="location"
                   name="location"
                   required
-                  placeholder={t("dealer.signup.form.locationPlaceholder")}
+                  placeholder={t("signup.form.locationPlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">{t("dealer.signup.form.email")}</Label>
+                <Label htmlFor="email">{t("signup.form.email")}</Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
                   required
-                  placeholder={t("dealer.signup.form.emailPlaceholder")}
+                  placeholder={t("signup.form.emailPlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">{t("dealer.signup.form.password")}</Label>
+                <Label htmlFor="password">{t("signup.form.password")}</Label>
                 <Input
                   id="password"
                   name="password"
                   type="password"
                   required
-                  placeholder={t("dealer.signup.form.passwordPlaceholder")}
+                  placeholder={t("signup.form.passwordPlaceholder")}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t("dealer.signup.form.submit")}
+                {t("signup.form.submit")}
               </Button>
             </form>
           </CardContent>

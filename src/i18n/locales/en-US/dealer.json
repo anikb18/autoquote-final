@@ -69,5 +69,28 @@
       "brandsPlaceholder": "e.g., Toyota, Honda, Ford",
       "submit": "Get Exclusive Access"
     }
+  },
+  "signup": {
+    "title": "Join Our Dealer Network",
+    "subtitle": "Get exclusive access to pre-qualified leads and grow your business",
+    "success": {
+      "title": "Registration Successful",
+      "description": "Welcome to our dealer network! You'll be redirected to your dashboard."
+    },
+    "error": {
+      "title": "Registration Error",
+      "description": "There was an error during registration. Please try again."
+    },
+    "form": {
+      "dealershipName": "Dealership Name",
+      "dealershipNamePlaceholder": "Enter your dealership name",
+      "location": "Location",
+      "locationPlaceholder": "City, Province",
+      "email": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "password": "Password",
+      "passwordPlaceholder": "Choose a secure password",
+      "submit": "Create Dealer Account"
+    }
   }
 }

@@ -69,5 +69,28 @@
       "brandsPlaceholder": "ex: Toyota, Honda, Ford",
       "submit": "Obtenir un accès exclusif"
     }
+  },
+  "signup": {
+    "title": "Rejoignez Notre Réseau de Concessionnaires",
+    "subtitle": "Obtenez un accès exclusif aux clients pré-qualifiés et développez votre entreprise",
+    "success": {
+      "title": "Inscription Réussie",
+      "description": "Bienvenue dans notre réseau de concessionnaires! Vous serez redirigé vers votre tableau de bord."
+    },
+    "error": {
+      "title": "Erreur d'Inscription",
+      "description": "Une erreur s'est produite lors de l'inscription. Veuillez réessayer."
+    },
+    "form": {
+      "dealershipName": "Nom de la Concession",
+      "dealershipNamePlaceholder": "Entrez le nom de votre concession",
+      "location": "Emplacement",
+      "locationPlaceholder": "Ville, Province",
+      "email": "Adresse Email",
+      "emailPlaceholder": "votre@email.com",
+      "password": "Mot de Passe",
+      "passwordPlaceholder": "Choisissez un mot de passe sécurisé",
+      "submit": "Créer un Compte Concessionnaire"
+    }
   }
 }
