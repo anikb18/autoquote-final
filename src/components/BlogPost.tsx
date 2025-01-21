@@ -4,17 +4,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { ArrowLeft, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Database } from "@/integrations/supabase/types";
 
-type BlogPost = {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  published_at: string | null;
+type BlogPost = Database['public']['Tables']['blog_posts']['Row'] & {
   profiles: {
     full_name: string | null;
   } | null;
-}
+};
 
 const BlogPost = () => {
   const { id } = useParams();
