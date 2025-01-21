@@ -1,0 +1,21 @@
+{
+  "appName": "Auto Trade Nexus",
+  "dashboard": "Tableau de bord",
+  "signIn": "Connexion",
+  "signOut": "Déconnexion",
+  "loading": "Chargement...",
+  "error": "Erreur",
+  "success": "Succès",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "edit": "Modifier",
+  "view": "Voir",
+  "search": "Rechercher",
+  "filter": "Filtrer",
+  "sort": "Trier",
+  "actions": "Actions",
+  "yes": "Oui",
+  "no": "Non",
+  "notAvailable": "Non disponible"
+}

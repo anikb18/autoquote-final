@@ -1,0 +1,44 @@
+{
+  "dashboard": {
+    "title": "Tableau de bord administrateur",
+    "overview": "Aperçu du système"
+  },
+  "tabs": {
+    "analytics": "Analytique",
+    "blog": "Gestion du blog",
+    "newsletter": "Infolettre"
+  },
+  "metrics": {
+    "totalUsers": "Nombre total d'utilisateurs",
+    "activeDeals": "Transactions actives",
+    "monthlyRevenue": "Revenu mensuel",
+    "conversionRate": "Taux de conversion",
+    "fromLastMonth": "par rapport au mois dernier"
+  },
+  "blog": {
+    "title": "Articles du blog",
+    "createNew": "Créer un nouvel article",
+    "status": {
+      "draft": "Brouillon",
+      "published": "Publié",
+      "archived": "Archivé"
+    },
+    "form": {
+      "title": "Titre de l'article",
+      "content": "Contenu de l'article",
+      "save": "Enregistrer comme brouillon",
+      "publish": "Publier"
+    }
+  },
+  "newsletter": {
+    "title": "Gestion de l'infolettre",
+    "create": "Créer une infolettre",
+    "drafts": "Brouillons",
+    "subscribers": "Abonnés",
+    "stats": {
+      "totalSubscribers": "Nombre total d'abonnés",
+      "openRate": "Taux d'ouverture",
+      "clickRate": "Taux de clic"
+    }
+  }
+}

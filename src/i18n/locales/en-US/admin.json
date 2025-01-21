@@ -1,0 +1,44 @@
+{
+  "dashboard": {
+    "title": "Admin Dashboard",
+    "overview": "System Overview"
+  },
+  "tabs": {
+    "analytics": "Analytics",
+    "blog": "Blog Management",
+    "newsletter": "Newsletter"
+  },
+  "metrics": {
+    "totalUsers": "Total Users",
+    "activeDeals": "Active Deals",
+    "monthlyRevenue": "Monthly Revenue",
+    "conversionRate": "Conversion Rate",
+    "fromLastMonth": "from last month"
+  },
+  "blog": {
+    "title": "Blog Posts",
+    "createNew": "Create New Post",
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "form": {
+      "title": "Post Title",
+      "content": "Post Content",
+      "save": "Save as Draft",
+      "publish": "Publish"
+    }
+  },
+  "newsletter": {
+    "title": "Newsletter Management",
+    "create": "Create Newsletter",
+    "drafts": "Drafts",
+    "subscribers": "Subscribers",
+    "stats": {
+      "totalSubscribers": "Total Subscribers",
+      "openRate": "Open Rate",
+      "clickRate": "Click Rate"
+    }
+  }
+}

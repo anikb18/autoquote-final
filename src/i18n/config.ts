@@ -2,8 +2,14 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import frCA from './locales/fr-CA.json';
-import enUS from './locales/en-US.json';
+// Import all translation files
+import enUSCommon from './locales/en-US/common.json';
+import enUSDealer from './locales/en-US/dealer.json';
+import enUSAdmin from './locales/en-US/admin.json';
+
+import frCACommon from './locales/fr-CA/common.json';
+import frCADealer from './locales/fr-CA/dealer.json';
+import frCAAdmin from './locales/fr-CA/admin.json';
 
 i18n
   .use(LanguageDetector)
@@ -12,11 +18,15 @@ i18n
     fallbackLng: 'fr-CA',
     resources: {
       'fr-CA': {
-        translation: frCA,
+        common: frCACommon,
+        dealer: frCADealer,
+        admin: frCAAdmin
       },
       'en-US': {
-        translation: enUS,
-      },
+        common: enUSCommon,
+        dealer: enUSDealer,
+        admin: enUSAdmin
+      }
     },
     detection: {
       order: ['localStorage', 'navigator'],
@@ -25,6 +35,9 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    // Add namespaces
+    ns: ['common', 'dealer', 'admin'],
+    defaultNS: 'common'
   });
 
 export default i18n;

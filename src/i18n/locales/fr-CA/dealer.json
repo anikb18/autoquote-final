@@ -1,0 +1,37 @@
+{
+  "welcome": "Bienvenue",
+  "metrics": {
+    "activeQuotes": "Devis actifs",
+    "wonBids": "Offres gagnées",
+    "totalRevenue": "Revenu total",
+    "fromLastMonth": "par rapport au mois dernier",
+    "todayActivity": "Voici votre activité aujourd'hui"
+  },
+  "recentQuotes": "Devis récents",
+  "performance": "Aperçu des performances",
+  "quotes": {
+    "recentTitle": "Devis récents",
+    "vehicle": "Véhicule",
+    "status": "Statut",
+    "timeLeft": "Temps restant",
+    "actions": {
+      "respond": "Répondre au devis",
+      "view": "Voir le devis"
+    },
+    "status": {
+      "pending": "En attente",
+      "responded": "Répondu",
+      "accepted": "Accepté",
+      "declined": "Refusé",
+      "expired": "Expiré"
+    },
+    "error": {
+      "title": "Erreur de chargement des devis",
+      "description": "Une erreur s'est produite lors du chargement de vos devis. Veuillez réessayer."
+    },
+    "expiration": {
+      "title": "Devis expiré",
+      "description": "Ce devis n'est plus disponible pour une réponse."
+    }
+  }
+}

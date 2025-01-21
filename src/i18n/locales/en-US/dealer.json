@@ -1,0 +1,37 @@
+{
+  "welcome": "Welcome",
+  "metrics": {
+    "activeQuotes": "Active Quotes",
+    "wonBids": "Won Bids",
+    "totalRevenue": "Total Revenue",
+    "fromLastMonth": "from last month",
+    "todayActivity": "Here's your activity today"
+  },
+  "recentQuotes": "Recent Quotes",
+  "performance": "Performance Overview",
+  "quotes": {
+    "recentTitle": "Recent Quotes",
+    "vehicle": "Vehicle",
+    "status": "Status",
+    "timeLeft": "Time Remaining",
+    "actions": {
+      "respond": "Respond to Quote",
+      "view": "View Quote"
+    },
+    "status": {
+      "pending": "Pending",
+      "responded": "Responded",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired"
+    },
+    "error": {
+      "title": "Error Loading Quotes",
+      "description": "There was an error loading your quotes. Please try again."
+    },
+    "expiration": {
+      "title": "Quote Expired",
+      "description": "This quote is no longer available for response."
+    }
+  }
+}
