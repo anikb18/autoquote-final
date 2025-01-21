@@ -237,49 +237,49 @@ export type Database = {
       }
       dealer_leads: {
         Row: {
-          id: string
-          dealership_name: string
-          location: string
-          volume: string
           brands: string
-          phone: string
-          email: string
-          preferred_contact: string
-          status: Database["public"]["Enums"]["dealer_lead_status"] | null
-          source: string
-          notes: string | null
           created_at: string | null
+          dealership_name: string
+          email: string
+          id: string
+          location: string
+          notes: string | null
+          phone: string
+          preferred_contact: string
+          source: string
+          status: Database["public"]["Enums"]["dealer_lead_status"] | null
           updated_at: string | null
+          volume: string
         }
         Insert: {
-          id?: string
-          dealership_name: string
-          location: string
-          volume: string
           brands: string
-          phone: string
-          email: string
-          preferred_contact: string
-          status?: Database["public"]["Enums"]["dealer_lead_status"] | null
-          source: string
-          notes?: string | null
           created_at?: string | null
+          dealership_name: string
+          email: string
+          id?: string
+          location: string
+          notes?: string | null
+          phone: string
+          preferred_contact: string
+          source: string
+          status?: Database["public"]["Enums"]["dealer_lead_status"] | null
           updated_at?: string | null
+          volume: string
         }
         Update: {
-          id?: string
-          dealership_name?: string
-          location?: string
-          volume?: string
           brands?: string
-          phone?: string
-          email?: string
-          preferred_contact?: string
-          status?: Database["public"]["Enums"]["dealer_lead_status"] | null
-          source?: string
-          notes?: string | null
           created_at?: string | null
+          dealership_name?: string
+          email?: string
+          id?: string
+          location?: string
+          notes?: string | null
+          phone?: string
+          preferred_contact?: string
+          source?: string
+          status?: Database["public"]["Enums"]["dealer_lead_status"] | null
           updated_at?: string | null
+          volume?: string
         }
         Relationships: []
       }
@@ -465,7 +465,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           down_payment?: number | null
-          id: string
+          id?: string
           interest_rate: number
           loan_amount: number
           monthly_payment: number
@@ -516,7 +516,7 @@ export type Database = {
           coverage_type: string
           created_at?: string | null
           deductible: number
-          id: string
+          id?: string
           provider?: string | null
           quote_id?: string | null
           updated_at?: string | null
@@ -1224,8 +1224,8 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          id: string
-          role: string
+          id?: string
+          role?: string
         }
         Relationships: []
       }
@@ -1242,7 +1242,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          id: string
+          id?: string
           name?: string
         }
         Relationships: []
@@ -1264,7 +1264,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          id: string
+          id?: string
           make_id?: string | null
           name?: string
           year?: number
@@ -1420,7 +1420,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {

@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type DealerLead = Database['public']['Tables']['dealer_leads']['Insert'];
 
 export const ContactForm = () => {
   const { t } = useTranslation('dealer');
@@ -24,21 +27,21 @@ export const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
+      const dealerLead: DealerLead = {
+        dealership_name: formData.dealershipName,
+        location: formData.location,
+        volume: formData.volume,
+        brands: formData.brands,
+        phone: formData.phone,
+        email: formData.email,
+        preferred_contact: formData.preferredContact,
+        status: 'new',
+        source: 'website'
+      };
+
       const { error } = await supabase
         .from('dealer_leads')
-        .insert([
-          {
-            dealership_name: formData.dealershipName,
-            location: formData.location,
-            volume: formData.volume,
-            brands: formData.brands,
-            phone: formData.phone,
-            email: formData.email,
-            preferred_contact: formData.preferredContact,
-            status: 'new',
-            source: 'website'
-          }
-        ]);
+        .insert([dealerLead]);
 
       if (error) throw error;
 
