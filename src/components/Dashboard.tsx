@@ -2,10 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import BuyerDashboard from "./BuyerDashboard";
 import DealerDashboard from "./DealerDashboard";
+import AdminDashboard from "./AdminDashboard";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const [viewAs, setViewAs] = useState<'admin' | 'dealer' | 'buyer'>('admin');
 
   const { data: userRole, isLoading, error } = useQuery({
     queryKey: ['user-role'],
@@ -13,7 +17,6 @@ const Dashboard = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
       
-      // First ensure the user has a role record
       const { data: existingRole, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
@@ -83,7 +86,28 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto py-8">
-      {userRole === 'dealer' ? <DealerDashboard /> : <BuyerDashboard />}
+      {userRole === 'admin' && (
+        <div className="mb-6">
+          <Select value={viewAs} onValueChange={(value: 'admin' | 'dealer' | 'buyer') => setViewAs(value)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="View dashboard as..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="admin">Admin View</SelectItem>
+              <SelectItem value="dealer">Dealer View</SelectItem>
+              <SelectItem value="buyer">Buyer View</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+      
+      {(userRole === 'admin' && viewAs === 'admin') ? (
+        <AdminDashboard />
+      ) : (userRole === 'admin' && viewAs === 'dealer') || userRole === 'dealer' ? (
+        <DealerDashboard />
+      ) : (
+        <BuyerDashboard />
+      )}
     </div>
   );
 };
