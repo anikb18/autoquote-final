@@ -1,37 +1,52 @@
 {
-  "welcome": "Welcome",
-  "metrics": {
-    "activeQuotes": "Active Quotes",
-    "wonBids": "Won Bids",
-    "totalRevenue": "Total Revenue",
-    "fromLastMonth": "from last month",
-    "todayActivity": "Here's your activity today"
+  "hero": {
+    "title": "Stop Losing Pre-Qualified Leads to Your Competition",
+    "subtitle": "While you're reading this, 3 other dealers are bidding on your potential customers",
+    "urgency": "Your local territory is being assigned now - Don't miss out on exclusive access",
+    "cta": {
+      "signup": "Join Leading Dealers",
+      "demo": "Schedule Your Demo Now"
+    }
   },
-  "recentQuotes": "Recent Quotes",
-  "performance": "Performance Overview",
-  "quotes": {
-    "recentTitle": "Recent Quotes",
-    "vehicle": "Vehicle",
-    "status": "Status",
-    "timeLeft": "Time Remaining",
-    "actions": {
-      "respond": "Respond to Quote",
-      "view": "View Quote"
+  "benefits": {
+    "bidding": {
+      "title": "Private Bidding System",
+      "description": "No price wars - exclusive access to pre-qualified leads"
     },
-    "status": {
-      "pending": "Pending",
-      "responded": "Responded",
-      "accepted": "Accepted",
-      "declined": "Declined",
-      "expired": "Expired"
+    "verification": {
+      "title": "Verified Buyers Only",
+      "description": "Credit card verified customers ready to purchase"
+    },
+    "automation": {
+      "title": "Automated Management",
+      "description": "Smart lead distribution with real-time analytics"
+    },
+    "support": {
+      "title": "Dedicated Support",
+      "description": "24/7 dealer support with satisfaction guarantee"
+    }
+  },
+  "signup": {
+    "title": "Join AutoQuote24",
+    "subtitle": "Get exclusive access to pre-qualified leads in your territory",
+    "form": {
+      "dealershipName": "Dealership Name",
+      "dealershipNamePlaceholder": "Enter dealership name",
+      "location": "Location",
+      "locationPlaceholder": "City, State",
+      "email": "Email",
+      "emailPlaceholder": "Enter your business email",
+      "password": "Password",
+      "passwordPlaceholder": "Create a secure password",
+      "submit": "Get Started Now"
+    },
+    "success": {
+      "title": "Welcome to AutoQuote24",
+      "description": "Your account has been created successfully. You'll be redirected to your dashboard."
     },
     "error": {
-      "title": "Error Loading Quotes",
-      "description": "There was an error loading your quotes. Please try again."
-    },
-    "expiration": {
-      "title": "Quote Expired",
-      "description": "This quote is no longer available for response."
+      "title": "Registration Error",
+      "description": "There was an error creating your account. Please try again."
     }
   }
 }

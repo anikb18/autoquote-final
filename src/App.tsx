@@ -6,6 +6,7 @@ import SubscriptionManagement from "./pages/SubscriptionManagement";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DealershipLanding from "./components/DealershipLanding";
+import DealerSignup from "./pages/DealerSignup";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/dealership" element={<DealershipLanding />} />
+          <Route path="/dealer-signup" element={<DealerSignup />} />
           <Route
             path="/dashboard"
             element={

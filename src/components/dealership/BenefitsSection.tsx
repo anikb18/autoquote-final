@@ -1,27 +1,30 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ChartBar, Shield, Users, Calendar } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const BenefitsSection = () => {
+  const { t } = useTranslation();
+
   const benefits = [
     {
       icon: ChartBar,
-      title: "Private Bidding System",
-      description: "No price wars - exclusive access to pre-qualified leads"
+      title: t("dealer.benefits.bidding.title"),
+      description: t("dealer.benefits.bidding.description")
     },
     {
       icon: Shield,
-      title: "Verified Buyers Only",
-      description: "Credit card verified customers ready to purchase"
+      title: t("dealer.benefits.verification.title"),
+      description: t("dealer.benefits.verification.description")
     },
     {
       icon: Users,
-      title: "Automated Management",
-      description: "Smart lead distribution with real-time analytics"
+      title: t("dealer.benefits.automation.title"),
+      description: t("dealer.benefits.automation.description")
     },
     {
       icon: Calendar,
-      title: "Dedicated Support",
-      description: "24/7 dealer support with satisfaction guarantee"
+      title: t("dealer.benefits.support.title"),
+      description: t("dealer.benefits.support.description")
     }
   ];
 
