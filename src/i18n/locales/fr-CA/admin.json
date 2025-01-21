@@ -1,7 +1,7 @@
 {
   "dashboard": {
     "title": "Tableau de bord administrateur",
-    "overview": "Aperçu du système"
+    "welcome": "Bienvenue dans le tableau de bord administrateur"
   },
   "tabs": {
     "analytics": "Analytique",
@@ -9,36 +9,61 @@
     "newsletter": "Infolettre"
   },
   "metrics": {
-    "totalUsers": "Nombre total d'utilisateurs",
-    "activeDeals": "Transactions actives",
-    "monthlyRevenue": "Revenu mensuel",
-    "conversionRate": "Taux de conversion",
-    "fromLastMonth": "par rapport au mois dernier"
+    "totalSales": {
+      "title": "Ventes totales",
+      "description": "Aperçu mensuel"
+    },
+    "activeDealers": {
+      "title": "Concessionnaires actifs",
+      "description": "Actuellement inscrits"
+    },
+    "totalUsers": {
+      "title": "Utilisateurs totaux",
+      "description": "Tous les utilisateurs inscrits"
+    },
+    "conversionRate": {
+      "title": "Taux de conversion",
+      "description": "Devis aux ventes"
+    }
   },
   "blog": {
     "title": "Articles du blog",
     "createNew": "Créer un nouvel article",
-    "status": {
-      "draft": "Brouillon",
-      "published": "Publié",
-      "archived": "Archivé"
-    },
     "form": {
       "title": "Titre de l'article",
       "content": "Contenu de l'article",
       "save": "Enregistrer comme brouillon",
-      "publish": "Publier"
+      "preview": "Aperçu et envoi"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "published": "Publié"
     }
   },
   "newsletter": {
     "title": "Gestion de l'infolettre",
-    "create": "Créer une infolettre",
-    "drafts": "Brouillons",
-    "subscribers": "Abonnés",
-    "stats": {
-      "totalSubscribers": "Nombre total d'abonnés",
-      "openRate": "Taux d'ouverture",
-      "clickRate": "Taux de clic"
+    "subscribers": {
+      "title": "Abonnés à l'infolettre",
+      "total": "Total des abonnés: {{count}}",
+      "subscribedOn": "Inscrit le: {{date}}"
+    },
+    "create": {
+      "title": "Créer une infolettre",
+      "description": "Composez une nouvelle infolettre à envoyer à vos abonnés",
+      "form": {
+        "title": "Titre de l'infolettre",
+        "content": "Contenu de l'infolettre",
+        "save": "Enregistrer le brouillon",
+        "send": "Envoyer l'infolettre"
+      }
+    },
+    "drafts": {
+      "title": "Brouillons d'infolettre",
+      "description": "Gérez vos brouillons d'infolettre et envois programmés",
+      "actions": {
+        "edit": "Modifier",
+        "send": "Envoyer"
+      }
     }
   }
 }

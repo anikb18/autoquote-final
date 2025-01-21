@@ -1,7 +1,7 @@
 {
   "dashboard": {
     "title": "Admin Dashboard",
-    "overview": "System Overview"
+    "welcome": "Welcome to the Admin Dashboard"
   },
   "tabs": {
     "analytics": "Analytics",
@@ -9,36 +9,61 @@
     "newsletter": "Newsletter"
   },
   "metrics": {
-    "totalUsers": "Total Users",
-    "activeDeals": "Active Deals",
-    "monthlyRevenue": "Monthly Revenue",
-    "conversionRate": "Conversion Rate",
-    "fromLastMonth": "from last month"
+    "totalSales": {
+      "title": "Total Sales",
+      "description": "Monthly overview"
+    },
+    "activeDealers": {
+      "title": "Active Dealers",
+      "description": "Currently registered"
+    },
+    "totalUsers": {
+      "title": "Total Users",
+      "description": "All registered users"
+    },
+    "conversionRate": {
+      "title": "Conversion Rate",
+      "description": "Quotes to Sales"
+    }
   },
   "blog": {
     "title": "Blog Posts",
     "createNew": "Create New Post",
-    "status": {
-      "draft": "Draft",
-      "published": "Published",
-      "archived": "Archived"
-    },
     "form": {
       "title": "Post Title",
       "content": "Post Content",
       "save": "Save as Draft",
-      "publish": "Publish"
+      "preview": "Preview & Send"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published"
     }
   },
   "newsletter": {
     "title": "Newsletter Management",
-    "create": "Create Newsletter",
-    "drafts": "Drafts",
-    "subscribers": "Subscribers",
-    "stats": {
-      "totalSubscribers": "Total Subscribers",
-      "openRate": "Open Rate",
-      "clickRate": "Click Rate"
+    "subscribers": {
+      "title": "Newsletter Subscribers",
+      "total": "Total Subscribers: {{count}}",
+      "subscribedOn": "Subscribed: {{date}}"
+    },
+    "create": {
+      "title": "Create Newsletter",
+      "description": "Compose a new newsletter to send to your subscribers",
+      "form": {
+        "title": "Newsletter Title",
+        "content": "Newsletter Content",
+        "save": "Save Draft",
+        "send": "Send Newsletter"
+      }
+    },
+    "drafts": {
+      "title": "Newsletter Drafts",
+      "description": "Manage your newsletter drafts and scheduled sends",
+      "actions": {
+        "edit": "Edit",
+        "send": "Send"
+      }
     }
   }
 }

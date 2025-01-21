@@ -1,8 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 export const AdminMetricsCards = () => {
+  const { t } = useTranslation('admin');
+  
   const { data: salesData } = useQuery({
     queryKey: ['sales-transactions'],
     queryFn: async () => {
@@ -57,8 +60,8 @@ export const AdminMetricsCards = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
-          <CardTitle>Total Sales</CardTitle>
-          <CardDescription>Monthly overview</CardDescription>
+          <CardTitle>{t('metrics.totalSales.title')}</CardTitle>
+          <CardDescription>{t('metrics.totalSales.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -69,8 +72,8 @@ export const AdminMetricsCards = () => {
 
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
-          <CardTitle>Active Dealers</CardTitle>
-          <CardDescription>Currently registered</CardDescription>
+          <CardTitle>{t('metrics.activeDealers.title')}</CardTitle>
+          <CardDescription>{t('metrics.activeDealers.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -81,8 +84,8 @@ export const AdminMetricsCards = () => {
 
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
-          <CardTitle>Total Users</CardTitle>
-          <CardDescription>All registered users</CardDescription>
+          <CardTitle>{t('metrics.totalUsers.title')}</CardTitle>
+          <CardDescription>{t('metrics.totalUsers.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
@@ -93,8 +96,8 @@ export const AdminMetricsCards = () => {
 
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
-          <CardTitle>Conversion Rate</CardTitle>
-          <CardDescription>Quotes to Sales</CardDescription>
+          <CardTitle>{t('metrics.conversionRate.title')}</CardTitle>
+          <CardDescription>{t('metrics.conversionRate.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">

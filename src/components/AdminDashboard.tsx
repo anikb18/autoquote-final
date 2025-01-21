@@ -7,19 +7,19 @@ import { NewsletterManagement } from "./dashboard/NewsletterManagement";
 import { useTranslation } from "react-i18next";
 
 const AdminDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('admin');
 
   return (
     <div className="p-6 space-y-8 bg-background min-h-screen">
       <h1 className="text-4xl font-bold text-foreground">
-        {t('admin.dashboard.title')}
+        {t('dashboard.title')}
       </h1>
       
       <Tabs defaultValue="analytics" className="space-y-6">
         <TabsList className="bg-background/50 backdrop-blur-sm border">
-          <TabsTrigger value="analytics">{t('admin.tabs.analytics')}</TabsTrigger>
-          <TabsTrigger value="blog">{t('admin.tabs.blog')}</TabsTrigger>
-          <TabsTrigger value="newsletter">{t('admin.tabs.newsletter')}</TabsTrigger>
+          <TabsTrigger value="analytics">{t('tabs.analytics')}</TabsTrigger>
+          <TabsTrigger value="blog">{t('tabs.blog')}</TabsTrigger>
+          <TabsTrigger value="newsletter">{t('tabs.newsletter')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="analytics" className="space-y-6">
