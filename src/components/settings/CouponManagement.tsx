@@ -29,7 +29,7 @@ export const CouponManagement = () => {
   const [formData, setFormData] = useState({
     name: "",
     code: "",
-    discountType: "percentage",
+    discountType: "percentage" as const,
     discountValue: "",
     usageLimit: "-1",
     description: "",
@@ -56,7 +56,7 @@ export const CouponManagement = () => {
     for (let i = 0; i < 8; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    setFormData(prev => ({ ...prev, code }));
+    return code;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,11 +64,13 @@ export const CouponManagement = () => {
     setIsLoading(true);
 
     try {
+      const couponCode = isAutoGenerate ? generateCode() : formData.code;
+      
       const { error } = await supabase
         .from('coupons')
-        .insert({
+        .insert([{
+          code: couponCode,
           name: formData.name,
-          code: isAutoGenerate ? generateCode() : formData.code,
           discount_type: formData.discountType,
           discount_value: parseFloat(formData.discountValue),
           usage_limit: parseInt(formData.usageLimit),
@@ -77,7 +79,7 @@ export const CouponManagement = () => {
           conditions: {
             subscription_type: formData.subscriptionType !== 'all' ? formData.subscriptionType : null
           }
-        });
+        }]);
 
       if (error) throw error;
 
@@ -160,7 +162,7 @@ export const CouponManagement = () => {
                 <Label htmlFor="discountType">Discount Type</Label>
                 <Select
                   value={formData.discountType}
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, discountType: value }))}
+                  onValueChange={(value: "percentage" | "fixed") => setFormData(prev => ({ ...prev, discountType: value }))}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
