@@ -1,96 +1,79 @@
 {
-  "hero": {
-    "title": "Arrêtez de perdre des clients qualifiés face à vos concurrents",
-    "subtitle": "Pendant que vous lisez ceci, 3 autres concessionnaires font des offres à vos clients potentiels",
-    "urgency": "Votre territoire local est en cours d'attribution - Ne manquez pas l'accès exclusif",
-    "stats": {
-      "dealers": "Concessionnaires Leaders",
-      "customers": "Clients Satisfaits"
-    },
-    "cta": {
-      "signup": "Rejoignez les concessionnaires leaders",
-      "demo": "Planifiez votre démo maintenant"
-    }
+  "nav": {
+    "home": "Accueil",
+    "blog": "Blog",
+    "about": "À propos",
+    "contact": "Contact",
+    "signIn": "Connexion"
   },
-  "benefits": {
-    "bidding": {
-      "title": "Système d'enchères privé",
-      "description": "Pas de guerre des prix - accès exclusif aux clients pré-qualifiés"
-    },
-    "verification": {
-      "title": "Acheteurs vérifiés uniquement",
-      "description": "Clients vérifiés par carte de crédit prêts à acheter"
-    },
-    "automation": {
-      "title": "Gestion automatisée",
-      "description": "Distribution intelligente des leads avec analyses en temps réel"
-    },
-    "support": {
-      "title": "Support dédié",
-      "description": "Support 24/7 avec garantie de satisfaction"
-    }
+  "welcome": "Bienvenue",
+  "metrics": {
+    "activeQuotes": "Devis actifs",
+    "wonBids": "Offres gagnées",
+    "totalRevenue": "Revenu total",
+    "fromLastMonth": "par rapport au mois dernier",
+    "todayActivity": "Voici votre activité aujourd'hui"
   },
-  "trust": {
-    "title": "Rejoignez les concessionnaires leaders",
-    "metrics": {
-      "network": {
-        "title": "Croissance du réseau",
-        "value": "250+",
-        "label": "Concessionnaires actifs"
+  "recentQuotes": "Devis récents",
+  "performance": "Aperçu des performances",
+  "quoteResponse": {
+    "title": "Répondre à la demande de soumission",
+    "newVehicle": {
+      "title": "Soumission véhicule neuf",
+      "price": "Prix offert",
+      "availability": "Disponibilité du véhicule",
+      "availabilityOptions": {
+        "inStock": "En stock",
+        "ordered": "À commander",
+        "transit": "En transit"
       },
-      "success": {
-        "title": "Taux de réussite",
-        "value": "35%",
-        "label": "Conversion moyenne des leads"
+      "estimatedDelivery": "Livraison estimée",
+      "additionalNotes": "Notes additionnelles",
+      "features": "Caractéristiques additionnelles",
+      "color": "Couleurs disponibles"
+    },
+    "tradeIn": {
+      "title": "Évaluation de l'échange",
+      "estimatedValue": "Valeur estimée",
+      "condition": "État du véhicule",
+      "conditionOptions": {
+        "excellent": "Excellent",
+        "good": "Bon",
+        "fair": "Passable",
+        "poor": "Mauvais"
       },
-      "value": {
-        "title": "Valeur du marché",
-        "value": "10K+",
-        "label": "Valeur mensuelle des leads"
-      }
-    }
+      "additionalNotes": "Notes d'évaluation",
+      "requireInspection": "Inspection physique requise"
+    },
+    "submit": "Soumettre la soumission",
+    "saving": "Enregistrement...",
+    "success": "Soumission envoyée avec succès",
+    "error": "Erreur lors de l'envoi de la soumission",
+    "premiumRequired": "Abonnement premium requis pour les évaluations d'échange"
   },
-  "contact": {
-    "title": "Sécurisez votre territoire maintenant",
-    "subtitle": "Prix de pré-lancement limités - Rejoignez-nous avant que votre marché ne soit verrouillé",
-    "form": {
-      "dealershipName": "Nom de la concession",
-      "dealershipNamePlaceholder": "Entrez le nom de la concession",
-      "location": "Emplacement",
-      "locationPlaceholder": "Ville, Province",
-      "volume": "Volume mensuel de ventes",
-      "volumeOptions": {
-        "small": "0-50 véhicules",
-        "medium": "51-100 véhicules",
-        "large": "101-200 véhicules",
-        "xlarge": "200+ véhicules"
-      },
-      "brands": "Marques représentées",
-      "brandsPlaceholder": "ex: Toyota, Honda, Ford",
-      "submit": "Obtenir un accès exclusif"
-    }
-  },
-  "signup": {
-    "title": "Rejoignez Notre Réseau de Concessionnaires",
-    "subtitle": "Obtenez un accès exclusif aux clients pré-qualifiés et développez votre entreprise",
-    "success": {
-      "title": "Inscription Réussie",
-      "description": "Bienvenue dans notre réseau de concessionnaires! Vous serez redirigé vers votre tableau de bord."
+  "quotes": {
+    "recentTitle": "Devis récents",
+    "vehicle": "Véhicule",
+    "status": "Statut",
+    "timeLeft": "Temps restant",
+    "actions": {
+      "respond": "Répondre au devis",
+      "view": "Voir le devis"
+    },
+    "status": {
+      "pending": "En attente",
+      "responded": "Répondu",
+      "accepted": "Accepté",
+      "declined": "Refusé",
+      "expired": "Expiré"
     },
     "error": {
-      "title": "Erreur d'Inscription",
-      "description": "Une erreur s'est produite lors de l'inscription. Veuillez réessayer."
+      "title": "Erreur de chargement des devis",
+      "description": "Une erreur s'est produite lors du chargement de vos devis. Veuillez réessayer."
     },
-    "form": {
-      "dealershipName": "Nom de la Concession",
-      "dealershipNamePlaceholder": "Entrez le nom de votre concession",
-      "location": "Emplacement",
-      "locationPlaceholder": "Ville, Province",
-      "email": "Adresse Email",
-      "emailPlaceholder": "votre@email.com",
-      "password": "Mot de Passe",
-      "passwordPlaceholder": "Choisissez un mot de passe sécurisé",
-      "submit": "Créer un Compte Concessionnaire"
+    "expiration": {
+      "title": "Devis expiré",
+      "description": "Ce devis n'est plus disponible pour une réponse."
     }
   }
 }

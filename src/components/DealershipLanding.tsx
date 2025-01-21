@@ -1,15 +1,15 @@
+import { DealershipHeader } from "./dealership/DealershipHeader";
 import { HeroSection } from "./dealership/HeroSection";
-import { BenefitsSection } from "./dealership/BenefitsSection";
 import { TrustSection } from "./dealership/TrustSection";
-import { ContactForm } from "./dealership/ContactForm";
 
 const DealershipLanding = () => {
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection />
-      <BenefitsSection />
-      <TrustSection />
-      <ContactForm />
+      <DealershipHeader />
+      <main>
+        <HeroSection />
+        <TrustSection />
+      </main>
     </div>
   );
 };

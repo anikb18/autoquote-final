@@ -1,96 +1,79 @@
 {
-  "hero": {
-    "title": "Stop Losing Pre-Qualified Leads to Your Competition",
-    "subtitle": "While you're reading this, 3 other dealers are bidding on your potential customers",
-    "urgency": "Your local territory is being assigned now - Don't miss out on exclusive access",
-    "stats": {
-      "dealers": "Leading Dealers",
-      "customers": "Happy Customers"
-    },
-    "cta": {
-      "signup": "Join Leading Dealers",
-      "demo": "Schedule Your Demo Now"
-    }
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "signIn": "Sign In"
   },
-  "benefits": {
-    "bidding": {
-      "title": "Private Bidding System",
-      "description": "No price wars - exclusive access to pre-qualified leads"
-    },
-    "verification": {
-      "title": "Verified Buyers Only",
-      "description": "Credit card verified customers ready to purchase"
-    },
-    "automation": {
-      "title": "Automated Management",
-      "description": "Smart lead distribution with real-time analytics"
-    },
-    "support": {
-      "title": "Dedicated Support",
-      "description": "24/7 dealer support with satisfaction guarantee"
-    }
+  "welcome": "Welcome",
+  "metrics": {
+    "activeQuotes": "Active Quotes",
+    "wonBids": "Won Bids",
+    "totalRevenue": "Total Revenue",
+    "fromLastMonth": "from last month",
+    "todayActivity": "Here's your activity today"
   },
-  "trust": {
-    "title": "Join Leading Dealerships",
-    "metrics": {
-      "network": {
-        "title": "Network Growth",
-        "value": "250+",
-        "label": "Active Dealerships"
+  "recentQuotes": "Recent Quotes",
+  "performance": "Performance Overview",
+  "quoteResponse": {
+    "title": "Respond to Quote Request",
+    "newVehicle": {
+      "title": "New Vehicle Quote",
+      "price": "Offered Price",
+      "availability": "Vehicle Availability",
+      "availabilityOptions": {
+        "inStock": "In Stock",
+        "ordered": "Need to Order",
+        "transit": "In Transit"
       },
-      "success": {
-        "title": "Success Rate",
-        "value": "35%",
-        "label": "Average Lead Conversion"
+      "estimatedDelivery": "Estimated Delivery",
+      "additionalNotes": "Additional Notes",
+      "features": "Additional Features",
+      "color": "Available Colors"
+    },
+    "tradeIn": {
+      "title": "Trade-In Evaluation",
+      "estimatedValue": "Estimated Value",
+      "condition": "Vehicle Condition",
+      "conditionOptions": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor"
       },
-      "value": {
-        "title": "Market Value",
-        "value": "10K+",
-        "label": "Monthly Lead Value"
-      }
-    }
+      "additionalNotes": "Evaluation Notes",
+      "requireInspection": "Requires Physical Inspection"
+    },
+    "submit": "Submit Quote",
+    "saving": "Saving Quote...",
+    "success": "Quote submitted successfully",
+    "error": "Error submitting quote",
+    "premiumRequired": "Premium subscription required for trade-in evaluations"
   },
-  "contact": {
-    "title": "Secure Your Territory Now",
-    "subtitle": "Limited pre-launch pricing available - Join before your market is locked",
-    "form": {
-      "dealershipName": "Dealership Name",
-      "dealershipNamePlaceholder": "Enter dealership name",
-      "location": "Location",
-      "locationPlaceholder": "City, Province",
-      "volume": "Monthly Sales Volume",
-      "volumeOptions": {
-        "small": "0-50 vehicles",
-        "medium": "51-100 vehicles",
-        "large": "101-200 vehicles",
-        "xlarge": "200+ vehicles"
-      },
-      "brands": "Brands Represented",
-      "brandsPlaceholder": "e.g., Toyota, Honda, Ford",
-      "submit": "Get Exclusive Access"
-    }
-  },
-  "signup": {
-    "title": "Join Our Dealer Network",
-    "subtitle": "Get exclusive access to pre-qualified leads and grow your business",
-    "success": {
-      "title": "Registration Successful",
-      "description": "Welcome to our dealer network! You'll be redirected to your dashboard."
+  "quotes": {
+    "recentTitle": "Recent Quotes",
+    "vehicle": "Vehicle",
+    "status": "Status",
+    "timeLeft": "Time Remaining",
+    "actions": {
+      "respond": "Respond to Quote",
+      "view": "View Quote"
+    },
+    "status": {
+      "pending": "Pending",
+      "responded": "Responded",
+      "accepted": "Accepted",
+      "declined": "Declined",
+      "expired": "Expired"
     },
     "error": {
-      "title": "Registration Error",
-      "description": "There was an error during registration. Please try again."
+      "title": "Error Loading Quotes",
+      "description": "There was an error loading your quotes. Please try again."
     },
-    "form": {
-      "dealershipName": "Dealership Name",
-      "dealershipNamePlaceholder": "Enter your dealership name",
-      "location": "Location",
-      "locationPlaceholder": "City, Province",
-      "email": "Email Address",
-      "emailPlaceholder": "your@email.com",
-      "password": "Password",
-      "passwordPlaceholder": "Choose a secure password",
-      "submit": "Create Dealer Account"
+    "expiration": {
+      "title": "Quote Expired",
+      "description": "This quote is no longer available for response."
     }
   }
 }
