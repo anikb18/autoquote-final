@@ -1,66 +1,19 @@
 {
-  "hero": {
-    "title": "Trouvez votre voiture de rêve au meilleur prix",
-    "subtitle": "Connectez-vous avec des concessionnaires de confiance et obtenez des devis compétitifs. Sans tracas, sans pression.",
-    "stats": {
-      "dealers": "Concessionnaires de confiance",
-      "customers": "Clients satisfaits"
-    }
+  "common": {
+    "appName": "Auto Trade Nexus",
+    "dashboard": "Tableau de bord",
+    "signIn": "Connexion",
+    "signOut": "Déconnexion"
   },
-  "form": {
-    "title": "Trouvez votre voiture parfaite",
-    "make": {
-      "label": "Marque",
-      "placeholder": "ex., Toyota"
+  "dealer": {
+    "welcome": "Bienvenue",
+    "metrics": {
+      "activeQuotes": "Devis actifs",
+      "wonBids": "Offres gagnées",
+      "totalRevenue": "Revenu total",
+      "fromLastMonth": "par rapport au mois dernier"
     },
-    "model": {
-      "label": "Modèle",
-      "placeholder": "ex., Camry"
-    },
-    "year": {
-      "label": "Année",
-      "placeholder": "2024"
-    },
-    "budget": {
-      "label": "Fourchette de prix",
-      "min": "Min",
-      "max": "Max"
-    },
-    "tradeIn": {
-      "label": "Option de reprise",
-      "placeholder": "Avez-vous un véhicule à échanger?",
-      "no": "Pas de reprise",
-      "yes": "Oui, j'ai un véhicule à échanger"
-    },
-    "visibility": {
-      "label": "Visibilité de la reprise",
-      "placeholder": "Sélectionnez l'option de visibilité",
-      "tenDays": "Visibilité 10 jours (10$)",
-      "unlimited": "Visibilité illimitée (40$)"
-    },
-    "submit": "Obtenir des devis",
-    "submitting": "Soumission en cours..."
-  },
-  "features": {
-    "title": "Pourquoi nous choisir",
-    "subtitle": "Nous rendons l'achat de voiture simple, transparent et sans stress",
-    "items": {
-      "trusted": {
-        "title": "Concessionnaires de confiance",
-        "description": "Tous les concessionnaires sont vérifiés et évalués par notre communauté"
-      },
-      "time": {
-        "title": "Gagnez du temps",
-        "description": "Obtenez plusieurs devis sans visiter les concessionnaires"
-      },
-      "prices": {
-        "title": "Meilleurs prix",
-        "description": "Les concessionnaires rivalisent pour vous offrir la meilleure offre"
-      },
-      "communication": {
-        "title": "Communication directe",
-        "description": "Discutez directement avec les concessionnaires après avoir accepté les devis"
-      }
-    }
+    "recentQuotes": "Devis récents",
+    "performance": "Aperçu des performances"
   }
 }

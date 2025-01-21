@@ -1,66 +1,19 @@
 {
-  "hero": {
-    "title": "Find Your Dream Car at the Best Price",
-    "subtitle": "Connect with trusted dealers and get competitive quotes. No hassle, no pressure.",
-    "stats": {
-      "dealers": "Trusted Dealers",
-      "customers": "Happy Customers"
-    }
+  "common": {
+    "appName": "Auto Trade Nexus",
+    "dashboard": "Dashboard",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
   },
-  "form": {
-    "title": "Find Your Perfect Car",
-    "make": {
-      "label": "Make",
-      "placeholder": "e.g., Toyota"
+  "dealer": {
+    "welcome": "Welcome",
+    "metrics": {
+      "activeQuotes": "Active Quotes",
+      "wonBids": "Won Bids",
+      "totalRevenue": "Total Revenue",
+      "fromLastMonth": "from last month"
     },
-    "model": {
-      "label": "Model",
-      "placeholder": "e.g., Camry"
-    },
-    "year": {
-      "label": "Year",
-      "placeholder": "2024"
-    },
-    "budget": {
-      "label": "Budget Range",
-      "min": "Min",
-      "max": "Max"
-    },
-    "tradeIn": {
-      "label": "Trade-In Option",
-      "placeholder": "Do you have a trade-in?",
-      "no": "No Trade-In",
-      "yes": "Yes, I Have a Trade-In"
-    },
-    "visibility": {
-      "label": "Trade-In Visibility",
-      "placeholder": "Select visibility option",
-      "tenDays": "10-Day Visibility ($10)",
-      "unlimited": "Unlimited Visibility ($40)"
-    },
-    "submit": "Get Quotes",
-    "submitting": "Submitting..."
-  },
-  "features": {
-    "title": "Why Choose Us",
-    "subtitle": "We make car buying simple, transparent, and stress-free",
-    "items": {
-      "trusted": {
-        "title": "Trusted Dealers",
-        "description": "All dealers are verified and rated by our community"
-      },
-      "time": {
-        "title": "Save Time",
-        "description": "Get multiple quotes without visiting dealerships"
-      },
-      "prices": {
-        "title": "Best Prices",
-        "description": "Dealers compete to offer you the best deal"
-      },
-      "communication": {
-        "title": "Direct Communication",
-        "description": "Chat directly with dealers after accepting quotes"
-      }
-    }
+    "recentQuotes": "Recent Quotes",
+    "performance": "Performance Overview"
   }
 }

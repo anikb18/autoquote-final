@@ -4,10 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<any>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -37,17 +39,17 @@ const Header = () => {
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Auto Trade Nexus</h1>
+        <h1 className="text-xl font-bold">{t('common.appName')}</h1>
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
           <ThemeSwitcher />
           {session ? (
             <>
-              <Button onClick={handleDashboard}>Dashboard</Button>
-              <Button variant="outline" onClick={handleSignOut}>Sign Out</Button>
+              <Button onClick={handleDashboard}>{t('common.dashboard')}</Button>
+              <Button variant="outline" onClick={handleSignOut}>{t('common.signOut')}</Button>
             </>
           ) : (
-            <Button onClick={handleSignIn}>Sign In</Button>
+            <Button onClick={handleSignIn}>{t('common.signIn')}</Button>
           )}
         </div>
       </div>

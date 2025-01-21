@@ -2,12 +2,14 @@ import { BellIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 
 interface WelcomeHeaderProps {
   unreadNotifications: number;
 }
 
 export const WelcomeHeader = ({ unreadNotifications }: WelcomeHeaderProps) => {
+  const { t } = useTranslation();
   const { data: profile } = useQuery({
     queryKey: ['dealer-profile'],
     queryFn: async () => {
@@ -28,9 +30,11 @@ export const WelcomeHeader = ({ unreadNotifications }: WelcomeHeaderProps) => {
   return (
     <div className="flex justify-between items-center">
       <div>
-        <h1 className="text-3xl font-bold">Welcome, {profile?.dealer_name}</h1>
+        <h1 className="text-3xl font-bold">
+          {t('dealer.welcome')}, {profile?.dealer_name}
+        </h1>
         <p className="text-muted-foreground mt-1">
-          Here's what's happening with your dealership today
+          {t('dealer.metrics.todayActivity')}
         </p>
       </div>
       <div className="relative">
