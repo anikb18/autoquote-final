@@ -22,18 +22,31 @@ import {
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
 
+type DiscountType = "percentage" | "fixed";
+
+interface CouponFormData {
+  name: string;
+  code: string;
+  discountType: DiscountType;
+  discountValue: string;
+  usageLimit: string;
+  description: string;
+  expiresAt: Date | null;
+  subscriptionType: string;
+}
+
 export const CouponManagement = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isAutoGenerate, setIsAutoGenerate] = useState(true);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CouponFormData>({
     name: "",
     code: "",
-    discountType: "percentage" as const,
+    discountType: "percentage",
     discountValue: "",
     usageLimit: "-1",
     description: "",
-    expiresAt: null as Date | null,
+    expiresAt: null,
     subscriptionType: "all",
   });
 
@@ -68,18 +81,18 @@ export const CouponManagement = () => {
       
       const { error } = await supabase
         .from('coupons')
-        .insert([{
+        .insert({
           code: couponCode,
           name: formData.name,
           discount_type: formData.discountType,
           discount_value: parseFloat(formData.discountValue),
           usage_limit: parseInt(formData.usageLimit),
           description: formData.description,
-          expires_at: formData.expiresAt,
+          expires_at: formData.expiresAt?.toISOString(),
           conditions: {
             subscription_type: formData.subscriptionType !== 'all' ? formData.subscriptionType : null
           }
-        }]);
+        });
 
       if (error) throw error;
 
