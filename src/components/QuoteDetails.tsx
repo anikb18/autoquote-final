@@ -52,8 +52,10 @@ const QuoteDetails = () => {
 
       if (error) throw error;
       
-      // Ensure car_details has the correct shape
-      const carDetails = data?.car_details as CarDetails;
+      // First cast to unknown, then to the expected shape
+      const rawCarDetails = data?.car_details as unknown;
+      const carDetails = rawCarDetails as CarDetails;
+      
       if (!carDetails?.year || !carDetails?.make || !carDetails?.model) {
         throw new Error('Invalid car details format');
       }
