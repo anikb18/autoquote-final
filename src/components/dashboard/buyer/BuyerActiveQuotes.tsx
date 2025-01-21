@@ -32,18 +32,20 @@ export const BuyerActiveQuotes = () => {
   const navigate = useNavigate();
 
   const { data: quotes, isLoading } = useQuery({
-    queryKey: ['buyer-quotes'],
+    queryKey: ['buyer-quotes', user?.id],
     queryFn: async () => {
+      if (!user?.id) throw new Error('User not authenticated');
+      
       const { data, error } = await supabase
         .from('quotes')
         .select('*, dealer_quotes(*)')
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-
       return data as Quote[];
     },
+    enabled: !!user?.id, // Only run query when we have a user ID
   });
 
   if (isLoading) {
