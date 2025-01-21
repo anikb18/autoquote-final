@@ -11,7 +11,7 @@ type Profile = {
 };
 
 type BlogPost = Database['public']['Tables']['blog_posts']['Row'] & {
-  profiles: Profile | null;
+  profiles: Profile;
 };
 
 const BlogPost = () => {
@@ -35,22 +35,12 @@ const BlogPost = () => {
       if (error) throw error;
       if (!data) return null;
       
-      // Safely transform the profiles data with proper null checking
-      const profileData: Profile | null = data.profiles ? 
-        (typeof data.profiles === 'object' && 
-         data.profiles !== null && 
-         'full_name' in data.profiles && 
-         data.profiles.full_name !== undefined
-          ? { full_name: data.profiles.full_name }
-          : null)
-        : null;
-      
-      const transformedData: BlogPost = {
+      return {
         ...data,
-        profiles: profileData
-      };
-      
-      return transformedData;
+        profiles: {
+          full_name: data.profiles?.full_name ?? null
+        }
+      } as BlogPost;
     }
   });
 
@@ -96,7 +86,7 @@ const BlogPost = () => {
         <CardHeader>
           <CardTitle className="text-3xl">{post.title}</CardTitle>
           <CardDescription>
-            By {post.profiles?.full_name || 'Unknown'} | 
+            By {post.profiles.full_name || 'Unknown'} | 
             Published: {new Date(post.published_at || post.created_at).toLocaleDateString()}
           </CardDescription>
         </CardHeader>
