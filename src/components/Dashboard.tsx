@@ -4,34 +4,50 @@ import BuyerDashboard from "./BuyerDashboard";
 import DealerDashboard from "./DealerDashboard";
 import AdminDashboard from "./AdminDashboard";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Skeleton } from "./ui/skeleton";
 import { Alert, AlertDescription } from "./ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { ChatbotPopup } from "./chat/ChatbotPopup";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [viewAs, setViewAs] = useState<'admin' | 'dealer' | 'buyer'>('admin');
 
-  const { data: userRole, isLoading, error } = useQuery({
-    queryKey: ['user-role'],
+  // First check if user is authenticated
+  const { data: session, isLoading: isSessionLoading } = useQuery({
+    queryKey: ['session'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      if (!session) {
+        navigate('/');
+        throw new Error('Not authenticated');
+      }
+      return session;
+    },
+  });
+
+  // Then fetch user role only if we have a session
+  const { data: userRole, isLoading: isRoleLoading, error } = useQuery({
+    queryKey: ['user-role', session?.user.id],
+    queryFn: async () => {
+      if (!session?.user) throw new Error('Not authenticated');
       
       const { data: existingRole, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
-        .eq('id', user.id)
+        .eq('id', session.user.id)
         .single();
 
       if (roleError && roleError.code === 'PGRST116') {
         const { data: newRole, error: insertError } = await supabase
           .from('user_roles')
           .insert([
-            { id: user.id, role: 'buyer' }
+            { id: session.user.id, role: 'buyer' }
           ])
           .select('role')
           .single();
@@ -50,11 +66,13 @@ const Dashboard = () => {
 
       return existingRole?.role;
     },
-    retry: 1,
+    enabled: !!session?.user.id,
     meta: {
       errorMessage: "Failed to load dashboard. Please try again later."
     }
   });
+
+  const isLoading = isSessionLoading || isRoleLoading;
 
   if (isLoading) {
     return (
