@@ -14,6 +14,10 @@ import Auth from "./pages/Auth";
 import BlogPost from "./components/BlogPost";
 import BlogList from "./components/BlogList";
 import QuoteDetails from "./components/QuoteDetails";
+import FinancialTools from "./components/financial/FinancialTools";
+import PaymentCalculator from "./components/financial/PaymentCalculator";
+import LoanPreApproval from "./components/financial/LoanPreApproval";
+import InsuranceQuote from "./components/financial/InsuranceQuote";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +40,10 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/tools" element={<FinancialTools />} />
+              <Route path="/tools/payment-calculator" element={<PaymentCalculator />} />
+              <Route path="/tools/loan-pre-approval" element={<LoanPreApproval />} />
+              <Route path="/tools/insurance-quote" element={<InsuranceQuote />} />
               <Route
                 path="/dashboard"
                 element={

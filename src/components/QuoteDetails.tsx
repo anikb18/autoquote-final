@@ -6,6 +6,10 @@ import { Skeleton } from "./ui/skeleton";
 import { Quote, CarDetails } from "@/types/quotes";
 import { QuoteHeader } from "./quotes/QuoteHeader";
 import { DealerQuoteItem } from "./quotes/DealerQuoteItem";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import PaymentCalculator from "./financial/PaymentCalculator";
+import LoanPreApproval from "./financial/LoanPreApproval";
+import InsuranceQuote from "./financial/InsuranceQuote";
 
 const QuoteDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -69,15 +73,38 @@ const QuoteDetails = () => {
       <Card>
         <QuoteHeader carDetails={quote.car_details} />
         <CardContent>
-          <div className="space-y-4">
-            {quote.dealer_quotes?.map((dealerQuote) => (
-              <DealerQuoteItem 
-                key={dealerQuote.id}
-                dealerQuote={dealerQuote}
-                quoteId={quote.id}
-              />
-            ))}
-          </div>
+          <Tabs defaultValue="quotes" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="quotes">Quotes</TabsTrigger>
+              <TabsTrigger value="calculator">Payment Calculator</TabsTrigger>
+              <TabsTrigger value="loan">Loan Pre-Approval</TabsTrigger>
+              <TabsTrigger value="insurance">Insurance Quote</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="quotes">
+              <div className="space-y-4">
+                {quote.dealer_quotes?.map((dealerQuote) => (
+                  <DealerQuoteItem 
+                    key={dealerQuote.id}
+                    dealerQuote={dealerQuote}
+                    quoteId={quote.id}
+                  />
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="calculator">
+              <PaymentCalculator quoteId={quote.id} vehiclePrice={25000} />
+            </TabsContent>
+
+            <TabsContent value="loan">
+              <LoanPreApproval quoteId={quote.id} />
+            </TabsContent>
+
+            <TabsContent value="insurance">
+              <InsuranceQuote quoteId={quote.id} />
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
