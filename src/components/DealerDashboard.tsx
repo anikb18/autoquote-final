@@ -1,15 +1,15 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DealerMetricsSection } from "./dashboard/DealerMetricsSection";
 import { DealerQuotesTable } from "./dashboard/DealerQuotesTable";
 import { PerformanceChart, type PerformanceData } from "./dashboard/PerformanceChart";
-import { BellIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Badge } from "./ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { WelcomeHeader } from "./dashboard/dealer/WelcomeHeader";
+import { NotificationHandler } from "./dashboard/dealer/NotificationHandler";
+import { ThemeSwitcher } from "./ThemeSwitcher";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const DealerDashboard = () => {
-  const { toast } = useToast();
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   const { data: profile } = useQuery({
@@ -52,32 +52,12 @@ const DealerDashboard = () => {
     },
   });
 
-  // Subscribe to real-time notifications
-  useEffect(() => {
-    const channel = supabase
-      .channel('dealer-notifications')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'dealer_notifications',
-          filter: `dealer_id=eq.${profile?.id}`,
-        },
-        (payload) => {
-          toast({
-            title: "New Notification",
-            description: "You have a new quote request.",
-          });
-          setUnreadNotifications((prev) => prev + 1);
-        }
-      )
-      .subscribe();
-
-    // Fetch initial unread notifications count
-    const fetchUnreadNotifications = async () => {
+  // Fetch initial unread notifications count
+  useQuery({
+    queryKey: ['unread-notifications'],
+    queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) return 0;
 
       const { count } = await supabase
         .from('dealer_notifications')
@@ -86,35 +66,23 @@ const DealerDashboard = () => {
         .eq('read', false);
 
       setUnreadNotifications(count || 0);
-    };
-
-    fetchUnreadNotifications();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [profile?.id, toast]);
+      return count;
+    },
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Welcome, {profile?.dealer_name}</h1>
-          <p className="text-muted-foreground mt-1">
-            Here's what's happening with your dealership today
-          </p>
-        </div>
-        <div className="relative">
-          <BellIcon className="h-6 w-6 text-gray-500 cursor-pointer" />
-          {unreadNotifications > 0 && (
-            <Badge 
-              className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-red-500"
-            >
-              {unreadNotifications}
-            </Badge>
-          )}
-        </div>
+      <div className="flex justify-end gap-4 mb-6">
+        <LanguageSwitcher />
+        <ThemeSwitcher />
       </div>
+      
+      <WelcomeHeader unreadNotifications={unreadNotifications} />
+      
+      <NotificationHandler 
+        dealerId={profile?.id}
+        onNotificationReceived={() => setUnreadNotifications(prev => prev + 1)}
+      />
       
       <DealerMetricsSection />
       
