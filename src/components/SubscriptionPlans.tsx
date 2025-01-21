@@ -4,16 +4,18 @@ import { Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { InlineWidget } from "react-calendly";
+import { useTranslation } from "react-i18next";
 
 const PRICE_IDS = {
-  FORFAIT_NOUVELLE_VOITURE: "price_1Qh3X9G6N4q5lhXvjs5nTxlf",
-  FORFAIT_REVENTE: "price_1Qh3Z5G6N4q5lhXvVfvvNFvP",
-  FORFAIT_STANDARD: "price_1Qh3bNG6N4q5lhXvNkkmsuQp",
-  FORFAIT_COMPLET: "price_1Qh3dWG6N4q5lhXvB0LACdX4"
+  FORFAIT_NOUVELLE_VOITURE: "price_1Qjb7xG6N4q5lhXvL2EsKg6n",
+  FORFAIT_REVENTE: "price_1Qjb7wG6N4q5lhXv4FJrSWLj"
 }
 
 const SubscriptionPlans = () => {
   const { toast } = useToast();
+  const { t } = useTranslation('dealer');
 
   const { data: userRole } = useQuery({
     queryKey: ['user-role'],
@@ -64,64 +66,33 @@ const SubscriptionPlans = () => {
 
   if (userRole === 'dealer') {
     return (
-      <div className="grid gap-6 md:grid-cols-2 lg:gap-8 max-w-6xl mx-auto px-4">
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle>Forfait Standard</CardTitle>
-            <CardDescription>Perfect for small dealerships</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                <span>Basic quote management</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                <span>Limited trade-in visibility</span>
-              </li>
-            </ul>
-          </CardContent>
-          <CardFooter>
+      <div className="py-16 px-4">
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">Contact Our Sales Team</h2>
+          <p className="text-muted-foreground mb-8">
+            Schedule a demo or request a callback to learn more about our dealer solutions
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="lg" className="min-w-[200px]">
+                  Schedule Demo
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[600px]">
+                <InlineWidget url="https://calendly.com/your-calendly-url" />
+              </DialogContent>
+            </Dialog>
             <Button 
-              className="w-full" 
-              onClick={() => handleSubscribe(PRICE_IDS.FORFAIT_STANDARD)}
+              variant="outline" 
+              size="lg"
+              className="min-w-[200px]"
+              onClick={() => window.location.href = "/contact"}
             >
-              Subscribe to Standard
+              Request Callback
             </Button>
-          </CardFooter>
-        </Card>
-
-        <Card className="flex flex-col border-primary">
-          <CardHeader>
-            <CardTitle>Forfait Complet</CardTitle>
-            <CardDescription>For growing dealerships</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow">
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                <span>Advanced quote management</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                <span>Unlimited trade-in visibility</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                <span>Priority support</span>
-              </li>
-            </ul>
-          </CardContent>
-          <CardFooter>
-            <Button 
-              className="w-full" 
-              onClick={() => handleSubscribe(PRICE_IDS.FORFAIT_COMPLET)}
-            >
-              Subscribe to Complete
-            </Button>
-          </CardFooter>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   }
