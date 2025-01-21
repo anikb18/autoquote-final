@@ -17,23 +17,23 @@
   },
   "features": {
     "title": "Pourquoi choisir AutoQuote24",
-    "subtitle": "Optimisez vos opérations et augmentez vos ventes avec notre plateforme complète",
+    "subtitle": "Rejoignez l'avenir de la vente automobile avec notre plateforme innovante conçue pour les concessions modernes",
     "items": {
       "trusted": {
         "title": "Système d'enchères privé",
-        "description": "Assure une concurrence équitable et de meilleures marges"
+        "description": "Concurrencez équitablement avec notre plateforme d'enchères exclusive qui garantit de meilleures marges"
       },
       "time": {
         "title": "Prospects pré-qualifiés",
-        "description": "Recevez uniquement des acheteurs vérifiés prêts à acheter"
+        "description": "Concentrez-vous sur la vente à des acheteurs vérifiés qui sont prêts à acheter"
       },
       "prices": {
-        "title": "Gestion automatisée",
-        "description": "Gagnez du temps avec la gestion intelligente des devis"
+        "title": "Gestion intelligente",
+        "description": "Gagnez du temps avec notre système automatisé de gestion et de réponse aux devis"
       },
       "communication": {
-        "title": "Support dédié",
-        "description": "Obtenez une assistance experte 24/7 avec notre équipe de support"
+        "title": "Support 24/7",
+        "description": "Obtenez une assistance experte à tout moment avec notre équipe de support dédiée"
       }
     }
   },

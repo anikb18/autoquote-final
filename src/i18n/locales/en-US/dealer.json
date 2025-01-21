@@ -17,23 +17,23 @@
   },
   "features": {
     "title": "Why Choose AutoQuote24",
-    "subtitle": "Streamline your dealership operations and boost your sales with our comprehensive platform",
+    "subtitle": "Join the future of automotive sales with our innovative platform designed for modern dealerships",
     "items": {
       "trusted": {
         "title": "Private Bidding System",
-        "description": "Ensures fair competition and better margins with our exclusive bidding platform"
+        "description": "Compete fairly with our exclusive bidding platform that ensures better margins and transparent competition"
       },
       "time": {
         "title": "Pre-Qualified Leads",
-        "description": "Only receive credit-verified buyers who are ready to purchase"
+        "description": "Focus on selling to credit-verified buyers who are ready to make a purchase"
       },
       "prices": {
-        "title": "Automated Management",
-        "description": "Save time with smart quote handling and automated responses"
+        "title": "Smart Management",
+        "description": "Save time and resources with our automated quote handling and response system"
       },
       "communication": {
-        "title": "Dedicated Support",
-        "description": "Get expert assistance whenever you need it with our 24/7 support team"
+        "title": "24/7 Support",
+        "description": "Get expert assistance whenever you need it with our dedicated support team"
       }
     }
   },
