@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,51 +25,49 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <StrictMode>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/subscription"
-                element={
-                  <ProtectedRoute>
-                    <SubscriptionManagement />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/blog"
-                element={
-                  <ProtectedRoute>
-                    <BlogList />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/blog/:id"
-                element={
-                  <ProtectedRoute>
-                    <BlogPost />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </StrictMode>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/subscription"
+              element={
+                <ProtectedRoute>
+                  <SubscriptionManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blog"
+              element={
+                <ProtectedRoute>
+                  <BlogList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blog/:id"
+              element={
+                <ProtectedRoute>
+                  <BlogPost />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 };
