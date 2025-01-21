@@ -37,7 +37,11 @@ const BuyerDashboard = () => {
         `)
         .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching quotes:', error);
+        throw error;
+      }
+      console.log('Fetched quotes:', data);
       return data;
     },
   });

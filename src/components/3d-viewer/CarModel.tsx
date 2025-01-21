@@ -2,13 +2,14 @@ import * as THREE from 'three';
 
 interface CarModelProps {
   scene: THREE.Scene;
+  color?: string;
 }
 
-export const CarModel = ({ scene }: CarModelProps) => {
+export const CarModel = ({ scene, color = '#00ff00' }: CarModelProps) => {
   // Create car body
   const bodyGeometry = new THREE.BoxGeometry(2, 1, 4);
   const bodyMaterial = new THREE.MeshPhongMaterial({ 
-    color: 0x00ff00,
+    color,
     specular: 0x555555,
     shininess: 30 
   });
@@ -35,6 +36,18 @@ export const CarModel = ({ scene }: CarModelProps) => {
   });
 
   scene.add(carBody);
-  
+
+  // Add ground plane
+  const groundGeometry = new THREE.PlaneGeometry(20, 20);
+  const groundMaterial = new THREE.MeshPhongMaterial({ 
+    color: 0xcccccc,
+    side: THREE.DoubleSide 
+  });
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+  ground.rotation.x = Math.PI / 2;
+  ground.position.y = -1;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
   return null;
 };
