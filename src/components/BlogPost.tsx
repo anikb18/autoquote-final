@@ -16,7 +16,7 @@ const BlogPost = () => {
         .from('blog_posts')
         .select(`
           *,
-          author:author_id (
+          profiles:author_id (
             full_name
           )
         `)
@@ -70,7 +70,7 @@ const BlogPost = () => {
         <CardHeader>
           <CardTitle className="text-3xl">{post.title}</CardTitle>
           <CardDescription>
-            By {post.author?.full_name || 'Unknown'} | 
+            By {post.profiles?.full_name || 'Unknown'} | 
             Published: {new Date(post.published_at || post.created_at).toLocaleDateString()}
           </CardDescription>
         </CardHeader>
