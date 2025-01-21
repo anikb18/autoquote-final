@@ -6,7 +6,6 @@ import { ArrowLeft, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Database } from "@/integrations/supabase/types";
 
-// Define a more specific type for the profiles data
 type Profile = {
   full_name: string | null;
 };
@@ -34,16 +33,16 @@ const BlogPost = () => {
         .maybeSingle();
       
       if (error) throw error;
-      
-      // Return null if no data found
       if (!data) return null;
       
-      // Safely transform the profiles data
-      const profileData = data.profiles && typeof data.profiles === 'object' && 'full_name' in data.profiles
-        ? { full_name: data.profiles.full_name }
-        : null;
+      // Safely transform the profiles data with proper null checking
+      const profileData = data.profiles && 
+        typeof data.profiles === 'object' && 
+        data.profiles !== null && 
+        'full_name' in data.profiles
+          ? { full_name: data.profiles.full_name }
+          : null;
       
-      // Transform the data to match our expected type
       const transformedData: BlogPost = {
         ...data,
         profiles: profileData
