@@ -8,13 +8,14 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface PaymentCalculatorProps {
-  quoteId: string;
-  vehiclePrice: number;
+  quoteId?: string;
+  vehiclePrice?: number;
 }
 
-const PaymentCalculator = ({ quoteId, vehiclePrice }: PaymentCalculatorProps) => {
+const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const [price, setPrice] = useState<number>(vehiclePrice);
   const [downPayment, setDownPayment] = useState<number>(0);
   const [interestRate, setInterestRate] = useState<number>(5.99);
   const [term, setTerm] = useState<number>(60);
@@ -24,10 +25,10 @@ const PaymentCalculator = ({ quoteId, vehiclePrice }: PaymentCalculatorProps) =>
   const QC_TAX_RATE = 0.14975; // Combined GST (5%) and QST (9.975%)
 
   const calculatePayments = async () => {
-    const loanAmount = vehiclePrice - downPayment;
+    const loanAmount = price - downPayment;
     const monthlyRate = interestRate / 12 / 100;
-    const totalTax = vehiclePrice * QC_TAX_RATE;
-    const totalWithTaxAmount = vehiclePrice + totalTax;
+    const totalTax = price * QC_TAX_RATE;
+    const totalWithTaxAmount = price + totalTax;
     
     const monthlyPaymentAmount = 
       (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, term)) / 
@@ -36,32 +37,34 @@ const PaymentCalculator = ({ quoteId, vehiclePrice }: PaymentCalculatorProps) =>
     setMonthlyPayment(monthlyPaymentAmount);
     setTotalWithTax(totalWithTaxAmount);
 
-    try {
-      const { error } = await supabase
-        .from('financing_calculations')
-        .insert({
-          quote_id: quoteId,
-          loan_amount: loanAmount,
-          down_payment: downPayment,
-          interest_rate: interestRate,
-          term_months: term,
-          monthly_payment: monthlyPaymentAmount,
-          tax_rate: QC_TAX_RATE,
-          total_with_tax: totalWithTaxAmount
+    if (quoteId) {
+      try {
+        const { error } = await supabase
+          .from('financing_calculations')
+          .insert({
+            quote_id: quoteId,
+            loan_amount: loanAmount,
+            down_payment: downPayment,
+            interest_rate: interestRate,
+            term_months: term,
+            monthly_payment: monthlyPaymentAmount,
+            tax_rate: QC_TAX_RATE,
+            total_with_tax: totalWithTaxAmount
+          });
+
+        if (error) throw error;
+
+        toast({
+          title: t('calculator.success'),
+          description: t('calculator.saved'),
         });
-
-      if (error) throw error;
-
-      toast({
-        title: t('calculator.success'),
-        description: t('calculator.saved'),
-      });
-    } catch (error) {
-      toast({
-        title: t('calculator.error'),
-        description: t('calculator.saveFailed'),
-        variant: "destructive",
-      });
+      } catch (error) {
+        toast({
+          title: t('calculator.error'),
+          description: t('calculator.saveFailed'),
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -75,9 +78,10 @@ const PaymentCalculator = ({ quoteId, vehiclePrice }: PaymentCalculatorProps) =>
           <Label>{t('calculator.vehiclePrice')}</Label>
           <Input
             type="number"
-            value={vehiclePrice}
-            disabled
-            className="bg-gray-100"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+            className={quoteId ? "bg-gray-100" : ""}
+            disabled={!!quoteId}
           />
         </div>
 
@@ -88,7 +92,7 @@ const PaymentCalculator = ({ quoteId, vehiclePrice }: PaymentCalculatorProps) =>
             value={downPayment}
             onChange={(e) => setDownPayment(Number(e.target.value))}
             min="0"
-            max={vehiclePrice}
+            max={price}
           />
         </div>
 
@@ -136,7 +140,7 @@ const PaymentCalculator = ({ quoteId, vehiclePrice }: PaymentCalculatorProps) =>
             <div className="flex justify-between">
               <span>{t('calculator.taxAmount')}:</span>
               <span className="font-semibold">
-                ${(totalWithTax - vehiclePrice).toFixed(2)}
+                ${(totalWithTax - price).toFixed(2)}
               </span>
             </div>
           </div>

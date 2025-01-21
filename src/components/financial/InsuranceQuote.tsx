@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface InsuranceQuoteProps {
-  quoteId: string;
+  quoteId?: string;
 }
 
 const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
@@ -29,17 +29,19 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
       // Simulate insurance quote calculation
       const annualPremium = calculatePremium(formData.coverageType, parseFloat(formData.deductible));
 
-      const { error } = await supabase
-        .from('insurance_quotes')
-        .insert({
-          quote_id: quoteId,
-          coverage_type: formData.coverageType,
-          deductible: parseFloat(formData.deductible),
-          annual_premium: annualPremium,
-          provider: "Sample Insurance Co." // This would come from actual provider in production
-        });
+      if (quoteId) {
+        const { error } = await supabase
+          .from('insurance_quotes')
+          .insert({
+            quote_id: quoteId,
+            coverage_type: formData.coverageType,
+            deductible: parseFloat(formData.deductible),
+            annual_premium: annualPremium,
+            provider: "Sample Insurance Co." // This would come from actual provider in production
+          });
 
-      if (error) throw error;
+        if (error) throw error;
+      }
 
       toast({
         title: t('insurance.success'),

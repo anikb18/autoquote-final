@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface LoanPreApprovalProps {
-  quoteId: string;
+  quoteId?: string;
 }
 
 const LoanPreApproval = ({ quoteId }: LoanPreApprovalProps) => {
@@ -29,15 +29,17 @@ const LoanPreApproval = ({ quoteId }: LoanPreApprovalProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
+      const preApprovalData = {
+        user_id: user.id,
+        ...(quoteId && { quote_id: quoteId }),
+        credit_score: parseInt(formData.creditScore),
+        annual_income: parseFloat(formData.annualIncome),
+        monthly_obligations: parseFloat(formData.monthlyObligations),
+      };
+
       const { error } = await supabase
         .from('loan_pre_approvals')
-        .insert({
-          user_id: user.id,
-          quote_id: quoteId,
-          credit_score: parseInt(formData.creditScore),
-          annual_income: parseFloat(formData.annualIncome),
-          monthly_obligations: parseFloat(formData.monthlyObligations),
-        });
+        .insert(preApprovalData);
 
       if (error) throw error;
 
