@@ -7,7 +7,13 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface BlogEditorProps {
-  onSave: (values: { title: string; content: string; excerpt: string; featured_image?: string; image_alt?: string }) => Promise<void>;
+  onSave: (values: { 
+    title: string; 
+    content: string; 
+    excerpt: string; 
+    featured_image?: string; 
+    image_alt?: string; 
+  }) => Promise<void>;
   initialValues?: {
     title: string;
     content: string;
@@ -99,7 +105,7 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
       )}
 
       <Editor
-        apiKey="your-api-key-here"
+        apiKey={process.env.TINYMCE_API_KEY}
         value={content}
         onEditorChange={(newContent) => setContent(newContent)}
         init={{
@@ -114,6 +120,7 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
             'bold italic forecolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
             'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         }}
       />
 
