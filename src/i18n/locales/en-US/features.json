@@ -18,5 +18,23 @@
       "title": "Secure Chat",
       "description": "Direct, encrypted communication with dealers"
     }
+  },
+  "secondary": {
+    "title": "Advanced Features",
+    "subtitle": "Everything you need for a seamless car buying experience",
+    "items": {
+      "valuation": {
+        "title": "Trade-in Valuation",
+        "description": "Get instant trade-in value estimates for your current vehicle"
+      },
+      "financing": {
+        "title": "Financing Calculator",
+        "description": "Calculate monthly payments and explore financing options"
+      },
+      "comparison": {
+        "title": "Vehicle Comparison",
+        "description": "Compare different models side by side to make informed decisions"
+      }
+    }
   }
 }

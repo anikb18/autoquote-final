@@ -18,5 +18,23 @@
       "title": "Chat sécurisé",
       "description": "Communication directe et cryptée avec les concessionnaires"
     }
+  },
+  "secondary": {
+    "title": "Fonctionnalités avancées",
+    "subtitle": "Tout ce dont vous avez besoin pour une expérience d'achat automobile transparente",
+    "items": {
+      "valuation": {
+        "title": "Évaluation de reprise",
+        "description": "Obtenez des estimations instantanées de la valeur de reprise de votre véhicule actuel"
+      },
+      "financing": {
+        "title": "Calculateur de financement",
+        "description": "Calculez les paiements mensuels et explorez les options de financement"
+      },
+      "comparison": {
+        "title": "Comparaison de véhicules",
+        "description": "Comparez différents modèles côte à côte pour prendre des décisions éclairées"
+      }
+    }
   }
 }
