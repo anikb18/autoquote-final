@@ -62,6 +62,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (role) {
+      console.log("Setting viewMode to role:", role);
       setViewMode(role as ViewMode);
     }
   }, [role]);
@@ -78,10 +79,11 @@ const Dashboard = () => {
   }
 
   if (!user) {
-    return null; // Return null instead of showing a message as we'll redirect to auth
+    return null;
   }
 
   const renderDashboard = () => {
+    console.log("Current viewMode:", viewMode);
     switch (viewMode) {
       case "admin":
         return <AdminDashboard />;
