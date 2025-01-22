@@ -1761,12 +1761,6 @@ export type Database = {
         }
         Returns: undefined
       }
-      is_admin: {
-        Args: {
-          user_id: string
-        }
-        Returns: boolean
-      }
       logflare_fdw_handler: {
         Args: Record<PropertyKey, never>
         Returns: unknown
