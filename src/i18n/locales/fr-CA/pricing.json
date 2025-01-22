@@ -1,48 +1,52 @@
 {
   "features": {
-    "title": "Plans Tarifaires Exclusifs",
-    "subtitle": "Accédez à des offres exceptionnelles sur les véhicules avec des frais uniques.",
+    "title": "Plans tarifaires exclusifs",
+    "subtitle": "Choisissez le plan parfait pour l'achat ou la vente de votre voiture",
+    "mostPopular": "Plus populaire",
+    "spotsRemaining": "{{count}} places restantes",
     "newCar": {
-      "title": "Plan Voiture Neuve",
-      "description": "Pour seulement 49,95$, accédez à des offres imbattables sur les voitures neuves. Vivez l'expérience de conduire la voiture de vos rêves!",
+      "title": "Service de soumission pour voiture neuve",
+      "description": "Obtenez les meilleures offres sur les voitures neuves grâce à notre système d'enchères compétitif",
       "price": "49,95$",
       "prelaunchPrice": "Prix de pré-lancement: 39,95$",
       "regularPrice": "99,95$",
-      "savings": "Économisez 40%",
-      "cta": "Réclamez Votre Offre",
-      "tooltip": "Ne manquez pas cette opportunité exclusive!",
+      "savings": "Économisez 60$",
       "items": {
         "newCar": [
-          "Accès exclusif aux meilleures offres",
-          "Service personnalisé juste pour vous",
-          "Essais routiers gratuits",
-          "Options de paiement flexibles",
-          "Évaluations approfondies pour échange",
-          "Rapports d'historique détaillés",
-          "Consultations d'experts"
+          "Accès à notre réseau de concessionnaires certifiés",
+          "Plusieurs soumissions compétitives en 24 heures",
+          "Système d'enchères privé",
+          "Comparaisons détaillées des véhicules",
+          "Évaluation de la valeur d'échange",
+          "Options de préapprobation de financement",
+          "Équipe de soutien dédiée"
         ]
-      }
+      },
+      "cta": "Obtenez votre soumission"
     },
     "tradeIn": {
-      "title": "Plan Échange",
-      "description": "Maximisez la valeur de reprise de votre véhicule pour seulement 16,95$. Obtenez la meilleure valeur sans effort!",
+      "title": "Évaluation d'échange",
+      "description": "Obtenez la meilleure valeur pour votre véhicule actuel",
       "price": "16,95$",
-      "savings": "40% de rabais pour les premiers clients! Offre limitée.",
-      "cta": "Commencez Aujourd'hui",
-      "tooltip": "Meilleure valeur d'échange garantie!",
+      "regularPrice": "29,95$",
+      "savings": "Économisez 40%",
       "items": {
         "tradeIn": [
-          "Évaluation gratuite du véhicule",
-          "Offres en argent instantanées",
-          "Processus simple et sans tracas",
-          "Consultations d'experts",
-          "Options d'échange flexibles",
-          "Aucuns frais cachés",
-          "Paiements rapides"
+          "Évaluation professionnelle du véhicule",
+          "Analyse de la valeur marchande",
+          "Offres multiples des concessionnaires",
+          "Évaluation de l'état",
+          "Examen du rapport d'historique",
+          "Soumissions sans obligation"
         ]
-      }
-    },
-    "mostPopular": "Plus Populaire",
-    "spotsRemaining": "Places limitées disponibles: {{count}}"
+      },
+      "cta": "Évaluez votre échange"
+    }
+  },
+  "time": {
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "seconds": "secondes"
   }
 }

@@ -1,48 +1,52 @@
 {
   "features": {
     "title": "Exclusive Pricing Plans",
-    "subtitle": "Unlock your access to premium vehicle deals with a one-time fee.",
+    "subtitle": "Choose the perfect plan for your car buying or selling needs",
+    "mostPopular": "Most Popular",
+    "spotsRemaining": "{{count}} spots remaining",
     "newCar": {
-      "title": "New Car Plan",
-      "description": "For just $49.95, gain access to unbeatable deals on new cars. Experience the thrill of driving your dream car!",
+      "title": "New Car Quote Service",
+      "description": "Get the best deals on new cars with our competitive bidding system",
       "price": "$49.95",
       "prelaunchPrice": "Pre-launch Price: $39.95",
       "regularPrice": "$99.95",
-      "savings": "Save 40%",
-      "cta": "Claim Your Deal Now",
-      "tooltip": "Don't miss out on this exclusive opportunity!",
+      "savings": "Save $60",
       "items": {
         "newCar": [
-          "Exclusive access to premium deals",
-          "Tailored service just for you",
-          "Free test drives to feel the excitement",
-          "Flexible payment options that suit your needs",
-          "Thorough trade-in assessments",
-          "Detailed vehicle history reports",
-          "Expert consultations"
+          "Access to our network of certified dealers",
+          "Multiple competitive quotes within 24 hours",
+          "Private bidding system",
+          "Detailed vehicle comparisons",
+          "Trade-in value assessment",
+          "Financing pre-approval options",
+          "Dedicated support team"
         ]
-      }
+      },
+      "cta": "Get Your Quote Now"
     },
     "tradeIn": {
-      "title": "Trade-In Plan",
-      "description": "Maximize your trade-in value with a one-time fee of $16.95. Get the best value for your vehicle effortlessly!",
+      "title": "Trade-In Valuation",
+      "description": "Get the best value for your current vehicle",
       "price": "$16.95",
-      "savings": "40% off for early birds! Limited time offer.",
-      "cta": "Get Started Today",
-      "tooltip": "Best trade-in values guaranteed!",
+      "regularPrice": "$29.95",
+      "savings": "Save 40%",
       "items": {
         "tradeIn": [
-          "Complimentary vehicle appraisal",
-          "Instant cash offers that put you first",
-          "A seamless and hassle-free process",
-          "Expert consultations to guide you",
-          "Flexible trade-in options tailored to you",
-          "No hidden fees, just transparency",
-          "Quick payments for your convenience"
+          "Professional vehicle appraisal",
+          "Market value analysis",
+          "Multiple dealer offers",
+          "Condition assessment",
+          "History report review",
+          "No-obligation quotes"
         ]
-      }
-    },
-    "mostPopular": "Most Popular",
-    "spotsRemaining": "Limited spots available: {{count}}"
+      },
+      "cta": "Value Your Trade-In"
+    }
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds"
   }
 }

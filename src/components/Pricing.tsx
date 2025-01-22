@@ -137,9 +137,6 @@ const Pricing = () => {
                     <p className="text-base sm:text-lg font-bold text-emerald-400 transition-all duration-300 group-hover:scale-110 group-hover:text-emerald-300">
                       {t('features.newCar.savings')}
                     </p>
-                    <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-full sm:w-60 p-3 bg-emerald-400/10 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 text-sm text-emerald-400 ring-1 ring-inset ring-emerald-400/20 z-10">
-                      {t('features.newCar.tooltip')}
-                    </div>
                   </div>
                   <p className="mt-1 text-sm text-slate-400">
                     {t('features.spotsRemaining', { count: REMAINING_SPOTS })}
@@ -197,9 +194,6 @@ const Pricing = () => {
                     <p className="text-base sm:text-lg font-bold text-emerald-400 transition-all duration-300 group-hover:scale-110 group-hover:text-emerald-300">
                       {t('features.tradeIn.savings')}
                     </p>
-                    <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-full sm:w-60 p-3 bg-emerald-400/10 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 text-sm text-emerald-400 ring-1 ring-inset ring-emerald-400/20 z-10">
-                      {t('features.tradeIn.tooltip')}
-                    </div>
                   </div>
                   <p className="mt-1 text-sm text-slate-400">
                     {t('features.spotsRemaining', { count: REMAINING_SPOTS })}
