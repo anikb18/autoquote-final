@@ -1,0 +1,105 @@
+AutoQuote24 is Quebec Canada's leading specialized car buying and selling platform. It streamlines the vehicle purchase process through a private bidding system.
+
+Car Buying Service
+    * Users submit vehicle preferences and pay a $40 fee.
+    * Dealers submit private bids without seeing competitors' offers.
+    * System automatically selects top 3 lowest price quotes.
+    * Trade-in value assessment available.
+    * Balloon payment calculations included.
+    * Accessories selection system.
+Car Selling System
+    * Users can create detailed car listings.
+    * Upload up to 4 high-quality vehicle photos.
+    * Dealers receive notifications of listings in their area.
+    * 24-hour business day auction countdown.
+    * Secure communication between seller and winning dealer.
+* **Chat System**
+    * Activated after user accepts a quote.
+    * End-to-end encrypted direct communication between buyer and dealer.
+    * Real-time notifications.
+    * Secure document sharing and digital signature capabilities.
+
+Frontend: React.js with Redux Toolkit, Tailwind CSS, Catalyst (platform), Salient (homepage).
+* **Backend:** Vite, Supabase, Redis caching.
+* **3rd-Party Services:**
+    * Authentication: supabase
+    * Supabase: Database
+    * Payment processing: Stripe
+    * AI services: Google Gemini (`AIzaSyCf8ofwBfuuoVa-jVdTc3CeRxZH8RYAqL4`) for vehicle data autocomplete (2024-2025 models).
+
+* Implement all core features listed above.
+Brand Colors:
+  main: #003139
+  secondary: #d1d2c3
+  blue: #446df6
+
+Revenue Streams:
+    * Users pay $49.95 for quote service.
+    * Users pay $16.95 for trade-in valuation only.
+    * Dealers pay subscription fees:
+        * $1595/mo for new car quotes.
+        * $1895/mo including used car buyouts.
+
+Primary Goals
+For Buyers:
+    * Eliminate negotiation stress.
+    * Receive competitive dealer quotes.
+    * Streamline the car buying process.
+    * Provide transparent pricing.
+For Dealers:
+    * Access to qualified leads.
+    * Private bidding system.
+    * Efficient customer acquisition.
+    * Streamlined sales process.
+Additional Features
+User Features:
+    * Photo Management: Up to 4 high-quality photos, required views (front, rear, interior dashboard, seats), 10MB max per photo.
+    * Trade-in System: Detailed condition assessment, mileage input, maintenance history, VIN verification, photo upload.
+    * Vehicle Search: Autocomplete for 2024-2025 models, separate autocomplete for trade-in, advanced filtering.
+Dealer Features:
+    * Dashboard Integration: Auction monitoring, bid history, quote management, communication tools, performance analytics.
+
+Always do translations for every new component using the `i18n` in ../i18n/ folder system and add them to the `./locales` folder.
+List of Tables and Their Columns
+Table,Column_Types
+affiliate_referrals,"id:uuid,referrer_id:uuid,referred_user_id:uuid,status:text,commission_earned:numeric,created_at:timestamptz,converted_at:timestamptz"
+affiliate_settings,"id:uuid,user_id:uuid,referral_code:text,commission_rate:numeric,total_earnings:numeric,pending_earnings:numeric,paid_earnings:numeric,created_at:timestamptz,updated_at:timestamptz"
+auctions,"id:uuid,user_id:uuid,vehicle_id:uuid,start_price:numeric(10,2),current_price:numeric(10,2),enddate:timestamptz,status:text,created_at:timestamptz,updated_at:timestamptz,photos:text[],vehicle_details:jsonb"
+blog_posts,"id:uuid,title:text,content:text,author_id:uuid,status:blog_post_status,created_at:timestamptz,updated_at:timestamptz,excerpt:text,featured_image:text,published_at:timestamptz,image_metadata:jsonb,image_alt:text"
+chat_messages,"id:uuid,quote_id:uuid,sender_id:uuid,content:text,created_at:timestamptz"
+coupons,"id:uuid,code:text,name:text,description:text,discount_type:coupon_discount_type,discount_value:numeric,usage_limit:integer,usage_count:integer,conditions:jsonb,active:boolean,created_at:timestamptz,expires_at:timestamptz,created_by:uuid"
+deadline,"id:timestamptz,created_at:timestamptz"
+dealer_analytics,"id:uuid,dealer_id:uuid,metric_type:text,value:numeric,period_start:timestamptz,period_end:timestamptz,created_at:timestamptz,quote_response_time:interval,conversion_rate:numeric,profit_margin:numeric,total_revenue:numeric,date_range_start:timestamptz,date_range_end:timestamptz,drill_down_data:jsonb"
+dealer_bids,"id:uuid,dealer_id:uuid,quote_id:uuid,amount:numeric,visibility:bid_visibility,status:text,created_at:timestamptz,updated_at:timestamptz"
+dealer_leads,"id:uuid,dealership_name:text,location:text,volume:text,brands:text,phone:text,email:text,preferred_contact:text,status:dealer_lead_status,source:text,notes:text,created_at:timestamptz,updated_at:timestamptz"
+dealer_notifications,"id:uuid,dealer_id:uuid,quote_id:uuid,type:text,read:boolean,created_at:timestamptz"
+dealer_profiles,"id:uuid,dealer_name:text,active:boolean,subscription_type:subscription_level,first_name:text,last_name:text"
+dealer_quotes,"id:uuid,quote_id:uuid,dealer_id:uuid,status:text,created_at:timestamptz,is_accepted:boolean,response_status:text,response_date:timestamptz,response_notes:text,alternative_options:jsonb"
+documents,"id:uuid,quote_id:uuid,type:text,file_path:text,status:text,created_at:timestamptz"
+financing_calculations,"id:uuid,quote_id:uuid,loan_amount:numeric,down_payment:numeric,interest_rate:numeric,term_months:integer,monthly_payment:numeric,tax_rate:numeric,province:text,total_with_tax:numeric"
+insurance_quotes,"id:uuid,quote_id:uuid,coverage_type:text,deductible:numeric,annual_premium:numeric,provider:text"
+loan_pre_approvals,"id:uuid,user_id:uuid,quote_id:uuid,status:text,credit_score:integer,annual_income:numeric,monthly_obligations:numeric,approved_amount:numeric,interest_rate:numeric"
+newsletter_sends,"id:uuid,newsletter_id:uuid,subscriber_id:uuid,sent_at:timestamptz,status:text,error_message:text,metadata:jsonb"
+newsletter_subscribers,"id:uuid,email:text,subscribed_at:timestamptz,status:text,user_id:uuid,subscribed_from:text"
+newsletters,"id:uuid,title:text,content:text,status:newsletter_status,scheduled_for:timestamptz,sent_at:timestamptz,created_at:timestamptz,updated_at:timestamptz,filter_criteria:jsonb,metadata:jsonb"
+notifications,"id:uuid,user_id:uuid,type:text,content:text,read:boolean,created_at:timestamptz"
+payments,"id:uuid,quote_id:uuid,amount:numeric(10,2),status:text,payment_method:text"
+plaid_accounts,"id:uuid,user_id:uuid,plaid_access_token:text,plaid_item_id:text,institution_name:text,institution_id:text,account_mask:text,account_type:text,account_subtype:text"
+plaid_transactions,"id:uuid,plaid_account_id:uuid,transaction_id:text,amount:numeric,date:date,merchant_name:text,category:text[]"
+pricing_plans,"id:uuid,stripe_product_id:text,stripe_price_id:text,name:text,description:text,features:jsonb,monthly_price:numeric,annual_price:numeric,is_featured:boolean,metadata:jsonb"
+profiles,"id:uuid,email:text,full_name:text,role:text,created_at:timestamptz,stripe_customer_id:text,subscription_status:text,subscription_id:text,subscription_type:subscription_level"
+quote_alerts,"id:uuid,quote_id:uuid,status:text,admin_notified:boolean,extension_applied:boolean,created_at:timestamptz,extended_until:timestamptz"
+quote_responses,"id:uuid,quote_id:uuid,dealer_quote_id:uuid,response_type:text,response_date:timestamptz,notes:text,created_at:timestamptz"
+quotes,"id:uuid,user_id:uuid,car_details:jsonb,has_trade_in:boolean,status:text,created_at:timestamptz,pricing_option:text,price_paid:numeric,trade_in_visibility_days:integer,trade_in_visibility_start:timestamptz,trade_in_details:jsonb,desired_vehicle_details:jsonb,financing_preference:text,lease_term:integer,annual_kilometers:integer,selected_colors:text[],interested_in_alternatives:boolean"
+sales_transactions,"id:uuid,quote_id:uuid,dealer_id:uuid,selling_price:numeric,invoice_price:numeric,transaction_date:timestamptz,status:text,gross_profit_percentage:numeric,created_at:timestamptz,updated_at:timestamptz"
+seo_settings,"id:uuid,page_identifier:text,title:text,meta_description:text,meta_keywords:text[],og_title:text,og_description:text,og_image:text"
+site_settings,"id:uuid,category:text,key:text,value:jsonb"
+support_tickets,"id:uuid,user_id:uuid,subject:text,category:text,message:text,status:text,created_at:timestamptz,updated_at:timestamptz"
+trade_in_valuations,"id:uuid,quote_id:uuid,vehicle_details:jsonb,estimated_value:numeric(10,2),created_at:timestamptz"
+user_activities,"id:uuid,user_id:uuid,action_type:text,details:jsonb,created_at:timestamptz"
+user_roles,"id:uuid,role:text,created_at:timestamptz"
+vehicle_makes,"id:uuid,name:text,created_at:timestamptz"
+vehicle_models,"id:uuid,make_id:uuid,name:text,year:integer,created_at:timestamptz"
+vehicle_photos,"id:uuid,quote_id:uuid,photo_url:text,created_at:timestamptz"
+vehicle_trims,"id:uuid,model_id:uuid,name:text,engine_type:text,body_style:text,created_at:timestamptz,trim_level:text"
+wrappers_fdw_stats,"fdw_name:text,create_times:bigint,rows_in:bigint,rows_out:bigint,bytes_in:bigint,bytes_out:bigint,metadata:jsonb,created_at:timestamptz,updated_at:timestamptz"

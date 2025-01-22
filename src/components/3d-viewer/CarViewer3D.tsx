@@ -6,6 +6,7 @@ import { Card } from '../ui/card';
 import { Loader2 } from 'lucide-react';
 import { Scene } from './Scene';
 import { CarModel } from './CarModel';
+import { Hotspots } from './Hotspots'; // Import your Hotspots component
 
 interface CarViewer3DProps {
   carDetails?: {
@@ -18,6 +19,12 @@ interface CarViewer3DProps {
 
 const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
+
+  const handleHotspotHover = (label: string | null) => {
+    setHoveredHotspot(label);
+  };
+
   const [sceneState, setSceneState] = useState<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -25,7 +32,7 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     controls: OrbitControls;
   } | null>(null);
 
-  const { data: carData, isLoading } = useQuery({
+  const { data: carData, isLoading, error } = useQuery({
     queryKey: ['car-data', carDetails?.make, carDetails?.model],
     queryFn: async () => {
       if (!carDetails?.make || !carDetails?.model) return null;
@@ -88,6 +95,13 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     controls: OrbitControls
   ) => {
     setSceneState({ scene, camera, renderer, controls });
+
+    // Setup lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 2);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+    directionalLight.position.set(1, 1, 1);
+    directionalLight.castShadow = true;
+    scene.add(ambientLight, directionalLight);
   };
 
   if (isLoading) {
@@ -100,11 +114,28 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     );
   }
 
+  if (error) {
+    return (
+      <Card className="p-4">
+        <div className="text-red-500">Error fetching car data: {error.message}</div>
+      </Card>
+    );
+  }
+
   return (
     <Card className="p-4 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg">
       <div ref={containerRef} className="h-[400px] w-full relative rounded-lg overflow-hidden">
         <Scene containerRef={containerRef} onSceneReady={handleSceneReady} />
-        {sceneState && <CarModel scene={sceneState.scene} />}
+        {sceneState && carData && (
+          <CarModel scene={sceneState.scene} carData={carData} />
+        )}
+        {sceneState && showHotspots && carDetails?.make && carDetails?.model && ( // Render Hotspots component
+          <Hotspots 
+            scene={sceneState.scene} 
+            carType={`${carDetails.year} ${carDetails.make} ${carDetails.model}`} 
+            onHotspotHover={handleHotspotHover}
+          />
+        )}
       </div>
     </Card>
   );

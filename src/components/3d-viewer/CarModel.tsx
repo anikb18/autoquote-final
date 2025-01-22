@@ -1,41 +1,45 @@
+import React, { useEffect } from 'react';
 import * as THREE from 'three';
 
 interface CarModelProps {
   scene: THREE.Scene;
-  color?: string;
+  carData: any; // Expecting carData to be passed from CarViewer3D
 }
 
-export const CarModel = ({ scene, color = '#00ff00' }: CarModelProps) => {
-  // Create car body
-  const bodyGeometry = new THREE.BoxGeometry(2, 1, 4);
-  const bodyMaterial = new THREE.MeshPhongMaterial({ 
-    color,
-    specular: 0x555555,
-    shininess: 30 
-  });
-  const carBody = new THREE.Mesh(bodyGeometry, bodyMaterial);
-  carBody.castShadow = true;
-  carBody.receiveShadow = true;
+export const CarModel = ({ scene, carData }: CarModelProps) => {
+  useEffect(() => {
+    if (!carData || carData.length === 0) {
+      // Render a placeholder or handle no car data case
+      console.warn('No car data available to display image.');
+      return;
+    }
 
-  // Add wheels
-  const wheelGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32);
-  const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
-  const wheelPositions = [
-    { x: -1, y: -0.5, z: 1.5 },
-    { x: 1, y: -0.5, z: 1.5 },
-    { x: -1, y: -0.5, z: -1.5 },
-    { x: 1, y: -0.5, z: -1.5 },
-  ];
+    const carImageURL = carData[0].image; // Assuming the first result has the image
 
-  wheelPositions.forEach(pos => {
-    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-    wheel.position.set(pos.x, pos.y, pos.z);
-    wheel.rotation.z = Math.PI / 2;
-    wheel.castShadow = true;
-    scene.add(wheel);
-  });
+    if (carImageURL) {
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load(carImageURL, (texture) => {
+        const aspectRatio = texture.image.width / texture.image.height;
+        const geometry = new THREE.PlaneGeometry(2 * aspectRatio, 2); // Adjust plane size
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+        const carImage = new THREE.Mesh(geometry, material);
+        scene.add(carImage);
 
-  scene.add(carBody);
+        // Clean up previous objects in the scene (optional, if needed)
+        // scene.remove(scene.getObjectByName('carModel')); // Example: Remove previous car model
+        carImage.name = 'carModel'; // Naming the mesh for potential removal later
+      }, undefined, (error) => {
+        console.error('Error loading car image texture:', error);
+      });
+    } else {
+      console.warn('No car image URL found in car data.');
+      // Optionally render a placeholder image here
+    }
 
-  return null;
+    return () => {
+      // Clean up resources if needed on unmount
+    };
+  }, [scene, carData]);
+
+  return null; // No visible component rendered directly
 };

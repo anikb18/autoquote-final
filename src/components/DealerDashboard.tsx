@@ -69,18 +69,18 @@ const DealerDashboard = () => {
   });
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
+    <div className="p-6 space-y-8 macOS-style">
       <WelcomeHeader unreadNotifications={unreadNotifications} />
-      
-      <NotificationHandler 
+
+      <NotificationHandler
         dealerId={profile?.id}
         onNotificationReceived={() => setUnreadNotifications(prev => prev + 1)}
       />
-      
+
       <DealerMetricsSection />
-      
+
       <DealerQuotesTable />
-      
+
       <PerformanceChart data={performanceData || []} />
     </div>
   );

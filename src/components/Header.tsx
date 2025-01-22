@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ import { useUserRole } from "@/hooks/use-user-role";
 const Header = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<any>(null);
+  const isAuthenticated = !!session;
   const [profile, setProfile] = useState<any>(null);
   const { t } = useTranslation();
   const { role } = useUserRole();
@@ -105,26 +106,57 @@ const Header = () => {
             <MessageSquare className="h-4 w-4" />
             {t('common.myQuotes')}
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDashboard}
+            className="flex items-center gap-2"
+          >
+            <Car className="h-4 w-4" />
+            {t('common.dashboard')}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDashboard}
+            className="flex items-center gap-2"
+          >
+            <Car className="h-4 w-4" />
+            {t('common.goToDashboard')}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDashboard}
+            className="flex items-center gap-2"
+          >
+            <Car className="h-4 w-4" />
+            {t('common.goToDashboard')}
+          </Button>
         </div>
       );
     }
-    
+
     return null;
   };
 
   return (
     <header className="border-b sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <button
-              onClick={handleHome}
-              className="text-xl font-bold flex items-center gap-2 hover:opacity-80 transition-opacity"
-            >
-              <Home className="h-5 w-5" />
-              AutoQuote24
-            </button>
-            
+        <div className="relative z-50 flex justify-between">
+          <div className="flex items-center md:gap-x-12">
+            <Link to="/" aria-label="Home">
+              <img
+                src="/logo/dark.png"
+                alt="Logo"
+                className="h-8 w-auto dark:hidden"
+              />
+              <img
+                src="/logo/light.png"
+                alt="Logo"
+                className="hidden h-8 w-auto dark:block"
+              />
+            </Link>
             {renderAuthenticatedNav()}
           </div>
 

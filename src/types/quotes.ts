@@ -2,6 +2,9 @@ export interface CarDetails {
   year: number;
   make: string;
   model: string;
+  trim?: string;
+  engine?: string;
+  options?: string;
 }
 
 export interface DealerQuote {

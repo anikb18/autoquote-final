@@ -12,6 +12,7 @@ import { Settings2, Globe, DollarSign, Mail, BellRing, Ticket, Users } from "luc
 import { useState } from "react";
 import { CouponManagement } from "./CouponManagement";
 import { AffiliateSettings } from "./AffiliateSettings";
+import { PricingManagement } from "./PricingManagement";
 
 export const AdminSettings = () => {
   const { toast } = useToast();
@@ -108,25 +109,7 @@ export const AdminSettings = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="platformFee">Platform Fee (%)</Label>
-                <Input id="platformFee" type="number" placeholder="2.5" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="dealerCommission">Dealer Commission (%)</Label>
-                <Input id="dealerCommission" type="number" placeholder="5" />
-              </div>
-              <div className="space-y-2">
-                <Label>Premium Features</Label>
-                <div className="flex items-center space-x-2">
-                  <Switch id="enableTradeIn" />
-                  <Label htmlFor="enableTradeIn">Enable Trade-In Feature</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch id="enableFinancing" />
-                  <Label htmlFor="enableFinancing">Enable Financing Calculator</Label>
-                </div>
-              </div>
+              <PricingManagement />
             </CardContent>
           </Card>
         </TabsContent>

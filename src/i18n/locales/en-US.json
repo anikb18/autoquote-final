@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Auto Trade Nexus",
+    "appName": "Autoquote24",
     "dashboard": "Dashboard",
     "signIn": "Sign In",
     "signOut": "Sign Out",
@@ -206,5 +206,425 @@
     },
     "submitting": "Submitting...",
     "submit": "Submit Quote Request"
+  },
+  "dealership": {
+    "title": "Welcome to Our Dealership",
+    "subtitle": "Your one-stop solution for buying and selling cars",
+    "carBuyingService": {
+      "title": "Car Buying Service",
+      "description": "Streamline your vehicle purchase process with our private bidding system.",
+      "point1": "Submit your vehicle preferences and pay a $40 fee.",
+      "point2": "Receive competitive dealer quotes without negotiation stress.",
+      "point3": "Get trade-in value assessments and balloon payment calculations."
+    },
+    "carSellingSystem": {
+      "title": "Car Selling System",
+      "description": "Create detailed car listings and connect with dealers in your area.",
+      "point1": "Upload up to 4 high-quality vehicle photos.",
+      "point2": "Secure communication with the winning dealer."
+    },
+    "chatSystem": {
+      "title": "Chat System",
+      "description": "End-to-end encrypted communication between buyers and dealers."
+    },
+    "additionalFeatures": {
+      "title": "Additional Features",
+      "description": "Explore our extensive features designed for both buyers and dealers."
+    },
+    "userFeatures": {
+      "title": "User Features",
+      "point1": "Photo Management: Upload up to 4 high-quality photos.",
+      "point2": "Trade-in System: Detailed condition assessment and VIN verification."
+    },
+    "dealerFeatures": {
+      "title": "Dealer Features",
+      "point1": "Dashboard Integration for auction monitoring and bid history.",
+      "point2": "Performance analytics and communication tools."
+    }
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "feedback": {
+      "client1": {
+        "name": "John Doe",
+        "quote": "This platform transformed my car buying experience!"
+      },
+      "client2": {
+        "name": "Jane Smith",
+        "quote": "I received the best quotes from dealers!"
+      }
+,
+  "greeting": "Hello",
+  "Common": {
+    "new": "New",
+    "guest": "Guest",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "continue": "Continue",
+    "finish": "Finish",
+    "done": "Done",
+    "viewAll": "View All",
+    "or": "or",
+    "needHelp": "Need Help?",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "export": "Export",
+    "import": "Import",
+    "add": "Add",
+    "confirm": "Confirm",
+    "noResults": "No results found"
+  },
+  "Navigation": {
+    "main": {
+      "home": "Home",
+      "about": "About",
+      "features": "Features",
+      "pricing": "Pricing",
+      "contact": "Contact",
+      "testimonials": "Testimonials"
+    },
+    "auth": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "signOut": "Sign Out",
+      "login": "Login",
+      "startFree": "Start Free"
+    },
+    "dashboard": {
+      "dashboard": "Dashboard",
+      "quotes": "Quotes",
+      "tradeIn": "Trade In",
+      "settings": "Settings",
+      "profile": "Profile",
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "help": "Help & Support",
+      "documents": "Documents",
+      "inventory": "Inventory",
+      "chat": "Chat",
+      "payments": "Payments",
+      "analytics": "Analytics",
+      "users": "Users",
+      "dealers": "Dealers",
+      "blog": "Blog"
+    },
+    "dealer": {
+      "dealerDashboard": "Dealer Dashboard",
+      "leads": "Leads",
+      "inventory": "Inventory",
+      "analytics": "Analytics",
+      "dealerSettings": "Dealer Settings"
+    },
+    "menu": {
+      "open": "Open main menu",
+      "close": "Close main menu",
+      "openUserMenu": "Open user menu"
+    }
+  },
+  "Meta": {
+    "global": {
+      "allRightsReserved": "All rights reserved."
+    },
+    "home": {
+      "title": "AutoQuote24 - Get the Best Deal on Your Next Car",
+      "description": "Skip the dealership visits and save money on your next car. Get 3 competing offers from dealerships for only $40. A private bidding system ensures you get the best deal. Money-back guarantee.",
+      "ogTitle": "AutoQuote24 - The Smart Way to Buy Cars",
+      "ogDescription": "Skip the dealership visits and save money on your next car. Get 3 competing offers from dealerships for only $40."
+    },
+    "auth": {
+      "signIn": {
+        "title": "Sign In - AutoQuote24",
+        "description": "Sign in to your AutoQuote24 account to manage your quotes and trade-ins"
+      },
+      "signUp": {
+        "title": "Sign Up - AutoQuote24",
+        "description": "Create your AutoQuote24 account to start receiving competitive car quotes from dealers"
+      }
+    },
+    "dashboard": {
+      "buyer": {
+        "title": "AutoQuote24 - Your Dashboard",
+        "description": "Manage your car quotes and trade-ins"
+      },
+      "dealer": {
+        "title": "AutoQuote24 - Dealer Dashboard",
+        "description": "Manage your quotes and performance metrics"
+      }
+    }
+  },
+  "hero": {
+    "title": "The best offers for",
+    "highlight": " your next car",
+    "titleEnd": ".",
+    "description": "Skip the dealership visits and save money on your next car. Get 3 competing offers from dealerships for only $40. A private bidding system ensures you get the best deal. Money-back guarantee.",
+    "getStarted": "Get Started",
+    "partners": {
+      "title": "Trusted by leading car manufacturers"
+    }
+  },
+  "Auth": {
+    "layout": {
+      "welcome": "Welcome to AutoQuote24",
+      "description": "Sign in to access your account"
+    },
+    "dealerLogin": "Dealer Login",
+    "userLogin": "User Login",
+    "noAccount": "No account / Want a quote?",
+    "noDealerAccount": "Want to become a dealer?",
+    "startHere": "Start here",
+    "signIn": {
+      "welcome": "Welcome back",
+      "error": {
+        "default": "An error occurred during sign in. Please try again.",
+        "invalid_credentials": "Invalid email or password.",
+        "account_not_found": "Account not found. Please sign up first."
+      },
+      "success": {
+        "signed_in": "Signed in successfully!"
+      },
+      "loading": "Signing in...",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?"
+    },
+    "signUp": {
+      "welcome": "Create your account",
+      "hasAccount": "Already have an account?",
+      "createAccount": "Create Account",
+      "continueWith": "Or continue with",
+      "google": "Google",
+      "facebook": "Facebook"
+    }
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "buyer_dashboard": {
+      "my_quote_requests": "My Quote Requests",
+      "no_quotes_yet": "No quote requests yet.",
+      "car_details": "Car Details",
+      "trade_in": "Trade-In",
+      "status": "Status",
+      "dealer_responses": "Dealer Responses"
+    }
+  },
+  "DealerDashboard": {
+    "title": "Dealer Dashboard",
+    "leadManagement": {
+      "title": "Lead Management",
+      "newLead": "New Lead",
+      "activeLeads": "Active Leads",
+      "convertedLeads": "Converted Leads",
+      "pendingFollowUp": "Pending Follow Up"
+    },
+    "performance": {
+      "title": "Performance Overview",
+      "quotesWon": "Quotes Won",
+      "averageResponse": "Average Response Time",
+      "customerSatisfaction": "Customer Satisfaction"
+    },
+    "communication": {
+      "title": "Communication Center",
+      "allMessages": "All Messages",
+      "newMessage": "New Message",
+      "unreadMessages": "Unread Messages",
+      "activeChats": "Active Chats"
+    },
+    "documents": {
+      "title": "Document Center",
+      "upload": "Upload Document",
+      "recentDocuments": "Recent Documents",
+      "pendingSignatures": "Pending Signatures"
+    },
+    "quoteAnalytics": {
+      "title": "Intelligent Quote Analytics",
+      "optimize": "Optimize Quotes",
+      "tabs": {
+        "overview": "Overview",
+        "predictions": "Predictions",
+        "competition": "Competition"
+      },
+      "metrics": {
+        "winRate": "Win Rate",
+        "predictedWinRate": "Predicted Win Rate",
+        "competitiveIndex": "Competitive Index",
+        "averageMargin": "Average Margin"
+      },
+      "insights": {
+        "title": "AI Insights",
+        "winProbability": "Win Probability",
+        "suggestedPrice": "Suggested Price Range",
+        "competitorActivity": "Competitor Activity"
+      }
+    }
+  },
+  "QuoteForm": {
+    "title": "Get Your Quote",
+    "description": "Fill in the details below to get your car quote.",
+    "fields": {
+      "make": {
+        "label": "Car Make",
+        "placeholder": "Enter car make"
+      },
+      "model": {
+        "label": "Car Model",
+        "placeholder": "Enter car model"
+      },
+      "year": {
+        "label": "Car Year",
+        "placeholder": "Enter car year"
+      }
+    },
+    "submit": "Submit Quote",
+    "bidCount": "{count} bids received",
+    "lowestBid": "Lowest Bid",
+    "deadline": "Deadline"
+  },
+  "TradeIn": {
+    "title": "Trade-In Evaluation",
+    "getEstimate": "Get Estimate",
+    "currentValue": "Current Value",
+    "lastUpdate": "Last Update",
+    "marketInsight": "Market Insight",
+    "valueIncreased": "Your vehicle's value has increased by 5% in the last month",
+    "viewHistory": "View History"
+  },
+  "Error": {
+    "oops": "Oops!",
+    "something_went_wrong": "Something went wrong",
+    "try_again": "Try again",
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundMessage": "The page you are looking for does not exist or has been moved.",
+    "backToHome": "Back to Home"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "message": "The page you are looking for does not exist or has been moved.",
+    "backToHome": "Back to Home"
+  },
+  "LanguageSwitcher": {
+    "button": "Switch Language",
+    "currentLocale": "Current locale: {locale}",
+    "switchLocale": "Switch to {locale}",
+    "en": "English",
+    "fr": "French"
+  },
+  "locale": {
+    "switchLocale": "Switch to {locale}",
+    "en": "English",
+    "fr": "French"
+  },
+  "theme": {
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "quotes": "Quotes",
+    "inventory": "Inventory",
+    "chat": "Chat",
+    "payments": "Payments",
+    "analytics": "Analytics",
+    "users": "Users",
+    "dealers": "Dealers",
+    "settings": "Settings",
+    "blog": "Blog"
+  },
+  "quotes": {
+    "title": "Quotes",
+    "new": "New Quote",
+    "all": "All Quotes",
+    "draft": "Draft",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "customer": "Customer",
+    "vehicle": "Vehicle",
+    "amount": "Amount",
+    "status": "Status",
+    "date": "Date",
+    "actions": "Actions"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "totalQuotes": "Total Quotes",
+    "conversionRate": "Conversion Rate",
+    "averageQuoteValue": "Average Quote Value",
+    "monthlyQuotes": "Monthly Quotes",
+    "conversionFunnel": "Conversion Funnel",
+    "vehicleTypes": "Vehicle Types"
+  },
+  "payments": {
+    "totalRevenue": "Total Revenue",
+    "pendingPayments": "Pending Payments",
+    "successRate": "Success Rate",
+    "searchPlaceholder": "Search payments...",
+    "statusFilter": "Status",
+    "all": "All",
+    "completed": "Completed",
+    "pending": "Pending",
+    "failed": "Failed",
+    "exportData": "Export Data",
+    "recentPayments": "Recent Payments",
+    "recentPaymentsDescription": "A list of recent payments and their status",
+    "date": "Date",
+    "customer": "Customer",
+    "amount": "Amount",
+    "status": "Status",
+    "method": "Payment Method",
+    "reference": "Reference",
+    "actions": "Actions",
+    "viewDetails": "View Details"
+  },
+  "blog": {
+    "admin": {
+      "title": "Blog Management",
+      "description": "Create and manage blog posts",
+      "posts": "Blog Posts",
+      "postsDescription": "View and manage all blog posts",
+      "newPost": "New Post",
+      "editPost": "Edit Post",
+      "postTitle": "Title",
+      "postContent": "Content",
+      "status": "Status",
+      "author": "Author",
+      "lastUpdated": "Last Updated"
+    }
+  },
+  "signIn": {
+    "title": "Sign In",
+    "description": "Sign in to your account to access your dashboard",
+    "email_label": "Email address",
+    "password_label": "Password",
+    "email_placeholder": "Your email address",
+    "password_placeholder": "Your password",
+    "button_label": "Sign In",
+    "loading_button_label": "Signing in...",
+    "social_provider_text": "Continue with {{provider}}",
+    "link_text": "Already have an account? Sign in",
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundMessage": "The page you are looking for does not exist or has been moved.",
+    "backToHome": "Back to Home"
   }
+  , 
+  "dashboard": {
+    "myListings": "My Listings"
+  },
+  "auctions": {
+    "ended": "Ended"
 }
+} 
+} 
+} 

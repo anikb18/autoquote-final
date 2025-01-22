@@ -81,6 +81,7 @@ serve(async (req) => {
         },
       ],
       mode: 'subscription',
+      allow_promotion_codes: true,
       success_url: `${req.headers.get('origin')}/dashboard`,
       cancel_url: `${req.headers.get('origin')}/`,
     })

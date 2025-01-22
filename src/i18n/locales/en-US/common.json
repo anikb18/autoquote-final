@@ -1,5 +1,5 @@
 {
-  "appName": "Auto Trade Nexus",
+  "appName": "Autoquote24",
   "dashboard": "Dashboard",
   "signIn": "Sign In",
   "signOut": "Sign Out",
@@ -17,5 +17,75 @@
   "actions": "Actions",
   "yes": "Yes",
   "no": "No",
-  "notAvailable": "Not Available"
+  "notAvailable": "Not Available",
+  "features": {
+    "title": "Pricing Plans",
+    "subtitle": "Choose a plan that fits your needs",
+    "mostPopular": "Most Popular",
+    "newCar": {
+      "title": "New Car Plan",
+      "description": "For just $49.95, gain access to unbeatable deals on new cars. Experience the thrill of driving your dream car!",
+      "price": "$49.95",
+      "prelaunchPrice": "Pre-launch Price: $39.95",
+      "regularPrice": "$99.95",
+      "savings": "Save 40%",
+      "cta": "Claim Your Deal Now",
+      "items": {
+        "newCar": [
+          "Exclusive access to premium deals",
+          "Tailored service just for you",
+          "Free test drives to feel the excitement",
+          "Flexible payment options that suit your needs",
+          "Thorough trade-in assessments",
+          "Detailed vehicle history reports",
+          "Expert consultations"
+        ]
+      }
+    },
+    "tradeIn": {
+      "title": "Trade-In Plan",
+      "description": "Maximize your trade-in value with a one-time fee of $16.95. Get the best value for your vehicle effortlessly!",
+      "price": "$16.95",
+      "regularPrice": "$49.95",
+      "savings": "40% off for early birds! Limited time offer.",
+      "cta": "Get Started Today",
+      "items": {
+        "tradeIn": [
+          "Complimentary vehicle appraisal",
+          "Instant cash offers that put you first",
+          "A seamless and hassle-free process",
+          "Expert consultations to guide you",
+          "Flexible trade-in options tailored to you",
+          "No hidden fees, just transparency",
+          "Quick payments for your convenience"
+        ]
+      }
+    },
+    "payroll": {
+      "title": "Payroll",
+      "description": "Manage payroll with ease."
+    },
+    "expenses": {
+      "title": "Expenses",
+      "description": "Track and manage expenses efficiently."
+    },
+    "vatReturns": {
+      "title": "VAT Returns",
+      "description": "Simplify VAT returns filing."
+    },
+    "reporting": {
+      "title": "Reporting",
+      "description": "Generate insightful reports."
+    },
+    "spotsRemaining": "Limited spots available: {{count}}"
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "subtitle": "What our clients are saying"
+  },
+  "callToAction": {
+    "title": "Ready to find your dream car?",
+    "description": "Join Autoquote24 today and discover a new way to buy and trade vehicles.",
+    "button": "Get Started Now"
+  }
 }

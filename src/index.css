@@ -90,3 +90,159 @@
 .hover-card {
   @apply hover:shadow-lg transition-shadow duration-200;
 }
+
+@keyframes sparkle {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+.sparkle-icon {
+  animation: sparkle 1s infinite;
+}
+@keyframes sparkle {
+  0% {
+    transform: scale(1);
+    opacity: 0.7; /* Softer opacity */
+  }
+  50% {
+    transform: scale(1.1); /* Slightly smaller scale */
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7; /* Softer opacity */
+  }
+}
+
+.sparkle-icon {
+  animation: sparkle 1.5s infinite; /* Slower animation */
+}
+
+/* Smooth transitions */
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Table hover effects */
+.table-row:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* 3D Viewer enhancements */
+.three-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* Smooth transitions */
+.table-row {
+  transition: background-color 0.2s;
+}
+
+/* Badge styling */
+.badge {
+  transition: opacity 0.2s;
+}
+
+.badge:hover {
+  opacity: 0.9;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 16rem; /* Fixed width for sidebar */
+}
+
+.sidebar-button {
+  color: #444; /* Dark font color for better contrast */
+  background: transparent; /* Transparent background for buttons */
+  border: none; /* Remove border */
+  padding: 8px; /* Padding for buttons */
+  text-align: left; /* Align text to the left */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.sidebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+
+/* Main content styles */
+.main-content {
+  margin-left: 16rem; /* Ensure main content is pushed to the right */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%; /* Full width on mobile */
+    position: relative; /* Change position for mobile */
+  }
+  .main-content {
+    margin-left: 0; /* Reset margin on mobile */
+  }
+}
+/* index.css */
+
+/* macOS-like UI Styles */
+.macOS-style {
+  background-color: #f0f0f5; /* Light background */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 16px; /* Consistent padding */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.macOS-style:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+/* Buttons */
+.button {
+  background-color: #007aff; /* Blue button */
+  color: white;
+  border-radius: 10px; /* Rounded button */
+  padding: 10px 20px; /* Button padding */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #005bb5; /* Darker blue on hover */
+}
+
+/* Card Styles */
+.card {
+  background-color: white; /* Card background */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  margin: 16px; /* Margin around cards */
+}
+
+.glassy-card {
+  background: rgba(255, 255, 255, 0.05); /* More translucent background */
+  border-radius: 12px; /* Rounded corners */
+  backdrop-filter: blur(15px); /* Increased blur effect */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 4px 20px rgba(0, 0, 0, 0.1); /* Neumorphic shadow */
+  padding: 16px; /* Padding inside the card */
+  margin: 16px; /* Margin around the card */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.glassy-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 8px 30px rgba(0, 0, 0, 0.1); /* Darker shadow on hover */
+}

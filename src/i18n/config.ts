@@ -6,10 +6,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import enUSCommon from './locales/en-US/common.json';
 import enUSDealer from './locales/en-US/dealer.json';
 import enUSAdmin from './locales/en-US/admin.json';
+import enUSHome from './locales/en-US/home.json';
 
 import frCACommon from './locales/fr-CA/common.json';
 import frCADealer from './locales/fr-CA/dealer.json';
 import frCAAdmin from './locales/fr-CA/admin.json';
+import frCAHome from './locales/fr-CA/home.json';
 
 i18n
   .use(LanguageDetector)
@@ -20,12 +22,14 @@ i18n
       'en-US': {
         common: enUSCommon,
         dealer: enUSDealer,
-        admin: enUSAdmin
+        admin: enUSAdmin,
+        home: enUSHome
       },
       'fr-CA': {
         common: frCACommon,
         dealer: frCADealer,
-        admin: frCAAdmin
+        admin: frCAAdmin,
+        home: frCAHome
       }
     },
     detection: {
@@ -35,7 +39,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-    ns: ['common', 'dealer', 'admin'],
+    ns: ['common', 'dealer', 'admin', 'home'],
     defaultNS: 'common'
   });
 

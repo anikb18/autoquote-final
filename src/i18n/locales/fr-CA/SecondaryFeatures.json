@@ -1,0 +1,19 @@
+{
+  "features": {
+    "valuation": {
+      "name": "Outils d'évaluation",
+      "summary": "Évaluation instantanée de véhicule",
+      "description": "Obtenez des évaluations en temps réel pour les véhicules, garantissant une tarification précise et des estimations de reprise."
+    },
+    "comparison": {
+      "name": "Plateforme de comparaison",
+      "summary": "Comparaisons côte à côte",
+      "description": "Comparez différents modèles de véhicules côte à côte pour aider les acheteurs à prendre des décisions éclairées."
+    },
+    "negotiation": {
+      "name": "Module de négociation",
+      "summary": "Outils de négociation intelligents",
+      "description": "Équipez les concessionnaires d'outils pour négocier efficacement et conclure des affaires plus rapidement."
+    }
+  }
+}

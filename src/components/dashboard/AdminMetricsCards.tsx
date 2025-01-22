@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
+import { DollarSignIcon, StoreIcon, UsersIcon, BarChartIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 
@@ -60,6 +61,7 @@ export const AdminMetricsCards = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
+          <DollarSignIcon className="h-4 w-4 text-muted-foreground mr-2" />
           <CardTitle>{t('metrics.totalSales.title')}</CardTitle>
           <CardDescription>{t('metrics.totalSales.description')}</CardDescription>
         </CardHeader>
@@ -73,6 +75,7 @@ export const AdminMetricsCards = () => {
 
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
+          <StoreIcon className="h-4 w-4 text-muted-foreground mr-2" />
           <CardTitle>{t('metrics.activeDealers.title')}</CardTitle>
           <CardDescription>{t('metrics.activeDealers.description')}</CardDescription>
         </CardHeader>
@@ -86,6 +89,7 @@ export const AdminMetricsCards = () => {
 
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
+          <UsersIcon className="h-4 w-4 text-muted-foreground mr-2" />
           <CardTitle>{t('metrics.totalUsers.title')}</CardTitle>
           <CardDescription>{t('metrics.totalUsers.description')}</CardDescription>
         </CardHeader>
@@ -99,6 +103,7 @@ export const AdminMetricsCards = () => {
 
       <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
         <CardHeader>
+          <BarChartIcon className="h-4 w-4 text-muted-foreground mr-2" />
           <CardTitle>{t('metrics.conversionRate.title')}</CardTitle>
           <CardDescription>{t('metrics.conversionRate.description')}</CardDescription>
         </CardHeader>

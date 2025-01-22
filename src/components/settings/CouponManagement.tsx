@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
+import stripe from "@/lib/stripe";
 
 type DiscountType = "percentage" | "fixed";
 
@@ -79,6 +80,30 @@ export const CouponManagement = () => {
     try {
       const couponCode = isAutoGenerate ? generateCode() : formData.code;
       
+      // Create Stripe coupon first
+      const stripeCoupon = await stripe.coupons.create({
+        name: formData.name,
+        [formData.discountType === 'percentage' ? 'percent_off' : 'amount_off']: 
+          formData.discountType === 'percentage' ? 
+          parseFloat(formData.discountValue) : 
+          parseFloat(formData.discountValue) * 100,
+        duration: 'forever',
+        max_redemptions: formData.usageLimit === "-1" ? null : parseInt(formData.usageLimit),
+        redeem_by: formData.expiresAt ? Math.floor(formData.expiresAt.getTime() / 1000) : undefined,
+        metadata: {
+          subscription_type: formData.subscriptionType
+        }
+      });
+
+      // Create Stripe promotion code
+      const promotionCode = await stripe.promotionCodes.create({
+        coupon: stripeCoupon.id,
+        code: couponCode,
+        max_redemptions: formData.usageLimit === "-1" ? null : parseInt(formData.usageLimit),
+        expires_at: formData.expiresAt ? Math.floor(formData.expiresAt.getTime() / 1000) : undefined,
+      });
+
+      // Save to Supabase
       const { error } = await supabase
         .from('coupons')
         .insert({
@@ -91,7 +116,9 @@ export const CouponManagement = () => {
           expires_at: formData.expiresAt?.toISOString(),
           conditions: {
             subscription_type: formData.subscriptionType !== 'all' ? formData.subscriptionType : null
-          }
+          },
+          stripe_coupon_id: stripeCoupon.id,
+          stripe_promotion_id: promotionCode.id
         });
 
       if (error) throw error;

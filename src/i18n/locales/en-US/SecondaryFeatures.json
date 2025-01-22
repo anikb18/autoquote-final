@@ -1,0 +1,19 @@
+{
+  "features": {
+    "valuation": {
+      "name": "Valuation Tools",
+      "summary": "Instant Vehicle Valuation",
+      "description": "Get real-time valuations for vehicles, ensuring accurate pricing and trade-in estimates."
+    },
+    "comparison": {
+      "name": "Comparison Platform",
+      "summary": "Side-by-Side Comparisons",
+      "description": "Compare different vehicle models side-by-side to help buyers make informed decisions."
+    },
+    "negotiation": {
+      "name": "Negotiation Module",
+      "summary": "Smart Negotiation Tools",
+      "description": "Equip dealers with tools to negotiate effectively and close deals faster."
+    }
+  }
+}
