@@ -6,6 +6,7 @@ import { Input } from "../ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { generateImage } from "@/utils/imageGeneration";
 import { Loader2 } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface BlogEditorProps {
   onSave: (values: { 
@@ -137,55 +138,57 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
       />
 
       <Dialog open={isImagePickerOpen} onOpenChange={setIsImagePickerOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Generate or Choose Featured Image</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Describe the image you want..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleGenerateImage()}
-              />
-              <Button 
-                onClick={handleGenerateImage}
-                disabled={isGeneratingImage}
-              >
-                {isGeneratingImage ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  "Generate"
-                )}
-              </Button>
-            </div>
-            {images.length > 0 && (
-              <div className="grid grid-cols-3 gap-4">
-                {images.map((image) => (
-                  <div
-                    key={image.id}
-                    className={`cursor-pointer relative ${
-                      selectedImage === image.src.medium ? "ring-2 ring-primary" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedImage(image.src.medium);
-                      setIsImagePickerOpen(false);
-                    }}
-                  >
-                    <img
-                      src={image.src.tiny}
-                      alt={image.alt}
-                      className="w-full h-32 object-cover rounded"
-                    />
-                  </div>
-                ))}
+          <ScrollArea className="flex-1">
+            <div className="space-y-4 p-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Describe the image you want..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleGenerateImage()}
+                />
+                <Button 
+                  onClick={handleGenerateImage}
+                  disabled={isGeneratingImage}
+                >
+                  {isGeneratingImage ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    "Generate"
+                  )}
+                </Button>
               </div>
-            )}
-          </div>
+              {images.length > 0 && (
+                <div className="grid grid-cols-3 gap-4">
+                  {images.map((image) => (
+                    <div
+                      key={image.id}
+                      className={`cursor-pointer relative ${
+                        selectedImage === image.src.medium ? "ring-2 ring-primary" : ""
+                      }`}
+                      onClick={() => {
+                        setSelectedImage(image.src.medium);
+                        setIsImagePickerOpen(false);
+                      }}
+                    >
+                      <img
+                        src={image.src.tiny}
+                        alt={image.alt}
+                        className="w-full h-32 object-cover rounded"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
 

@@ -168,10 +168,10 @@ export function EmailTemplateModal({
             Choose a template or enter your own topic to generate professional email content
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 px-1">
-          <div className="space-y-4 py-4">
+        <ScrollArea className="flex-1">
+          <div className="space-y-4 p-4">
             {!selectedTemplate && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {EMAIL_TEMPLATES.map((template, index) => (
                   <Button
                     key={index}
@@ -234,10 +234,10 @@ export function EmailTemplateModal({
             )}
           </div>
         </ScrollArea>
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end p-4 border-t">
           {(selectedTemplate || customTopic) && (
             <Button
-              onClick={() => handleGenerate()}
+              onClick={handleGenerate}
               disabled={
                 (selectedTemplate && Object.keys(fieldValues).length === 0) || 
                 (!selectedTemplate && !customTopic) || 

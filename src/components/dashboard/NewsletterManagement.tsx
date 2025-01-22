@@ -156,7 +156,7 @@ export const NewsletterManagement = () => {
               </div>
             </div>
             <Editor
-              apiKey={import.meta.env.VITE_TINY_MCE_API}
+              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
               init={{
                 height: 500,
                 menubar: true,
