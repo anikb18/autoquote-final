@@ -9,57 +9,59 @@ export const useUserRole = () => {
     queryKey: ['user-role'],
     queryFn: async () => {
       try {
-        // First get the current session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        if (sessionError) throw sessionError;
-        if (!session?.user) return { role: null, user: null };
-
-        // Get user role from user_roles table
-        const { data: roleData, error: roleError } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('id', session.user.id)
-          .maybeSingle(); // Changed from .single() to .maybeSingle()
-
-        if (roleError && roleError.code !== 'PGRST116') {
-          console.error('Error fetching user role:', roleError);
-          throw roleError;
+        if (sessionError) {
+          console.error('Session error:', sessionError);
+          throw sessionError;
+        }
+        
+        if (!session?.user) {
+          return { role: null, user: null };
         }
 
-        // Get profile data
+        // Get profile data first
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
-          .maybeSingle(); // Changed from .single() to .maybeSingle()
+          .maybeSingle();
 
         if (profileError) {
-          console.error('Error fetching profile:', profileError);
+          console.error('Profile fetch error:', profileError);
           throw profileError;
+        }
+
+        // Get user role
+        const { data: roleData, error: roleError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('id', session.user.id)
+          .maybeSingle();
+
+        if (roleError && roleError.code !== 'PGRST116') {
+          console.error('Role fetch error:', roleError);
+          throw roleError;
         }
 
         // Default to 'user' role if no specific role is found
         const userRole = roleData?.role || 'user';
 
-        console.log('User role:', userRole); // Added for debugging
-        console.log('Profile data:', profileData); // Added for debugging
-
         return {
           role: userRole,
           user: {
             ...session.user,
-            profile: profileData
+            profile: profileData || null
           }
         };
       } catch (error) {
         console.error('Auth error:', error);
         toast({
-          title: "Authentication Error",
-          description: "There was a problem fetching your user data",
+          title: "Error",
+          description: "Failed to fetch user data. Please try refreshing the page.",
           variant: "destructive",
         });
-        return { role: null, user: null };
+        throw error;
       }
     },
     retry: 1,
