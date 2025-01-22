@@ -32,7 +32,12 @@ const BuyerCarListings = () => {
 
       return data.map((quote): Quote => ({
         id: quote.id,
-        car_details: quote.car_details as CarDetails,
+        car_details: {
+          year: quote.car_details.year || '',
+          make: quote.car_details.make || '',
+          model: quote.car_details.model || '',
+          ...quote.car_details
+        } as CarDetails,
         dealer_quotes: quote.dealer_quotes.map((dq): DealerQuote => ({
           id: dq.id,
           dealer_id: dq.dealer_id,
