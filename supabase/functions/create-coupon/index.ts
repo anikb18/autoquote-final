@@ -45,22 +45,43 @@ serve(async (req) => {
       throw new Error('Admin access required')
     }
 
-    // Get all coupons
-    const { data: coupons, error } = await supabaseClient
+    // Get the request body
+    const { code, name, description, discount_type, discount_value, usage_limit, expires_at } = await req.json()
+
+    // Validate required fields
+    if (!code || !name || !discount_type || !discount_value) {
+      throw new Error('Missing required fields')
+    }
+
+    // Create the coupon
+    const { data: coupon, error } = await supabaseClient
       .from('coupons')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .insert([
+        {
+          code,
+          name,
+          description,
+          discount_type,
+          discount_value,
+          usage_limit,
+          expires_at,
+          created_by: user.id
+        }
+      ])
+      .select()
+      .single()
 
     if (error) throw error
 
     return new Response(
-      JSON.stringify({ coupons }),
+      JSON.stringify({ coupon }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       },
     )
   } catch (error) {
+    console.error('Error creating coupon:', error.message)
     return new Response(
       JSON.stringify({ error: error.message }),
       {
