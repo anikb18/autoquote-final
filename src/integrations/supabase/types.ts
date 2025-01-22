@@ -964,6 +964,48 @@ export type Database = {
           },
         ]
       }
+      pricing_plans: {
+        Row: {
+          annual_price: number | null
+          created_at: string | null
+          description: string | null
+          features: Json | null
+          id: string
+          is_featured: boolean | null
+          metadata: Json | null
+          monthly_price: number | null
+          name: string | null
+          stripe_price_id: string | null
+          stripe_product_id: string | null
+        }
+        Insert: {
+          annual_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_featured?: boolean | null
+          metadata?: Json | null
+          monthly_price?: number | null
+          name?: string | null
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+        }
+        Update: {
+          annual_price?: number | null
+          created_at?: string | null
+          description?: string | null
+          features?: Json | null
+          id?: string
+          is_featured?: boolean | null
+          metadata?: Json | null
+          monthly_price?: number | null
+          name?: string | null
+          stripe_price_id?: string | null
+          stripe_product_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -1493,11 +1535,119 @@ export type Database = {
           },
         ]
       }
+      wrappers_fdw_stats: {
+        Row: {
+          bytes_in: number | null
+          bytes_out: number | null
+          create_times: number | null
+          created_at: string
+          fdw_name: string
+          metadata: Json | null
+          rows_in: number | null
+          rows_out: number | null
+          updated_at: string
+        }
+        Insert: {
+          bytes_in?: number | null
+          bytes_out?: number | null
+          create_times?: number | null
+          created_at?: string
+          fdw_name: string
+          metadata?: Json | null
+          rows_in?: number | null
+          rows_out?: number | null
+          updated_at?: string
+        }
+        Update: {
+          bytes_in?: number | null
+          bytes_out?: number | null
+          create_times?: number | null
+          created_at?: string
+          fdw_name?: string
+          metadata?: Json | null
+          rows_in?: number | null
+          rows_out?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      add_coupon: {
+        Args: {
+          coupon_code: string
+          coupon_name: string
+          coupon_description: string
+          discount_type: string
+          discount_value: number
+          usage_limit: number
+          expires_at: string
+        }
+        Returns: undefined
+      }
+      airtable_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      airtable_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      airtable_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      auth0_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      auth0_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      auth0_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      big_query_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      big_query_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      big_query_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
       calculate_dealer_metrics: {
         Args: {
           dealer_id: string
@@ -1509,6 +1659,66 @@ export type Database = {
           total_revenue: number
           average_response_time: unknown
         }[]
+      }
+      click_house_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      click_house_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      click_house_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      cognito_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      cognito_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      cognito_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      firebase_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      firebase_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      firebase_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
       }
       get_dealer_stats:
         | {
@@ -1531,11 +1741,162 @@ export type Database = {
               total_revenue: number
             }[]
           }
+      hello_world_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      hello_world_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      hello_world_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      logflare_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      logflare_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      logflare_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      mssql_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      mssql_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      mssql_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      redis_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      redis_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      redis_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      s3_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      s3_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      s3_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
       set_claim: {
         Args: {
           user_id: string
           claim_key: string
           claim_value: string
+        }
+        Returns: undefined
+      }
+      stripe_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      stripe_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      stripe_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
+        }
+        Returns: undefined
+      }
+      update_pricing_plan: {
+        Args: {
+          plan_id: string
+          plan_name: string
+          plan_description: string
+          monthly_price: number
+          annual_price: number
+          is_featured: boolean
+        }
+        Returns: undefined
+      }
+      wasm_fdw_handler: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown
+      }
+      wasm_fdw_meta: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          name: string
+          version: string
+          author: string
+          website: string
+        }[]
+      }
+      wasm_fdw_validator: {
+        Args: {
+          options: string[]
+          catalog: unknown
         }
         Returns: undefined
       }
