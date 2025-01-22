@@ -8,7 +8,12 @@ export async function fetchCarDetailsFromGemini(make: string, model: string, yea
     
     const prompt = `Provide detailed specifications and recommendations for a ${year} ${make} ${model}. 
                    Include: engine options, fuel efficiency, safety features, and notable features. 
-                   Format the response as a JSON object.`;
+                   Format the response as a JSON object with the following structure:
+                   {
+                     "engine": "string describing engine specs",
+                     "fuelEfficiency": "string describing fuel efficiency",
+                     "safetyFeatures": "string listing key safety features"
+                   }`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
