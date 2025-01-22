@@ -6,6 +6,8 @@ import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useTheme } from "@/hooks/use-theme";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +37,8 @@ const Header = () => {
   const [profile, setProfile] = useState<any>(null);
   const { t } = useTranslation();
   const { role } = useUserRole();
+  const isMobile = useIsMobile();
+  const { theme } = useTheme();
 
   // Fetch unread notifications for dealers
   const { data: unreadNotifications } = useQuery({
@@ -185,7 +189,6 @@ const Header = () => {
       );
     }
 
-    // Admin only sees dashboard button
     return (
       <div className="hidden md:flex items-center gap-4">
         <Button
@@ -201,6 +204,13 @@ const Header = () => {
     );
   };
 
+  const getLogo = () => {
+    if (isMobile) {
+      return theme === 'dark' ? '/brandmark/light-01.svg' : '/brandmark/dark-01.svg';
+    }
+    return theme === 'dark' ? '/logo/light.png' : '/logo/dark.png';
+  };
+
   return (
     <header className="border-b sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 py-3">
@@ -208,14 +218,9 @@ const Header = () => {
           <div className="flex items-center md:gap-x-12">
             <Link to="/" aria-label="Home">
               <img
-                src="/logo/dark.png"
+                src={getLogo()}
                 alt="Logo"
-                className="h-8 w-auto dark:hidden"
-              />
-              <img
-                src="/logo/light.png"
-                alt="Logo"
-                className="hidden h-8 w-auto dark:block"
+                className="h-8 w-auto"
               />
             </Link>
             {renderAuthenticatedNav()}
