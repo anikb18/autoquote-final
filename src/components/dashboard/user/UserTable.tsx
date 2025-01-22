@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Editor } from '@tinymce/tinymce-react';
-import { Eye, Mail, MoreHorizontal, X } from "lucide-react";
+import { Eye, Mail, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 type Profile = Tables<'profiles'>;
 type UserRole = "super_admin" | "admin" | "dealer" | "user";
@@ -48,6 +50,8 @@ export const UserTable = ({
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [emailContent, setEmailContent] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [scheduledDate, setScheduledDate] = useState('');
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
@@ -73,10 +77,10 @@ export const UserTable = ({
   };
 
   const handleSendEmail = async () => {
-    if (!selectedUser || !emailContent) {
+    if (!selectedUser || !emailContent || !emailSubject) {
       toast({
         title: "Error",
-        description: "Please write an email message first.",
+        description: "Please fill in all required fields",
         variant: "destructive",
       });
       return;
@@ -86,8 +90,9 @@ export const UserTable = ({
       const { error } = await supabase.functions.invoke('send-email', {
         body: {
           to: [selectedUser.email],
-          subject: `Message from AutoQuote24`,
+          subject: emailSubject,
           html: emailContent,
+          scheduledFor: scheduledDate || undefined
         },
       });
 
@@ -95,10 +100,14 @@ export const UserTable = ({
 
       toast({
         title: "Success",
-        description: "Email sent successfully.",
+        description: scheduledDate 
+          ? "Email scheduled successfully" 
+          : "Email sent successfully",
       });
       setIsEmailOpen(false);
       setEmailContent('');
+      setEmailSubject('');
+      setScheduledDate('');
       setSelectedUser(null);
     } catch (error) {
       console.error('Error sending email:', error);
@@ -247,7 +256,25 @@ export const UserTable = ({
           <DialogHeader>
             <DialogTitle>Send Email to {selectedUser?.email}</DialogTitle>
           </DialogHeader>
-          <div className="mt-4 flex-1">
+          <div className="mt-4 space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="subject">Subject</Label>
+              <Input
+                id="subject"
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                placeholder="Enter email subject"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="schedule">Schedule Send (Optional)</Label>
+              <Input
+                id="schedule"
+                type="datetime-local"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
+              />
+            </div>
             <Editor
               apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
               value={emailContent}
@@ -273,7 +300,7 @@ export const UserTable = ({
               Cancel
             </Button>
             <Button onClick={handleSendEmail}>
-              Send Email
+              {scheduledDate ? 'Schedule Email' : 'Send Email'}
             </Button>
           </div>
         </DialogContent>
