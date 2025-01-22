@@ -9,11 +9,11 @@ import { Button } from "./ui/button";
 import Sidebar from "@/components/ui/sidebar";
 import { User } from "@supabase/supabase-js";
 
-type ViewMode = "admin" | "dealer" | "buyer";
+type ViewMode = "admin" | "dealer" | "user";
 
 const Dashboard = () => {
   const { role, user } = useUserRole();
-  const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "buyer");
+  const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const Dashboard = () => {
             <SelectContent>
               <SelectItem value="admin">Admin View</SelectItem>
               <SelectItem value="dealer">Dealer View</SelectItem>
-              <SelectItem value="buyer">Buyer View</SelectItem>
+              <SelectItem value="user">Buyer View</SelectItem>
             </SelectContent>
           </Select>
         </div>
