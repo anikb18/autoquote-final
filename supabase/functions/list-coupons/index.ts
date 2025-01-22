@@ -28,25 +28,31 @@ serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    // Check if user is admin
-    const { data: profile, error: profileError } = await supabaseClient
-      .from('profiles')
+    // Check if user is admin using the user_roles table
+    const { data: userRole, error: roleError } = await supabaseClient
+      .from('user_roles')
       .select('role')
       .eq('id', user.id)
       .single();
 
-    if (profileError || profile?.role !== 'admin') {
+    if (roleError || userRole?.role !== 'admin') {
       throw new Error('Admin access required');
     }
+
+    console.log('Admin access verified for user:', user.id);
 
     // Fetch coupons
     const { data: coupons, error: couponsError } = await supabaseClient
       .from('coupons')
-      .select('*');
+      .select('*')
+      .order('created_at', { ascending: false });
 
     if (couponsError) {
+      console.error('Error fetching coupons:', couponsError);
       throw couponsError;
     }
+
+    console.log('Successfully fetched coupons:', coupons?.length);
 
     return new Response(
       JSON.stringify({ coupons }),
@@ -57,7 +63,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('Error in list-coupons function:', error.message);
     return new Response(
       JSON.stringify({ error: error.message }),
       { 
