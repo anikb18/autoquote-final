@@ -45,10 +45,18 @@ export function Testimonials() {
         <TestimonialHeader />
         <ul
           role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 sm:gap-8 lg:mt-20 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:mt-20 lg:max-w-none lg:grid-cols-3"
         >
           {testimonials.map((testimonial, index) => (
-            <li key={index} className={index >= 3 ? 'hidden lg:block' : ''}>
+            <li 
+              key={index} 
+              className={`animate-fade-in ${
+                index >= 3 ? 'hidden lg:block' : ''
+              }`}
+              style={{
+                animationDelay: `${index * 150}ms`
+              }}
+            >
               <TestimonialCard 
                 testimonialKey={testimonial.key}
                 image={testimonial.image}

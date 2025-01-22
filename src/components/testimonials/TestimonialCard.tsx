@@ -12,7 +12,7 @@ export const TestimonialCard = ({ testimonialKey, image }: TestimonialCardProps)
   const { t } = useTranslation('testimonials');
 
   return (
-    <Card className="relative rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10">
+    <Card className="relative h-full rounded-2xl bg-white p-6 shadow-xl shadow-slate-900/10 transition-transform hover:-translate-y-1">
       <QuoteIcon className="absolute left-6 top-6 fill-slate-100" />
       <CardContent className="relative">
         <blockquote className="text-lg tracking-tight text-slate-900">
