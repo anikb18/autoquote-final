@@ -1,118 +1,12 @@
 {
-  "appName": "Autoquote24",
-  "dashboard": "Tableau de bord",
-  "signIn": "Connexion",
-  "signOut": "Déconnexion",
-  "loading": "Chargement...",
-  "error": "Erreur",
-  "success": "Succès",
-  "save": "Enregistrer",
-  "cancel": "Annuler",
-  "delete": "Supprimer",
-  "edit": "Modifier",
-  "view": "Voir",
-  "search": "Rechercher",
-  "filter": "Filtrer",
-  "sort": "Trier",
-  "actions": "Actions",
-  "yes": "Oui",
-  "no": "Non",
-  "notAvailable": "Non disponible",
-  "features": {
-    "mostPopular": "Le Plus Populaire",
-    "newCar": {
-      "title": "Plan Nouvelle Voiture",
-      "description": "Pour seulement 49,95 $, accédez à des offres imbattables sur les voitures neuves. Vivez l'excitation de conduire la voiture de vos rêves !",
-      "price": "49,95 $",
-      "prelaunchPrice": "Prix de pré-lancement : 39,95 $",
-      "regularPrice": "99,95 $",
-      "savings": "Économisez 40 %",
-      "cta": "Réclamez Votre Offre Maintenant",
-      "tooltip": "Ne manquez pas cette opportunité exclusive !",
-      "items": {
-        "newCar": [
-          "Accès exclusif à des offres premium",
-          "Service personnalisé juste pour vous",
-          "Essais gratuits pour ressentir l'excitation",
-          "Options de paiement flexibles qui vous conviennent",
-          "Évaluations de reprise approfondies",
-          "Rapports d'historique des véhicules détaillés",
-          "Consultations d'experts"
-        ]
-      }
-    },
-    "tradeIn": {
-      "title": "Plan de Revente",
-      "description": "Maximisez la valeur de votre reprise avec un frais unique de 16,95 $. Obtenez la meilleure valeur pour votre véhicule sans effort !",
-      "price": "16,95 $",
-      "savings": "40 % de réduction pour les premiers inscrits ! Offre limitée.",
-      "cta": "Commencer Aujourd'hui",
-      "tooltip": "Meilleures valeurs de reprise garanties !",
-      "items": {
-        "tradeIn": [
-          "Évaluation gratuite du véhicule",
-          "Offres instantanées en espèces qui vous mettent en avant",
-          "Un processus sans tracas et fluide",
-          "Consultations d'experts pour vous guider",
-          "Options de reprise flexibles adaptées à vous",
-          "Pas de frais cachés, juste de la transparence",
-          "Paiements rapides pour votre commodité"
-        ]
-      }
-    },
-    "spotsRemaining": "Places limitées disponibles : {{count}}"
-  },
-  "testimonials": {
-    "title": "Écoutez Nos Clients Satisfaits",
-    "subtitle": "Histoires vraies de personnes réelles. Découvrez pourquoi nos clients aiment Autoquote24.",
-    "montreal": {
-      "content": "Autoquote24 a rendu la vente de ma voiture tellement facile ! J'ai reçu une excellente offre et tout le processus a été simple et rapide.",
-      "author": {
-        "name": "Sophie Dubois",
-        "role": "Montréal, QC"
-      }
-    },
-    "laval": {
-      "content": "J'hésitais à échanger ma vieille voiture, mais Autoquote24 m'a fait une offre fantastique et a rendu cela complètement sans stress.",
-      "author": {
-        "name": "Jean-Pierre Gagnon",
-        "role": "Laval, QC"
-      }
-    },
-    "sherbrooke": {
-      "content": "L'outil d'évaluation en ligne était incroyablement précis, et j'ai reçu exactement ce qu'ils ont estimé. Hautement recommandé !",
-      "author": {
-        "name": "Nadia Belanger",
-        "role": "Sherbrooke, QC"
-      }
-    },
-    "gatineau": {
-      "content": "Du début à la fin, Autoquote24 a dépassé mes attentes. Service professionnel, courtois et efficace.",
-      "author": {
-        "name": "François LeBlanc",
-        "role": "Gatineau, QC"
-      }
-    },
-    "quebec": {
-      "content": "J'ai comparé les prix et Autoquote24 a offert le meilleur prix pour ma reprise. De plus, leur service client est de premier ordre.",
-      "author": {
-        "name": "Chantal Roy",
-        "role": "Québec, QC"
-      }
-    },
-    "troisrivieres": {
-      "content": "Vendre ma voiture en privé était un casse-tête. Autoquote24 a simplifié les choses et j'ai été payé rapidement.",
-      "author": {
-        "name": "Mathieu Côté",
-        "role": "Trois-Rivières, QC"
-      }
-    }
-  },
-  "title": "Témoignages",
-  "subtitle": "Ce que disent nos clients",
   "callToAction": {
-    "title": "Prêt à trouver la voiture de vos rêves?",
-    "description": "Rejoignez Autoquote24 dès aujourd'hui et découvrez une nouvelle façon d'acheter et d'échanger des véhicules.",
-    "button": "Commencez maintenant"
+    "title": "Prêt à trouver la voiture de vos rêves ?",
+    "description": "Rejoignez Autoquote24 aujourd'hui et découvrez une nouvelle façon d'acheter et d'échanger des véhicules.",
+    "button": "Commencer maintenant"
+  },
+  "Navigation": {
+    "auth": {
+      "signIn": "Se connecter"
+    }
   }
 }

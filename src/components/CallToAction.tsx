@@ -7,7 +7,7 @@ import backgroundImage from '/src/images/background-call-to-action.jpg'
 import { Link } from 'react-router-dom'
 
 export function CallToAction() {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
 
   return (
     <section

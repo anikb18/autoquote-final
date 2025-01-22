@@ -1,65 +1,18 @@
 {
   "hero": {
     "title": "Welcome to AutoQuote24",
-    "subtitle": "Your trusted platform for buying and selling cars.",
-    "ctaGetStarted": "Get Started",
-    "ctaSignIn": "Sign In",
-    "partners": "Trusted by thousands of drivers of these brands:"
-  },
-  "pricing": {
-    "title": "Pricing Plans",
-    "description": "Choose the plan that fits your needs.",
-    "plans": {
-      "newCar": "New Car Plan",
-      "tradeIn": "Trade-In Plan"
+    "highlight": "your next car",
+    "titleEnd": ".",
+    "description": "Skip the dealership visits and save money on your next car. Get 3 competing offers from dealerships for only $40. A private bidding system ensures you get the best deal. Money-back guarantee.",
+    "getStarted": "Get Started",
+    "partners": {
+      "title": "Trusted by leading car manufacturers"
     }
   },
   "features": {
-    "mostPopular": "Most Popular",
+    "mostPopular": "Most Popular Features",
     "newCar": {
-      "title": "New Car Plan",
-      "description": "For just $49.95, gain access to unbeatable deals on new cars. Experience the thrill of driving your dream car!",
-      "price": "$49.95",
-      "prelaunchPrice": "Pre-launch Price: $39.95",
-      "regularPrice": "$99.95",
-      "savings": "Save 40%",
-      "cta": "Claim Your Deal Now",
-      "items": {
-        "newCar": [
-          "Exclusive access to premium deals",
-          "Tailored service just for you",
-          "Free test drives to feel the excitement",
-          "Flexible payment options that suit your needs",
-          "Thorough trade-in assessments",
-          "Detailed vehicle history reports",
-          "Expert consultations"
-        ]
-      }
-    },
-    "tradeIn": {
-      "title": "Trade-In Plan",
-      "description": "Maximize your trade-in value with a one-time fee of $16.95. Get the best value for your vehicle effortlessly!",
-      "price": "$16.95",
-      "regularPrice": "$49.95",
-      "savings": "40% off for early birds! Limited time offer.",
-      "cta": "Get Started Today",
-      "items": {
-        "tradeIn": [
-          "Complimentary vehicle appraisal",
-          "Instant cash offers that put you first",
-          "A seamless and hassle-free process",
-          "Expert consultations to guide you",
-          "Flexible trade-in options tailored to you",
-          "No hidden fees, just transparency",
-          "Quick payments for your convenience"
-        ]
-      }
-    },
-    "spotsRemaining": "Limited spots available: {{count}}"
-  },
-  "dealer": {
-    "contactSalesTeam": "Contact Our Sales Team",
-    "scheduleDemo": "Schedule Demo",
-    "requestCallback": "Request Callback"
+      "description": "For just $49.95, gain access to unbeatable deals on new cars. Experience the thrill of driving your dream car!"
+    }
   }
 }

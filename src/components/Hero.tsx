@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/container';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Hero = () => {
-  const { t } = useTranslation('home'); // Changed namespace to 'home'
+  const { t } = useTranslation('home');
   const navigate = useNavigate();
 
   const handleViewDetail = (quoteId) => {
@@ -44,9 +44,9 @@ const Hero = () => {
           {t('hero.partners.title')}
         </p>
         <div className="mt-8 flex justify-center gap-x-8">
-        <div className="relative h-12 w-24">
-  <img src="/cars/ford.png" alt="ford" className="h-full w-full object-contain" />
-</div>
+          <div className="relative h-12 w-24">
+            <img src="/cars/ford.png" alt="ford" className="h-full w-full object-contain" />
+          </div>
           <div className="relative h-12 w-24">
             <img src="/cars/Mercedes.png" alt="Mercedes-Benz" className="h-full w-full object-contain" />
           </div>

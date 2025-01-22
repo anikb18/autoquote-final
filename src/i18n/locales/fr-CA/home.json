@@ -1,58 +1,18 @@
 {
   "hero": {
     "title": "Bienvenue chez AutoQuote24",
-    "subtitle": "Votre plateforme de confiance pour acheter et vendre des voitures.",
-    "ctaGetStarted": "Commencer",
-    "ctaSignIn": "Se Connecter",
-    "partners": "Fiers partenaires de milliers de conducteurs de ces marques:"
+    "highlight": "votre prochaine voiture",
+    "titleEnd": ".",
+    "description": "Évitez les visites chez les concessionnaires et économisez sur votre prochaine voiture. Obtenez 3 soumissions de concessionnaires compétitives pour seulement 40 $. Un système d'enchères privé vous assure d'obtenir la meilleure offre. Garantie de remboursement.",
+    "getStarted": "Commencer",
+    "partners": {
+      "title": "Approuvé par les principaux constructeurs automobiles"
+    }
   },
   "features": {
-    "mostPopular": "Le Plus Populaire",
+    "mostPopular": "Fonctionnalités les plus populaires",
     "newCar": {
-      "title": "Plan Nouvelle Voiture",
-      "description": "Pour seulement 49,95 $, accédez à des offres imbattables sur les voitures neuves. Vivez l'excitation de conduire la voiture de vos rêves !",
-      "price": "49,95 $",
-      "prelaunchPrice": "Prix de pré-lancement : 39,95 $",
-      "regularPrice": "99,95 $",
-      "savings": "Économisez 40 %",
-      "cta": "Réclamez Votre Offre Maintenant",
-      "tooltip": "Ne manquez pas cette opportunité exclusive !",
-      "items": {
-        "newCar": [
-          "Accès exclusif à des offres premium",
-          "Service personnalisé juste pour vous",
-          "Essais gratuits pour ressentir l'excitation",
-          "Options de paiement flexibles qui vous conviennent",
-          "Évaluations de reprise approfondies",
-          "Rapports d'historique des véhicules détaillés",
-          "Consultations d'experts"
-        ]
-      }
-    },
-    "tradeIn": {
-      "title": "Plan de Revente",
-      "description": "Maximisez la valeur de votre reprise avec un frais unique de 16,95 $. Obtenez la meilleure valeur pour votre véhicule sans effort !",
-      "price": "16,95 $",
-      "savings": "40 % de réduction pour les premiers inscrits ! Offre limitée.",
-      "cta": "Commencer Aujourd'hui",
-      "tooltip": "Meilleures valeurs de reprise garanties !",
-      "items": {
-        "tradeIn": [
-          "Évaluation gratuite du véhicule",
-          "Offres instantanées en espèces qui vous mettent en avant",
-          "Un processus sans tracas et fluide",
-          "Consultations d'experts pour vous guider",
-          "Options de reprise flexibles adaptées à vous",
-          "Pas de frais cachés, juste de la transparence",
-          "Paiements rapides pour votre commodité"
-        ]
-      }
-    },
-    "spotsRemaining": "Places limitées disponibles : {{count}}"
-  },
-  "dealer": {
-    "contactSalesTeam": "Contactez Notre Équipe de Ventes",
-    "scheduleDemo": "Planifier une Démo",
-    "requestCallback": "Demander un Retour d'Appel"
+      "description": "Pour seulement 49,95 $, accédez à des offres imbattables sur les voitures neuves. Vivez l'excitation de conduire la voiture de vos rêves !"
+    }
   }
 }
