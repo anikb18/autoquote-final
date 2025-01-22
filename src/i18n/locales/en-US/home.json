@@ -6,13 +6,125 @@
     "description": "Skip the dealership visits and save money on your next car. Get 3 competing offers from dealerships for only $40. A private bidding system ensures you get the best deal. Money-back guarantee.",
     "getStarted": "Get Started",
     "partners": {
-      "title": "Trusted by leading car manufacturers"
+      "title": "Trusted by Leading Car Manufacturers"
     }
   },
   "features": {
+    "title": "Streamline Your Car Buying Experience",
+    "subtitle": "Discover how AutoQuote24 revolutionizes the car buying process",
     "mostPopular": "Most Popular Features",
+    "items": {
+      "trusted": {
+        "title": "Trusted Network",
+        "description": "Connect with verified dealers across Quebec"
+      },
+      "time": {
+        "title": "Save Time",
+        "description": "Get multiple quotes without visiting dealerships"
+      },
+      "prices": {
+        "title": "Best Prices",
+        "description": "Dealers compete to offer you the best deal"
+      },
+      "communication": {
+        "title": "Secure Communication",
+        "description": "Direct, encrypted chat with dealers"
+      }
+    },
     "newCar": {
-      "description": "For just $49.95, gain access to unbeatable deals on new cars. Experience the thrill of driving your dream car!"
+      "title": "New Car Quote Service",
+      "description": "Get the best deals on new cars with our competitive bidding system",
+      "price": "$49.95",
+      "prelaunchPrice": "$39.95",
+      "regularPrice": "$99.95",
+      "savings": "Save 60%",
+      "items": {
+        "newCar": [
+          "Access to our network of certified dealers",
+          "Multiple competitive quotes within 24 hours",
+          "Private bidding system",
+          "Detailed vehicle comparisons",
+          "Trade-in value assessment",
+          "Financing pre-approval options",
+          "Dedicated support team"
+        ]
+      },
+      "cta": "Get Your Quote Now"
+    },
+    "tradeIn": {
+      "title": "Trade-In Valuation",
+      "description": "Get the best value for your current vehicle",
+      "price": "$16.95",
+      "prelaunchPrice": "$14.95",
+      "regularPrice": "$29.95",
+      "savings": "Save 40%",
+      "items": {
+        "tradeIn": [
+          "Professional vehicle appraisal",
+          "Market value analysis",
+          "Multiple dealer offers",
+          "Condition assessment",
+          "History report review",
+          "No-obligation quotes"
+        ]
+      },
+      "cta": "Value Your Trade-In"
     }
+  },
+  "testimonials": {
+    "title": "What Our Customers Say",
+    "subtitle": "Real experiences from AutoQuote24 users",
+    "montreal": {
+      "content": "I saved over $3,000 on my new SUV without ever leaving my home. The process was incredibly smooth!",
+      "author": {
+        "name": "Marc Tremblay",
+        "role": "Montreal"
+      }
+    },
+    "laval": {
+      "content": "Getting multiple quotes was effortless. I had three competitive offers within 24 hours.",
+      "author": {
+        "name": "Sophie Bergeron",
+        "role": "Laval"
+      }
+    },
+    "sherbrooke": {
+      "content": "The trade-in valuation was spot-on, and I got a great deal on my new vehicle.",
+      "author": {
+        "name": "Jean-François Dubois",
+        "role": "Sherbrooke"
+      }
+    },
+    "gatineau": {
+      "content": "AutoQuote24's platform made car buying stress-free. Highly recommended!",
+      "author": {
+        "name": "Marie-Claude Gagnon",
+        "role": "Gatineau"
+      }
+    },
+    "quebec": {
+      "content": "Professional service and great communication throughout the entire process.",
+      "author": {
+        "name": "Pierre Lavoie",
+        "role": "Quebec City"
+      }
+    },
+    "troisrivieres": {
+      "content": "The best way to buy a car! Saved time and money with their bidding system.",
+      "author": {
+        "name": "Isabelle Roy",
+        "role": "Trois-Rivières"
+      }
+    }
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds"
+  },
+  "spots": {
+    "remaining": "Limited spots remaining",
+    "total": "100"
   }
 }
