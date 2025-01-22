@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Settings } from "lucide-react";
 import { Button } from "./ui/button";
 import Sidebar from "@/components/ui/sidebar";
-import { User } from "@supabase/supabase-js";
+import { useToast } from "@/hooks/use-toast";
 
 type ViewMode = "admin" | "dealer" | "user";
 
@@ -15,12 +15,19 @@ const Dashboard = () => {
   const { role, user } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (role) {
       setViewMode(role as ViewMode);
     }
   }, [role]);
+
+  useEffect(() => {
+    // Debug logging
+    console.log("Current role:", role);
+    console.log("Current user:", user);
+  }, [role, user]);
 
   const renderDashboard = () => {
     switch (viewMode) {
@@ -32,6 +39,14 @@ const Dashboard = () => {
         return <BuyerDashboard />;
     }
   };
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Please log in to view the dashboard.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F1F0FB] relative flex w-full">
@@ -58,7 +73,16 @@ const Dashboard = () => {
 
       {role === "admin" && (
         <div className="fixed top-4 right-4 z-50">
-          <Select value={viewMode} onValueChange={(value: ViewMode) => setViewMode(value)}>
+          <Select 
+            value={viewMode} 
+            onValueChange={(value: ViewMode) => {
+              setViewMode(value);
+              toast({
+                title: "View Changed",
+                description: `Switched to ${value} view`,
+              });
+            }}
+          >
             <SelectTrigger className="w-[140px] text-sm h-8 bg-white/80 backdrop-blur-sm border-gray-200/50">
               <SelectValue placeholder="View Mode" />
             </SelectTrigger>
