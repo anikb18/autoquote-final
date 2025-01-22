@@ -12,13 +12,31 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface UserPasswordResetProps {
-  userEmail: string;
+  userId: string;
 }
 
-export const UserPasswordReset = ({ userEmail }: UserPasswordResetProps) => {
+export const UserPasswordReset = ({ userId }: UserPasswordResetProps) => {
   const { toast } = useToast();
-  const [resetEmailAddress, setResetEmailAddress] = useState(userEmail);
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [resetEmailAddress, setResetEmailAddress] = useState("");
+
+  // Fetch user email when dialog opens
+  const handleOpenDialog = async () => {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('id', userId)
+        .single();
+
+      if (profile?.email) {
+        setResetEmailAddress(profile.email);
+      }
+    } catch (error) {
+      console.error('Error fetching user email:', error);
+    }
+    setIsResetDialogOpen(true);
+  };
 
   const handlePasswordReset = async (email: string) => {
     try {
@@ -49,7 +67,7 @@ export const UserPasswordReset = ({ userEmail }: UserPasswordResetProps) => {
         <Button 
           variant="outline" 
           size="sm"
-          onClick={() => setResetEmailAddress(userEmail)}
+          onClick={handleOpenDialog}
         >
           Reset Password
         </Button>
