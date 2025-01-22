@@ -1,48 +1,48 @@
 {
-    "features": {
-      "title": "Exclusive Pricing Plans",
-      "subtitle": "Unlock your access to premium vehicle deals with a one-time fee.",
-      "newCar": {
-        "title": "New Car Plan",
-        "description": "For just $49.95, gain access to unbeatable deals on new cars. Experience the thrill of driving your dream car!",
-        "price": "$49.95",
-        "prelaunchPrice": "Pre-launch Price: $39.95",
-        "regularPrice": "$99.95",
-        "savings": "Save 40%",
-        "cta": "Claim Your Deal Now",
-        "tooltip": "Don't miss out on this exclusive opportunity!",
-        "items": {
-          "newCar": [
-            "Exclusive access to premium deals",
-            "Tailored service just for you",
-            "Free test drives to feel the excitement",
-            "Flexible payment options that suit your needs",
-            "Thorough trade-in assessments",
-            "Detailed vehicle history reports",
-            "Expert consultations"
-          ]
-        }
-      },
-      "tradeIn": {
-        "title": "Trade-In Plan",
-        "description": "Maximize your trade-in value with a one-time fee of $16.95. Get the best value for your vehicle effortlessly!",
-        "price": "$16.95",
-        "savings": "40% off for early birds! Limited time offer.",
-        "cta": "Get Started Today",
-        "tooltip": "Best trade-in values guaranteed!",
-        "items": {
-          "tradeIn": [
-            "Complimentary vehicle appraisal",
-            "Instant cash offers that put you first",
-            "A seamless and hassle-free process",
-            "Expert consultations to guide you",
-            "Flexible trade-in options tailored to you",
-            "No hidden fees, just transparency",
-            "Quick payments for your convenience"
-          ]
-        }
-      },
-      "mostPopular": "Most Popular",
-      "spotsRemaining": "Limited spots available: {{count}}"
-    }
+  "features": {
+    "title": "Plans Tarifaires Exclusifs",
+    "subtitle": "Accédez à des offres exceptionnelles sur les véhicules avec des frais uniques.",
+    "newCar": {
+      "title": "Plan Voiture Neuve",
+      "description": "Pour seulement 49,95$, accédez à des offres imbattables sur les voitures neuves. Vivez l'expérience de conduire la voiture de vos rêves!",
+      "price": "49,95$",
+      "prelaunchPrice": "Prix de pré-lancement: 39,95$",
+      "regularPrice": "99,95$",
+      "savings": "Économisez 40%",
+      "cta": "Réclamez Votre Offre",
+      "tooltip": "Ne manquez pas cette opportunité exclusive!",
+      "items": {
+        "newCar": [
+          "Accès exclusif aux meilleures offres",
+          "Service personnalisé juste pour vous",
+          "Essais routiers gratuits",
+          "Options de paiement flexibles",
+          "Évaluations approfondies pour échange",
+          "Rapports d'historique détaillés",
+          "Consultations d'experts"
+        ]
+      }
+    },
+    "tradeIn": {
+      "title": "Plan Échange",
+      "description": "Maximisez la valeur de reprise de votre véhicule pour seulement 16,95$. Obtenez la meilleure valeur sans effort!",
+      "price": "16,95$",
+      "savings": "40% de rabais pour les premiers clients! Offre limitée.",
+      "cta": "Commencez Aujourd'hui",
+      "tooltip": "Meilleure valeur d'échange garantie!",
+      "items": {
+        "tradeIn": [
+          "Évaluation gratuite du véhicule",
+          "Offres en argent instantanées",
+          "Processus simple et sans tracas",
+          "Consultations d'experts",
+          "Options d'échange flexibles",
+          "Aucuns frais cachés",
+          "Paiements rapides"
+        ]
+      }
+    },
+    "mostPopular": "Plus Populaire",
+    "spotsRemaining": "Places limitées disponibles: {{count}}"
   }
+}
