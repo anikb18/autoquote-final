@@ -10,6 +10,7 @@ import DealerSignup from "./pages/DealerSignup";
 import NewQuoteForm from "./components/NewQuoteForm";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Header from "./components/Header";
+import BuyerDashboard from "./components/BuyerDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/my-quotes"
+                element={
+                  <ProtectedRoute>
+                    <BuyerDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/dealers"
+                element={
+                  <ProtectedRoute>
+                    <BuyerDashboard />
                   </ProtectedRoute>
                 }
               />

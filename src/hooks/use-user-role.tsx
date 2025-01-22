@@ -7,20 +7,26 @@ export const useUserRole = () => {
     queryKey: ['user-role'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return { role: 'user', user: null };
+      if (!user) return { role: null, user: null };
 
       // Query user_roles table directly
-      const { data: roleData } = await supabase
+      const { data: roleData, error } = await supabase
         .from('user_roles')
         .select('role')
         .eq('id', user.id)
-        .maybeSingle();
+        .single();
+
+      if (error) {
+        console.error('Error fetching user role:', error);
+        return { role: 'user', user };
+      }
 
       return { 
-        role: roleData?.role || 'user',
+        role: roleData?.role || 'user', 
         user 
       };
     },
+    retry: 1
   });
 
   return { 
