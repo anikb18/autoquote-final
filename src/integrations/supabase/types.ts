@@ -1404,17 +1404,17 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
-          role: string
+          role: Database["public"]["Enums"]["user_role_type"]
         }
         Insert: {
           created_at?: string | null
           id: string
-          role: string
+          role?: Database["public"]["Enums"]["user_role_type"]
         }
         Update: {
           created_at?: string | null
           id?: string
-          role?: string
+          role?: Database["public"]["Enums"]["user_role_type"]
         }
         Relationships: []
       }
@@ -1925,6 +1925,7 @@ export type Database = {
       newsletter_status: "draft" | "scheduled" | "sent"
       subscription_level: "basic" | "premium"
       user_role: "admin" | "dealer" | "user"
+      user_role_type: "super_admin" | "admin" | "dealer" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
