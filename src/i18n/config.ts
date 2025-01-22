@@ -8,12 +8,16 @@ import enUSDealer from './locales/en-US/dealer.json';
 import enUSAdmin from './locales/en-US/admin.json';
 import enUSHome from './locales/en-US/home.json';
 import enUSPricing from './locales/en-US/pricing.json';
+import enUSTestimonials from './locales/en-US/testimonials.json';
+import enUSFeatures from './locales/en-US/features.json';
 
 import frCACommon from './locales/fr-CA/common.json';
 import frCADealer from './locales/fr-CA/dealer.json';
 import frCAAdmin from './locales/fr-CA/admin.json';
 import frCAHome from './locales/fr-CA/home.json';
 import frCAPricing from './locales/fr-CA/pricing.json';
+import frCATestimonials from './locales/fr-CA/testimonials.json';
+import frCAFeatures from './locales/fr-CA/features.json';
 
 i18n
   .use(LanguageDetector)
@@ -26,14 +30,18 @@ i18n
         dealer: enUSDealer,
         admin: enUSAdmin,
         home: enUSHome,
-        pricing: enUSPricing
+        pricing: enUSPricing,
+        testimonials: enUSTestimonials,
+        features: enUSFeatures
       },
       'fr-CA': {
         common: frCACommon,
         dealer: frCADealer,
         admin: frCAAdmin,
         home: frCAHome,
-        pricing: frCAPricing
+        pricing: frCAPricing,
+        testimonials: frCATestimonials,
+        features: frCAFeatures
       }
     },
     detection: {
@@ -43,7 +51,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-    ns: ['common', 'dealer', 'admin', 'home', 'pricing'],
+    ns: ['common', 'dealer', 'admin', 'home', 'pricing', 'testimonials', 'features'],
     defaultNS: 'common'
   });
 

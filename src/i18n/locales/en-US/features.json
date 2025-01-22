@@ -1,0 +1,22 @@
+{
+  "title": "Streamline Your Car Buying Experience",
+  "subtitle": "Discover how AutoQuote24 revolutionizes car buying in Quebec",
+  "items": {
+    "trusted": {
+      "title": "Trusted Network",
+      "description": "Connect with verified Quebec dealers for the best deals"
+    },
+    "time": {
+      "title": "Save Time",
+      "description": "Get multiple quotes without visiting dealerships"
+    },
+    "prices": {
+      "title": "Best Prices",
+      "description": "Dealers compete to offer you the best deal"
+    },
+    "communication": {
+      "title": "Secure Chat",
+      "description": "Direct, encrypted communication with dealers"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Simplifiez votre expérience d'achat automobile",
+  "subtitle": "Découvrez comment AutoQuote24 révolutionne l'achat de voiture au Québec",
+  "items": {
+    "trusted": {
+      "title": "Réseau de confiance",
+      "description": "Connectez-vous avec des concessionnaires québécois vérifiés"
+    },
+    "time": {
+      "title": "Gagnez du temps",
+      "description": "Obtenez plusieurs soumissions sans visiter les concessionnaires"
+    },
+    "prices": {
+      "title": "Meilleurs prix",
+      "description": "Les concessionnaires rivalisent pour vous offrir la meilleure offre"
+    },
+    "communication": {
+      "title": "Chat sécurisé",
+      "description": "Communication directe et cryptée avec les concessionnaires"
+    }
+  }
+}
