@@ -11,12 +11,6 @@ import { UserRoleSelect } from "./UserRoleSelect";
 import { Tables } from "@/integrations/supabase/types";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu,
@@ -24,7 +18,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Editor } from '@tinymce/tinymce-react';
+import { Eye, Mail, MoreHorizontal, X } from "lucide-react";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -47,6 +44,10 @@ export const UserTable = ({
   itemsPerPage 
 }: UserTableProps) => {
   const { toast } = useToast();
+  const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [emailContent, setEmailContent] = useState('');
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
@@ -66,6 +67,44 @@ export const UserTable = ({
       toast({
         title: "Error",
         description: "Failed to update user role. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!selectedUser || !emailContent) {
+      toast({
+        title: "Error",
+        description: "Please write an email message first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.functions.invoke('send-email', {
+        body: {
+          to: [selectedUser.email],
+          subject: `Message from AutoQuote24`,
+          html: emailContent,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Email sent successfully.",
+      });
+      setIsEmailOpen(false);
+      setEmailContent('');
+      setSelectedUser(null);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send email. Please try again.",
         variant: "destructive",
       });
     }
@@ -126,16 +165,20 @@ export const UserTable = ({
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={() => {
-                        // Implement view details
+                        setSelectedUser(profile);
+                        setIsDetailsOpen(true);
                       }}
                     >
+                      <Eye className="mr-2 h-4 w-4" />
                       View Details
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => {
-                        // Implement send email
+                        setSelectedUser(profile);
+                        setIsEmailOpen(true);
                       }}
                     >
+                      <Mail className="mr-2 h-4 w-4" />
                       Send Email
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -146,33 +189,95 @@ export const UserTable = ({
         </TableBody>
       </Table>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <Button
-              variant="ghost"
-              onClick={() => setPage(Math.max(1, page - 1))}
-              disabled={page === 1}
-              className="gap-1 pl-2.5"
-            >
-              <span>Previous</span>
+      <div className="flex justify-center gap-2">
+        <Button
+          variant="outline"
+          onClick={() => setPage(Math.max(1, page - 1))}
+          disabled={page === 1}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => setPage(page + 1)}
+          disabled={!profiles || profiles.length < itemsPerPage}
+        >
+          Next
+        </Button>
+      </div>
+
+      {/* User Details Modal */}
+      <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <h4 className="font-medium">Email</h4>
+              <p className="text-sm">{selectedUser?.email}</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">Full Name</h4>
+              <p className="text-sm">{selectedUser?.full_name || 'N/A'}</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">Role</h4>
+              <p className="text-sm">{selectedUser?.role || 'user'}</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">Subscription Status</h4>
+              <p className="text-sm">{selectedUser?.subscription_status || 'none'}</p>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium">Created At</h4>
+              <p className="text-sm">
+                {selectedUser?.created_at 
+                  ? format(new Date(selectedUser.created_at), 'PPpp')
+                  : 'N/A'}
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Send Email Modal */}
+      <Dialog open={isEmailOpen} onOpenChange={setIsEmailOpen}>
+        <DialogContent className="sm:max-w-[800px] h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Send Email to {selectedUser?.email}</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4 flex-1">
+            <Editor
+              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+              value={emailContent}
+              onEditorChange={(content) => setEmailContent(content)}
+              init={{
+                height: 400,
+                menubar: false,
+                plugins: [
+                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                  'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                  'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | blocks | ' +
+                  'bold italic forecolor | alignleft aligncenter ' +
+                  'alignright alignjustify | bullist numlist outdent indent | ' +
+                  'removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+              }}
+            />
+          </div>
+          <div className="mt-4 flex justify-end space-x-2">
+            <Button variant="outline" onClick={() => setIsEmailOpen(false)}>
+              Cancel
             </Button>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink>{page}</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <Button
-              variant="ghost"
-              onClick={() => setPage(page + 1)}
-              disabled={!profiles || profiles.length < itemsPerPage}
-              className="gap-1 pr-2.5"
-            >
-              <span>Next</span>
+            <Button onClick={handleSendEmail}>
+              Send Email
             </Button>
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
