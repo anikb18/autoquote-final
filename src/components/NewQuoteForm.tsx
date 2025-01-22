@@ -8,6 +8,10 @@ import { supabase } from '@/integrations/supabase/client';
 import DesiredVehicleSection from './forms/DesiredVehicleSection';
 import FinancingSection from './forms/FinancingSection';
 import TradeInSection from './forms/TradeInSection';
+import { ProgressBar } from './ProgressBar';
+import confetti from 'canvas-confetti';
+import { Badge } from '@/components/ui/badge';
+import { motion } from 'framer-motion';
 
 type FinancingType = 'cash' | 'financing' | 'lease';
 
@@ -89,6 +93,76 @@ const NewQuoteForm = () => {
     }
   }, [currentStep, session, navigate, t]);
 
+  const triggerConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 },
+      zIndex: 9999,
+    };
+
+    function fire(particleRatio: number, opts: any) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+
+    fire(0.2, {
+      spread: 60,
+    });
+
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+  };
+
+  const createCheckoutSession = async () => {
+    try {
+      const response = await supabase.functions.invoke('create-checkout', {
+        body: {
+          priceId: 'price_1Qjb7xG6N4q5lhXvL2EsKg6n', // Price ID for "Forfait Nouvelle Voiture"
+        },
+      });
+
+      const { url, error } = response.data;
+      
+      if (error) throw error;
+      if (url) {
+        triggerConfetti();
+        setTimeout(() => {
+          window.location.href = url;
+        }, 1500); // Delay to show confetti
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      toast({
+        title: t('form.error.title'),
+        description: t('form.error.paymentFailed'),
+        variant: 'destructive',
+      });
+    }
+  };
+
   const handleNext = () => {
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
@@ -98,36 +172,6 @@ const NewQuoteForm = () => {
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-    }
-  };
-
-  const createCheckoutSession = async () => {
-    try {
-      const response = await fetch(
-        'https://zndolceqzclnprozyudy.functions.supabase.co/create-checkout',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.access_token}`,
-          },
-          body: JSON.stringify({
-            priceId: 'price_1Qh3X9G6N4q5lhXvjs5nTxlf',
-          }),
-        }
-      );
-
-      const { url } = await response.json();
-      if (url) {
-        window.location.href = url;
-      }
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
-      toast({
-        title: t('form.error.title'),
-        description: t('form.error.paymentFailed'),
-        variant: 'destructive',
-      });
     }
   };
 
@@ -149,68 +193,107 @@ const NewQuoteForm = () => {
     }
   };
 
+  const getStepPreview = (step: number) => {
+    switch (step) {
+      case 1:
+        return t('form.steps.vehicle');
+      case 2:
+        return t('form.steps.financing');
+      case 3:
+        return t('form.steps.tradeIn');
+      case 4:
+        return t('form.steps.payment');
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <Card className="w-full max-w-2xl mx-auto p-6 space-y-8">
         <div className="space-y-4">
-          <h1 className="text-2xl font-bold text-center text-foreground">
-            {t('form.steps', { step: currentStep, total: 4 })}
-          </h1>
-          <p className="text-muted-foreground text-center">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-foreground">
+              {t('form.steps', { step: currentStep, total: 4 })}
+            </h1>
+            <Badge variant="secondary" className="text-sm">
+              {getStepPreview(currentStep + 1 <= 4 ? currentStep + 1 : currentStep)}
+            </Badge>
+          </div>
+          
+          <ProgressBar
+            total={4}
+            remaining={4 - currentStep}
+            className="mb-8"
+          />
+
+          <motion.p
+            key={currentStep}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-muted-foreground text-center"
+          >
             {currentStep === 1 && t('form.desiredVehicle.description')}
             {currentStep === 2 && t('form.financing.description')}
             {currentStep === 3 && t('form.tradeIn.description')}
             {currentStep === 4 && t('form.payment.description')}
-          </p>
+          </motion.p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {currentStep === 1 && (
-            <DesiredVehicleSection
-              desiredVehicle={formData.desiredVehicle}
-              setDesiredVehicle={(data) => setFormData(prev => ({ ...prev, desiredVehicle: data }))}
-            />
-          )}
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {currentStep === 1 && (
+              <DesiredVehicleSection
+                desiredVehicle={formData.desiredVehicle}
+                setDesiredVehicle={(data) => setFormData(prev => ({ ...prev, desiredVehicle: data }))}
+              />
+            )}
 
-          {currentStep === 2 && (
-            <FinancingSection
-              financingType={formData.financing.type}
-              setFinancingType={(type: FinancingType) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, type }}))}
-              financingDetails={formData.financing}
-              setFinancingDetails={(data) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, ...data }}))}
-            />
-          )}
+            {currentStep === 2 && (
+              <FinancingSection
+                financingType={formData.financing.type}
+                setFinancingType={(type: FinancingType) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, type }}))}
+                financingDetails={formData.financing}
+                setFinancingDetails={(data) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, ...data }}))}
+              />
+            )}
 
-          {currentStep === 3 && (
-            <TradeInSection
-              hasTradeIn={formData.tradeIn.hasTradeIn}
-              setHasTradeIn={(value) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, hasTradeIn: value }}))}
-              tradeInVehicle={formData.tradeIn.vehicle}
-              setTradeInVehicle={(data) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, vehicle: data }}))}
-              photos={formData.tradeIn.photos}
-              handlePhotoUpload={(e) => {
-                const files = Array.from(e.target.files || []);
-                setFormData(prev => ({
-                  ...prev,
-                  tradeIn: {
-                    ...prev.tradeIn,
-                    photos: [...prev.tradeIn.photos, ...files]
-                  }
-                }));
-              }}
-            />
-          )}
+            {currentStep === 3 && (
+              <TradeInSection
+                hasTradeIn={formData.tradeIn.hasTradeIn}
+                setHasTradeIn={(value) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, hasTradeIn: value }}))}
+                tradeInVehicle={formData.tradeIn.vehicle}
+                setTradeInVehicle={(data) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, vehicle: data }}))}
+                photos={formData.tradeIn.photos}
+                handlePhotoUpload={(e) => {
+                  const files = Array.from(e.target.files || []);
+                  setFormData(prev => ({
+                    ...prev,
+                    tradeIn: {
+                      ...prev.tradeIn,
+                      photos: [...prev.tradeIn.photos, ...files]
+                    }
+                  }));
+                }}
+              />
+            )}
 
-          {currentStep === 4 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">{t('form.payment.title')}</h3>
-              <p>{t('form.payment.description')}</p>
-              <div className="p-4 bg-muted rounded-lg">
-                <p className="text-2xl font-bold">$49.95</p>
-                <p className="text-sm text-muted-foreground">{t('form.payment.details')}</p>
+            {currentStep === 4 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">{t('form.payment.title')}</h3>
+                <div className="p-6 bg-muted rounded-lg border border-border">
+                  <p className="text-3xl font-bold text-center mb-2">$49.95</p>
+                  <p className="text-sm text-muted-foreground text-center">{t('form.payment.details')}</p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </motion.div>
 
           <div className="flex justify-between pt-4">
             {currentStep > 1 && (
@@ -220,7 +303,7 @@ const NewQuoteForm = () => {
             )}
             <Button 
               type="submit"
-              className="ml-auto"
+              className={currentStep === 1 ? 'w-full' : 'ml-auto'}
               disabled={loading}
             >
               {currentStep === 4 ? t('form.payment.proceed') : t('form.next')}

@@ -1,130 +1,33 @@
 {
-  "hero": {
-    "title": "Bienvenue chez AutoQuote24",
-    "highlight": "votre prochaine voiture",
-    "titleEnd": ".",
-    "description": "Évitez les visites chez les concessionnaires et économisez sur votre prochaine voiture. Obtenez 3 soumissions compétitives pour seulement 40 $. Un système d'enchères privé vous assure d'obtenir la meilleure offre. Garantie de remboursement.",
-    "getStarted": "Commencer",
-    "partners": {
-      "title": "Approuvé par les principaux constructeurs automobiles"
-    }
-  },
-  "features": {
-    "title": "Simplifiez votre expérience d'achat automobile",
-    "subtitle": "Découvrez comment AutoQuote24 révolutionne l'achat de voiture",
-    "mostPopular": "Fonctionnalités les plus populaires",
-    "items": {
-      "trusted": {
-        "title": "Réseau de confiance",
-        "description": "Connectez-vous avec des concessionnaires vérifiés à travers le Québec"
-      },
-      "time": {
-        "title": "Gagnez du temps",
-        "description": "Obtenez plusieurs soumissions sans visiter les concessionnaires"
-      },
-      "prices": {
-        "title": "Meilleurs prix",
-        "description": "Les concessionnaires rivalisent pour vous offrir la meilleure offre"
-      },
-      "communication": {
-        "title": "Communication sécurisée",
-        "description": "Chat direct et crypté avec les concessionnaires"
-      }
+  "form": {
+    "steps": {
+      "vehicle": "Détails du véhicule",
+      "financing": "Options de financement",
+      "tradeIn": "Détails de la reprise",
+      "payment": "Paiement sécurisé"
     },
-    "newCar": {
-      "title": "Service de soumission pour voiture neuve",
-      "description": "Obtenez les meilleures offres sur les voitures neuves avec notre système d'enchères compétitif",
-      "price": "49,95 $",
-      "prelaunchPrice": "39,95 $",
-      "regularPrice": "99,95 $",
-      "savings": "Économisez 60%",
-      "items": {
-        "newCar": [
-          "Accès à notre réseau de concessionnaires certifiés",
-          "Plusieurs soumissions compétitives en 24 heures",
-          "Système d'enchères privé",
-          "Comparaisons détaillées des véhicules",
-          "Évaluation de la valeur d'échange",
-          "Options de préapprobation de financement",
-          "Équipe de soutien dédiée"
-        ]
-      },
-      "cta": "Obtenez votre soumission"
+    "desiredVehicle": {
+      "description": "Parlez-nous du véhicule que vous recherchez"
+    },
+    "financing": {
+      "description": "Choisissez votre option de financement préférée"
     },
     "tradeIn": {
-      "title": "Évaluation d'échange",
-      "description": "Obtenez la meilleure valeur pour votre véhicule actuel",
-      "price": "16,95 $",
-      "prelaunchPrice": "14,95 $",
-      "regularPrice": "29,95 $",
-      "savings": "Économisez 40%",
-      "items": {
-        "tradeIn": [
-          "Évaluation professionnelle du véhicule",
-          "Analyse de la valeur marchande",
-          "Offres de plusieurs concessionnaires",
-          "Évaluation de l'état",
-          "Examen du rapport d'historique",
-          "Soumissions sans obligation"
-        ]
-      },
-      "cta": "Évaluez votre échange"
+      "description": "Ajoutez les détails de votre véhicule de reprise si applicable"
+    },
+    "payment": {
+      "title": "Complétez votre demande de devis",
+      "description": "Sécurisez votre demande de devis avec un paiement unique",
+      "details": "Obtenez des devis compétitifs de notre réseau de concessionnaires certifiés",
+      "proceed": "Procéder au paiement"
+    },
+    "back": "Étape précédente",
+    "next": "Continuer",
+    "authRequired": "Authentification requise",
+    "pleaseSignIn": "Veuillez vous connecter pour continuer",
+    "error": {
+      "title": "Erreur",
+      "paymentFailed": "Le traitement du paiement a échoué. Veuillez réessayer."
     }
-  },
-  "testimonials": {
-    "title": "Ce que disent nos clients",
-    "subtitle": "Expériences réelles des utilisateurs d'AutoQuote24",
-    "montreal": {
-      "content": "J'ai économisé plus de 3 000 $ sur mon nouveau VUS sans jamais quitter ma maison. Le processus était incroyablement simple !",
-      "author": {
-        "name": "Marc Tremblay",
-        "role": "Montréal"
-      }
-    },
-    "laval": {
-      "content": "Obtenir plusieurs soumissions était sans effort. J'ai eu trois offres compétitives en 24 heures.",
-      "author": {
-        "name": "Sophie Bergeron",
-        "role": "Laval"
-      }
-    },
-    "sherbrooke": {
-      "content": "L'évaluation de reprise était précise, et j'ai obtenu une excellente offre sur mon nouveau véhicule.",
-      "author": {
-        "name": "Jean-François Dubois",
-        "role": "Sherbrooke"
-      }
-    },
-    "gatineau": {
-      "content": "La plateforme AutoQuote24 a rendu l'achat de voiture sans stress. Fortement recommandé !",
-      "author": {
-        "name": "Marie-Claude Gagnon",
-        "role": "Gatineau"
-      }
-    },
-    "quebec": {
-      "content": "Service professionnel et excellente communication tout au long du processus.",
-      "author": {
-        "name": "Pierre Lavoie",
-        "role": "Québec"
-      }
-    },
-    "troisrivieres": {
-      "content": "La meilleure façon d'acheter une voiture ! J'ai économisé du temps et de l'argent avec leur système d'enchères.",
-      "author": {
-        "name": "Isabelle Roy",
-        "role": "Trois-Rivières"
-      }
-    }
-  },
-  "time": {
-    "days": "jours",
-    "hours": "heures",
-    "minutes": "minutes",
-    "seconds": "secondes"
-  },
-  "spots": {
-    "remaining": "Places limitées restantes",
-    "total": "100"
   }
 }
