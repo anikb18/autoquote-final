@@ -20,33 +20,33 @@
   "sherbrooke": {
     "content": "En tant que premier acheteur de voiture, le processus était incroyablement simple. Les concessionnaires étaient professionnels et les devis étaient transparents.",
     "author": {
-      "name": "Sophie Bergeron",
-      "role": "Cliente de Sherbrooke",
-      "initials": "SB"
+      "name": "Michel Bergeron",
+      "role": "Client de Sherbrooke",
+      "initials": "MB"
     }
   },
   "gatineau": {
     "content": "Les calculs des paiements ballons et les options de financement m'ont permis de bien comprendre mes paiements mensuels. Pas de surprises, juste un excellent service.",
     "author": {
-      "name": "Marc-André Gagnon",
-      "role": "Client de Gatineau",
-      "initials": "MG"
+      "name": "Isabelle Gagnon",
+      "role": "Cliente de Gatineau",
+      "initials": "IG"
     }
   },
   "quebec": {
     "content": "J'ai adoré pouvoir télécharger des photos de ma reprise et obtenir des évaluations instantanées. Tout le processus était efficace et professionnel.",
     "author": {
-      "name": "Isabelle Roy",
-      "role": "Cliente de Québec",
-      "initials": "IR"
+      "name": "Pierre-Luc Roy",
+      "role": "Client de Québec",
+      "initials": "PR"
     }
   },
   "troisrivieres": {
     "content": "Le système de chat sécurisé a facilité la communication avec les concessionnaires. J'ai obtenu rapidement des réponses à toutes mes questions.",
     "author": {
-      "name": "Pierre Bouchard",
+      "name": "Antoine Bouchard",
       "role": "Client de Trois-Rivières",
-      "initials": "PB"
+      "initials": "AB"
     }
   }
 }

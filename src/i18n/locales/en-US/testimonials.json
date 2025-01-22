@@ -20,33 +20,33 @@
   "sherbrooke": {
     "content": "As a first-time car buyer, the process was incredibly straightforward. The dealers were professional, and the quotes were transparent.",
     "author": {
-      "name": "Sophie Bergeron",
+      "name": "Michel Bergeron",
       "role": "Sherbrooke Customer",
-      "initials": "SB"
+      "initials": "MB"
     }
   },
   "gatineau": {
     "content": "The balloon payment calculations and financing options made it easy to understand my monthly payments. No surprises, just great service.",
     "author": {
-      "name": "Marc-André Gagnon",
+      "name": "Isabelle Gagnon",
       "role": "Gatineau Customer",
-      "initials": "MG"
+      "initials": "IG"
     }
   },
   "quebec": {
     "content": "I loved being able to upload photos of my trade-in and get instant valuations. The whole process was efficient and professional.",
     "author": {
-      "name": "Isabelle Roy",
+      "name": "Pierre-Luc Roy",
       "role": "Quebec City Customer",
-      "initials": "IR"
+      "initials": "PR"
     }
   },
   "troisrivieres": {
     "content": "The secure chat system made communication with dealers easy and efficient. I got all my questions answered quickly.",
     "author": {
-      "name": "Pierre Bouchard",
+      "name": "Antoine Bouchard",
       "role": "Trois-Rivières Customer",
-      "initials": "PB"
+      "initials": "AB"
     }
   }
 }
