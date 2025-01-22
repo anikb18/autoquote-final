@@ -17,10 +17,12 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Shield } from "lucide-react";
 
+type UserRole = "super_admin" | "admin" | "dealer" | "user";
+
 interface UserRoleSelectProps {
   userId: string;
-  currentRole: string;
-  onRoleChange: (userId: string, newRole: string) => Promise<void>;
+  currentRole: UserRole;
+  onRoleChange: (userId: string, newRole: UserRole) => Promise<void>;
 }
 
 export const UserRoleSelect = ({
@@ -29,9 +31,9 @@ export const UserRoleSelect = ({
   onRoleChange,
 }: UserRoleSelectProps) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
 
-  const handleRoleSelect = (role: string) => {
+  const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role);
     setIsConfirmOpen(true);
   };
