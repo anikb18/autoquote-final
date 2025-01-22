@@ -8,5 +8,15 @@
     "auth": {
       "signIn": "Sign In"
     }
-  }
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds"
+  },
+  "spotsRemaining": "{{count}} spots remaining",
+  "totalSpots": "{{count}} total spots",
+  "title": "Limited Time Offer",
+  "subtitle": "Don't miss out on these exclusive deals"
 }

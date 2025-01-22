@@ -1,12 +1,22 @@
 {
   "callToAction": {
-    "title": "Prêt à trouver la voiture de vos rêves ?",
+    "title": "Prêt à trouver la voiture de vos rêves?",
     "description": "Rejoignez Autoquote24 aujourd'hui et découvrez une nouvelle façon d'acheter et d'échanger des véhicules.",
     "button": "Commencer maintenant"
   },
   "Navigation": {
     "auth": {
-      "signIn": "Se connecter"
+      "signIn": "Connexion"
     }
-  }
+  },
+  "time": {
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "seconds": "secondes"
+  },
+  "spotsRemaining": "{{count}} places restantes",
+  "totalSpots": "{{count}} places au total",
+  "title": "Offre à durée limitée",
+  "subtitle": "Ne manquez pas ces offres exclusives"
 }
