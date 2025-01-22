@@ -6,7 +6,7 @@ import { Card } from '../ui/card';
 import { Loader2 } from 'lucide-react';
 import { Scene } from './Scene';
 import { CarModel } from './CarModel';
-import { Hotspots } from './Hotspots'; // Import your Hotspots component
+import { Hotspots } from './Hotspots';
 
 interface CarViewer3DProps {
   carDetails?: {
@@ -35,8 +35,10 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
   const { data: carData, isLoading, error } = useQuery({
     queryKey: ['car-data', carDetails?.make, carDetails?.model],
     queryFn: async () => {
-      if (!carDetails?.make || !carDetails?.model) return null;
-      console.log('Fetching car data for:', carDetails);
+      if (!carDetails?.make || !carDetails?.model) {
+        console.warn('Missing car details:', carDetails);
+        return null;
+      }
 
       try {
         const response = await fetch(
@@ -48,6 +50,9 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
             },
           }
         );
+        if (!response.ok) {
+          throw new Error(`API call failed: ${response.statusText}`);
+        }
         const data = await response.json();
         console.log('Car API response:', data);
         return data;
@@ -115,9 +120,18 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
   }
 
   if (error) {
+    console.error('Error in CarViewer3D:', error);
     return (
       <Card className="p-4">
-        <div className="text-red-500">Error fetching car data: {error.message}</div>
+        <div className="text-red-500">Error loading car model. Please try again later.</div>
+      </Card>
+    );
+  }
+
+  if (!carDetails?.make || !carDetails?.model) {
+    return (
+      <Card className="p-4">
+        <div className="text-muted-foreground">No car details available</div>
       </Card>
     );
   }
@@ -129,7 +143,7 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
         {sceneState && carData && (
           <CarModel scene={sceneState.scene} carData={carData} />
         )}
-        {sceneState && showHotspots && carDetails?.make && carDetails?.model && ( // Render Hotspots component
+        {sceneState && showHotspots && carDetails?.make && carDetails?.model && (
           <Hotspots 
             scene={sceneState.scene} 
             carType={`${carDetails.year} ${carDetails.make} ${carDetails.model}`} 
