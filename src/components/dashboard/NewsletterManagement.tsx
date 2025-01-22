@@ -7,13 +7,23 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { PlusCircle, Send } from "lucide-react";
+import { PlusCircle, Send, Sparkles } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 export const NewsletterManagement = () => {
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedNewsletter, setSelectedNewsletter] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const { data: subscribers } = useQuery({
     queryKey: ['newsletter-subscribers'],
@@ -40,6 +50,41 @@ export const NewsletterManagement = () => {
       return data;
     }
   });
+
+  const generateEmailContent = async () => {
+    if (!title) {
+      toast({
+        title: "Error",
+        description: "Please enter a newsletter title first",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const prompt = `Generate a professional newsletter email about ${title}. The content should be engaging and informative. Include HTML formatting for better presentation. The tone should be professional but friendly.`;
+      
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      
+      setContent(text);
+      toast({
+        title: "Success",
+        description: "Email content generated successfully!"
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate content. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleCreateNewsletter = async () => {
     if (!title || !content) {
@@ -121,17 +166,37 @@ export const NewsletterManagement = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Input
-                placeholder="Newsletter Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+              <div className="flex gap-2 items-center">
+                <Input
+                  placeholder="Newsletter Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={generateEmailContent}
+                        disabled={isGenerating}
+                        className="relative"
+                      >
+                        <Sparkles className="h-4 w-4 sparkle-icon" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Generate email content with AI</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
             </div>
             <Editor
-              apiKey="your-tinymce-api-key"
+              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
               init={{
                 height: 500,
-                menubar: false,
+                menubar: true,
                 plugins: [
                   'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
                   'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
@@ -141,6 +206,7 @@ export const NewsletterManagement = () => {
                   'bold italic forecolor | alignleft aligncenter ' +
                   'alignright alignjustify | bullist numlist outdent indent | ' +
                   'removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
               }}
               value={content}
               onEditorChange={setContent}
@@ -149,10 +215,6 @@ export const NewsletterManagement = () => {
               <Button onClick={handleCreateNewsletter}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Save as Draft
-              </Button>
-              <Button variant="secondary">
-                <Send className="mr-2 h-4 w-4" />
-                Preview & Send
               </Button>
             </div>
           </CardContent>

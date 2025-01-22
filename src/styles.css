@@ -1,23 +1,22 @@
 @keyframes sparkle {
   0% {
     transform: scale(1);
-    opacity: 0.7; /* Softer opacity */
+    opacity: 0.7;
   }
   50% {
-    transform: scale(1.1); /* Slightly smaller scale */
+    transform: scale(1.1);
     opacity: 1;
   }
   100% {
     transform: scale(1);
-    opacity: 0.7; /* Softer opacity */
+    opacity: 0.7;
   }
 }
 
 .sparkle-icon {
-  animation: sparkle 1.5s infinite; /* Slower animation */
+  animation: sparkle 1.5s infinite;
 }
 
-/* Smooth transitions */
 .card {
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -50,3 +49,4 @@
 .badge:hover {
   opacity: 0.9;
 }
+
