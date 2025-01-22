@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 type ViewMode = "admin" | "dealer" | "user";
 
 const Dashboard = () => {
-  const { role, user, isLoading } = useUserRole();
+  const { role, user, isLoading: roleLoading } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>("user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
@@ -23,11 +23,20 @@ const Dashboard = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) throw error;
+        
         if (!session) {
+          toast({
+            title: "Authentication Required",
+            description: "Please log in to access the dashboard",
+            variant: "destructive",
+          });
           navigate("/auth");
           return;
         }
+        
         setIsAuthChecking(false);
       } catch (error) {
         console.error("Auth check error:", error);
@@ -43,7 +52,7 @@ const Dashboard = () => {
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") {
+      if (event === "SIGNED_OUT" || !session) {
         navigate("/auth");
       }
     });
@@ -57,7 +66,7 @@ const Dashboard = () => {
     }
   }, [role]);
 
-  if (isAuthChecking || isLoading) {
+  if (isAuthChecking || roleLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center space-y-2">
@@ -69,13 +78,7 @@ const Dashboard = () => {
   }
 
   if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center space-y-4">
-          <p>Please log in to view the dashboard.</p>
-        </div>
-      </div>
-    );
+    return null; // Return null instead of showing a message as we'll redirect to auth
   }
 
   const renderDashboard = () => {
