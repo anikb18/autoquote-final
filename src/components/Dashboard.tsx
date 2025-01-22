@@ -122,6 +122,7 @@ const Dashboard = () => {
           <Select 
             value={viewMode} 
             onValueChange={(value: ViewMode) => {
+              console.log("Changing view mode to:", value);
               setViewMode(value);
               toast({
                 title: "View Changed",
