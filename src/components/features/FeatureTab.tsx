@@ -39,11 +39,11 @@ export const FeatureTab = ({ feature, isActive, className }: FeatureTabProps) =>
             <feature.icon />
           </div>
           <h3 className="ml-4 text-lg font-medium text-white">
-            {t(`items.${feature.name}.title`)}
+            {t(`secondary.items.${feature.name}.title`)}
           </h3>
         </motion.div>
         <p className="mt-3 text-sm text-slate-300">
-          {t(`items.${feature.name}.description`)}
+          {t(`secondary.items.${feature.name}.description`)}
         </p>
       </div>
     </div>
