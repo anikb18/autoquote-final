@@ -30,25 +30,34 @@ const BuyerCarListings = () => {
       
       if (error) throw error;
 
-      return data.map((quote): Quote => ({
-        id: quote.id,
-        car_details: {
-          year: quote.car_details.year || '',
-          make: quote.car_details.make || '',
-          model: quote.car_details.model || '',
-          ...quote.car_details
-        } as CarDetails,
-        dealer_quotes: quote.dealer_quotes.map((dq): DealerQuote => ({
-          id: dq.id,
-          dealer_id: dq.dealer_id,
-          dealer_profile: dq.dealer_profiles,
-          is_accepted: false,
-          created_at: dq.created_at,
-          status: 'pending',
-        })),
-        status: 'active',
-        created_at: new Date().toISOString(),
-      }));
+      return data.map((quote): Quote => {
+        // Ensure car_details is an object
+        const carDetails = typeof quote.car_details === 'object' && quote.car_details !== null 
+          ? quote.car_details 
+          : {};
+
+        return {
+          id: quote.id,
+          car_details: {
+            year: Number(carDetails.year) || 0,
+            make: String(carDetails.make || ''),
+            model: String(carDetails.model || ''),
+            trim: carDetails.trim ? String(carDetails.trim) : undefined,
+            engine: carDetails.engine ? String(carDetails.engine) : undefined,
+            options: carDetails.options ? String(carDetails.options) : undefined,
+          },
+          dealer_quotes: quote.dealer_quotes.map((dq): DealerQuote => ({
+            id: dq.id,
+            dealer_id: dq.dealer_id,
+            dealer_profile: dq.dealer_profiles,
+            is_accepted: false,
+            created_at: dq.created_at,
+            status: 'pending',
+          })),
+          status: 'active',
+          created_at: new Date().toISOString(),
+        };
+      });
     },
   });
 
