@@ -1191,6 +1191,48 @@ export type Database = {
         }
         Relationships: []
       }
+      role_change_history: {
+        Row: {
+          changed_by: string
+          created_at: string | null
+          id: string
+          new_role: Database["public"]["Enums"]["user_role_type"]
+          old_role: Database["public"]["Enums"]["user_role_type"] | null
+          user_id: string
+        }
+        Insert: {
+          changed_by: string
+          created_at?: string | null
+          id?: string
+          new_role: Database["public"]["Enums"]["user_role_type"]
+          old_role?: Database["public"]["Enums"]["user_role_type"] | null
+          user_id: string
+        }
+        Update: {
+          changed_by?: string
+          created_at?: string | null
+          id?: string
+          new_role?: Database["public"]["Enums"]["user_role_type"]
+          old_role?: Database["public"]["Enums"]["user_role_type"] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_change_history_changed_by_fkey1"
+            columns: ["changed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_change_history_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_transactions: {
         Row: {
           created_at: string | null
