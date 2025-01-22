@@ -87,7 +87,6 @@ const DesiredVehicleSection = ({
           <Select 
             onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, make: value, model: '' }))}
             value={desiredVehicle.make}
-            disabled={!desiredVehicle.year}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('form.make.selectMake')} />
@@ -109,7 +108,7 @@ const DesiredVehicleSection = ({
           <Select 
             onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, model: value }))}
             value={desiredVehicle.model}
-            disabled={!desiredVehicle.make || !desiredVehicle.year}
+            disabled={!desiredVehicle.make}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('form.model.selectModel')} />
