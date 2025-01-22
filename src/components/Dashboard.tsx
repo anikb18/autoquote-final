@@ -14,33 +14,29 @@ type ViewMode = "admin" | "dealer" | "user";
 
 const Dashboard = () => {
   const { role, user, isLoading } = useUserRole();
-  const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "user");
+  const [viewMode, setViewMode] = useState<ViewMode>("user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          navigate("/auth");
-        }
-      } catch (error) {
-        console.error("Auth check error:", error);
-        toast({
-          title: "Authentication Error",
-          description: "Please try logging in again",
-          variant: "destructive",
-        });
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
         navigate("/auth");
-      } finally {
-        setIsAuthChecking(false);
+        return;
       }
     };
     checkAuth();
-  }, [navigate, toast]);
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        navigate("/auth");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   useEffect(() => {
     if (role) {
@@ -48,29 +44,12 @@ const Dashboard = () => {
     }
   }, [role]);
 
-  useEffect(() => {
-    // Debug logging
-    console.log("Current role:", role);
-    console.log("Current user:", user);
-  }, [role, user]);
-
-  const renderDashboard = () => {
-    switch (viewMode) {
-      case "admin":
-        return <AdminDashboard />;
-      case "dealer":
-        return <DealerDashboard />;
-      default:
-        return <BuyerDashboard />;
-    }
-  };
-
-  if (isLoading || isAuthChecking) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center space-y-2">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p>Loading...</p>
+          <p>Loading dashboard...</p>
         </div>
       </div>
     );
@@ -87,6 +66,17 @@ const Dashboard = () => {
     );
   }
 
+  const renderDashboard = () => {
+    switch (viewMode) {
+      case "admin":
+        return <AdminDashboard />;
+      case "dealer":
+        return <DealerDashboard />;
+      default:
+        return <BuyerDashboard />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F1F0FB] relative flex w-full">
       <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5" 
@@ -97,7 +87,7 @@ const Dashboard = () => {
         <div className="h-full bg-white/80 backdrop-blur-md shadow-lg border-r border-gray-200/50">
           <Sidebar 
             user={user}
-            onSelect={() => {}} // This can be implemented if needed
+            onSelect={() => {}} 
             onChangeRole={(newRole: ViewMode) => setViewMode(newRole)}
             viewMode={viewMode}
             isCollapsed={isSidebarCollapsed}

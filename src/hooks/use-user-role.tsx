@@ -5,60 +5,68 @@ import { useToast } from "./use-toast";
 export const useUserRole = () => {
   const { toast } = useToast();
 
-  const { data: authData, isLoading } = useQuery({
+  const { data: authData, isLoading, error } = useQuery({
     queryKey: ['user-role'],
     queryFn: async () => {
       try {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        // First get the current session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        if (authError) throw authError;
-        if (!user) return { role: 'user', user: null };
+        if (sessionError) throw sessionError;
+        if (!session?.user) return { role: null, user: null };
 
-        // Query user_roles table
+        // Get user role from user_roles table
         const { data: roleData, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        if (roleError) {
-          console.error('Error fetching user role:', roleError);
-          toast({
-            title: "Error fetching role",
-            description: "Using default user role",
-            variant: "destructive",
-          });
-        }
-
-        // Also fetch profile data
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
+          .eq('id', session.user.id)
           .single();
 
-        return { 
-          role: roleData?.role || 'user',
+        if (roleError && roleError.code !== 'PGRST116') {
+          console.error('Error fetching user role:', roleError);
+          throw roleError;
+        }
+
+        // Get profile data
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          throw profileError;
+        }
+
+        // Default to 'user' role if no specific role is found
+        const userRole = roleData?.role || 'user';
+
+        return {
+          role: userRole,
           user: {
-            ...user,
+            ...session.user,
             profile: profileData
           }
         };
       } catch (error) {
         console.error('Auth error:', error);
-        return { role: 'user', user: null };
+        toast({
+          title: "Authentication Error",
+          description: "There was a problem fetching your user data",
+          variant: "destructive",
+        });
+        return { role: null, user: null };
       }
     },
     retry: 1,
     staleTime: 1000 * 60 * 5, // Cache for 5 minutes
-    meta: {
-      errorMessage: 'Failed to fetch user role'
-    }
   });
 
   return {
-    role: authData?.role || 'user',
-    user: authData?.user,
-    isLoading
+    role: authData?.role || null,
+    user: authData?.user || null,
+    isLoading,
+    error
   };
 };
