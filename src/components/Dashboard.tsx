@@ -8,7 +8,8 @@ import Sidebar from "@/components/ui/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, LayoutDashboard, Users, BookOpen, Mail, Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type ViewMode = "admin" | "dealer" | "user";
 
@@ -19,6 +20,35 @@ const Dashboard = () => {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { t } = useTranslation('admin');
+
+  const sidebarItems = [
+    {
+      icon: LayoutDashboard,
+      label: t('tabs.analytics'),
+      value: "overview"
+    },
+    {
+      icon: Users,
+      label: t('tabs.users'),
+      value: "users"
+    },
+    {
+      icon: BookOpen,
+      label: t('tabs.blog'),
+      value: "content"
+    },
+    {
+      icon: Mail,
+      label: t('tabs.newsletter'),
+      value: "marketing"
+    },
+    {
+      icon: Settings,
+      label: t('common:settings'),
+      value: "settings"
+    }
+  ];
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -104,6 +134,7 @@ const Dashboard = () => {
         <div className="h-full bg-white/80 backdrop-blur-md shadow-lg border-r border-gray-200/50">
           <Sidebar 
             user={user}
+            items={sidebarItems}
             onSelect={() => {}} 
             onChangeRole={(newRole: ViewMode) => setViewMode(newRole)}
             viewMode={viewMode}
