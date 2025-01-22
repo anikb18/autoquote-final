@@ -10,7 +10,7 @@ interface ProgressBarProps {
 }
 
 export function ProgressBar({ total, remaining, className = '' }: ProgressBarProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   const [width, setWidth] = useState(0)
   
   useEffect(() => {

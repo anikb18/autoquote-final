@@ -9,7 +9,7 @@ interface CountdownTimerProps {
 }
 
 export function CountdownTimer({ endTime, onComplete }: CountdownTimerProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft())
 
   function calculateTimeLeft() {

@@ -7,11 +7,13 @@ import enUSCommon from './locales/en-US/common.json';
 import enUSDealer from './locales/en-US/dealer.json';
 import enUSAdmin from './locales/en-US/admin.json';
 import enUSHome from './locales/en-US/home.json';
+import enUSPricing from './locales/en-US/pricing.json';
 
 import frCACommon from './locales/fr-CA/common.json';
 import frCADealer from './locales/fr-CA/dealer.json';
 import frCAAdmin from './locales/fr-CA/admin.json';
 import frCAHome from './locales/fr-CA/home.json';
+import frCAPricing from './locales/fr-CA/pricing.json';
 
 i18n
   .use(LanguageDetector)
@@ -23,13 +25,15 @@ i18n
         common: enUSCommon,
         dealer: enUSDealer,
         admin: enUSAdmin,
-        home: enUSHome
+        home: enUSHome,
+        pricing: enUSPricing
       },
       'fr-CA': {
         common: frCACommon,
         dealer: frCADealer,
         admin: frCAAdmin,
-        home: frCAHome
+        home: frCAHome,
+        pricing: frCAPricing
       }
     },
     detection: {
@@ -39,7 +43,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-    ns: ['common', 'dealer', 'admin', 'home'],
+    ns: ['common', 'dealer', 'admin', 'home', 'pricing'],
     defaultNS: 'common'
   });
 

@@ -42,11 +42,5 @@
       },
       "cta": "Value Your Trade-In"
     }
-  },
-  "time": {
-    "days": "days",
-    "hours": "hours",
-    "minutes": "minutes",
-    "seconds": "seconds"
   }
 }
