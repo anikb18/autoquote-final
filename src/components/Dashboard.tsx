@@ -4,11 +4,11 @@ import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
 import BuyerDashboard from "./BuyerDashboard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from "./ui/button";
 import Sidebar from "@/components/ui/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 type ViewMode = "admin" | "dealer" | "user";
 
@@ -16,17 +16,30 @@ const Dashboard = () => {
   const { role, user, isLoading } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>("user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate("/auth");
+          return;
+        }
+        setIsAuthChecking(false);
+      } catch (error) {
+        console.error("Auth check error:", error);
+        toast({
+          title: "Error",
+          description: "Authentication error. Please try signing in again.",
+          variant: "destructive",
+        });
         navigate("/auth");
-        return;
       }
     };
+
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -36,7 +49,7 @@ const Dashboard = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   useEffect(() => {
     if (role) {
@@ -44,11 +57,11 @@ const Dashboard = () => {
     }
   }, [role]);
 
-  if (isLoading) {
+  if (isAuthChecking || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center space-y-2">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto" />
           <p>Loading dashboard...</p>
         </div>
       </div>
@@ -60,7 +73,6 @@ const Dashboard = () => {
       <div className="flex items-center justify-center h-screen">
         <div className="text-center space-y-4">
           <p>Please log in to view the dashboard.</p>
-          <Button onClick={() => navigate("/auth")}>Go to Login</Button>
         </div>
       </div>
     );
