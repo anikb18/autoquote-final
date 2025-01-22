@@ -11,13 +11,8 @@ import { User } from "@supabase/supabase-js";
 
 type ViewMode = "admin" | "dealer" | "buyer";
 
-interface UserRoleResult {
-  role: string;
-  user: User | null;
-}
-
 const Dashboard = () => {
-  const { role, user } = useUserRole() as UserRoleResult;
+  const { role, user } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "buyer");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 

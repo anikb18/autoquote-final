@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 export const useUserRole = () => {
-  const { data: userRole, error } = useQuery({
+  const { data: userRoleData, error } = useQuery({
     queryKey: ['user-role'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return null;
+      if (!user) return { role: 'user', user: null };
 
       const { data, error } = await supabase
         .from('user_roles')
@@ -16,12 +17,18 @@ export const useUserRole = () => {
 
       if (error) {
         console.error('Error fetching user role:', error);
-        return null;
+        return { role: 'user', user };
       }
 
-      return data?.role || 'user'; // Default to 'user' if no role is set
+      return { 
+        role: data?.role || 'user',
+        user 
+      };
     },
   });
 
-  return { role: userRole, error };
+  return { 
+    role: userRoleData?.role || 'user', 
+    user: userRoleData?.user || null 
+  };
 };
