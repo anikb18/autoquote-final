@@ -1,46 +1,42 @@
 {
-  "features": {
-    "title": "Exclusive Pricing Plans",
-    "subtitle": "Choose the perfect plan for your car buying or selling needs",
-    "mostPopular": "Most Popular",
-    "spotsRemaining": "{{count}} spots remaining",
-    "newCar": {
-      "title": "New Car Quote Service",
-      "description": "Get the best deals on new cars with our competitive bidding system",
-      "price": "$49.95",
-      "prelaunchPrice": "Pre-launch Price: $39.95",
-      "regularPrice": "$99.95",
-      "savings": "Save $60",
-      "items": {
-        "newCar": [
-          "Access to our network of certified dealers",
-          "Multiple competitive quotes within 24 hours",
-          "Private bidding system",
-          "Detailed vehicle comparisons",
-          "Trade-in value assessment",
-          "Financing pre-approval options",
-          "Dedicated support team"
-        ]
-      },
-      "cta": "Get Your Quote Now"
-    },
-    "tradeIn": {
-      "title": "Trade-In Valuation",
-      "description": "Get the best value for your current vehicle",
-      "price": "$16.95",
-      "regularPrice": "$29.95",
-      "savings": "Save 40%",
-      "items": {
-        "tradeIn": [
-          "Professional vehicle appraisal",
-          "Market value analysis",
-          "Multiple dealer offers",
-          "Condition assessment",
-          "History report review",
-          "No-obligation quotes"
-        ]
-      },
-      "cta": "Value Your Trade-In"
-    }
-  }
+  "header": {
+    "title": "Get the Best Deal on Your Next Vehicle",
+    "subtitle": "Choose the package that best suits your needs. Save time and money with our competitive bidding system."
+  },
+  "newCar": {
+    "title": "New Vehicle Package",
+    "description": "Perfect for buyers looking for a new vehicle. Get competitive quotes from certified dealers.",
+    "price": "$49.95",
+    "prelaunchPrice": "Pre-launch special price",
+    "regularPrice": "Regular price: $79.95",
+    "savings": "Save $30 Today",
+    "items": [
+      "Access to our private bidding system",
+      "Receive up to 3 competitive dealer quotes",
+      "24-hour quote guarantee",
+      "Secure dealer chat system",
+      "Digital document signing",
+      "Price match guarantee",
+      "Money-back guarantee"
+    ],
+    "cta": "Start Your Car Search"
+  },
+  "tradeIn": {
+    "title": "Trade-In Package",
+    "description": "Get the best value for your current vehicle with our comprehensive trade-in service.",
+    "price": "$16.95",
+    "prelaunchPrice": "Pre-launch special price",
+    "regularPrice": "Regular price: $29.95",
+    "savings": "Save $13 Today",
+    "items": [
+      "Professional vehicle valuation",
+      "Multiple dealer trade-in offers",
+      "Condition report analysis",
+      "Market value comparison",
+      "Secure document upload",
+      "Direct dealer negotiation"
+    ],
+    "cta": "Value Your Trade-In"
+  },
+  "mostPopular": "Most Popular"
 }

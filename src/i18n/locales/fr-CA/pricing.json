@@ -1,46 +1,42 @@
 {
-  "features": {
-    "title": "Plans tarifaires exclusifs",
-    "subtitle": "Choisissez le plan parfait pour l'achat ou la vente de votre voiture",
-    "mostPopular": "Plus populaire",
-    "spotsRemaining": "{{count}} places restantes",
-    "newCar": {
-      "title": "Service de soumission pour voiture neuve",
-      "description": "Obtenez les meilleures offres sur les voitures neuves grâce à notre système d'enchères compétitif",
-      "price": "49,95$",
-      "prelaunchPrice": "Prix de pré-lancement: 39,95$",
-      "regularPrice": "99,95$",
-      "savings": "Économisez 60$",
-      "items": {
-        "newCar": [
-          "Accès à notre réseau de concessionnaires certifiés",
-          "Plusieurs soumissions compétitives en 24 heures",
-          "Système d'enchères privé",
-          "Comparaisons détaillées des véhicules",
-          "Évaluation de la valeur d'échange",
-          "Options de préapprobation de financement",
-          "Équipe de soutien dédiée"
-        ]
-      },
-      "cta": "Obtenez votre soumission"
-    },
-    "tradeIn": {
-      "title": "Évaluation d'échange",
-      "description": "Obtenez la meilleure valeur pour votre véhicule actuel",
-      "price": "16,95$",
-      "regularPrice": "29,95$",
-      "savings": "Économisez 40%",
-      "items": {
-        "tradeIn": [
-          "Évaluation professionnelle du véhicule",
-          "Analyse de la valeur marchande",
-          "Offres multiples des concessionnaires",
-          "Évaluation de l'état",
-          "Examen du rapport d'historique",
-          "Soumissions sans obligation"
-        ]
-      },
-      "cta": "Évaluez votre échange"
-    }
-  }
+  "header": {
+    "title": "Obtenez le Meilleur Prix pour Votre Prochain Véhicule",
+    "subtitle": "Choisissez le forfait qui correspond le mieux à vos besoins. Économisez temps et argent grâce à notre système d'enchères compétitif."
+  },
+  "newCar": {
+    "title": "Forfait Nouveau Véhicule",
+    "description": "Parfait pour les acheteurs à la recherche d'un nouveau véhicule. Obtenez des soumissions compétitives de concessionnaires certifiés.",
+    "price": "49,95 $",
+    "prelaunchPrice": "Prix spécial de pré-lancement",
+    "regularPrice": "Prix régulier: 79,95 $",
+    "savings": "Économisez 30 $ aujourd'hui",
+    "items": [
+      "Accès à notre système d'enchères privé",
+      "Recevez jusqu'à 3 soumissions compétitives",
+      "Garantie de soumission en 24 heures",
+      "Système de chat sécurisé",
+      "Signature numérique de documents",
+      "Garantie du meilleur prix",
+      "Garantie de remboursement"
+    ],
+    "cta": "Commencez Votre Recherche"
+  },
+  "tradeIn": {
+    "title": "Forfait Échange",
+    "description": "Obtenez la meilleure valeur pour votre véhicule actuel avec notre service d'échange complet.",
+    "price": "16,95 $",
+    "prelaunchPrice": "Prix spécial de pré-lancement",
+    "regularPrice": "Prix régulier: 29,95 $",
+    "savings": "Économisez 13 $ aujourd'hui",
+    "items": [
+      "Évaluation professionnelle du véhicule",
+      "Offres d'échange de plusieurs concessionnaires",
+      "Analyse du rapport d'état",
+      "Comparaison de la valeur marchande",
+      "Téléchargement sécurisé de documents",
+      "Négociation directe avec le concessionnaire"
+    ],
+    "cta": "Évaluez Votre Échange"
+  },
+  "mostPopular": "Plus Populaire"
 }
