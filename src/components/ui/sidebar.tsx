@@ -1,8 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Button } from './button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
-import { ChevronLeft, ChevronRight, Home, Settings, BarChart2, Users, FileText, Mail } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Home, Settings, BarChart2, Users, FileText, Mail, Car, ShoppingCart, Store } from 'lucide-react';
+import { useUserRole } from '@/hooks/use-user-role';
 
 interface SidebarProps {
   user: any;
@@ -22,17 +24,50 @@ const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse 
 }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { role } = useUserRole();
 
-  const menuItems = [
-    { id: 'overview', icon: Home, label: t('sidebar.overview') },
-    { id: 'admin-metrics', icon: BarChart2, label: t('sidebar.metrics') },
-    { id: 'dealer-metrics', icon: BarChart2, label: t('sidebar.dealerMetrics') },
-    { id: 'dealership-comparisons', icon: Users, label: t('sidebar.comparisons') },
-    { id: 'sales-trend', icon: FileText, label: t('sidebar.sales') },
-    { id: 'performance', icon: BarChart2, label: t('sidebar.performance') },
-    { id: 'settings', icon: Settings, label: t('sidebar.settings') },
-    { id: 'support', icon: Mail, label: t('sidebar.support') },
-  ];
+  const getMenuItems = () => {
+    const commonItems = [
+      { id: 'overview', icon: Home, label: t('sidebar.overview'), path: '/dashboard' },
+    ];
+
+    const adminItems = [
+      ...commonItems,
+      { id: 'admin-metrics', icon: BarChart2, label: t('sidebar.metrics'), path: '/dashboard/admin-metrics' },
+      { id: 'users', icon: Users, label: t('sidebar.users'), path: '/dashboard/users' },
+      { id: 'blog', icon: FileText, label: t('sidebar.blog'), path: '/dashboard/blog' },
+      { id: 'settings', icon: Settings, label: t('sidebar.settings'), path: '/dashboard/settings' },
+    ];
+
+    const dealerItems = [
+      ...commonItems,
+      { id: 'dealer-metrics', icon: BarChart2, label: t('sidebar.dealerMetrics'), path: '/dashboard/dealer-metrics' },
+      { id: 'inventory', icon: Car, label: t('sidebar.inventory'), path: '/dashboard/inventory' },
+      { id: 'quotes', icon: ShoppingCart, label: t('sidebar.quotes'), path: '/dashboard/quotes' },
+    ];
+
+    const userItems = [
+      ...commonItems,
+      { id: 'my-quotes', icon: FileText, label: t('sidebar.myQuotes'), path: '/dashboard/my-quotes' },
+      { id: 'dealers', icon: Store, label: t('sidebar.dealers'), path: '/dashboard/dealers' },
+    ];
+
+    switch (role) {
+      case 'admin':
+        return adminItems;
+      case 'dealer':
+        return dealerItems;
+      default:
+        return userItems;
+    }
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const menuItems = getMenuItems();
 
   return (
     <div className="h-full flex flex-col bg-background">
@@ -61,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               key={item.id}
               variant="ghost"
               className={`w-full justify-start ${isCollapsed ? 'px-2' : 'px-4'}`}
-              onClick={() => onSelect(item.id)}
+              onClick={() => handleNavigation(item.path)}
             >
               <item.icon className="h-4 w-4 mr-2" />
               {!isCollapsed && <span>{item.label}</span>}
@@ -70,20 +105,20 @@ const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      <div className="p-4 border-t">
-        {!isCollapsed && (
+      {role === 'admin' && !isCollapsed && (
+        <div className="p-4 border-t">
           <Select value={viewMode} onValueChange={onChangeRole}>
             <SelectTrigger>
-              <SelectValue placeholder="Select view" />
+              <SelectValue placeholder={t('common.selectView')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="admin">Admin View</SelectItem>
-              <SelectItem value="dealer">Dealer View</SelectItem>
-              <SelectItem value="buyer">Buyer View</SelectItem>
+              <SelectItem value="admin">{t('common.adminView')}</SelectItem>
+              <SelectItem value="dealer">{t('common.dealerView')}</SelectItem>
+              <SelectItem value="buyer">{t('common.buyerView')}</SelectItem>
             </SelectContent>
           </Select>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
