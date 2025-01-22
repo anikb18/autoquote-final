@@ -52,6 +52,19 @@ const Header = () => {
     setProfile(data);
   };
 
+  const getAvatarUrl = () => {
+    if (session?.user?.user_metadata?.avatar_url) {
+      // Use Google profile picture if available
+      return session.user.user_metadata.avatar_url;
+    } else if (profile?.avatar_url) {
+      // Use custom avatar if set
+      return profile.avatar_url;
+    } else {
+      // Fallback to local avatar
+      return '/avatar.png';
+    }
+  };
+
   const handleSignIn = () => {
     navigate("/auth");
   };
@@ -115,24 +128,6 @@ const Header = () => {
             <Car className="h-4 w-4" />
             {t('common.dashboard')}
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDashboard}
-            className="flex items-center gap-2"
-          >
-            <Car className="h-4 w-4" />
-            {t('common.goToDashboard')}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleDashboard}
-            className="flex items-center gap-2"
-          >
-            <Car className="h-4 w-4" />
-            {t('common.goToDashboard')}
-          </Button>
         </div>
       );
     }
@@ -170,7 +165,7 @@ const Header = () => {
                   <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                     <Avatar className="h-10 w-10">
                       <AvatarImage
-                        src={profile?.avatar_url || `https://www.gravatar.com/avatar/${session.user.email}`}
+                        src={getAvatarUrl()}
                         alt={profile?.full_name || session.user.email}
                       />
                       <AvatarFallback>
