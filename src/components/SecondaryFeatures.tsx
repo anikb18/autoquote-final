@@ -1,24 +1,27 @@
-import { useId } from 'react';
-import { Tab } from '@headlessui/react';
-import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
-import { Container } from '@/components/ui/container';
-import screenshotPayroll from '/public/images/payroll.png';
-import screenshotInventory from '/public/images/expenses.png';
-import screenshotContacts from '/public/images/contacts.png';
+import { useId } from 'react'
+import { Tab } from '@headlessui/react'
+import { Container } from '@/components/ui/container'
+import { useTranslation } from 'react-i18next'
+import clsx from 'clsx'
+import { motion } from 'framer-motion'
 
 interface Feature {
-  key: string;
+  name?: string | React.ReactElement;
+  summary: string;
+  description: string;
   image: string;
   icon: React.ComponentType;
 }
 
 const features: Array<Feature> = [
   {
-    key: 'valuation',
-    image: screenshotPayroll,
-    icon: function ValuationIcon() {
-      let id = useId();
+    name: 'Inventory Management',
+    summary: 'Keep track of your entire fleet with ease.',
+    description:
+      'Stay organized with our comprehensive inventory management system. Track vehicle details, maintenance records, and availability in real-time.',
+    image: '/images/screenshots/inventory.webp',
+    icon: function ReportingIcon() {
+      let id = useId()
       return (
         <>
           <defs>
@@ -35,20 +38,23 @@ const features: Array<Feature> = [
             </linearGradient>
           </defs>
           <path
-            d="M12 16v-4M16 12l-4-4-4 4M12 16a8 8 0 100 16 8 8 0 000-16z"
+            d="m30 15-4 5-4-11-4 18-4-11-4 7-4-5"
             stroke={`url(#${id})`}
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </>
-      );
+      )
     },
   },
   {
-    key: 'comparison',
-    image: screenshotInventory,
-    icon: function ComparisonIcon() {
+    name: 'Lead Management',
+    summary: 'Never miss a potential sale.',
+    description:
+      'Convert more leads with our advanced CRM system. Track customer interactions, set follow-up reminders, and close deals faster.',
+    image: '/images/screenshots/leads.webp',
+    icon: function InventoryIcon() {
       return (
         <>
           <path
@@ -66,13 +72,16 @@ const features: Array<Feature> = [
             fill="#fff"
           />
         </>
-      );
+      )
     },
   },
   {
-    key: 'negotiation',
-    image: screenshotContacts,
-    icon: function NegotiationIcon() {
+    name: 'Analytics',
+    summary: 'Detailed insights at your fingertips.',
+    description:
+      'Make data-driven decisions with our comprehensive analytics dashboard. Monitor sales performance, track customer behavior, and identify growth opportunities.',
+    image: '/images/screenshots/analytics.webp',
+    icon: function ContactsIcon() {
       return (
         <>
           <path
@@ -85,21 +94,21 @@ const features: Array<Feature> = [
             fill="#fff"
           />
         </>
-      );
+      )
     },
   },
-];
+]
 
 function Feature({
   feature,
   isActive,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<'div'> & {
-  feature: Feature;
-  isActive: boolean;
+}: {
+  feature: Feature
+  isActive: boolean
+  className?: string
 }) {
-  const { t } = useTranslation('SecondaryFeatures');
   return (
     <div
       className={clsx(className, !isActive && 'opacity-75 hover:opacity-100')}
@@ -108,7 +117,7 @@ function Feature({
       <div
         className={clsx(
           'w-9 rounded-lg',
-          isActive ? 'bg-blue-600' : 'bg-slate-500',
+          isActive ? 'bg-primary' : 'bg-slate-500'
         )}
       >
         <svg aria-hidden="true" className="h-9 w-9" fill="none">
@@ -118,26 +127,26 @@ function Feature({
       <h3
         className={clsx(
           'mt-6 text-sm font-medium',
-          isActive ? 'text-blue-600' : 'text-slate-600',
+          isActive ? 'text-primary' : 'text-slate-600'
         )}
       >
-        {t(`features.${feature.key}.name`)}
+        {feature.name}
       </h3>
       <p className="mt-2 font-display text-xl text-slate-900">
-        {t(`features.${feature.key}.summary`)}
+        {feature.summary}
       </p>
-      <p className="mt-4 text-sm text-slate-600">
-        {t(`features.${feature.key}.description`)}
-      </p>
+      <p className="mt-4 text-sm text-slate-600">{feature.description}</p>
     </div>
-  );
+  )
 }
 
 function FeaturesMobile() {
+  const { t } = useTranslation()
+
   return (
     <div className="-mx-4 mt-20 flex flex-col gap-y-10 overflow-hidden px-4 sm:-mx-6 sm:px-6 lg:hidden">
       {features.map((feature) => (
-        <div key={feature.key}>
+        <div key={feature.summary}>
           <Feature feature={feature} className="mx-auto max-w-2xl" isActive />
           <div className="relative mt-10 pb-10">
             <div className="absolute -inset-x-4 bottom-0 top-8 bg-slate-200 sm:-inset-x-6" />
@@ -146,24 +155,27 @@ function FeaturesMobile() {
                 className="w-full"
                 src={feature.image}
                 alt=""
+                sizes="52.75rem"
               />
             </div>
           </div>
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 function FeaturesDesktop() {
+  const { t } = useTranslation()
+
   return (
-    <Tab.Group className="hidden lg:mt-20 lg:block">
+    <Tab.Group as="div" className="hidden lg:mt-20 lg:block">
       {({ selectedIndex }) => (
         <>
           <Tab.List className="grid grid-cols-3 gap-x-8">
             {features.map((feature, featureIndex) => (
               <Feature
-                key={feature.key}
+                key={feature.summary}
                 feature={{
                   ...feature,
                   name: (
@@ -183,10 +195,10 @@ function FeaturesDesktop() {
               {features.map((feature, featureIndex) => (
                 <Tab.Panel
                   static
-                  key={feature.key}
+                  key={feature.summary}
                   className={clsx(
                     'px-5 transition duration-500 ease-in-out ui-not-focus-visible:outline-none',
-                    featureIndex !== selectedIndex && 'opacity-60',
+                    featureIndex !== selectedIndex && 'opacity-60'
                   )}
                   style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
                   aria-hidden={featureIndex !== selectedIndex}
@@ -196,6 +208,7 @@ function FeaturesDesktop() {
                       className="w-full"
                       src={feature.image}
                       alt=""
+                      sizes="52.75rem"
                     />
                   </div>
                 </Tab.Panel>
@@ -206,48 +219,30 @@ function FeaturesDesktop() {
         </>
       )}
     </Tab.Group>
-  );
+  )
 }
 
 export function SecondaryFeatures() {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <section
       id="secondary-features"
-      aria-label="Features for building a portfolio"
-      className="py-20 sm:py-32"
+      aria-label="Features for simplifying everyday business tasks"
+      className="pb-14 pt-20 sm:pb-20 sm:pt-32 lg:pb-32"
     >
       <Container>
-        <div className="mx-auto max-w-2xl sm:text-center">
-          <h2 className="text-3xl font-medium tracking-tight text-gray-900">
-            {t('features.mostPopular')}
+        <div className="mx-auto max-w-2xl md:text-center">
+          <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+            {t('features.title')}
           </h2>
-          <p className="mt-2 text-lg text-gray-600">
-            {t('features.newCar.description')}
+          <p className="mt-4 text-lg tracking-tight text-slate-700">
+            {t('features.description')}
           </p>
         </div>
-        <ul
-          role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 text-sm sm:mt-20 sm:grid-cols-2 md:gap-y-10 lg:max-w-none lg:grid-cols-3"
-        >
-          {features.map((feature) => (
-            <li
-              key={feature.key}
-              className="rounded-2xl border border-gray-200 p-8"
-            >
-              <h3 className="font-semibold text-gray-900">
-                {t(`features.${feature.key}.title`)}
-              </h3>
-              <p className="mt-2 text-gray-700">
-                {t(`features.${feature.key}.description`)}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <FeaturesMobile />
+        <FeaturesDesktop />
       </Container>
     </section>
-  );
+  )
 }
-
-export default SecondaryFeatures;

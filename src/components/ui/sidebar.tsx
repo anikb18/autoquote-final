@@ -1,101 +1,89 @@
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, LayoutDashboard, Settings, Users, FileText, BarChart3 } from "lucide-react";
+import { useTranslation } from 'react-i18next';
+import { Button } from './button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
+import { ChevronLeft, ChevronRight, Home, Settings, BarChart2, Users, FileText, Mail } from 'lucide-react';
 
 interface SidebarProps {
   user: any;
   onSelect: (section: string) => void;
   onChangeRole: (role: string) => void;
   viewMode: string;
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-const Sidebar = ({ user, onSelect, onChangeRole, viewMode, isCollapsed, onToggleCollapse }: SidebarProps) => {
+const Sidebar: React.FC<SidebarProps> = ({ 
+  user, 
+  onSelect, 
+  onChangeRole, 
+  viewMode,
+  isCollapsed = false,
+  onToggleCollapse 
+}) => {
+  const { t } = useTranslation();
+
+  const menuItems = [
+    { id: 'overview', icon: Home, label: t('sidebar.overview') },
+    { id: 'admin-metrics', icon: BarChart2, label: t('sidebar.metrics') },
+    { id: 'dealer-metrics', icon: BarChart2, label: t('sidebar.dealerMetrics') },
+    { id: 'dealership-comparisons', icon: Users, label: t('sidebar.comparisons') },
+    { id: 'sales-trend', icon: FileText, label: t('sidebar.sales') },
+    { id: 'performance', icon: BarChart2, label: t('sidebar.performance') },
+    { id: 'settings', icon: Settings, label: t('sidebar.settings') },
+    { id: 'support', icon: Mail, label: t('sidebar.support') },
+  ];
+
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 flex justify-between items-center border-b border-gray-200/50">
-        <span className={`font-semibold transition-opacity duration-200 ${isCollapsed ? 'opacity-0 hidden' : 'opacity-100'}`}>
-          Dashboard
-        </span>
+    <div className="h-full flex flex-col bg-background">
+      <div className="p-4 flex justify-between items-center border-b">
+        <div className={`transition-all duration-300 ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'}`}>
+          <img 
+            src="/logo.svg" 
+            alt="Logo" 
+            className="h-8"
+          />
+        </div>
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           onClick={onToggleCollapse}
-          className="p-2 hover:bg-gray-100/50 rounded-full"
+          className="ml-auto"
         >
-          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
       </div>
 
-      <nav className="flex-1 p-4">
-        <ul className="space-y-2">
-          <li>
+      <div className="flex-1 overflow-auto py-4">
+        <nav className="space-y-2 px-2">
+          {menuItems.map((item) => (
             <Button
+              key={item.id}
               variant="ghost"
-              className="w-full justify-start gap-2 hover:bg-gray-100/50"
-              onClick={() => onSelect('overview')}
+              className={`w-full justify-start ${isCollapsed ? 'px-2' : 'px-4'}`}
+              onClick={() => onSelect(item.id)}
             >
-              <LayoutDashboard size={20} />
-              {!isCollapsed && <span>Overview</span>}
+              <item.icon className="h-4 w-4 mr-2" />
+              {!isCollapsed && <span>{item.label}</span>}
             </Button>
-          </li>
-          <li>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-2 hover:bg-gray-100/50"
-              onClick={() => onSelect('admin-metrics')}
-            >
-              <BarChart3 size={20} />
-              {!isCollapsed && <span>Metrics</span>}
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-2 hover:bg-gray-100/50"
-              onClick={() => onSelect('users')}
-            >
-              <Users size={20} />
-              {!isCollapsed && <span>Users</span>}
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-2 hover:bg-gray-100/50"
-              onClick={() => onSelect('settings')}
-            >
-              <Settings size={20} />
-              {!isCollapsed && <span>Settings</span>}
-            </Button>
-          </li>
-          <li>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-2 hover:bg-gray-100/50"
-              onClick={() => onSelect('reports')}
-            >
-              <FileText size={20} />
-              {!isCollapsed && <span>Reports</span>}
-            </Button>
-          </li>
-        </ul>
-      </nav>
+          ))}
+        </nav>
+      </div>
 
-      {!isCollapsed && (
-        <div className="p-4 border-t border-gray-200/50">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              {user?.email?.[0]?.toUpperCase() || 'U'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{user?.email}</p>
-              <p className="text-xs text-gray-500 truncate">{viewMode}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="p-4 border-t">
+        {!isCollapsed && (
+          <Select value={viewMode} onValueChange={onChangeRole}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select view" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="admin">Admin View</SelectItem>
+              <SelectItem value="dealer">Dealer View</SelectItem>
+              <SelectItem value="buyer">Buyer View</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
+      </div>
     </div>
   );
 };

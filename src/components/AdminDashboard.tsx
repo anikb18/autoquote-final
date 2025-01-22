@@ -4,9 +4,9 @@ import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { BlogManagement } from "./dashboard/BlogManagement";
 import { NewsletterManagement } from "./dashboard/NewsletterManagement";
 import { UserManagement } from "./dashboard/UserManagement";
-import { AdminSettings } from "./settings/AdminSettings"; // Import AdminSettings
+import AdminSettings from "./settings/AdminSettings"; // Changed to default import
 import { useTranslation } from "react-i18next";
-import { Link } from 'react-router-dom'; // Assuming you are using react-router-dom for navigation
+import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const { t } = useTranslation('admin');
