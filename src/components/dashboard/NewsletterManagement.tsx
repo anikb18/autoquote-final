@@ -14,16 +14,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+import { EmailTemplateModal } from "./EmailTemplateModal";
 
 export const NewsletterManagement = () => {
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedNewsletter, setSelectedNewsletter] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   const { data: subscribers } = useQuery({
     queryKey: ['newsletter-subscribers'],
@@ -50,41 +48,6 @@ export const NewsletterManagement = () => {
       return data;
     }
   });
-
-  const generateEmailContent = async () => {
-    if (!title) {
-      toast({
-        title: "Error",
-        description: "Please enter a newsletter title first",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsGenerating(true);
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const prompt = `Generate a professional newsletter email about ${title}. The content should be engaging and informative. Include HTML formatting for better presentation. The tone should be professional but friendly.`;
-      
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
-      
-      setContent(text);
-      toast({
-        title: "Success",
-        description: "Email content generated successfully!"
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to generate content. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   const handleCreateNewsletter = async () => {
     if (!title || !content) {
@@ -178,15 +141,14 @@ export const NewsletterManagement = () => {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={generateEmailContent}
-                        disabled={isGenerating}
+                        onClick={() => setIsTemplateModalOpen(true)}
                         className="relative"
                       >
-                        <Sparkles className="h-4 w-4 sparkle-icon" />
+                        <Sparkles className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Generate email content with AI</p>
+                      <p>Generate email content with AI templates</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -281,6 +243,12 @@ export const NewsletterManagement = () => {
           </CardContent>
         </Card>
       </TabsContent>
+
+      <EmailTemplateModal
+        open={isTemplateModalOpen}
+        onOpenChange={setIsTemplateModalOpen}
+        onContentGenerated={setContent}
+      />
     </Tabs>
   );
 };
