@@ -5,25 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ChatInterface from "@/components/ChatInterface";
 import { DealerQuoteItem } from "@/components/quotes/DealerQuoteItem";
 import { useTranslation } from "react-i18next";
-
-interface CarDetails {
-  year: string;
-  make: string;
-  model: string;
-  [key: string]: any;
-}
-
-interface Quote {
-  id: string;
-  car_details: CarDetails;
-  dealer_quotes: Array<{
-    dealer_id: string;
-    dealer_profile: {
-      dealer_name: string;
-    };
-    is_accepted: boolean;
-  }>;
-}
+import { CarDetails, Quote, DealerQuote } from "@/types/quotes";
 
 const BuyerCarListings = () => {
   const { t } = useTranslation();
@@ -36,7 +18,9 @@ const BuyerCarListings = () => {
           id,
           car_details,
           dealer_quotes!inner (
+            id,
             dealer_id,
+            created_at,
             dealer_profiles (
               dealer_name
             )
@@ -45,7 +29,21 @@ const BuyerCarListings = () => {
         .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
       
       if (error) throw error;
-      return data;
+
+      return data.map((quote): Quote => ({
+        id: quote.id,
+        car_details: quote.car_details as CarDetails,
+        dealer_quotes: quote.dealer_quotes.map((dq): DealerQuote => ({
+          id: dq.id,
+          dealer_id: dq.dealer_id,
+          dealer_profile: dq.dealer_profiles,
+          is_accepted: false,
+          created_at: dq.created_at,
+          status: 'pending',
+        })),
+        status: 'active',
+        created_at: new Date().toISOString(),
+      }));
     },
   });
 
@@ -63,7 +61,7 @@ const BuyerCarListings = () => {
           <CardContent>
             {quote.dealer_quotes.map((dealerQuote) => (
               <DealerQuoteItem
-                key={dealerQuote.dealer_id}
+                key={dealerQuote.id}
                 dealerQuote={dealerQuote}
                 quoteId={quote.id}
               />

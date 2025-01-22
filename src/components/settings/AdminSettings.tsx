@@ -1,5 +1,5 @@
 import { CouponManagement } from "./CouponManagement";
-import { PricingManagement } from "./PricingManagement";
+import PricingManagement from "./PricingManagement";
 
 const AdminSettings = () => {
   return (

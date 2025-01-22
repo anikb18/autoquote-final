@@ -21,6 +21,11 @@ interface PromotionCode {
   active: boolean;
 }
 
+interface CouponResponse {
+  coupons: Coupon[];
+  promotionCodes: PromotionCode[];
+}
+
 export const CouponManagement = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -28,9 +33,9 @@ export const CouponManagement = () => {
   const { data: couponsData } = useQuery({
     queryKey: ['coupons'],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('list-coupons');
+      const { data, error } = await supabase.functions.invoke<CouponResponse>('list-coupons');
       if (error) throw error;
-      return data as { coupons: Coupon[], promotionCodes: PromotionCode[] };
+      return data;
     }
   });
 

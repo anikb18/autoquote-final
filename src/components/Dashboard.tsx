@@ -13,11 +13,17 @@ import { DealerMetricsSection } from "./dashboard/DealerMetricsSection";
 import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { PerformanceChart } from "./dashboard/PerformanceChart";
+import { User } from "@supabase/supabase-js";
 
 type ViewMode = "admin" | "dealer" | "buyer";
 
+interface UserRoleResult {
+  role: string;
+  user: User | null;
+}
+
 const Dashboard = () => {
-  const { role, user } = useUserRole();
+  const { role, user } = useUserRole() as UserRoleResult;
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "buyer");
   const [selectedSection, setSelectedSection] = useState('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -108,7 +114,7 @@ const Dashboard = () => {
           <Sidebar 
             user={user}
             onSelect={setSelectedSection} 
-            onChangeRole={setViewMode} 
+            onChangeRole={(newRole: ViewMode) => setViewMode(newRole)}
             viewMode={viewMode}
             isCollapsed={isSidebarCollapsed}
             onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
