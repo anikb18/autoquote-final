@@ -4,13 +4,16 @@ import { UserTable } from "./user/UserTable";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserRole } from "@/hooks/use-user-role";
+import { Tables } from "@/integrations/supabase/types";
+
+type Profile = Tables<'profiles'>;
 
 export const UserManagement = () => {
   const { toast } = useToast();
   const { role } = useUserRole();
 
-  const { data: users, isLoading, error } = useQuery({
-    queryKey: ['admin-users'],
+  const { data: profiles, isLoading, error, refetch: refetchProfiles } = useQuery({
+    queryKey: ['user-profiles'],
     queryFn: async () => {
       if (role !== 'admin') {
         throw new Error('Unauthorized: Admin access required');
@@ -20,22 +23,7 @@ export const UserManagement = () => {
         .select('*');
       
       if (error) throw error;
-      return data;
-    },
-    enabled: role === 'admin', // Only run query if user is admin
-  });
-
-  const { data: profiles, refetch: refetchProfiles } = useQuery({
-    queryKey: ['user-profiles'],
-    queryFn: async () => {
-      if (role !== 'admin') {
-        throw new Error('Unauthorized: Admin access required');
-      }
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*');
-      if (error) throw error;
-      return data;
+      return data as Profile[];
     },
     enabled: role === 'admin', // Only run query if user is admin
   });
@@ -94,7 +82,7 @@ export const UserManagement = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">User Management</h2>
       </div>
-      <UserTable users={users} profiles={profiles} isLoading={isLoading} />
+      <UserTable profiles={profiles} isLoading={isLoading} />
     </div>
   );
 };

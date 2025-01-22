@@ -8,16 +8,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { UserPasswordReset } from "./UserPasswordReset";
-import { User } from "@supabase/supabase-js";
 import { Tables } from "@/integrations/supabase/types";
 
+type Profile = Tables<'profiles'>;
+
 interface UserTableProps {
-  users: User[] | null;
-  profiles?: Tables<'profiles'>[] | null;
+  profiles?: Profile[] | null;
   isLoading: boolean;
 }
 
-export const UserTable = ({ users, profiles, isLoading }: UserTableProps) => {
+export const UserTable = ({ profiles, isLoading }: UserTableProps) => {
   if (isLoading) {
     return <div>Loading users...</div>;
   }
@@ -28,34 +28,31 @@ export const UserTable = ({ users, profiles, isLoading }: UserTableProps) => {
         <TableRow>
           <TableHead>Email</TableHead>
           <TableHead>Full Name</TableHead>
-          <TableHead>Last Sign In</TableHead>
+          <TableHead>Created At</TableHead>
           <TableHead>Subscription</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users?.map((user) => {
-          const userProfile = profiles?.find(p => p.id === user.id);
-          return (
-            <TableRow key={user.id}>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>{userProfile?.full_name || 'N/A'}</TableCell>
-              <TableCell>
-                {user.last_sign_in_at 
-                  ? format(new Date(user.last_sign_in_at), 'PPpp')
-                  : 'Never'}
-              </TableCell>
-              <TableCell>
-                {userProfile?.subscription_status 
-                  ? `${userProfile.subscription_status} (${userProfile.subscription_type})`
-                  : 'No subscription'}
-              </TableCell>
-              <TableCell>
-                <UserPasswordReset userEmail={user.email || ''} />
-              </TableCell>
-            </TableRow>
-          );
-        })}
+        {profiles?.map((profile) => (
+          <TableRow key={profile.id}>
+            <TableCell>{profile.email}</TableCell>
+            <TableCell>{profile.full_name || 'N/A'}</TableCell>
+            <TableCell>
+              {profile.created_at 
+                ? format(new Date(profile.created_at), 'PPpp')
+                : 'Never'}
+            </TableCell>
+            <TableCell>
+              {profile.subscription_status 
+                ? `${profile.subscription_status} (${profile.subscription_type})`
+                : 'No subscription'}
+            </TableCell>
+            <TableCell>
+              <UserPasswordReset userEmail={profile.email || ''} />
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
