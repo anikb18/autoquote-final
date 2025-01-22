@@ -18,5 +18,28 @@
   "spotsRemaining": "{{count}} spots remaining",
   "totalSpots": "{{count}} total spots",
   "title": "Limited Time Offer",
-  "subtitle": "Don't miss out on these exclusive deals"
+  "subtitle": "Don't miss out on these exclusive deals",
+  "form": {
+    "steps": "Step {{step}} of {{total}}",
+    "desiredVehicle": {
+      "title": "Desired Vehicle",
+      "description": "Tell us about the vehicle you're looking for"
+    },
+    "financing": {
+      "title": "Financing Options",
+      "description": "Choose your preferred financing method"
+    },
+    "tradeIn": {
+      "title": "Trade-In Vehicle",
+      "description": "Do you have a vehicle to trade in?"
+    },
+    "payment": {
+      "title": "Complete Your Quote Request",
+      "description": "Your quote request is almost ready. Complete the payment to receive competitive offers from our network of certified dealers.",
+      "details": "Includes trade-in valuation and unlimited dealer quotes",
+      "proceed": "Proceed to Payment"
+    },
+    "back": "Back",
+    "next": "Next"
+  }
 }

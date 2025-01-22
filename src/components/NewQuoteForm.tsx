@@ -150,8 +150,20 @@ const NewQuoteForm = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="max-w-2xl mx-auto p-6">
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <Card className="w-full max-w-2xl mx-auto p-6 space-y-8">
+        <div className="space-y-4">
+          <h1 className="text-2xl font-bold text-center text-foreground">
+            {t('form.steps', { step: currentStep, total: 4 })}
+          </h1>
+          <p className="text-muted-foreground text-center">
+            {currentStep === 1 && t('form.desiredVehicle.description')}
+            {currentStep === 2 && t('form.financing.description')}
+            {currentStep === 3 && t('form.tradeIn.description')}
+            {currentStep === 4 && t('form.payment.description')}
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-8">
           {currentStep === 1 && (
             <DesiredVehicleSection
@@ -193,9 +205,9 @@ const NewQuoteForm = () => {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">{t('form.payment.title')}</h3>
               <p>{t('form.payment.description')}</p>
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-muted rounded-lg">
                 <p className="text-2xl font-bold">$49.95</p>
-                <p className="text-sm text-gray-600">{t('form.payment.details')}</p>
+                <p className="text-sm text-muted-foreground">{t('form.payment.details')}</p>
               </div>
             </div>
           )}

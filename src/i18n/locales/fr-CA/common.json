@@ -2,11 +2,11 @@
   "callToAction": {
     "title": "Prêt à trouver la voiture de vos rêves?",
     "description": "Rejoignez Autoquote24 aujourd'hui et découvrez une nouvelle façon d'acheter et d'échanger des véhicules.",
-    "button": "Commencer maintenant"
+    "button": "Commencer Maintenant"
   },
   "Navigation": {
     "auth": {
-      "signIn": "Connexion"
+      "signIn": "Se Connecter"
     }
   },
   "time": {
@@ -17,6 +17,29 @@
   },
   "spotsRemaining": "{{count}} places restantes",
   "totalSpots": "{{count}} places au total",
-  "title": "Offre à durée limitée",
-  "subtitle": "Ne manquez pas ces offres exclusives"
+  "title": "Offre à Durée Limitée",
+  "subtitle": "Ne manquez pas ces offres exclusives",
+  "form": {
+    "steps": "Étape {{step}} sur {{total}}",
+    "desiredVehicle": {
+      "title": "Véhicule Désiré",
+      "description": "Parlez-nous du véhicule que vous recherchez"
+    },
+    "financing": {
+      "title": "Options de Financement",
+      "description": "Choisissez votre méthode de financement préférée"
+    },
+    "tradeIn": {
+      "title": "Véhicule d'Échange",
+      "description": "Avez-vous un véhicule à échanger?"
+    },
+    "payment": {
+      "title": "Complétez Votre Demande",
+      "description": "Votre demande est presque prête. Complétez le paiement pour recevoir des offres compétitives de notre réseau de concessionnaires certifiés.",
+      "details": "Inclut l'évaluation de l'échange et les soumissions illimitées",
+      "proceed": "Procéder au Paiement"
+    },
+    "back": "Retour",
+    "next": "Suivant"
+  }
 }
