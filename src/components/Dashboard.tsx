@@ -4,18 +4,30 @@ import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
 import BuyerDashboard from "./BuyerDashboard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Settings } from "lucide-react";
 import { Button } from "./ui/button";
 import Sidebar from "@/components/ui/sidebar";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 type ViewMode = "admin" | "dealer" | "user";
 
 const Dashboard = () => {
-  const { role, user } = useUserRole();
+  const { role, user, isLoading } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/auth");
+      }
+    };
+    checkAuth();
+  }, [navigate]);
 
   useEffect(() => {
     if (role) {
@@ -40,10 +52,21 @@ const Dashboard = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p>Please log in to view the dashboard.</p>
+        <div className="text-center space-y-4">
+          <p>Please log in to view the dashboard.</p>
+          <Button onClick={() => navigate("/auth")}>Go to Login</Button>
+        </div>
       </div>
     );
   }
