@@ -17,7 +17,7 @@ import { PerformanceChart } from "./dashboard/PerformanceChart";
 type ViewMode = "admin" | "dealer" | "buyer";
 
 const Dashboard = () => {
-  const { role } = useUserRole();
+  const { role, user } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "buyer");
   const [selectedSection, setSelectedSection] = useState('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -46,13 +46,13 @@ const Dashboard = () => {
       <div className="flex items-center space-x-3">
         {role === "admin" && (
           <Select value={viewMode} onValueChange={(value: ViewMode) => setViewMode(value)}>
-            <SelectTrigger className="w-[140px] text-sm h-8 bg-white/50 backdrop-blur-sm border-gray-200/50">
+            <SelectTrigger className="w-[140px] text-sm h-8 bg-gray-100 text-gray-900 border-gray-200/50">
               <SelectValue placeholder="View Mode" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="admin" className="text-sm">Admin View</SelectItem>
-              <SelectItem value="dealer" className="text-sm">Dealer View</SelectItem>
-              <SelectItem value="buyer" className="text-sm">Buyer View</SelectItem>
+              <SelectItem value="admin" className="text-sm text-gray-900">Admin View</SelectItem>
+              <SelectItem value="dealer" className="text-sm text-gray-900">Dealer View</SelectItem>
+              <SelectItem value="buyer" className="text-sm text-gray-900">Buyer View</SelectItem>
             </SelectContent>
           </Select>
         )}
@@ -106,6 +106,7 @@ const Dashboard = () => {
         ${isSidebarCollapsed ? 'w-16' : 'w-64'}`}>
         <div className="h-full bg-white/80 backdrop-blur-md shadow-lg border-r border-gray-200/50">
           <Sidebar 
+            user={user}
             onSelect={setSelectedSection} 
             onChangeRole={setViewMode} 
             viewMode={viewMode}
