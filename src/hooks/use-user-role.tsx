@@ -20,7 +20,7 @@ export const useUserRole = () => {
           .from('user_roles')
           .select('role')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle(); // Changed from .single() to .maybeSingle()
 
         if (roleError && roleError.code !== 'PGRST116') {
           console.error('Error fetching user role:', roleError);
@@ -32,7 +32,7 @@ export const useUserRole = () => {
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle(); // Changed from .single() to .maybeSingle()
 
         if (profileError) {
           console.error('Error fetching profile:', profileError);
@@ -41,6 +41,9 @@ export const useUserRole = () => {
 
         // Default to 'user' role if no specific role is found
         const userRole = roleData?.role || 'user';
+
+        console.log('User role:', userRole); // Added for debugging
+        console.log('Profile data:', profileData); // Added for debugging
 
         return {
           role: userRole,
