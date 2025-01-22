@@ -19,16 +19,22 @@ export const UserManagement = () => {
         throw new Error('Unauthorized: Admin access required');
       }
       
-      // Updated query to fetch all profiles
+      // Fetch all profiles with their roles
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
-        .select('*, user_roles(role)');
+        .select(`
+          *,
+          user_roles (
+            role
+          )
+        `);
       
-      if (profilesError) throw profilesError;
+      if (profilesError) {
+        console.error('Error fetching profiles:', profilesError);
+        throw profilesError;
+      }
       
-      // Log the data to help with debugging
       console.log('Fetched profiles:', profilesData);
-      
       return profilesData as Profile[];
     },
     enabled: role === 'admin',

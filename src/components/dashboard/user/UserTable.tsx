@@ -10,17 +10,24 @@ import {
 import { UserPasswordReset } from "./UserPasswordReset";
 import { Tables } from "@/integrations/supabase/types";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Profile = Tables<'profiles'>;
 
 interface UserTableProps {
-  profiles?: Profile[] | null;
+  profiles?: Profile[];
   isLoading: boolean;
 }
 
 export const UserTable = ({ profiles, isLoading }: UserTableProps) => {
   if (isLoading) {
-    return <div>Loading users...</div>;
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-full" />
+        <Skeleton className="h-8 w-full" />
+        <Skeleton className="h-8 w-full" />
+      </div>
+    );
   }
 
   return (
@@ -48,15 +55,15 @@ export const UserTable = ({ profiles, isLoading }: UserTableProps) => {
             <TableCell>
               {profile.created_at 
                 ? format(new Date(profile.created_at), 'PPpp')
-                : 'Never'}
+                : 'N/A'}
             </TableCell>
             <TableCell>
-              {profile.subscription_status 
-                ? `${profile.subscription_status} (${profile.subscription_type})`
-                : 'No subscription'}
+              <Badge variant={profile.subscription_status === 'active' ? 'default' : 'secondary'}>
+                {profile.subscription_status || 'none'}
+              </Badge>
             </TableCell>
             <TableCell>
-              <UserPasswordReset userEmail={profile.email || ''} />
+              <UserPasswordReset userId={profile.id} />
             </TableCell>
           </TableRow>
         ))}
