@@ -1,15 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Container } from '@/components/ui/container';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const { t } = useTranslation('home');
-  const navigate = useNavigate();
-
-  const handleViewDetail = (quoteId) => {
-    navigate(`/quotes/${quoteId}`);
-  };
 
   return (
     <Container className="pb-16 pt-20 text-center lg:pt-32">
@@ -33,10 +28,7 @@ const Hero = () => {
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
         <Button asChild>
-          <Link to="/sign-up">{t('hero.getStarted')}</Link>
-        </Button>
-        <Button variant="outline" asChild>
-          <Link to="/sign-in">{t('Navigation.auth.signIn')}</Link>
+          <Link to="/new-quote">{t('hero.getStarted')}</Link>
         </Button>
       </div>
       <div className="mt-36 lg:mt-44">

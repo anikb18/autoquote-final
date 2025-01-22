@@ -7,14 +7,14 @@ import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DealershipLanding from "./components/DealershipLanding";
 import DealerSignup from "./pages/DealerSignup";
+import NewQuoteForm from "./components/NewQuoteForm";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Header from "./components/Header";
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 5,
       retry: 1,
     },
   },
@@ -32,6 +32,7 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
+              <Route path="/new-quote" element={<NewQuoteForm />} />
               <Route
                 path="/dashboard"
                 element={
