@@ -1918,6 +1918,7 @@ export type Database = {
         | "lost"
       newsletter_status: "draft" | "scheduled" | "sent"
       subscription_level: "basic" | "premium"
+      user_role: "admin" | "dealer" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
