@@ -12,9 +12,9 @@
   "laval": {
     "content": "L'évaluation de la reprise était exacte, et j'ai reçu plusieurs offres compétitives en 24 heures. C'est comme ça que l'achat d'une voiture devrait se passer !",
     "author": {
-      "name": "Jean-Philippe Tremblay",
-      "role": "Client de Laval",
-      "initials": "JT"
+      "name": "Amélie Tremblay",
+      "role": "Cliente de Laval",
+      "initials": "AT"
     }
   },
   "sherbrooke": {
@@ -44,9 +44,9 @@
   "troisrivieres": {
     "content": "Le système de chat sécurisé a facilité la communication avec les concessionnaires. J'ai obtenu rapidement des réponses à toutes mes questions.",
     "author": {
-      "name": "Antoine Bouchard",
-      "role": "Client de Trois-Rivières",
-      "initials": "AB"
+      "name": "Catherine Bouchard",
+      "role": "Cliente de Trois-Rivières",
+      "initials": "CB"
     }
   }
 }

@@ -12,9 +12,9 @@
   "laval": {
     "content": "The trade-in valuation was spot-on, and I received multiple competitive offers within 24 hours. This is how car buying should be!",
     "author": {
-      "name": "Jean-Philippe Tremblay",
+      "name": "Amélie Tremblay",
       "role": "Laval Customer",
-      "initials": "JT"
+      "initials": "AT"
     }
   },
   "sherbrooke": {
@@ -44,9 +44,9 @@
   "troisrivieres": {
     "content": "The secure chat system made communication with dealers easy and efficient. I got all my questions answered quickly.",
     "author": {
-      "name": "Antoine Bouchard",
+      "name": "Catherine Bouchard",
       "role": "Trois-Rivières Customer",
-      "initials": "AB"
+      "initials": "CB"
     }
   }
 }
