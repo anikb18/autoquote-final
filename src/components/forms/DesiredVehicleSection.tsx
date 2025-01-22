@@ -30,6 +30,49 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
   });
 
   const availableYears = ['2024', '2025'];
+  const carMakes = [
+    { value: 'toyota', label: 'Toyota' },
+    { value: 'honda', label: 'Honda' },
+    { value: 'ford', label: 'Ford' },
+    { value: 'chevrolet', label: 'Chevrolet' },
+    { value: 'hyundai', label: 'Hyundai' }
+  ];
+
+  const getModelsByMake = (make: string) => {
+    const modelMap: { [key: string]: { value: string, label: string }[] } = {
+      toyota: [
+        { value: 'camry', label: 'Camry' },
+        { value: 'corolla', label: 'Corolla' },
+        { value: 'rav4', label: 'RAV4' },
+        { value: 'highlander', label: 'Highlander' }
+      ],
+      honda: [
+        { value: 'civic', label: 'Civic' },
+        { value: 'accord', label: 'Accord' },
+        { value: 'cr-v', label: 'CR-V' },
+        { value: 'pilot', label: 'Pilot' }
+      ],
+      ford: [
+        { value: 'f-150', label: 'F-150' },
+        { value: 'escape', label: 'Escape' },
+        { value: 'explorer', label: 'Explorer' },
+        { value: 'mustang', label: 'Mustang' }
+      ],
+      chevrolet: [
+        { value: 'silverado', label: 'Silverado' },
+        { value: 'equinox', label: 'Equinox' },
+        { value: 'traverse', label: 'Traverse' },
+        { value: 'malibu', label: 'Malibu' }
+      ],
+      hyundai: [
+        { value: 'elantra', label: 'Elantra' },
+        { value: 'tucson', label: 'Tucson' },
+        { value: 'santa-fe', label: 'Santa Fe' },
+        { value: 'palisade', label: 'Palisade' }
+      ]
+    };
+    return modelMap[make] || [];
+  };
 
   return (
     <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
@@ -46,32 +89,13 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>{t('form.make.label')}</Label>
-          <Select 
-            onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, make: value }))}
-            value={desiredVehicle.make}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={t('form.make.placeholder')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="toyota">Toyota</SelectItem>
-              <SelectItem value="honda">Honda</SelectItem>
-              <SelectItem value="ford">Ford</SelectItem>
-              <SelectItem value="chevrolet">Chevrolet</SelectItem>
-              <SelectItem value="hyundai">Hyundai</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
           <Label>{t('form.year.label')}</Label>
           <Select 
             onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, year: value }))}
             value={desiredVehicle.year}
           >
             <SelectTrigger>
-              <SelectValue placeholder={t('form.year.placeholder')} />
+              <SelectValue placeholder={t('form.year.selectYear')} />
             </SelectTrigger>
             <SelectContent>
               {availableYears.map((year) => (
@@ -82,24 +106,41 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
         </div>
 
         <div className="space-y-2">
-          <Label>{t('form.model.label')}</Label>
+          <Label>{t('form.make.label')}</Label>
           <Select 
-            onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, model: value }))}
-            value={desiredVehicle.model}
+            onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, make: value, model: '' }))}
+            value={desiredVehicle.make}
           >
             <SelectTrigger>
-              <SelectValue placeholder={t('form.model.placeholder')} />
+              <SelectValue placeholder={t('form.make.selectMake')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="camry">Camry</SelectItem>
-              <SelectItem value="corolla">Corolla</SelectItem>
-              <SelectItem value="rav4">RAV4</SelectItem>
-              <SelectItem value="highlander">Highlander</SelectItem>
+              {carMakes.map((make) => (
+                <SelectItem key={make.value} value={make.value}>{make.label}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
 
-        {carDetails && (
+        <div className="space-y-2">
+          <Label>{t('form.model.label')}</Label>
+          <Select 
+            onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, model: value }))}
+            value={desiredVehicle.model}
+            disabled={!desiredVehicle.make}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={t('form.model.selectModel')} />
+            </SelectTrigger>
+            <SelectContent>
+              {getModelsByMake(desiredVehicle.make).map((model) => (
+                <SelectItem key={model.value} value={model.value}>{model.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {carDetails && !isLoading && (
           <div className="col-span-2">
             <div className="bg-white p-4 rounded-lg shadow-sm">
               <h5 className="font-medium mb-2">{t('form.carDetails.specifications')}</h5>
