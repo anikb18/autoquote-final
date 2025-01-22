@@ -34,9 +34,9 @@ const DesiredVehicleSection = ({
   });
 
   const { data: carModels = [], isLoading: isLoadingModels } = useQuery({
-    queryKey: ['car-models', desiredVehicle.make],
-    queryFn: () => fetchCarModels(desiredVehicle.make),
-    enabled: !!desiredVehicle.make,
+    queryKey: ['car-models', desiredVehicle.make, desiredVehicle.year],
+    queryFn: () => fetchCarModels(desiredVehicle.make, desiredVehicle.year),
+    enabled: !!(desiredVehicle.make && desiredVehicle.year),
   });
 
   const { data: carDetails, isLoading: isLoadingDetails } = useQuery({
@@ -68,7 +68,7 @@ const DesiredVehicleSection = ({
         <div className="space-y-2">
           <Label>{t('form.year.label')}</Label>
           <Select 
-            onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, year: value }))}
+            onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, year: value, model: '' }))}
             value={desiredVehicle.year}
           >
             <SelectTrigger>
@@ -87,6 +87,7 @@ const DesiredVehicleSection = ({
           <Select 
             onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, make: value, model: '' }))}
             value={desiredVehicle.make}
+            disabled={!desiredVehicle.year}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('form.make.selectMake')} />
@@ -108,7 +109,7 @@ const DesiredVehicleSection = ({
           <Select 
             onValueChange={(value) => setDesiredVehicle(prev => ({ ...prev, model: value }))}
             value={desiredVehicle.model}
-            disabled={!desiredVehicle.make}
+            disabled={!desiredVehicle.make || !desiredVehicle.year}
           >
             <SelectTrigger>
               <SelectValue placeholder={t('form.model.selectModel')} />
