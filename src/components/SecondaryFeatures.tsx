@@ -2,7 +2,7 @@ import { useId } from 'react';
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { Container } from '@/components/ui/Container';
+import { Container } from '@/components/ui/container';
 import screenshotPayroll from '/public/images/payroll.png';
 import screenshotInventory from '/public/images/expenses.png';
 import screenshotContacts from '/public/images/contacts.png';

@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { Container } from '@/components/ui/Container'
+import { Container } from '@/components/ui/container'
 import avatarImage1 from '/public/images/avatars/avatar-1.png';
 import avatarImage2 from '/public/images/avatars/avatar-2.png'
 import avatarImage3 from '/public/images/avatars/avatar-3.png'
