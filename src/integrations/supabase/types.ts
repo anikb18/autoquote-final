@@ -1287,6 +1287,42 @@ export type Database = {
           },
         ]
       }
+      scheduled_emails: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          html_content: string
+          id: string
+          scheduled_for: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["email_status"] | null
+          subject: string
+          to_addresses: string[]
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          html_content: string
+          id?: string
+          scheduled_for: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["email_status"] | null
+          subject: string
+          to_addresses: string[]
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          html_content?: string
+          id?: string
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["email_status"] | null
+          subject?: string
+          to_addresses?: string[]
+        }
+        Relationships: []
+      }
       seo_settings: {
         Row: {
           created_at: string | null
@@ -1980,6 +2016,7 @@ export type Database = {
         | "qualified"
         | "converted"
         | "lost"
+      email_status: "pending" | "sent" | "failed"
       newsletter_status: "draft" | "scheduled" | "sent"
       subscription_level: "basic" | "premium"
       user_role: "admin" | "dealer" | "user"
