@@ -1700,6 +1700,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      create_admin_user: {
+        Args: {
+          email: string
+          password: string
+          full_name: string
+        }
+        Returns: string
+      }
       firebase_fdw_handler: {
         Args: Record<PropertyKey, never>
         Returns: unknown
