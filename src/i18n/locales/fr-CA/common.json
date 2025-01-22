@@ -15,8 +15,8 @@
     "minutes": "minutes",
     "seconds": "secondes"
   },
-  "spotsRemaining": "{{count}} places restantes",
-  "totalSpots": "{{count}} places au total",
+  "spotsRemaining": "{{count}} étapes restantes",
+  "totalSpots": "{{count}} étapes au total",
   "title": "Offre à Durée Limitée",
   "subtitle": "Ne manquez pas ces offres exclusives",
   "form": {
@@ -24,6 +24,21 @@
     "desiredVehicle": {
       "title": "Véhicule Désiré",
       "description": "Parlez-nous du véhicule que vous recherchez"
+    },
+    "make": {
+      "label": "Marque",
+      "placeholder": "Sélectionnez la marque"
+    },
+    "model": {
+      "label": "Modèle",
+      "placeholder": "Sélectionnez le modèle"
+    },
+    "year": {
+      "label": "Année"
+    },
+    "trim": {
+      "label": "Niveau de Finition",
+      "placeholder": "Sélectionnez la finition"
     },
     "financing": {
       "title": "Options de Financement",

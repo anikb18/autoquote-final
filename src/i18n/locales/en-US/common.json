@@ -15,8 +15,8 @@
     "minutes": "minutes",
     "seconds": "seconds"
   },
-  "spotsRemaining": "{{count}} spots remaining",
-  "totalSpots": "{{count}} total spots",
+  "spotsRemaining": "{{count}} steps remaining",
+  "totalSpots": "{{count}} total steps",
   "title": "Limited Time Offer",
   "subtitle": "Don't miss out on these exclusive deals",
   "form": {
@@ -24,6 +24,21 @@
     "desiredVehicle": {
       "title": "Desired Vehicle",
       "description": "Tell us about the vehicle you're looking for"
+    },
+    "make": {
+      "label": "Make",
+      "placeholder": "Select make"
+    },
+    "model": {
+      "label": "Model",
+      "placeholder": "Select model"
+    },
+    "year": {
+      "label": "Year"
+    },
+    "trim": {
+      "label": "Trim Level",
+      "placeholder": "Select trim"
     },
     "financing": {
       "title": "Financing Options",
