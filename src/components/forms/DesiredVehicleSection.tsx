@@ -3,8 +3,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Car } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCarDetailsFromGemini } from "@/utils/carData";
+import { fetchCarDetailsFromGemini, fetchCarMakes, fetchCarModels } from "@/utils/carData";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card } from "@/components/ui/card";
 
 interface DesiredVehicleProps {
   desiredVehicle: {
@@ -19,7 +20,18 @@ interface DesiredVehicleProps {
 const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVehicleProps) => {
   const { t } = useTranslation();
 
-  const { data: carDetails, isLoading } = useQuery({
+  const { data: carMakes = [], isLoading: isLoadingMakes } = useQuery({
+    queryKey: ['car-makes'],
+    queryFn: fetchCarMakes,
+  });
+
+  const { data: carModels = [], isLoading: isLoadingModels } = useQuery({
+    queryKey: ['car-models', desiredVehicle.make],
+    queryFn: () => fetchCarModels(desiredVehicle.make),
+    enabled: !!desiredVehicle.make,
+  });
+
+  const { data: carDetails, isLoading: isLoadingDetails } = useQuery({
     queryKey: ['car-details', desiredVehicle.make, desiredVehicle.model, desiredVehicle.year],
     queryFn: () => fetchCarDetailsFromGemini(
       desiredVehicle.make,
@@ -30,49 +42,6 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
   });
 
   const availableYears = ['2024', '2025'];
-  const carMakes = [
-    { value: 'toyota', label: 'Toyota' },
-    { value: 'honda', label: 'Honda' },
-    { value: 'ford', label: 'Ford' },
-    { value: 'chevrolet', label: 'Chevrolet' },
-    { value: 'hyundai', label: 'Hyundai' }
-  ];
-
-  const getModelsByMake = (make: string) => {
-    const modelMap: { [key: string]: { value: string, label: string }[] } = {
-      toyota: [
-        { value: 'camry', label: 'Camry' },
-        { value: 'corolla', label: 'Corolla' },
-        { value: 'rav4', label: 'RAV4' },
-        { value: 'highlander', label: 'Highlander' }
-      ],
-      honda: [
-        { value: 'civic', label: 'Civic' },
-        { value: 'accord', label: 'Accord' },
-        { value: 'cr-v', label: 'CR-V' },
-        { value: 'pilot', label: 'Pilot' }
-      ],
-      ford: [
-        { value: 'f-150', label: 'F-150' },
-        { value: 'escape', label: 'Escape' },
-        { value: 'explorer', label: 'Explorer' },
-        { value: 'mustang', label: 'Mustang' }
-      ],
-      chevrolet: [
-        { value: 'silverado', label: 'Silverado' },
-        { value: 'equinox', label: 'Equinox' },
-        { value: 'traverse', label: 'Traverse' },
-        { value: 'malibu', label: 'Malibu' }
-      ],
-      hyundai: [
-        { value: 'elantra', label: 'Elantra' },
-        { value: 'tucson', label: 'Tucson' },
-        { value: 'santa-fe', label: 'Santa Fe' },
-        { value: 'palisade', label: 'Palisade' }
-      ]
-    };
-    return modelMap[make] || [];
-  };
 
   return (
     <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
@@ -115,9 +84,13 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
               <SelectValue placeholder={t('form.make.selectMake')} />
             </SelectTrigger>
             <SelectContent>
-              {carMakes.map((make) => (
-                <SelectItem key={make.value} value={make.value}>{make.label}</SelectItem>
-              ))}
+              {isLoadingMakes ? (
+                <SelectItem value="loading" disabled>Loading...</SelectItem>
+              ) : (
+                carMakes.map((make) => (
+                  <SelectItem key={make.value} value={make.value}>{make.label}</SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>
@@ -133,24 +106,29 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
               <SelectValue placeholder={t('form.model.selectModel')} />
             </SelectTrigger>
             <SelectContent>
-              {getModelsByMake(desiredVehicle.make).map((model) => (
-                <SelectItem key={model.value} value={model.value}>{model.label}</SelectItem>
-              ))}
+              {isLoadingModels ? (
+                <SelectItem value="loading" disabled>Loading...</SelectItem>
+              ) : (
+                carModels.map((model) => (
+                  <SelectItem key={model.value} value={model.value}>{model.label}</SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>
 
-        {carDetails && !isLoading && (
-          <div className="col-span-2">
-            <div className="bg-white p-4 rounded-lg shadow-sm">
-              <h5 className="font-medium mb-2">{t('form.carDetails.specifications')}</h5>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p>{carDetails.engine}</p>
-                <p>{carDetails.fuelEfficiency}</p>
-                <p>{carDetails.safetyFeatures}</p>
-              </div>
+        {carDetails && !isLoadingDetails && (
+          <Card className="col-span-2 p-4 space-y-3">
+            <h5 className="font-medium">{t('form.carDetails.specifications')}</h5>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <p><strong>Engine:</strong> {carDetails.engine}</p>
+              <p><strong>Fuel Efficiency:</strong> {carDetails.fuelEfficiency}</p>
+              <p><strong>Safety Features:</strong> {carDetails.safetyFeatures}</p>
+              <p><strong>Technology:</strong> {carDetails.technology}</p>
+              <p><strong>Available Trims:</strong> {carDetails.trims}</p>
+              <p><strong>Price Range:</strong> {carDetails.priceRange}</p>
             </div>
-          </div>
+          </Card>
         )}
       </div>
     </div>
