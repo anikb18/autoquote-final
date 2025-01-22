@@ -31,6 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 type Profile = Tables<'profiles'>;
+type UserRole = "super_admin" | "admin" | "dealer" | "user";
 
 interface UserTableProps {
   profiles?: Profile[];
@@ -49,7 +50,7 @@ export const UserTable = ({
 }: UserTableProps) => {
   const { toast } = useToast();
 
-  const handleRoleChange = async (userId: string, newRole: string) => {
+  const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
       const { error } = await supabase
         .from('user_roles')
@@ -103,7 +104,7 @@ export const UserTable = ({
               <TableCell>
                 <UserRoleSelect
                   userId={profile.id}
-                  currentRole={profile.role || 'user'}
+                  currentRole={(profile.role as UserRole) || 'user'}
                   onRoleChange={handleRoleChange}
                 />
               </TableCell>
@@ -150,19 +151,27 @@ export const UserTable = ({
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious 
+            <Button
+              variant="ghost"
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-            />
+              className="gap-1 pl-2.5"
+            >
+              <span>Previous</span>
+            </Button>
           </PaginationItem>
           <PaginationItem>
             <PaginationLink>{page}</PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationNext 
+            <Button
+              variant="ghost"
               onClick={() => setPage(page + 1)}
               disabled={!profiles || profiles.length < itemsPerPage}
-            />
+              className="gap-1 pr-2.5"
+            >
+              <span>Next</span>
+            </Button>
           </PaginationItem>
         </PaginationContent>
       </Pagination>
