@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { EmailTemplateModal } from "./EmailTemplateModal";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const NewsletterManagement = () => {
   const { toast } = useToast();
@@ -155,7 +156,7 @@ export const NewsletterManagement = () => {
               </div>
             </div>
             <Editor
-              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+              apiKey={import.meta.env.VITE_TINY_MCE_API}
               init={{
                 height: 500,
                 menubar: true,
@@ -192,28 +193,30 @@ export const NewsletterManagement = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {newsletters?.map((newsletter) => (
-                <div 
-                  key={newsletter.id} 
-                  className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div>
-                    <h3 className="font-medium">{newsletter.title}</h3>
-                    <p className="text-sm text-gray-500">
-                      Created: {new Date(newsletter.created_at).toLocaleDateString()}
-                    </p>
+            <ScrollArea className="h-[400px] pr-4">
+              <div className="space-y-2">
+                {newsletters?.map((newsletter) => (
+                  <div 
+                    key={newsletter.id} 
+                    className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div>
+                      <h3 className="font-medium">{newsletter.title}</h3>
+                      <p className="text-sm text-gray-500">
+                        Created: {new Date(newsletter.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm">Edit</Button>
+                      <Button size="sm" onClick={() => handleSendNewsletter(newsletter.id)}>
+                        <Send className="mr-2 h-4 w-4" />
+                        Send
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">Edit</Button>
-                    <Button size="sm" onClick={() => handleSendNewsletter(newsletter.id)}>
-                      <Send className="mr-2 h-4 w-4" />
-                      Send
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
       </TabsContent>
@@ -227,19 +230,21 @@ export const NewsletterManagement = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {subscribers?.map((subscriber) => (
-                <div 
-                  key={subscriber.id} 
-                  className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <span>{subscriber.email}</span>
-                  <span className="text-sm text-gray-500">
-                    Subscribed: {new Date(subscriber.subscribed_at).toLocaleDateString()}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <ScrollArea className="h-[400px] pr-4">
+              <div className="space-y-2">
+                {subscribers?.map((subscriber) => (
+                  <div 
+                    key={subscriber.id} 
+                    className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <span>{subscriber.email}</span>
+                    <span className="text-sm text-gray-500">
+                      Subscribed: {new Date(subscriber.subscribed_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
       </TabsContent>

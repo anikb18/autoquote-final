@@ -11,6 +11,7 @@ import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useToast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
@@ -79,7 +80,6 @@ export function EmailTemplateModal({
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       
-      // Create a context-aware prompt that includes AutoQuote24's business details
       const prompt = `
         Write a professional email for AutoQuote24, Quebec Canada's leading specialized car buying and selling platform.
         
@@ -89,6 +89,9 @@ export function EmailTemplateModal({
         - System automatically selects top 3 lowest price quotes
         - Trade-in value assessment available
         - Target audience: Quebec car buyers and sellers
+        - Buyers pay $49.95 for quote service
+        - Trade-in valuation costs $16.95
+        - Dealer subscriptions: $1595/mo for new car quotes, $1895/mo including used car buyouts
         
         Email Type: ${templateData.title}
         
@@ -104,6 +107,7 @@ export function EmailTemplateModal({
         - Include both English and French versions
         - Focus on value proposition and benefits
         - Include AutoQuote24's unique selling points where relevant
+        - Emphasize cost savings and competitive advantages
         
         Format the email in HTML with appropriate styling.
       `;
@@ -157,88 +161,89 @@ export function EmailTemplateModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>Generate Email Content</DialogTitle>
           <DialogDescription>
             Choose a template or enter your own topic to generate professional email content
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          {!selectedTemplate && (
-            <div className="grid grid-cols-2 gap-4">
-              {EMAIL_TEMPLATES.map((template, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  className="h-auto p-4 text-left flex flex-col items-start space-y-2"
-                  onClick={() => handleTemplateSelect(template)}
-                  disabled={isGenerating}
-                >
-                  <span className="font-semibold">{template.title}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {template.description}
-                  </span>
-                </Button>
-              ))}
-            </div>
-          )}
-
-          {selectedTemplate && (
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">{selectedTemplate.title}</h3>
-                <Button
-                  variant="ghost"
-                  onClick={() => setSelectedTemplate(null)}
-                >
-                  Choose Different Template
-                </Button>
-              </div>
-              
-              <div className="space-y-4">
-                {selectedTemplate.fields.map((field) => (
-                  <div key={field.name} className="space-y-2">
-                    <Label htmlFor={field.name}>{field.label}</Label>
-                    <Input
-                      id={field.name}
-                      placeholder={field.placeholder}
-                      value={fieldValues[field.name] || ''}
-                      onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                      disabled={isGenerating}
-                    />
-                  </div>
+        <ScrollArea className="flex-1 px-1">
+          <div className="space-y-4 py-4">
+            {!selectedTemplate && (
+              <div className="grid grid-cols-2 gap-4">
+                {EMAIL_TEMPLATES.map((template, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="h-auto p-4 text-left flex flex-col items-start space-y-2"
+                    onClick={() => handleTemplateSelect(template)}
+                    disabled={isGenerating}
+                  >
+                    <span className="font-semibold">{template.title}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {template.description}
+                    </span>
+                  </Button>
                 ))}
               </div>
-            </div>
-          )}
+            )}
 
-          {!selectedTemplate && (
-            <div className="space-y-2">
-              <Label htmlFor="customTopic">Custom Topic</Label>
-              <div className="flex gap-2">
-                <Input
-                  id="customTopic"
-                  placeholder="Enter your topic..."
-                  value={customTopic}
-                  onChange={(e) => setCustomTopic(e.target.value)}
-                  disabled={isGenerating}
-                />
-                <Button 
-                  onClick={() => handleGenerate()}
-                  disabled={!customTopic || isGenerating}
-                >
-                  Generate
-                </Button>
+            {selectedTemplate && (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold">{selectedTemplate.title}</h3>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setSelectedTemplate(null)}
+                  >
+                    Choose Different Template
+                  </Button>
+                </div>
+                
+                <div className="space-y-4">
+                  {selectedTemplate.fields.map((field) => (
+                    <div key={field.name} className="space-y-2">
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <Input
+                        id={field.name}
+                        placeholder={field.placeholder}
+                        value={fieldValues[field.name] || ''}
+                        onChange={(e) => handleFieldChange(field.name, e.target.value)}
+                        disabled={isGenerating}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {selectedTemplate && (
+            {!selectedTemplate && (
+              <div className="space-y-2">
+                <Label htmlFor="customTopic">Custom Topic</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="customTopic"
+                    placeholder="Enter your topic..."
+                    value={customTopic}
+                    onChange={(e) => setCustomTopic(e.target.value)}
+                    disabled={isGenerating}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+        <div className="flex justify-end pt-4">
+          {(selectedTemplate || customTopic) && (
             <Button
               onClick={() => handleGenerate()}
-              disabled={Object.keys(fieldValues).length === 0 || isGenerating}
-              className="w-full"
+              disabled={
+                (selectedTemplate && Object.keys(fieldValues).length === 0) || 
+                (!selectedTemplate && !customTopic) || 
+                isGenerating
+              }
+              className="w-full sm:w-auto"
             >
               {isGenerating ? "Generating..." : "Generate Email Content"}
             </Button>
