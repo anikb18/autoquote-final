@@ -1,0 +1,52 @@
+{
+  "title": "What Our Quebec Customers Are Saying",
+  "subtitle": "Discover how AutoQuote24 is transforming the car buying experience across Quebec",
+  "montreal": {
+    "content": "AutoQuote24 saved me thousands on my new SUV. The dealers competed for my business, and I got the best possible price without leaving my home.",
+    "author": {
+      "name": "Marie Dubois",
+      "role": "Montreal Customer",
+      "initials": "MD"
+    }
+  },
+  "laval": {
+    "content": "The trade-in valuation was spot-on, and I received multiple competitive offers within 24 hours. This is how car buying should be!",
+    "author": {
+      "name": "Jean-Philippe Tremblay",
+      "role": "Laval Customer",
+      "initials": "JT"
+    }
+  },
+  "sherbrooke": {
+    "content": "As a first-time car buyer, the process was incredibly straightforward. The dealers were professional, and the quotes were transparent.",
+    "author": {
+      "name": "Sophie Bergeron",
+      "role": "Sherbrooke Customer",
+      "initials": "SB"
+    }
+  },
+  "gatineau": {
+    "content": "The balloon payment calculations and financing options made it easy to understand my monthly payments. No surprises, just great service.",
+    "author": {
+      "name": "Marc-André Gagnon",
+      "role": "Gatineau Customer",
+      "initials": "MG"
+    }
+  },
+  "quebec": {
+    "content": "I loved being able to upload photos of my trade-in and get instant valuations. The whole process was efficient and professional.",
+    "author": {
+      "name": "Isabelle Roy",
+      "role": "Quebec City Customer",
+      "initials": "IR"
+    }
+  },
+  "troisrivieres": {
+    "content": "The secure chat system made communication with dealers easy and efficient. I got all my questions answered quickly.",
+    "author": {
+      "name": "Pierre Bouchard",
+      "role": "Trois-Rivières Customer",
+      "initials": "PB"
+    }
+  }
+}

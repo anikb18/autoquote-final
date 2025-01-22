@@ -1,0 +1,52 @@
+{
+  "title": "Ce que nos clients québécois en disent",
+  "subtitle": "Découvrez comment AutoQuote24 transforme l'expérience d'achat automobile au Québec",
+  "montreal": {
+    "content": "AutoQuote24 m'a fait économiser des milliers de dollars sur mon nouveau VUS. Les concessionnaires se sont fait concurrence pour mon entreprise, et j'ai obtenu le meilleur prix possible sans quitter ma maison.",
+    "author": {
+      "name": "Marie Dubois",
+      "role": "Cliente de Montréal",
+      "initials": "MD"
+    }
+  },
+  "laval": {
+    "content": "L'évaluation de la reprise était exacte, et j'ai reçu plusieurs offres compétitives en 24 heures. C'est comme ça que l'achat d'une voiture devrait se passer !",
+    "author": {
+      "name": "Jean-Philippe Tremblay",
+      "role": "Client de Laval",
+      "initials": "JT"
+    }
+  },
+  "sherbrooke": {
+    "content": "En tant que premier acheteur de voiture, le processus était incroyablement simple. Les concessionnaires étaient professionnels et les devis étaient transparents.",
+    "author": {
+      "name": "Sophie Bergeron",
+      "role": "Cliente de Sherbrooke",
+      "initials": "SB"
+    }
+  },
+  "gatineau": {
+    "content": "Les calculs des paiements ballons et les options de financement m'ont permis de bien comprendre mes paiements mensuels. Pas de surprises, juste un excellent service.",
+    "author": {
+      "name": "Marc-André Gagnon",
+      "role": "Client de Gatineau",
+      "initials": "MG"
+    }
+  },
+  "quebec": {
+    "content": "J'ai adoré pouvoir télécharger des photos de ma reprise et obtenir des évaluations instantanées. Tout le processus était efficace et professionnel.",
+    "author": {
+      "name": "Isabelle Roy",
+      "role": "Cliente de Québec",
+      "initials": "IR"
+    }
+  },
+  "troisrivieres": {
+    "content": "Le système de chat sécurisé a facilité la communication avec les concessionnaires. J'ai obtenu rapidement des réponses à toutes mes questions.",
+    "author": {
+      "name": "Pierre Bouchard",
+      "role": "Client de Trois-Rivières",
+      "initials": "PB"
+    }
+  }
+}
