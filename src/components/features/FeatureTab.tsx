@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface FeatureTabProps {
   feature: {
