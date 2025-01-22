@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { UserPasswordReset } from "./UserPasswordReset";
 import { Tables } from "@/integrations/supabase/types";
+import { Badge } from "@/components/ui/badge";
 
 type Profile = Tables<'profiles'>;
 
@@ -28,6 +29,7 @@ export const UserTable = ({ profiles, isLoading }: UserTableProps) => {
         <TableRow>
           <TableHead>Email</TableHead>
           <TableHead>Full Name</TableHead>
+          <TableHead>Role</TableHead>
           <TableHead>Created At</TableHead>
           <TableHead>Subscription</TableHead>
           <TableHead>Actions</TableHead>
@@ -38,6 +40,11 @@ export const UserTable = ({ profiles, isLoading }: UserTableProps) => {
           <TableRow key={profile.id}>
             <TableCell>{profile.email}</TableCell>
             <TableCell>{profile.full_name || 'N/A'}</TableCell>
+            <TableCell>
+              <Badge variant="outline">
+                {profile.role || 'user'}
+              </Badge>
+            </TableCell>
             <TableCell>
               {profile.created_at 
                 ? format(new Date(profile.created_at), 'PPpp')

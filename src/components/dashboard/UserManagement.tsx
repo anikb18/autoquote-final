@@ -18,14 +18,20 @@ export const UserManagement = () => {
       if (role !== 'admin') {
         throw new Error('Unauthorized: Admin access required');
       }
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*');
       
-      if (error) throw error;
-      return data as Profile[];
+      // Updated query to fetch all profiles
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('*, user_roles(role)');
+      
+      if (profilesError) throw profilesError;
+      
+      // Log the data to help with debugging
+      console.log('Fetched profiles:', profilesData);
+      
+      return profilesData as Profile[];
     },
-    enabled: role === 'admin', // Only run query if user is admin
+    enabled: role === 'admin',
   });
 
   useEffect(() => {
