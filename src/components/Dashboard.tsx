@@ -16,18 +16,31 @@ const Dashboard = () => {
   const { role, user, isLoading } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "user");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate("/auth");
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        toast({
+          title: "Authentication Error",
+          description: "Please try logging in again",
+          variant: "destructive",
+        });
         navigate("/auth");
+      } finally {
+        setIsAuthChecking(false);
       }
     };
     checkAuth();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   useEffect(() => {
     if (role) {
@@ -52,10 +65,13 @@ const Dashboard = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isAuthChecking) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p>Loading...</p>
+        <div className="text-center space-y-2">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p>Loading...</p>
+        </div>
       </div>
     );
   }
