@@ -3,7 +3,7 @@ import { useUserRole } from "@/hooks/use-user-role";
 import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard"; // Corrected import
 import BuyerDashboard from "./BuyerDashboard";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Settings } from "lucide-react";
 import { Button } from "./ui/button";
 import Sidebar from "@/components/ui/sidebar"; // Import sidebar
@@ -32,9 +32,11 @@ const Dashboard = () => {
   const renderTopBar = () => (
     <div className="fixed top-0 left-0 right-0 h-12 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b flex items-center justify-between px-4 z-50">
       <div className="flex items-center space-x-2">
-        <span className="font-semibold text-sm">
-          AutoQuote24 • {viewMode.charAt(0).toUpperCase() + viewMode.slice(1)} Dashboard
-        </span>
+        {role !== "admin" && (
+          <span className="font-semibold text-sm">
+            AutoQuote24 • {viewMode.charAt(0).toUpperCase() + viewMode.slice(1)} Dashboard
+          </span>
+        )}
       </div>
 
       <div className="flex items-center space-x-3">
@@ -96,10 +98,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex macOS-style" style={{ backgroundImage: `url('/dashboard-bg-2.webp')`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center', backgroundAttachment: 'fixed' }}>
-      {renderTopBar()}
-      <Sidebar onSelect={setSelectedSection} />
-      <main className="flex-1 ml-64 pt-12 macOS-style">
+    <div className="min-h-screen bg-slate-900 relative flex">
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: 'url(/dashboard-bg.webp)' }} />
+      <Sidebar onSelect={setSelectedSection} onChangeRole={setViewMode} viewMode={viewMode} />
+      <main className="flex-1 bg-transparent p-6"> // Increased padding to prevent overlap
         {renderSection()}
       </main>
     </div>
