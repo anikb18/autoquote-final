@@ -14,8 +14,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { PlusCircle, User, Settings, LogOut, Home, MessageSquare, Car } from "lucide-react";
+import { 
+  PlusCircle, 
+  User, 
+  Settings, 
+  LogOut, 
+  Home, 
+  MessageSquare, 
+  Car,
+  Bell
+} from "lucide-react";
 import { useUserRole } from "@/hooks/use-user-role";
+import { Badge } from "./ui/badge";
+import { useQuery } from "@tanstack/react-query";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -24,6 +35,21 @@ const Header = () => {
   const [profile, setProfile] = useState<any>(null);
   const { t } = useTranslation();
   const { role } = useUserRole();
+
+  // Fetch unread notifications for dealers
+  const { data: unreadNotifications } = useQuery({
+    queryKey: ['unread-notifications'],
+    queryFn: async () => {
+      if (role !== 'dealer') return 0;
+      const { count } = await supabase
+        .from('dealer_notifications')
+        .select('*', { count: 'exact' })
+        .eq('dealer_id', session?.user?.id)
+        .eq('read', false);
+      return count || 0;
+    },
+    enabled: !!session && role === 'dealer'
+  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -54,13 +80,10 @@ const Header = () => {
 
   const getAvatarUrl = () => {
     if (session?.user?.user_metadata?.avatar_url) {
-      // Use Google profile picture if available
       return session.user.user_metadata.avatar_url;
     } else if (profile?.avatar_url) {
-      // Use custom avatar if set
       return profile.avatar_url;
     } else {
-      // Fallback to local avatar
       return '/avatar.png';
     }
   };
@@ -78,16 +101,16 @@ const Header = () => {
     navigate("/dashboard");
   };
 
-  const handleHome = () => {
-    navigate("/");
+  const handleNewQuote = () => {
+    navigate("/new-quote");
   };
 
-  const handleRequestQuote = () => {
-    navigate("/request-quote");
+  const handleQuoteRequests = () => {
+    navigate("/quote-requests");
   };
 
   const handleMyQuotes = () => {
-    navigate("/dashboard");
+    navigate("/dashboard/my-quotes");
   };
 
   const handleSettings = () => {
@@ -97,14 +120,44 @@ const Header = () => {
   const renderAuthenticatedNav = () => {
     if (!session) return null;
 
-    // Only show quote-related actions for regular users (buyers)
+    if (role === 'dealer') {
+      return (
+        <div className="hidden md:flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleQuoteRequests}
+            className="flex items-center gap-2"
+          >
+            <MessageSquare className="h-4 w-4" />
+            {t('dealer.quoteRequests')}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="relative"
+            onClick={() => navigate('/dashboard/notifications')}
+          >
+            <Bell className="h-4 w-4" />
+            {unreadNotifications > 0 && (
+              <Badge 
+                className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-red-500"
+              >
+                {unreadNotifications}
+              </Badge>
+            )}
+          </Button>
+        </div>
+      );
+    }
+
     if (role === 'user') {
       return (
         <div className="hidden md:flex items-center gap-4">
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleRequestQuote}
+            onClick={handleNewQuote}
             className="flex items-center gap-2"
           >
             <PlusCircle className="h-4 w-4" />
@@ -132,7 +185,20 @@ const Header = () => {
       );
     }
 
-    return null;
+    // Admin only sees dashboard button
+    return (
+      <div className="hidden md:flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDashboard}
+          className="flex items-center gap-2"
+        >
+          <Car className="h-4 w-4" />
+          {t('common.dashboard')}
+        </Button>
+      </div>
+    );
   };
 
   return (

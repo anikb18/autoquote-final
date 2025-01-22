@@ -33,6 +33,7 @@ function App() {
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
               <Route path="/new-quote" element={<NewQuoteForm />} />
+              <Route path="/quote-requests" element={<NewQuoteForm />} />
               <Route
                 path="/dashboard"
                 element={
