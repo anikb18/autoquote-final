@@ -12,29 +12,29 @@ import screenshotVatReturns from '/images/vat-returns.png';
 
 const features = [
   {
-    title: 'payroll',
-    description: 'payrollDescription',
+    title: 'trusted',
+    description: 'items.trusted.description',
     image: screenshotPayroll,
   },
   {
-    title: 'expenses',
-    description: 'expensesDescription',
+    title: 'time',
+    description: 'items.time.description',
     image: screenshotExpenses,
   },
   {
-    title: 'vatReturns',
-    description: 'vatReturnsDescription',
+    title: 'prices',
+    description: 'items.prices.description',
     image: screenshotVatReturns,
   },
   {
-    title: 'reporting',
-    description: 'reportingDescription',
+    title: 'communication',
+    description: 'items.communication.description',
     image: screenshotReporting,
   },
 ];
 
 export function PrimaryFeatures() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('features');
   const [tabOrientation, setTabOrientation] = useState('horizontal');
 
   useEffect(() => {
@@ -68,10 +68,10 @@ export function PrimaryFeatures() {
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            {t('features.mostPopular')}
+            {t('title')}
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            {t('features.newCar.description')}
+            {t('subtitle')}
           </p>
         </div>
         <Tab.Group
@@ -103,7 +103,7 @@ export function PrimaryFeatures() {
                           )}
                         >
                           <span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />
-                          {t(`features.${feature.title}.title`)}
+                          {t(`items.${feature.title}.title`)}
                         </Tab>
                       </h3>
                       <p
@@ -114,7 +114,7 @@ export function PrimaryFeatures() {
                             : 'text-blue-100 group-hover:text-white'
                         )}
                       >
-                        {t(`features.${feature.title}.description`)}
+                        {t(`items.${feature.title}.description`)}
                       </p>
                     </div>
                   ))}

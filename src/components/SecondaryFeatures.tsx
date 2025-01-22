@@ -15,10 +15,9 @@ interface Feature {
 
 const features: Array<Feature> = [
   {
-    name: 'Inventory Management',
-    summary: 'Keep track of your entire fleet with ease.',
-    description:
-      'Stay organized with our comprehensive inventory management system. Track vehicle details, maintenance records, and availability in real-time.',
+    name: 'valuation',
+    summary: 'items.valuation.title',
+    description: 'items.valuation.description',
     image: '/images/screenshots/inventory.webp',
     icon: function ReportingIcon() {
       let id = useId()
@@ -49,10 +48,9 @@ const features: Array<Feature> = [
     },
   },
   {
-    name: 'Lead Management',
-    summary: 'Never miss a potential sale.',
-    description:
-      'Convert more leads with our advanced CRM system. Track customer interactions, set follow-up reminders, and close deals faster.',
+    name: 'financing',
+    summary: 'items.financing.title',
+    description: 'items.financing.description',
     image: '/images/screenshots/leads.webp',
     icon: function InventoryIcon() {
       return (
@@ -76,10 +74,9 @@ const features: Array<Feature> = [
     },
   },
   {
-    name: 'Analytics',
-    summary: 'Detailed insights at your fingertips.',
-    description:
-      'Make data-driven decisions with our comprehensive analytics dashboard. Monitor sales performance, track customer behavior, and identify growth opportunities.',
+    name: 'comparison',
+    summary: 'items.comparison.title',
+    description: 'items.comparison.description',
     image: '/images/screenshots/analytics.webp',
     icon: function ContactsIcon() {
       return (
@@ -141,13 +138,22 @@ function Feature({
 }
 
 function FeaturesMobile() {
-  const { t } = useTranslation()
+  const { t } = useTranslation('features')
 
   return (
     <div className="-mx-4 mt-20 flex flex-col gap-y-10 overflow-hidden px-4 sm:-mx-6 sm:px-6 lg:hidden">
       {features.map((feature) => (
         <div key={feature.summary}>
-          <Feature feature={feature} className="mx-auto max-w-2xl" isActive />
+          <Feature 
+            feature={{
+              ...feature,
+              name: t(`secondary.items.${feature.name}.title`),
+              summary: t(`secondary.items.${feature.name}.title`),
+              description: t(`secondary.items.${feature.name}.description`),
+            }} 
+            className="mx-auto max-w-2xl" 
+            isActive 
+          />
           <div className="relative mt-10 pb-10">
             <div className="absolute -inset-x-4 bottom-0 top-8 bg-slate-200 sm:-inset-x-6" />
             <div className="relative mx-auto w-[52.75rem] overflow-hidden rounded-xl bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-500/10">
@@ -166,7 +172,7 @@ function FeaturesMobile() {
 }
 
 function FeaturesDesktop() {
-  const { t } = useTranslation()
+  const { t } = useTranslation('features')
 
   return (
     <Tab.Group as="div" className="hidden lg:mt-20 lg:block">
@@ -181,9 +187,11 @@ function FeaturesDesktop() {
                   name: (
                     <Tab className="ui-not-focus-visible:outline-none">
                       <span className="absolute inset-0" />
-                      {feature.name}
+                      {t(`secondary.items.${feature.name}.title`)}
                     </Tab>
                   ),
+                  summary: t(`secondary.items.${feature.name}.title`),
+                  description: t(`secondary.items.${feature.name}.description`),
                 }}
                 isActive={featureIndex === selectedIndex}
                 className="relative"
@@ -223,7 +231,7 @@ function FeaturesDesktop() {
 }
 
 export function SecondaryFeatures() {
-  const { t } = useTranslation()
+  const { t } = useTranslation('features')
 
   return (
     <section
@@ -234,10 +242,10 @@ export function SecondaryFeatures() {
       <Container>
         <div className="mx-auto max-w-2xl md:text-center">
           <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
-            {t('features.title')}
+            {t('secondary.title')}
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            {t('features.description')}
+            {t('secondary.subtitle')}
           </p>
         </div>
         <FeaturesMobile />
