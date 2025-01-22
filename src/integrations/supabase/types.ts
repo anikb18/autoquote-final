@@ -1416,7 +1416,15 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["user_role_type"]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_profile_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vehicle_makes: {
         Row: {
