@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   const { t } = useTranslation('admin');
 
   return (
-    <div className="p-6 space-y-8 macOS-style">
+    <div className="space-y-8">
       <div className="space-y-2">
         <h1 className="text-4xl font-bold text-foreground">
           {t('dashboard.title')}
