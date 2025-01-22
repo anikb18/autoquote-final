@@ -9,6 +9,36 @@ import DesiredVehicleSection from './forms/DesiredVehicleSection';
 import FinancingSection from './forms/FinancingSection';
 import TradeInSection from './forms/TradeInSection';
 
+type FinancingType = 'cash' | 'financing' | 'lease';
+
+interface FormData {
+  desiredVehicle: {
+    make: string;
+    model: string;
+    trim: string;
+    year: string;
+  };
+  financing: {
+    type: FinancingType;
+    term: string;
+    annualKilometers: string;
+  };
+  tradeIn: {
+    hasTradeIn: boolean;
+    vehicle: {
+      vin: string;
+      make: string;
+      model: string;
+      trim: string;
+      mileage: string;
+      year: string;
+      outstandingLoan: string;
+      accidentFree: boolean;
+    };
+    photos: File[];
+  }
+}
+
 const NewQuoteForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -17,7 +47,7 @@ const NewQuoteForm = () => {
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useState(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     desiredVehicle: {
       make: '',
       model: '',
@@ -82,7 +112,7 @@ const NewQuoteForm = () => {
             'Authorization': `Bearer ${session?.access_token}`,
           },
           body: JSON.stringify({
-            priceId: 'price_1Qh3X9G6N4q5lhXvjs5nTxlf', // Your Stripe price ID for the quote service
+            priceId: 'price_1Qh3X9G6N4q5lhXvjs5nTxlf',
           }),
         }
       );
@@ -133,7 +163,7 @@ const NewQuoteForm = () => {
           {currentStep === 2 && (
             <FinancingSection
               financingType={formData.financing.type}
-              setFinancingType={(type) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, type }}))}
+              setFinancingType={(type: FinancingType) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, type }}))}
               financingDetails={formData.financing}
               setFinancingDetails={(data) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, ...data }}))}
             />
