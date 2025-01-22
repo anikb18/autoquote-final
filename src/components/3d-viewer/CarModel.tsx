@@ -15,7 +15,7 @@ export const CarModel = ({ scene, carData }: CarModelProps) => {
 
     // Create a default car representation (a simple box for now)
     const geometry = new THREE.BoxGeometry(2, 1, 4); // Basic car-like proportions
-    const material = new THREE.MeshPhongMaterial({ 
+    const material = new THREE.MeshStandardMaterial({ 
       color: 0x446df6, // Using the brand blue color
       metalness: 0.7,
       roughness: 0.3,
