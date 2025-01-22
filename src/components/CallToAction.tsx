@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Container } from '@/components/ui/container'
 import backgroundImage from '/src/images/background-call-to-action.jpg'
+import { Link } from 'react-router-dom'
 
 export function CallToAction() {
   const { t } = useTranslation()
@@ -28,8 +29,10 @@ export function CallToAction() {
           <p className="mt-4 text-lg tracking-tight text-white">
             {t('callToAction.description')}
           </p>
-          <Button href="/register" color="white" className="mt-10">
-            {t('callToAction.button')}
+          <Button asChild className="mt-10 bg-white text-blue-600 hover:bg-gray-50">
+            <Link to="/register">
+              {t('callToAction.button')}
+            </Link>
           </Button>
         </div>
       </Container>

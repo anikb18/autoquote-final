@@ -21,6 +21,11 @@ const Dashboard = () => {
   const [viewMode, setViewMode] = useState<ViewMode>((role as ViewMode) || "buyer");
   const [selectedSection, setSelectedSection] = useState('overview');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [performanceData, setPerformanceData] = useState([
+    { period: 'Jan', conversionRate: 65, responseTime: 24, revenue: 1200 },
+    { period: 'Feb', conversionRate: 75, responseTime: 22, revenue: 1400 },
+    { period: 'Mar', conversionRate: 70, responseTime: 20, revenue: 1300 },
+  ]);
 
   useEffect(() => {
     if (role) {
@@ -87,9 +92,7 @@ const Dashboard = () => {
       case 'sales-trend':
         return <SalesTrendChart />;
       case 'performance':
-        return <PerformanceChart />;
-      case 'settings':
-        return <Settings />;
+        return <PerformanceChart data={performanceData} />;
       default:
         return <Overview />;
     }
