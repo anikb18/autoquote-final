@@ -40,7 +40,8 @@ interface FormData {
       accidentFree: boolean;
     };
     photos: File[];
-  }
+  };
+  openToVariants: boolean;
 }
 
 const NewQuoteForm = () => {
@@ -76,7 +77,8 @@ const NewQuoteForm = () => {
         accidentFree: true,
       },
       photos: [],
-    }
+    },
+    openToVariants: false,
   });
 
   useEffect(() => {
@@ -252,6 +254,8 @@ const NewQuoteForm = () => {
               <DesiredVehicleSection
                 desiredVehicle={formData.desiredVehicle}
                 setDesiredVehicle={(data) => setFormData(prev => ({ ...prev, desiredVehicle: data }))}
+                openToVariants={formData.openToVariants}
+                setOpenToVariants={(value) => setFormData(prev => ({ ...prev, openToVariants: value }))}
               />
             )}
 

@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCarDetailsFromGemini, fetchCarMakes, fetchCarModels } from "@/utils/carData";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 interface DesiredVehicleProps {
   desiredVehicle: {
@@ -15,9 +16,16 @@ interface DesiredVehicleProps {
     year: string;
   };
   setDesiredVehicle: (value: any) => void;
+  openToVariants?: boolean;
+  setOpenToVariants?: (value: boolean) => void;
 }
 
-const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVehicleProps) => {
+const DesiredVehicleSection = ({ 
+  desiredVehicle, 
+  setDesiredVehicle,
+  openToVariants = false,
+  setOpenToVariants = () => {}
+}: DesiredVehicleProps) => {
   const { t } = useTranslation();
 
   const { data: carMakes = [], isLoading: isLoadingMakes } = useQuery({
@@ -115,6 +123,17 @@ const DesiredVehicleSection = ({ desiredVehicle, setDesiredVehicle }: DesiredVeh
               )}
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="col-span-2 flex items-center space-x-2 py-4">
+          <Switch
+            id="variants"
+            checked={openToVariants}
+            onCheckedChange={setOpenToVariants}
+          />
+          <Label htmlFor="variants" className="font-normal">
+            {t('form.desiredVehicle.variantQuestion')}
+          </Label>
         </div>
 
         {carDetails && !isLoadingDetails && (

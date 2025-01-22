@@ -7,10 +7,16 @@
       "payment": "Secure Payment"
     },
     "desiredVehicle": {
-      "description": "Tell us about the vehicle you're looking for"
+      "description": "Tell us about the vehicle you're looking for",
+      "variantQuestion": "Would you be open to variants of your car (color, year) at a reduced price?",
+      "variantDescription": "This could give you access to better deals"
     },
     "financing": {
-      "description": "Choose your preferred financing option"
+      "description": "Choose your preferred financing method",
+      "title": "Financing Options",
+      "cash": "Cash",
+      "loan": "Financing",
+      "lease": "Lease"
     },
     "tradeIn": {
       "description": "Add your trade-in vehicle details if applicable"

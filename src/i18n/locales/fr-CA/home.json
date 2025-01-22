@@ -7,10 +7,16 @@
       "payment": "Paiement sécurisé"
     },
     "desiredVehicle": {
-      "description": "Parlez-nous du véhicule que vous recherchez"
+      "description": "Parlez-nous du véhicule que vous recherchez",
+      "variantQuestion": "Seriez-vous ouvert à des variantes de votre voiture (couleur, année) à prix réduit?",
+      "variantDescription": "Cela pourrait vous donner accès à des offres plus avantageuses"
     },
     "financing": {
-      "description": "Choisissez votre option de financement préférée"
+      "description": "Choisissez votre méthode de financement préférée",
+      "title": "Options de Financement",
+      "cash": "Comptant",
+      "loan": "Financement",
+      "lease": "Location"
     },
     "tradeIn": {
       "description": "Ajoutez les détails de votre véhicule de reprise si applicable"
