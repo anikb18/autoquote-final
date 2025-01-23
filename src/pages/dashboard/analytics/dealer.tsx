@@ -16,6 +16,13 @@ interface DealerMetrics {
   monthly_change: number;
 }
 
+interface RawDealerMetrics {
+  total_bids: number;
+  won_bids: number;
+  total_revenue: number;
+  average_response_time: string;
+}
+
 export default function DealerAnalytics() {
   const { toast } = useToast();
 
@@ -25,7 +32,7 @@ export default function DealerAnalytics() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase.rpc(
+      const { data, error } = await supabase.rpc<RawDealerMetrics>(
         'calculate_dealer_metrics',
         { 
           dealer_id: user.id,
@@ -35,15 +42,21 @@ export default function DealerAnalytics() {
 
       if (error) throw error;
 
-      // Calculate monthly change (example calculation)
+      // Convert average_response_time from interval to hours
+      const avgResponseHours = data[0]?.average_response_time 
+        ? parseFloat(data[0].average_response_time.split(':')[0]) + 
+          parseFloat(data[0].average_response_time.split(':')[1]) / 60
+        : 0;
+
+      // Calculate monthly change
       const monthlyChange = ((data[0]?.total_revenue || 0) - (data[1]?.total_revenue || 0)) / 
                            (data[1]?.total_revenue || 1) * 100;
 
       return {
         total_revenue: data[0]?.total_revenue || 0,
         active_quotes: data[0]?.total_bids || 0,
-        conversion_rate: (data[0]?.won_bids / data[0]?.total_bids) * 100 || 0,
-        avg_response_time: data[0]?.average_response_time || 0,
+        conversion_rate: (data[0]?.won_bids / (data[0]?.total_bids || 1)) * 100 || 0,
+        avg_response_time: avgResponseHours,
         monthly_change: monthlyChange
       };
     },
@@ -86,7 +99,7 @@ export default function DealerAnalytics() {
       name: "Total Revenue",
       stat: metrics?.total_revenue || 0,
       icon: DollarSign,
-      change: `${metrics?.monthly_change.toFixed(1)}%`,
+      change: `${(metrics?.monthly_change || 0).toFixed(1)}%`,
       changeType: (metrics?.monthly_change || 0) >= 0 ? "increase" as const : "decrease" as const,
       prefix: "$"
     },
