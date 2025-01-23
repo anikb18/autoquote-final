@@ -11,7 +11,10 @@ import {
   Car,
   MessageSquare,
   HelpCircle,
-  History
+  History,
+  Sun,
+  Moon,
+  Globe
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,11 +24,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useTheme } from "@/hooks/use-theme";
 
 export function DashboardSidebar() {
   const { role, user } = useUserRole();
-  const { t } = useTranslation('admin');
+  const { t, i18n } = useTranslation('admin');
   const location = useLocation();
+  const { theme, setTheme } = useTheme();
+  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(role);
 
   const adminItems = [
     {
@@ -81,8 +89,8 @@ export function DashboardSidebar() {
     }
   ];
 
-  const items = role === 'admin' ? adminItems : 
-                role === 'dealer' ? dealerItems : 
+  const items = viewMode === 'admin' ? adminItems : 
+                viewMode === 'dealer' ? dealerItems : 
                 buyerItems;
 
   const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
@@ -151,12 +159,43 @@ export function DashboardSidebar() {
         </ul>
       </nav>
 
-      {/* Footer with Avatar and Settings */}
+      {/* Footer with Settings */}
       <div className="flex flex-col gap-y-2 px-6 pb-4 border-t border-gray-200 pt-4">
+        {/* Theme Switcher */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          className="w-full justify-start gap-x-3 rounded-md p-2"
+        >
+          {theme === "light" ? (
+            <Moon className="h-6 w-6 shrink-0" />
+          ) : (
+            <Sun className="h-6 w-6 shrink-0" />
+          )}
+          {theme === "light" ? "Dark Mode" : "Light Mode"}
+        </Button>
+
+        {/* Language Switcher */}
+        <Select
+          value={i18n.language}
+          onValueChange={(value) => i18n.changeLanguage(value)}
+        >
+          <SelectTrigger className="w-full">
+            <Globe className="h-5 w-5 mr-2" />
+            <SelectValue placeholder="Select Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en-US">English</SelectItem>
+            <SelectItem value="fr-CA">Français</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* View Mode Switcher (for admin only) */}
         {role === 'admin' && (
           <Select
-            value={role}
-            onValueChange={(value: "admin" | "dealer" | "user") => {}}
+            value={viewMode}
+            onValueChange={(value: "admin" | "dealer" | "user") => setViewMode(value)}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select view mode" />
@@ -169,6 +208,7 @@ export function DashboardSidebar() {
           </Select>
         )}
         
+        {/* User Profile */}
         <div className="flex items-center gap-x-3 py-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.user_metadata?.avatar_url} />
