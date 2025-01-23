@@ -1,65 +1,44 @@
 import {
-  Home,
-  Users,
-  FileText,
+  BookOpen,
   Mail,
-  Settings,
-  Car,
-  MessageSquare,
-  BarChart,
+  BarChart3,
   Search,
+  Palette,
   Image,
-  PaintBucket,
-  Tag,
+  FileText,
   Ticket,
+  HelpCircle,
+  Settings,
+  DollarSign,
+  Car
 } from "lucide-react";
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
   const adminItems = [
     {
-      title: "Overview",
-      icon: Home,
-      href: "/dashboard"
+      title: "User Blog",
+      icon: BookOpen,
+      href: "/dashboard/blog"
     },
     {
-      title: "Users",
-      icon: Users,
-      href: "/dashboard/users"
-    },
-    {
-      title: "Content",
-      icon: FileText,
-      href: "/dashboard/content",
-      children: [
-        {
-          title: "Blog Posts",
-          href: "/dashboard/blog"
-        },
-        {
-          title: "Pages",
-          href: "/dashboard/pages"
-        }
-      ]
-    },
-    {
-      title: "Marketing",
+      title: "Email",
       icon: Mail,
-      href: "/dashboard/marketing",
-      children: [
-        {
-          title: "Newsletter",
-          href: "/dashboard/newsletter"
-        },
-        {
-          title: "Promotions",
-          href: "/dashboard/promotions"
-        }
-      ]
+      href: "/dashboard/newsletter"
     },
     {
       title: "Analytics",
-      icon: BarChart,
-      href: "/dashboard/analytics"
+      icon: BarChart3,
+      href: "/dashboard/analytics",
+      children: [
+        {
+          title: "Dealer Performance",
+          href: "/dashboard/analytics/dealer"
+        },
+        {
+          title: "Platform Revenue",
+          href: "/dashboard/analytics/revenue"
+        }
+      ]
     },
     {
       title: "SEO",
@@ -68,41 +47,27 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
     },
     {
       title: "Design",
-      icon: PaintBucket,
-      href: "/dashboard/design",
-      children: [
-        {
-          title: "Theme",
-          href: "/dashboard/theme"
-        },
-        {
-          title: "Media Library",
-          href: "/dashboard/media"
-        }
-      ]
+      icon: Palette,
+      href: "/dashboard/design"
     },
     {
-      title: "E-commerce",
-      icon: Tag,
-      href: "/dashboard/ecommerce",
-      children: [
-        {
-          title: "Products",
-          href: "/dashboard/products"
-        },
-        {
-          title: "Orders",
-          href: "/dashboard/orders"
-        },
-        {
-          title: "Coupons",
-          href: "/dashboard/coupons"
-        }
-      ]
+      title: "Media Library",
+      icon: Image,
+      href: "/dashboard/media"
+    },
+    {
+      title: "Plans",
+      icon: FileText,
+      href: "/dashboard/plans"
+    },
+    {
+      title: "Coupons",
+      icon: Ticket,
+      href: "/dashboard/coupons"
     },
     {
       title: "Support Center",
-      icon: Ticket,
+      icon: HelpCircle,
       href: "/support",
       badge: unreadCount > 0 ? unreadCount : undefined
     },
@@ -116,12 +81,12 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
   const dealerItems = [
     {
       title: "Overview",
-      icon: Home,
+      icon: BarChart3,
       href: "/dashboard"
     },
     {
       title: "Active Quotes",
-      icon: MessageSquare,
+      icon: DollarSign,
       href: "/dashboard/quotes"
     },
     {
@@ -131,7 +96,7 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
     },
     {
       title: "Support",
-      icon: Ticket,
+      icon: HelpCircle,
       href: "/support",
       badge: unreadCount > 0 ? unreadCount : undefined
     },
@@ -145,7 +110,7 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
   const buyerItems = [
     {
       title: "My Quotes",
-      icon: MessageSquare,
+      icon: DollarSign,
       href: "/dashboard/my-quotes"
     },
     {
@@ -155,7 +120,7 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
     },
     {
       title: "Support",
-      icon: Ticket,
+      icon: HelpCircle,
       href: "/support",
       badge: unreadCount > 0 ? unreadCount : undefined
     },
