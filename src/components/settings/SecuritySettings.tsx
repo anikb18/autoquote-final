@@ -27,7 +27,10 @@ export function SecuritySettings() {
         .single();
       
       if (error) throw error;
-      return (data?.value || {}) as SecuritySettingsData;
+      return (data?.value as SecuritySettingsData) || {
+        two_factor_auth: false,
+        require_email_verification: false
+      };
     }
   });
 

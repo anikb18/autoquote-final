@@ -29,7 +29,12 @@ export function NotificationSettings() {
         .single();
       
       if (error) throw error;
-      return (data?.value || {}) as NotificationSettingsData;
+      return (data?.value as NotificationSettingsData) || {
+        email_notifications: false,
+        push_notifications: false,
+        quote_alerts: false,
+        marketing_emails: false
+      };
     }
   });
 
