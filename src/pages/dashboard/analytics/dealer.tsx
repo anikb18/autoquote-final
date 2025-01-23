@@ -1,43 +1,23 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DealershipComparison } from "@/components/dashboard/DealershipComparison";
 import { SalesTrendChart } from "@/components/dashboard/SalesTrendChart";
 import { MetricsOverview } from "@/components/dashboard/shared/MetricsOverview";
 import { DollarSign, TrendingUp, Users, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface DealerMetrics {
   active_quotes_count: number;
   quote_change: number;
-  recent_quotes: Array<{
-    id: string;
-    car_details: {
-      make: string;
-      model: string;
-      year: number;
-    };
-    created_at: string;
-  }>;
   won_bids_count: number;
   total_revenue: number;
 }
 
-interface MetricItem {
-  id: number;
-  name: string;
-  stat: number | string;
-  icon: typeof DollarSign | typeof TrendingUp | typeof Users | typeof Clock;
-  change: string;
-  changeType: "increase" | "decrease";
-  prefix?: string;
-}
-
-export default function DealerAnalytics() {
+const DealerAnalytics = () => {
   const { toast } = useToast();
 
-  const { data: stats, isLoading } = useQuery<DealerMetrics, Error>({
+  const { data: stats, isLoading } = useQuery({
     queryKey: ['dealer-stats'],
     queryFn: async () => {
       const { data: profile } = await supabase.auth.getUser();
@@ -60,8 +40,6 @@ export default function DealerAnalytics() {
       );
 
       if (error) throw error;
-      
-      // Return first item since RPC returns an array with single item
       return data[0] as DealerMetrics;
     },
     meta: {
@@ -75,7 +53,7 @@ export default function DealerAnalytics() {
     },
   });
 
-  const dealerStats: MetricItem[] = [
+  const dealerStats = [
     {
       id: 1,
       name: "Active Quotes",
@@ -123,12 +101,18 @@ export default function DealerAnalytics() {
           ) : (
             <>
               <MetricsOverview title="Performance Overview" stats={dealerStats} />
-              <SalesTrendChart />
-              <DealershipComparison />
+              <div className="mt-8">
+                <SalesTrendChart />
+              </div>
+              <div className="mt-8">
+                <DealershipComparison />
+              </div>
             </>
           )}
         </CardContent>
       </Card>
     </div>
   );
-}
+};
+
+export default DealerAnalytics;
