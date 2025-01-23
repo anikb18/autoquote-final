@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,21 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Json } from "@/integrations/supabase/types";
-
-interface RawPricingPlan {
-  id: string;
-  stripe_product_id: string | null;
-  stripe_price_id: string | null;
-  name: string | null;
-  description: string | null;
-  features: Json | null;
-  monthly_price: number | null;
-  annual_price: number | null;
-  is_featured: boolean | null;
-  metadata: Json | null;
-  created_at: string | null;
-}
 
 interface PricingPlan {
   id: string;
@@ -60,15 +46,14 @@ const PricingManagement = () => {
       
       if (error) throw error;
 
-      // Convert raw data to our expected format and ensure features is always a string array
-      return (data as RawPricingPlan[]).map(plan => ({
+      return (data as any[]).map(plan => ({
         id: plan.id,
         name: plan.name || '',
         description: plan.description || '',
         monthlyPrice: plan.monthly_price || 0,
         annualPrice: plan.annual_price || 0,
         features: Array.isArray(plan.features) 
-          ? plan.features.map(f => String(f))  // Convert each feature to string
+          ? plan.features.map(f => String(f))
           : [],
         isFeatured: plan.is_featured || false
       }));
@@ -133,7 +118,7 @@ const PricingManagement = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">{t('pricing.title')}</h2>
         <Dialog>
           <DialogTrigger asChild>
@@ -199,38 +184,37 @@ const PricingManagement = () => {
         </Dialog>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {plans.map((plan) => (
-          <Card key={plan.id}>
-            <CardHeader>
-              <CardTitle>{plan.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">{plan.description}</p>
-              <div className="space-y-2">
-                <p>Monthly: ${plan.monthlyPrice}</p>
-                <p>Annual: ${plan.annualPrice}</p>
-                <div className="mt-4">
-                  <h4 className="font-semibold mb-2">{t('pricing.features')}:</h4>
-                  <ul className="list-disc list-inside">
-                    {plan.features.map((feature, index) => (
-                      <li key={index}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="flex justify-end space-x-2 mt-4">
-                  <Button variant="outline" onClick={() => setEditingPlan(plan)}>
-                    {t('pricing.edit')}
-                  </Button>
-                  <Button variant="destructive" onClick={() => handleDeletePlan(plan.id)}>
-                    {t('pricing.delete')}
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Monthly Price</TableHead>
+            <TableHead>Annual Price</TableHead>
+            <TableHead>Featured</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {plans.map((plan) => (
+            <TableRow key={plan.id}>
+              <TableCell>{plan.name}</TableCell>
+              <TableCell>{plan.description}</TableCell>
+              <TableCell>${plan.monthlyPrice}</TableCell>
+              <TableCell>${plan.annualPrice}</TableCell>
+              <TableCell>{plan.isFeatured ? "Yes" : "No"}</TableCell>
+              <TableCell className="text-right space-x-2">
+                <Button variant="outline" size="sm" onClick={() => setEditingPlan(plan)}>
+                  {t('pricing.edit')}
+                </Button>
+                <Button variant="destructive" size="sm" onClick={() => handleDeletePlan(plan.id)}>
+                  {t('pricing.delete')}
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
