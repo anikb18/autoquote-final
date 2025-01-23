@@ -15,7 +15,13 @@ import {
   Sun,
   Moon,
   Globe,
-  Ticket
+  Ticket,
+  Database,
+  BarChart,
+  Search,
+  Image,
+  PaintBucket,
+  Tag
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -52,15 +58,14 @@ export function DashboardSidebar() {
           .eq('status', 'open');
         return count || 0;
       } else {
-        const { count } = await supabase
+        const { data: responses } = await supabase
           .from('support_responses')
-          .select('*', { count: 'exact', head: true })
-          .eq('is_admin_response', true)
-          .eq('read', false);
-        return count || 0;
+          .select('*')
+          .eq('is_admin_response', true);
+        return responses?.length || 0;
       }
     },
-    refetchInterval: 30000 // Refetch every 30 seconds
+    refetchInterval: 30000
   });
 
   const adminItems = [
@@ -75,17 +80,81 @@ export function DashboardSidebar() {
       href: "/dashboard/users"
     },
     {
-      title: t('tabs.blog'),
+      title: "Content",
       icon: FileText,
-      href: "/dashboard/blog"
+      href: "/dashboard/content",
+      children: [
+        {
+          title: "Blog Posts",
+          href: "/dashboard/blog"
+        },
+        {
+          title: "Pages",
+          href: "/dashboard/pages"
+        }
+      ]
     },
     {
-      title: t('tabs.newsletter'),
+      title: "Marketing",
       icon: Mail,
-      href: "/dashboard/newsletter"
+      href: "/dashboard/marketing",
+      children: [
+        {
+          title: "Newsletter",
+          href: "/dashboard/newsletter"
+        },
+        {
+          title: "Promotions",
+          href: "/dashboard/promotions"
+        }
+      ]
     },
     {
-      title: "Ticket Center",
+      title: "Analytics",
+      icon: BarChart,
+      href: "/dashboard/analytics"
+    },
+    {
+      title: "SEO",
+      icon: Search,
+      href: "/dashboard/seo"
+    },
+    {
+      title: "Design",
+      icon: PaintBucket,
+      href: "/dashboard/design",
+      children: [
+        {
+          title: "Theme",
+          href: "/dashboard/theme"
+        },
+        {
+          title: "Media Library",
+          href: "/dashboard/media"
+        }
+      ]
+    },
+    {
+      title: "E-commerce",
+      icon: Tag,
+      href: "/dashboard/ecommerce",
+      children: [
+        {
+          title: "Products",
+          href: "/dashboard/products"
+        },
+        {
+          title: "Orders",
+          href: "/dashboard/orders"
+        },
+        {
+          title: "Coupons",
+          href: "/dashboard/coupons"
+        }
+      ]
+    },
+    {
+      title: "Support Center",
       icon: Ticket,
       href: "/support",
       badge: unreadCount > 0 ? unreadCount : undefined
@@ -156,7 +225,6 @@ export function DashboardSidebar() {
 
   return (
     <div className="flex grow flex-col gap-y-5">
-      {/* Header with Logo */}
       <div className="flex h-16 shrink-0 items-center border-b px-6">
         <img
           className="h-8 w-auto"
@@ -165,7 +233,6 @@ export function DashboardSidebar() {
         />
       </div>
       
-      {/* Main Navigation */}
       <nav className="flex flex-1 flex-col px-6">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
@@ -189,34 +256,33 @@ export function DashboardSidebar() {
                       </Badge>
                     )}
                   </Link>
+                  {item.children && (
+                    <ul className="mt-1 pl-8 space-y-1">
+                      {item.children.map((child) => (
+                        <li key={child.href}>
+                          <Link
+                            to={child.href}
+                            className={cn(
+                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6',
+                              location.pathname === child.href
+                                ? 'bg-gray-50 text-primary font-semibold'
+                                : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                            )}
+                          >
+                            {child.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
-            </ul>
-          </li>
-
-          {/* Support Section */}
-          <li>
-            <div className="text-xs font-semibold leading-6 text-gray-400">
-              Help
-            </div>
-            <ul role="list" className="mt-2 space-y-1">
-              <li>
-                <Link
-                  to="/changelog"
-                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-700 hover:text-primary hover:bg-gray-50"
-                >
-                  <History className="h-6 w-6 shrink-0" />
-                  Changelog
-                </Link>
-              </li>
             </ul>
           </li>
         </ul>
       </nav>
 
-      {/* Footer with Settings */}
       <div className="flex flex-col gap-y-2 px-6 pb-4 border-t pt-4">
-        {/* Theme Switcher */}
         <Button
           variant="ghost"
           size="icon"
@@ -231,7 +297,6 @@ export function DashboardSidebar() {
           {theme === "light" ? "Dark Mode" : "Light Mode"}
         </Button>
 
-        {/* Language Switcher */}
         <Select
           value={i18n.language}
           onValueChange={(value) => i18n.changeLanguage(value)}
@@ -246,7 +311,6 @@ export function DashboardSidebar() {
           </SelectContent>
         </Select>
 
-        {/* View Mode Switcher (for admin only) */}
         {(role === 'admin' || role === 'super_admin') && (
           <Select
             value={viewMode}
@@ -263,7 +327,6 @@ export function DashboardSidebar() {
           </Select>
         )}
         
-        {/* User Profile */}
         <div className="flex items-center gap-x-3 py-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.user_metadata?.avatar_url} />
