@@ -6,30 +6,7 @@ import { NewsletterManagement } from "./dashboard/NewsletterManagement";
 import { UserManagement } from "./dashboard/UserManagement";
 import AdminSettings from "./settings/AdminSettings";
 import { useTranslation } from "react-i18next";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { 
-  TextCursorInput, 
-  Square,
-  ChevronDown,
-  SeparatorHorizontal
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const AdminDashboard = () => {
   const { t } = useTranslation('admin');
@@ -46,62 +23,6 @@ const AdminDashboard = () => {
         <p className="text-sm text-muted-foreground">
           {t('dashboard.overview')}
         </p>
-      </div>
-
-      {/* Example of using the UI components */}
-      <div className="space-y-4 mb-8">
-        <div className="flex items-center gap-4">
-          <div className="flex-1 space-y-2">
-            <label className="text-sm font-medium">Text Input</label>
-            <div className="flex items-center gap-2">
-              <TextCursorInput className="h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Enter text..." />
-            </div>
-          </div>
-          
-          <div className="flex-1 space-y-2">
-            <label className="text-sm font-medium">Dropdown Menu</label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full justify-between">
-                  Select Option
-                  <ChevronDown className="h-4 w-4 opacity-50" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-full">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Option 1</DropdownMenuItem>
-                <DropdownMenuItem>Option 2</DropdownMenuItem>
-                <DropdownMenuItem>Option 3</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Text Area</label>
-          <Textarea placeholder="Enter longer text..." className="min-h-[100px]" />
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Button className="flex items-center gap-2">
-            <Square className="h-4 w-4" />
-            Primary Button
-          </Button>
-          <Button variant="outline" className="flex items-center gap-2">
-            <Square className="h-4 w-4" />
-            Secondary Button
-          </Button>
-        </div>
-
-        <div className="flex items-center gap-4 py-4">
-          <span className="text-sm text-muted-foreground">Section 1</span>
-          <Separator orientation="vertical" className="h-4" />
-          <span className="text-sm text-muted-foreground">Section 2</span>
-          <SeparatorHorizontal className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm text-muted-foreground">Section 3</span>
-        </div>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
