@@ -111,19 +111,19 @@ const BlogList = () => {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 bg-[#1A1F2C]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Blog Posts</h1>
+        <h1 className="text-3xl font-bold text-[#D6BCFA]">Blog Posts</h1>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white">
               <PlusCircle className="mr-2" />
               Create Post
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl">
+          <DialogContent className="max-w-4xl bg-[#1A1F2C] border-[#6E59A5]">
             <DialogHeader>
-              <DialogTitle>Create New Blog Post</DialogTitle>
+              <DialogTitle className="text-[#D6BCFA]">Create New Blog Post</DialogTitle>
             </DialogHeader>
             <BlogEditor onSave={handleCreatePost} />
           </DialogContent>
@@ -132,7 +132,7 @@ const BlogList = () => {
 
       <div className="grid gap-4">
         {translatedPosts.map((post) => (
-          <Card key={post.id} className="relative">
+          <Card key={post.id} className="relative bg-[#1A1F2C] border-[#6E59A5] hover:border-[#9b87f5] transition-colors">
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div className="flex gap-4">
@@ -140,33 +140,43 @@ const BlogList = () => {
                     <img 
                       src={post.featured_image} 
                       alt={post.image_alt || post.title}
-                      className="w-24 h-24 object-cover rounded"
+                      className="w-24 h-24 object-cover rounded border border-[#6E59A5]"
                     />
                   )}
                   <div>
                     <CardTitle 
-                      className="hover:text-primary cursor-pointer" 
+                      className="text-[#D6BCFA] hover:text-[#9b87f5] cursor-pointer transition-colors" 
                       onClick={() => navigate(`/blog/${post.id}`)}
                     >
                       {post.title}
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-[#8E9196]">
                       Status: {post.status} | Created: {new Date(post.created_at).toLocaleDateString()}
                     </CardDescription>
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" onClick={() => navigate(`/blog/${post.id}/edit`)}>
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => navigate(`/blog/${post.id}/edit`)}
+                    className="border-[#6E59A5] hover:border-[#9b87f5] text-[#D6BCFA]"
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="destructive" size="icon" onClick={() => handleDeletePost(post.id)}>
+                  <Button 
+                    variant="destructive" 
+                    size="icon" 
+                    onClick={() => handleDeletePost(post.id)}
+                    className="bg-red-500 hover:bg-red-600"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <p className="line-clamp-2">{post.excerpt}</p>
+              <p className="line-clamp-2 text-[#C8C8C9]">{post.excerpt}</p>
             </CardContent>
           </Card>
         ))}
