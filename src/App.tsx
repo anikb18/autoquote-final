@@ -24,6 +24,7 @@ import { CouponManagement } from "./components/settings/CouponManagement";
 import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { SecuritySettings } from "./components/settings/SecuritySettings";
 import { NotificationSettings } from "./components/settings/NotificationSettings";
+import { ProfileSettings } from "./components/settings/ProfileSettings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -111,6 +112,13 @@ function App() {
                 <ProtectedRoute>
                   <DashboardLayout>
                     <AdminSettings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/settings/profile" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <ProfileSettings />
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
