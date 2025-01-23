@@ -7,7 +7,7 @@ import DealerDashboard from "@/components/DealerDashboard";
 import SettingsLayout from "@/components/settings/SettingsLayout";
 import SupportRequest from "@/components/support/SupportRequest";
 import SupportTicketList from "@/components/support/SupportTicketList";
-import Testimonials from "@/components/testimonials/Testimonials";
+import Testimonials from "@/components/Testimonials";
 
 const queryClient = new QueryClient();
 
