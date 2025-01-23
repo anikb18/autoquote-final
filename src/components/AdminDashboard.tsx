@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   const { t } = useTranslation('admin');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8">
       <div className="space-y-2">
         <h1 className="text-4xl font-bold text-foreground">
           {t('dashboard.title')}
@@ -26,7 +26,7 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-background/50 backdrop-blur-sm border">
+        <TabsList className="bg-background/50 backdrop-blur-sm border w-full justify-start">
           <TabsTrigger value="overview">{t('tabs.analytics')}</TabsTrigger>
           <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
           <TabsTrigger value="content">{t('tabs.blog')}</TabsTrigger>
@@ -35,9 +35,13 @@ const AdminDashboard = () => {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-8">
-          <AdminMetricsCards />
-          <SalesTrendChart />
-          <DealershipComparison />
+          <div className="grid gap-8">
+            <AdminMetricsCards />
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <SalesTrendChart />
+              <DealershipComparison />
+            </div>
+          </div>
         </TabsContent>
 
         <TabsContent value="users">

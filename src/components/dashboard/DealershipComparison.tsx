@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useTranslation } from "react-i18next";
 
 interface DealerPerformance {
   dealer_name: string;
@@ -12,6 +13,8 @@ interface DealerPerformance {
 }
 
 export const DealershipComparison = () => {
+  const { t } = useTranslation('admin');
+
   const { data: dealerPerformance } = useQuery({
     queryKey: ['dealer-performance-comparison'],
     queryFn: async () => {
@@ -56,40 +59,53 @@ export const DealershipComparison = () => {
   });
 
   return (
-    <Card className="col-span-4">
+    <Card className="col-span-1">
       <CardHeader>
         <CardTitle>Dealership Performance Comparison</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[400px]">
+        <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={dealerPerformance}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="period" />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+              <XAxis dataKey="period" className="text-muted-foreground" />
+              <YAxis yAxisId="left" className="text-muted-foreground" />
+              <YAxis yAxisId="right" orientation="right" className="text-muted-foreground" />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '0.5rem'
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+              />
               <Legend />
               <Line
                 yAxisId="left"
                 type="monotone"
                 dataKey="conversion_rate"
                 name="Conversion Rate (%)"
-                stroke="#8884d8"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                dot={false}
               />
               <Line
                 yAxisId="right"
                 type="monotone"
                 dataKey="total_revenue"
                 name="Revenue ($)"
-                stroke="#82ca9d"
+                stroke="hsl(var(--secondary))"
+                strokeWidth={2}
+                dot={false}
               />
               <Line
                 yAxisId="left"
                 type="monotone"
                 dataKey="response_time"
                 name="Response Time (min)"
-                stroke="#ffc658"
+                stroke="hsl(var(--accent))"
+                strokeWidth={2}
+                dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
