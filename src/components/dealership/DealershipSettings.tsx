@@ -34,9 +34,9 @@ export const DealershipSettings = () => {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        dealer_name: formData.get('dealerName'),
-        first_name: formData.get('firstName'),
-        last_name: formData.get('lastName'),
+        dealer_name: formData.get('dealerName')?.toString() || '',
+        first_name: formData.get('firstName')?.toString() || '',
+        last_name: formData.get('lastName')?.toString() || '',
       };
 
       const { error } = await supabase
