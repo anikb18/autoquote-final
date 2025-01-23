@@ -1,15 +1,16 @@
-'use client';
+'use client'
 
-import * as Headless from '@headlessui/react';
-import React, { useState } from 'react';
-import { cn } from "@/lib/utils";
+import * as Headless from '@headlessui/react'
+import React, { useState } from 'react'
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 function OpenMenuIcon() {
   return (
     <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="h-6 w-6">
       <path d="M2 6.75C2 6.33579 2.33579 6 2.75 6H17.25C17.6642 6 18 6.33579 18 6.75C18 7.16421 17.6642 7.5 17.25 7.5H2.75C2.33579 7.5 2 7.16421 2 6.75ZM2 13.25C2 12.8358 2.33579 12.5 2.75 12.5H17.25C17.6642 12.5 18 12.8358 18 13.25C18 13.6642 17.6642 14 17.25 14H2.75C2.33579 14 2 13.6642 2 13.25Z" />
     </svg>
-  );
+  )
 }
 
 function CloseMenuIcon() {
@@ -17,29 +18,7 @@ function CloseMenuIcon() {
     <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="h-6 w-6">
       <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
     </svg>
-  );
-}
-
-interface NavbarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  active?: boolean;
-}
-
-function NavbarItem({ active, className, children, ...props }: NavbarItemProps) {
-  return (
-    <button
-      type="button"
-      className={cn(
-        "group flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-zinc-950/5 dark:hover:bg-white/5",
-        active && "bg-zinc-950/5 dark:bg-white/5",
-        className
-      )}
-      {...props}
-    >
-      <div className="h-6 w-6 text-zinc-500 transition-colors group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300">
-        {children}
-      </div>
-    </button>
-  );
+  )
 }
 
 function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open: boolean; close: () => void }>) {
@@ -67,12 +46,14 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
           <Headless.DialogPanel className="fixed inset-y-0 w-full max-w-80 p-2 transition">
             <div className="flex h-full flex-col rounded-lg bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10">
               <div className="-mb-3 px-4 pt-3">
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={close}
-                  className="group flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-zinc-950/5 dark:hover:bg-white/5"
+                  className="h-10 w-10"
                 >
                   <CloseMenuIcon />
-                </button>
+                </Button>
               </div>
               {children}
             </div>
@@ -80,17 +61,17 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
         </Headless.TransitionChild>
       </Headless.Dialog>
     </Headless.Transition>
-  );
+  )
 }
 
 interface DashboardLayoutProps {
-  navbar: React.ReactNode;
-  sidebar: React.ReactNode;
-  children: React.ReactNode;
+  navbar: React.ReactNode
+  sidebar: React.ReactNode
+  children: React.ReactNode
 }
 
 export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutProps) {
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false)
 
   return (
     <div className="relative isolate flex min-h-svh w-full bg-white max-lg:flex-col lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950">
@@ -105,9 +86,15 @@ export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutPr
       {/* Navbar on mobile */}
       <header className="flex items-center px-4 lg:hidden">
         <div className="py-2.5">
-          <NavbarItem onClick={() => setShowSidebar(true)} aria-label="Open navigation">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowSidebar(true)}
+            className="h-10 w-10"
+            aria-label="Open navigation"
+          >
             <OpenMenuIcon />
-          </NavbarItem>
+          </Button>
         </div>
         <div className="min-w-0 flex-1">{navbar}</div>
       </header>
@@ -119,5 +106,5 @@ export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutPr
         </div>
       </main>
     </div>
-  );
+  )
 }

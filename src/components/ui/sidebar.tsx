@@ -1,135 +1,134 @@
-import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+'use client'
 
-interface SidebarProps {
-  user: any;
-  items: {
-    icon: any;
-    label: string;
-    value: string;
-  }[];
-  onSelect: (value: string) => void;
-  onChangeRole: (role: string) => void;
-  viewMode: string;
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
+import * as Headless from '@headlessui/react'
+import { cn } from "@/lib/utils"
+import { LayoutGroup, motion } from 'framer-motion'
+import { default as React, useId } from 'react'
+import { TouchTarget } from './button'
+import { Link } from './link'
+
+export function Sidebar({ className, ...props }: React.ComponentPropsWithoutRef<'nav'>) {
+  return <nav {...props} className={cn(className, 'flex h-full flex-col')} />
 }
 
-const Sidebar = ({
-  user,
-  items,
-  onSelect,
-  viewMode,
-  isCollapsed,
-  onToggleCollapse
-}: SidebarProps) => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { toast } = useToast();
+export function SidebarHeader({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  return (
+    <div
+      {...props}
+      className={cn(
+        className,
+        'flex flex-col border-b border-zinc-950/5 p-4 dark:border-white/5 [&>[data-slot=section]+[data-slot=section]]:mt-2.5'
+      )}
+    />
+  )
+}
 
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast({
-        title: t('common:signOut'),
-        description: t('common:signOutSuccess'),
-      });
-      navigate('/auth');
-    } catch (error) {
-      toast({
-        title: t('common:error'),
-        description: t('common:signOutError'),
-        variant: "destructive",
-      });
-    }
-  };
+export function SidebarBody({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  return (
+    <div
+      {...props}
+      className={cn(
+        className,
+        'flex flex-1 flex-col overflow-y-auto p-4 [&>[data-slot=section]+[data-slot=section]]:mt-8'
+      )}
+    />
+  )
+}
 
-  // Map sidebar values to actual routes
-  const getRouteForValue = (value: string) => {
-    const routeMap: { [key: string]: string } = {
-      overview: '/dashboard',
-      users: '/dashboard/users',
-      content: '/dashboard/blog',
-      marketing: '/dashboard/newsletter',
-      settings: '/dashboard/settings'
-    };
-    return routeMap[value] || '/dashboard';
-  };
+export function SidebarFooter({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  return (
+    <div
+      {...props}
+      className={cn(
+        className,
+        'flex flex-col border-t border-zinc-950/5 p-4 dark:border-white/5 [&>[data-slot=section]+[data-slot=section]]:mt-2.5'
+      )}
+    />
+  )
+}
+
+export function SidebarSection({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  let id = useId()
 
   return (
-    <div className="relative h-full flex flex-col">
-      <div className="p-4 flex items-center justify-between">
-        <div className={cn("flex items-center gap-2", isCollapsed && "hidden")}>
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={user?.avatar_url} />
-            <AvatarFallback>
-              {user?.email?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium">
-              {user?.email}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {viewMode.charAt(0).toUpperCase() + viewMode.slice(1)}
-            </span>
-          </div>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onToggleCollapse}
-          className="ml-auto"
+    <LayoutGroup id={id}>
+      <div {...props} data-slot="section" className={cn(className, 'flex flex-col gap-0.5')} />
+    </LayoutGroup>
+  )
+}
+
+export function SidebarDivider({ className, ...props }: React.ComponentPropsWithoutRef<'hr'>) {
+  return <hr {...props} className={cn(className, 'my-4 border-t border-zinc-950/5 lg:-mx-4 dark:border-white/5')} />
+}
+
+export function SidebarSpacer({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  return <div aria-hidden="true" {...props} className={cn(className, 'mt-8 flex-1')} />
+}
+
+export function SidebarHeading({ className, ...props }: React.ComponentPropsWithoutRef<'h3'>) {
+  return (
+    <h3 {...props} className={cn(className, 'mb-1 px-2 text-xs/6 font-medium text-zinc-500 dark:text-zinc-400')} />
+  )
+}
+
+export const SidebarItem = React.forwardRef(function SidebarItem(
+  {
+    current,
+    className,
+    children,
+    ...props
+  }: { current?: boolean; className?: string; children: React.ReactNode } & (
+    | Omit<Headless.ButtonProps, 'className'>
+    | Omit<React.ComponentPropsWithoutRef<typeof Link>, 'type' | 'className'>
+  ),
+  ref: React.ForwardedRef<HTMLButtonElement>
+) {
+  let classes = cn(
+    'flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-zinc-950 sm:py-2 sm:text-sm/5',
+    'data-[slot=icon]:*:size-6 data-[slot=icon]:*:shrink-0 data-[slot=icon]:*:fill-zinc-500 sm:data-[slot=icon]:*:size-5',
+    'data-[slot=icon]:last:*:ml-auto data-[slot=icon]:last:*:size-5 sm:data-[slot=icon]:last:*:size-4',
+    'data-[slot=avatar]:*:-m-0.5 data-[slot=avatar]:*:size-7 data-[slot=avatar]:*:[--ring-opacity:10%] sm:data-[slot=avatar]:*:size-6',
+    'data-[hover]:bg-zinc-950/5 data-[slot=icon]:*:data-[hover]:fill-zinc-950',
+    'data-[active]:bg-zinc-950/5 data-[slot=icon]:*:data-[active]:fill-zinc-950',
+    'data-[slot=icon]:*:data-[current]:fill-zinc-950',
+    'dark:text-white dark:data-[slot=icon]:*:fill-zinc-400',
+    'dark:data-[hover]:bg-white/5 dark:data-[slot=icon]:*:data-[hover]:fill-white',
+    'dark:data-[active]:bg-white/5 dark:data-[slot=icon]:*:data-[active]:fill-white',
+    'dark:data-[slot=icon]:*:data-[current]:fill-white'
+  )
+
+  return (
+    <span className={cn(className, 'relative')}>
+      {current && (
+        <motion.span
+          layoutId="current-indicator"
+          className="absolute inset-y-2 -left-4 w-0.5 rounded-full bg-zinc-950 dark:bg-white"
+        />
+      )}
+      {'href' in props ? (
+        <Headless.CloseButton
+          as={Link}
+          {...props}
+          className={classes}
+          data-current={current ? 'true' : undefined}
+          ref={ref}
         >
-          {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
-        </Button>
-      </div>
-
-      <ScrollArea className="flex-1 px-2">
-        <div className="space-y-2 py-2">
-          {items.map((item) => (
-            <Link
-              key={item.value}
-              to={getRouteForValue(item.value)}
-              onClick={() => onSelect(item.value)}
-            >
-              <Button
-                variant="ghost"
-                className={cn(
-                  "w-full justify-start",
-                  isCollapsed && "justify-center px-2"
-                )}
-              >
-                <item.icon className={cn("h-5 w-5", !isCollapsed && "mr-2")} />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </ScrollArea>
-
-      <div className="p-4">
-        <Button
-          variant="ghost"
-          className={cn(
-            "w-full justify-start",
-            isCollapsed && "justify-center px-2"
-          )}
-          onClick={handleSignOut}
+          <TouchTarget>{children}</TouchTarget>
+        </Headless.CloseButton>
+      ) : (
+        <Headless.Button
+          {...props}
+          className={cn('cursor-default', classes)}
+          data-current={current ? 'true' : undefined}
+          ref={ref}
         >
-          <LogOut className={cn("h-5 w-5", !isCollapsed && "mr-2")} />
-          {!isCollapsed && <span>{t('common:signOut')}</span>}
-        </Button>
-      </div>
-    </div>
-  );
-};
+          <TouchTarget>{children}</TouchTarget>
+        </Headless.Button>
+      )}
+    </span>
+  )
+})
 
-export default Sidebar;
+export function SidebarLabel({ className, ...props }: React.ComponentPropsWithoutRef<'span'>) {
+  return <span {...props} className={cn(className, 'truncate')} />
+}
