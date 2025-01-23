@@ -1,46 +1,37 @@
-import * as React from "react"
 import { cn } from "@/lib/utils"
+import React from "react"
 
-interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
+type HeadingProps = {
   level?: 1 | 2 | 3 | 4 | 5 | 6
-}
+  className?: string
+} & React.HTMLAttributes<HTMLHeadingElement>
 
-export function Heading({ 
-  className, 
-  level = 1, 
-  children,
-  ...props 
-}: HeadingProps) {
+export function Heading({ className, level = 1, children, ...props }: HeadingProps) {
   const Component = `h${level}` as keyof JSX.IntrinsicElements
-
+  
   return (
     <Component
+      {...props}
       className={cn(
-        "text-2xl font-semibold tracking-tight text-foreground sm:text-xl",
+        "text-2xl/8 font-semibold text-zinc-950 sm:text-xl/8 dark:text-white",
         className
       )}
-      {...props}
     >
       {children}
     </Component>
   )
 }
 
-export function Subheading({ 
-  className, 
-  level = 2, 
-  children,
-  ...props 
-}: HeadingProps) {
+export function Subheading({ className, level = 2, children, ...props }: HeadingProps) {
   const Component = `h${level}` as keyof JSX.IntrinsicElements
-
+  
   return (
     <Component
+      {...props}
       className={cn(
-        "text-base font-semibold text-foreground sm:text-sm",
+        "text-base/7 font-semibold text-zinc-950 sm:text-sm/6 dark:text-white",
         className
       )}
-      {...props}
     >
       {children}
     </Component>
