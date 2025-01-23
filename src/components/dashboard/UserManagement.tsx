@@ -66,7 +66,6 @@ export const UserManagement = () => {
   const handleExport = async () => {
     if (!profiles) return;
     
-    // Convert profiles to CSV format
     const headers = ["Email", "Full Name", "Role", "Created At", "Subscription Status"];
     const csvContent = [
       headers.join(","),
@@ -79,7 +78,6 @@ export const UserManagement = () => {
       ].join(","))
     ].join("\n");
 
-    // Create and download the CSV file
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
@@ -112,7 +110,7 @@ export const UserManagement = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center border-b pb-4">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Users className="h-6 w-6" />

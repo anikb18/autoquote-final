@@ -82,7 +82,7 @@ export const UserTable = ({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="border rounded-lg">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
