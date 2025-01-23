@@ -62,22 +62,29 @@ export const DocumentsManagement = () => {
 
       // Transform and validate the data
       const transformedData = data?.map(doc => {
-        const carDetails = doc.quote?.car_details as unknown as CarDetails;
-        const isValidCarDetails = carDetails && 
-          typeof carDetails === 'object' && 
-          'year' in carDetails &&
-          'make' in carDetails &&
-          'model' in carDetails;
+        const rawCarDetails = doc.quote?.car_details as any;
+        const carDetails: CarDetails = {
+          year: typeof rawCarDetails?.year === 'string' || typeof rawCarDetails?.year === 'number' 
+            ? String(rawCarDetails.year) 
+            : 'N/A',
+          make: typeof rawCarDetails?.make === 'string' 
+            ? rawCarDetails.make 
+            : 'N/A',
+          model: typeof rawCarDetails?.model === 'string' 
+            ? rawCarDetails.model 
+            : 'N/A'
+        };
 
         return {
           ...doc,
           quote: doc.quote ? {
             ...doc.quote,
-            car_details: isValidCarDetails ? carDetails : {
-              year: 'N/A',
-              make: 'N/A',
-              model: 'N/A'
-            }
+            car_details: carDetails,
+            user: doc.quote.user || null,
+            dealer_quotes: doc.quote.dealer_quotes.map(dq => ({
+              ...dq,
+              dealer: dq.dealer || null
+            }))
           } : null
         };
       });
