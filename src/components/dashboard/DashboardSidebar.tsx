@@ -57,6 +57,11 @@ export function DashboardSidebar() {
       title: t('tabs.newsletter'),
       icon: Mail,
       href: "/dashboard/newsletter"
+    },
+    {
+      title: t('tabs.settings'),
+      icon: Settings,
+      href: "/dashboard/settings"
     }
   ];
 
@@ -75,6 +80,11 @@ export function DashboardSidebar() {
       title: "Dealership",
       icon: Car,
       href: "/dashboard/dealership"
+    },
+    {
+      title: "Settings",
+      icon: Settings,
+      href: "/dashboard/settings"
     }
   ];
 
@@ -88,14 +98,17 @@ export function DashboardSidebar() {
       title: "Find Dealers",
       icon: Car,
       href: "/dashboard/dealers"
+    },
+    {
+      title: "Settings",
+      icon: Settings,
+      href: "/dashboard/settings"
     }
   ];
 
   const items = viewMode === 'admin' ? adminItems : 
                 viewMode === 'dealer' ? dealerItems : 
                 buyerItems;
-
-  const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
 
   return (
     <div className="flex grow flex-col gap-y-5">
@@ -225,19 +238,6 @@ export function DashboardSidebar() {
             </span>
           </div>
         </div>
-        
-        <Link
-          to="/dashboard/settings"
-          className={cn(
-            'group flex gap-x-3 rounded-md p-2 text-sm leading-6',
-            location.pathname === '/dashboard/settings'
-              ? 'bg-gray-50 text-primary font-semibold'
-              : 'text-gray-700 hover:text-primary hover:bg-gray-50'
-          )}
-        >
-          <Settings className="h-6 w-6 shrink-0" />
-          Settings
-        </Link>
       </div>
     </div>
   );
