@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Input } from "../ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { generateImage } from "@/utils/imageGeneration";
 import { Loader2 } from "lucide-react";
@@ -84,40 +85,19 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="relative">
-        <label
-          htmlFor="title"
-          className="absolute -top-2 left-2 inline-block bg-background px-1 text-xs font-medium text-foreground"
-        >
-          Post Title
-        </label>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-          placeholder="Enter post title"
-        />
-      </div>
+    <div className="space-y-4">
+      <Input
+        placeholder="Post title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="text-xl font-bold"
+      />
       
-      <div className="relative">
-        <label
-          htmlFor="excerpt"
-          className="absolute -top-2 left-2 inline-block bg-background px-1 text-xs font-medium text-foreground"
-        >
-          Brief Excerpt
-        </label>
-        <input
-          id="excerpt"
-          type="text"
-          value={excerpt}
-          onChange={(e) => setExcerpt(e.target.value)}
-          className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-          placeholder="Enter brief excerpt"
-        />
-      </div>
+      <Input
+        placeholder="Brief excerpt"
+        value={excerpt}
+        onChange={(e) => setExcerpt(e.target.value)}
+      />
 
       <div className="flex items-center gap-4 mb-4">
         {selectedImage && (
@@ -129,22 +109,12 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
       </div>
 
       {selectedImage && (
-        <div className="relative">
-          <label
-            htmlFor="imageAlt"
-            className="absolute -top-2 left-2 inline-block bg-background px-1 text-xs font-medium text-foreground"
-          >
-            Image Alt Text
-          </label>
-          <input
-            id="imageAlt"
-            type="text"
-            value={imageAlt}
-            onChange={(e) => setImageAlt(e.target.value)}
-            className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-            placeholder="Describe the image"
-          />
-        </div>
+        <Input
+          placeholder="Image alt text"
+          value={imageAlt}
+          onChange={(e) => setImageAlt(e.target.value)}
+          className="mb-4"
+        />
       )}
 
       <RichTextEditor
@@ -161,12 +131,11 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
           <ScrollArea className="flex-1">
             <div className="space-y-4 p-4">
               <div className="flex gap-2">
-                <input
+                <Input
                   placeholder="Describe the image you want..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGenerateImage()}
-                  className="flex-1 rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
                 <Button 
                   onClick={handleGenerateImage}
