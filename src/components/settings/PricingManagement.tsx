@@ -60,14 +60,16 @@ const PricingManagement = () => {
       
       if (error) throw error;
 
-      // Convert raw data to our expected format
+      // Convert raw data to our expected format and ensure features is always a string array
       return (data as RawPricingPlan[]).map(plan => ({
         id: plan.id,
         name: plan.name || '',
         description: plan.description || '',
         monthlyPrice: plan.monthly_price || 0,
         annualPrice: plan.annual_price || 0,
-        features: Array.isArray(plan.features) ? plan.features : [],
+        features: Array.isArray(plan.features) 
+          ? plan.features.map(f => String(f))  // Convert each feature to string
+          : [],
         isFeatured: plan.is_featured || false
       }));
     }
@@ -146,14 +148,14 @@ const PricingManagement = () => {
                 <Label>{t('pricing.planName')}</Label>
                 <Input
                   value={editingPlan?.name || ''}
-                  onChange={(e) => setEditingPlan(prev => prev ? { ...prev, name: e.target.value } : null)}
+                  onChange={(e) => setEditingPlan(prev => prev ? { ...prev, name: e.target.value } : defaultPlan)}
                 />
               </div>
               <div>
                 <Label>{t('pricing.description')}</Label>
                 <Textarea
                   value={editingPlan?.description || ''}
-                  onChange={(e) => setEditingPlan(prev => prev ? { ...prev, description: e.target.value } : null)}
+                  onChange={(e) => setEditingPlan(prev => prev ? { ...prev, description: e.target.value } : defaultPlan)}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -162,7 +164,7 @@ const PricingManagement = () => {
                   <Input
                     type="number"
                     value={editingPlan?.monthlyPrice || 0}
-                    onChange={(e) => setEditingPlan(prev => prev ? { ...prev, monthlyPrice: Number(e.target.value) } : null)}
+                    onChange={(e) => setEditingPlan(prev => prev ? { ...prev, monthlyPrice: Number(e.target.value) } : defaultPlan)}
                   />
                 </div>
                 <div>
@@ -170,7 +172,7 @@ const PricingManagement = () => {
                   <Input
                     type="number"
                     value={editingPlan?.annualPrice || 0}
-                    onChange={(e) => setEditingPlan(prev => prev ? { ...prev, annualPrice: Number(e.target.value) } : null)}
+                    onChange={(e) => setEditingPlan(prev => prev ? { ...prev, annualPrice: Number(e.target.value) } : defaultPlan)}
                   />
                 </div>
               </div>
@@ -178,14 +180,14 @@ const PricingManagement = () => {
                 <Label>{t('pricing.features')}</Label>
                 <Textarea
                   value={editingPlan?.features.join('\n') || ''}
-                  onChange={(e) => setEditingPlan(prev => prev ? { ...prev, features: e.target.value.split('\n') } : null)}
+                  onChange={(e) => setEditingPlan(prev => prev ? { ...prev, features: e.target.value.split('\n').filter(Boolean) } : defaultPlan)}
                   placeholder={t('pricing.featuresPlaceholder')}
                 />
               </div>
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={editingPlan?.isFeatured || false}
-                  onCheckedChange={(checked) => setEditingPlan(prev => prev ? { ...prev, isFeatured: checked } : null)}
+                  onCheckedChange={(checked) => setEditingPlan(prev => prev ? { ...prev, isFeatured: checked } : defaultPlan)}
                 />
                 <Label>{t('pricing.featured')}</Label>
               </div>
