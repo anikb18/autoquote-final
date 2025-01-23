@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import SubscriptionStatus from "./SubscriptionStatus";
 import { Loader2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,20 +15,41 @@ const ProtectedRoute = ({ children, requireSubscription = false }: ProtectedRout
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
 
-  const { data: profile, isLoading: profileLoading } = useQuery({
+  const { data: profile, isLoading: profileLoading, error: profileError } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return null;
-      
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-      
-      if (error) throw error;
-      return data;
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return null;
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        console.error('Profile fetch error:', error);
+        toast({
+          title: "Error fetching profile",
+          description: "Please try refreshing the page",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+    retry: 1,
+    meta: {
+      onError: (error: Error) => {
+        console.error('Profile query error:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load user profile",
+          variant: "destructive",
+        });
+      },
     },
   });
 
@@ -46,6 +68,11 @@ const ProtectedRoute = ({ children, requireSubscription = false }: ProtectedRout
         setIsChecking(false);
       } catch (error) {
         console.error("Auth check error:", error);
+        toast({
+          title: "Authentication Error",
+          description: "Please sign in again",
+          variant: "destructive",
+        });
         navigate("/auth");
       }
     };
@@ -66,7 +93,23 @@ const ProtectedRoute = ({ children, requireSubscription = false }: ProtectedRout
       <div className="flex items-center justify-center h-screen">
         <div className="text-center space-y-2">
           <Loader2 className="h-8 w-8 animate-spin mx-auto" />
-          <p>Checking authentication...</p>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (profileError) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center space-y-2">
+          <p className="text-red-500">Error loading profile</p>
+          <button 
+            onClick={() => navigate("/auth")}
+            className="text-blue-500 hover:underline"
+          >
+            Return to login
+          </button>
         </div>
       </div>
     );
