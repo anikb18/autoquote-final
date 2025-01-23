@@ -24,10 +24,7 @@ export const MessageList = ({
           <ChatMessage
             key={msg.id}
             message={msg}
-            isDealer={msg.sender_id === dealerId}
-            quoteAccepted={quoteAccepted}
-            showTranslate={autoTranslate}
-            onTranslate={() => onTranslate(msg.id)}
+            isAccepted={quoteAccepted}
           />
         ))}
       </div>

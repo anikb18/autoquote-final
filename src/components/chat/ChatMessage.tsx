@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { MessageType } from "@/types/chat";
 
@@ -34,7 +33,7 @@ export const ChatMessage = ({ message, isAccepted }: ChatMessageProps) => {
   return (
     <div className="flex items-start space-x-4 p-4">
       <Avatar>
-        <AvatarImage src={message.sender?.avatar_url} />
+        <AvatarImage src={senderProfile?.avatar_url} />
         <AvatarFallback>
           {displayName.charAt(0)}
         </AvatarFallback>
