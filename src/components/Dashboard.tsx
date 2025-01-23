@@ -4,33 +4,10 @@ import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
 import BuyerDashboard from "./BuyerDashboard";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, User } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import {
-  Sidebar,
-  SidebarBody,
-  SidebarHeader,
-  SidebarFooter,
-} from "@/components/ui/sidebar";
-import { DashboardSidebar } from "./dashboard/DashboardSidebar";
-import { UserManagement } from "./dashboard/UserManagement";
-import { BlogManagement } from "./dashboard/BlogManagement";
-import { NewsletterManagement } from "./dashboard/NewsletterManagement";
-import { SettingsForm } from "./settings/SettingsForm";
-import { ThemeSwitcher } from "./ThemeSwitcher";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -46,7 +23,6 @@ const Dashboard = () => {
   const [profile, setProfile] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
   const { t } = useTranslation('admin');
 
   useEffect(() => {
@@ -104,20 +80,6 @@ const Dashboard = () => {
     }
   }, [role]);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
-
-  const getAvatarUrl = () => {
-    if (user?.user_metadata?.avatar_url) {
-      return user.user_metadata.avatar_url;
-    } else if (profile?.avatar_url) {
-      return profile.avatar_url;
-    }
-    return null;
-  };
-
   // Loading state
   if (isAuthChecking || roleLoading) {
     return (
@@ -136,19 +98,6 @@ const Dashboard = () => {
   }
 
   const renderContent = () => {
-    if (location.pathname === "/dashboard/users") {
-      return <UserManagement />;
-    }
-    if (location.pathname === "/dashboard/blog") {
-      return <BlogManagement />;
-    }
-    if (location.pathname === "/dashboard/newsletter") {
-      return <NewsletterManagement />;
-    }
-    if (location.pathname === "/dashboard/settings") {
-      return <SettingsForm />;
-    }
-
     switch (viewMode) {
       case "admin":
         return <AdminDashboard />;
@@ -160,80 +109,25 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex w-full bg-background">
-      <Sidebar>
-        <SidebarHeader className="border-b p-4">
-          <div className="flex h-16 shrink-0 items-center px-6">
-            <img
-              className="h-8 w-auto"
-              src="/logo/dark.png"
-              alt="AutoQuote24"
-            />
-          </div>
-        </SidebarHeader>
-        <SidebarBody>
-          <DashboardSidebar />
-        </SidebarBody>
-        <SidebarFooter className="border-t p-4 space-y-4">
-          <div className="flex items-center gap-4 px-2">
-            <ThemeSwitcher />
-            <LanguageSwitcher />
-          </div>
-          {role === 'admin' && (
-            <div className="px-2 mb-4">
-              <Select
-                value={viewMode}
-                onValueChange={(value: "admin" | "dealer" | "user") => setViewMode(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select view mode" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Admin View</SelectItem>
-                  <SelectItem value="dealer">Dealer View</SelectItem>
-                  <SelectItem value="user">User View</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          <div className="flex items-center justify-between px-2">
-            <div className="flex items-center gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={getAvatarUrl() || ''} />
-                      <AvatarFallback>
-                        <User className="h-4 w-4" />
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{profile?.full_name}</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        {user.email}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    Sign out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </SidebarFooter>
-      </Sidebar>
-
-      <main className="flex-1 overflow-auto">
-        <div className="container mx-auto p-6">
-          {renderContent()}
+    <div className="p-6">
+      {role === 'admin' && (
+        <div className="mb-6">
+          <Select
+            value={viewMode}
+            onValueChange={(value: "admin" | "dealer" | "user") => setViewMode(value)}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select view mode" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="admin">Admin View</SelectItem>
+              <SelectItem value="dealer">Dealer View</SelectItem>
+              <SelectItem value="user">User View</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </main>
+      )}
+      {renderContent()}
     </div>
   );
 };
