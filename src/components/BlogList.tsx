@@ -14,6 +14,9 @@ interface Blog {
   content: string;
   status: 'draft' | 'published' | 'archived';
   created_at: string;
+  excerpt: string;
+  featured_image?: string;
+  image_alt?: string;
 }
 
 const BlogList = () => {
@@ -67,6 +70,37 @@ const BlogList = () => {
     setSelectedBlog(null);
   };
 
+  const handleSave = async (values: { 
+    title: string; 
+    content: string; 
+    excerpt: string; 
+    featured_image?: string; 
+    image_alt?: string; 
+  }) => {
+    const { error } = await supabase
+      .from('blog_posts')
+      .upsert({
+        id: selectedBlog?.id,
+        ...values,
+        status: selectedBlog?.status || 'draft'
+      });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save blog",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Blog saved successfully",
+      });
+      handleDialogClose();
+      refetch();
+    }
+  };
+
   return (
     <div>
       <Button onClick={() => setIsDialogOpen(true)}>Create New Blog</Button>
@@ -75,7 +109,16 @@ const BlogList = () => {
           <DialogHeader>
             <DialogTitle>{selectedBlog ? "Edit Blog" : "Create Blog"}</DialogTitle>
           </DialogHeader>
-          <BlogEditor initialBlog={selectedBlog} onClose={handleDialogClose} />
+          <BlogEditor 
+            onSave={handleSave}
+            initialValues={selectedBlog ? {
+              title: selectedBlog.title,
+              content: selectedBlog.content,
+              excerpt: selectedBlog.excerpt,
+              featured_image: selectedBlog.featured_image,
+              image_alt: selectedBlog.image_alt
+            } : undefined}
+          />
         </DialogContent>
       </Dialog>
       <ul>

@@ -8,6 +8,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Shield } from "lucide-react";
 
+interface SecuritySettingsData {
+  two_factor_auth: boolean;
+  require_email_verification: boolean;
+}
+
 export function SecuritySettings() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -22,7 +27,7 @@ export function SecuritySettings() {
         .single();
       
       if (error) throw error;
-      return data?.value || {};
+      return (data?.value || {}) as SecuritySettingsData;
     }
   });
 
@@ -33,18 +38,17 @@ export function SecuritySettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        two_factor_auth: formData.get('twoFactorAuth') === 'on',
-        require_email_verification: formData.get('requireEmailVerification') === 'on',
-        session_timeout: Number(formData.get('sessionTimeout')),
+        category: 'security',
+        key: 'settings',
+        value: {
+          two_factor_auth: formData.get('twoFactorAuth') === 'on',
+          require_email_verification: formData.get('requireEmailVerification') === 'on',
+        }
       };
 
       const { error } = await supabase
         .from('site_settings')
-        .upsert({
-          category: 'security',
-          key: 'settings',
-          value: updates
-        });
+        .upsert(updates);
 
       if (error) throw error;
 

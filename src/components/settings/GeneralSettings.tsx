@@ -8,6 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Settings } from "lucide-react";
 
+interface GeneralSettingsData {
+  site_name: string;
+  support_email: string;
+  platform_fee: number;
+}
+
 export function GeneralSettings() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -22,7 +28,7 @@ export function GeneralSettings() {
         .single();
       
       if (error) throw error;
-      return data?.value || {};
+      return (data?.value || {}) as GeneralSettingsData;
     }
   });
 
@@ -33,18 +39,18 @@ export function GeneralSettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        site_name: formData.get('siteName'),
-        support_email: formData.get('supportEmail'),
-        platform_fee: Number(formData.get('platformFee')),
+        category: 'general',
+        key: 'settings',
+        value: {
+          site_name: formData.get('siteName'),
+          support_email: formData.get('supportEmail'),
+          platform_fee: Number(formData.get('platformFee')),
+        }
       };
 
       const { error } = await supabase
         .from('site_settings')
-        .upsert({
-          category: 'general',
-          key: 'settings',
-          value: updates
-        });
+        .upsert(updates);
 
       if (error) throw error;
 

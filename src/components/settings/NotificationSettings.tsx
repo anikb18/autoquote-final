@@ -8,6 +8,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Bell } from "lucide-react";
 
+interface NotificationSettingsData {
+  email_notifications: boolean;
+  push_notifications: boolean;
+  quote_alerts: boolean;
+  marketing_emails: boolean;
+}
+
 export function NotificationSettings() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -22,7 +29,7 @@ export function NotificationSettings() {
         .single();
       
       if (error) throw error;
-      return data?.value || {};
+      return (data?.value || {}) as NotificationSettingsData;
     }
   });
 
@@ -33,19 +40,19 @@ export function NotificationSettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        email_notifications: formData.get('emailNotifications') === 'on',
-        push_notifications: formData.get('pushNotifications') === 'on',
-        quote_alerts: formData.get('quoteAlerts') === 'on',
-        marketing_emails: formData.get('marketingEmails') === 'on',
+        category: 'notifications',
+        key: 'settings',
+        value: {
+          email_notifications: formData.get('emailNotifications') === 'on',
+          push_notifications: formData.get('pushNotifications') === 'on',
+          quote_alerts: formData.get('quoteAlerts') === 'on',
+          marketing_emails: formData.get('marketingEmails') === 'on',
+        }
       };
 
       const { error } = await supabase
         .from('site_settings')
-        .upsert({
-          category: 'notifications',
-          key: 'settings',
-          value: updates
-        });
+        .upsert(updates);
 
       if (error) throw error;
 
