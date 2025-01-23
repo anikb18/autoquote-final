@@ -29,15 +29,15 @@ interface Document {
   quote: {
     car_details: CarDetails;
     user: {
-      full_name: string;
-      email: string;
-    };
+      full_name: string | null;
+      email: string | null;
+    } | null;
     dealer_quotes: {
       dealer: {
-        dealer_name: string;
-      };
+        dealer_name: string | null;
+      } | null;
     }[];
-  };
+  } | null;
 }
 
 export const DocumentsManagement = () => {
@@ -62,22 +62,24 @@ export const DocumentsManagement = () => {
 
       // Transform and validate the data
       const transformedData = data?.map(doc => {
-        const carDetails = doc.quote?.car_details as CarDetails;
-        if (!carDetails?.year || !carDetails?.make || !carDetails?.model) {
-          console.warn('Invalid car details format:', doc.quote?.car_details);
-          return {
-            ...doc,
-            quote: {
-              ...doc.quote,
-              car_details: {
-                year: 'N/A',
-                make: 'N/A',
-                model: 'N/A'
-              }
+        const carDetails = doc.quote?.car_details as unknown as CarDetails;
+        const isValidCarDetails = carDetails && 
+          typeof carDetails === 'object' && 
+          'year' in carDetails &&
+          'make' in carDetails &&
+          'model' in carDetails;
+
+        return {
+          ...doc,
+          quote: doc.quote ? {
+            ...doc.quote,
+            car_details: isValidCarDetails ? carDetails : {
+              year: 'N/A',
+              make: 'N/A',
+              model: 'N/A'
             }
-          };
-        }
-        return doc;
+          } : null
+        };
       });
 
       return transformedData as Document[];
@@ -151,8 +153,8 @@ export const DocumentsManagement = () => {
                 </TableCell>
                 <TableCell>
                   <div>
-                    <div className="font-medium">{doc.quote?.user?.full_name}</div>
-                    <div className="text-sm text-muted-foreground">{doc.quote?.user?.email}</div>
+                    <div className="font-medium">{doc.quote?.user?.full_name || 'N/A'}</div>
+                    <div className="text-sm text-muted-foreground">{doc.quote?.user?.email || 'N/A'}</div>
                   </div>
                 </TableCell>
                 <TableCell>{doc.quote?.dealer_quotes[0]?.dealer?.dealer_name || 'N/A'}</TableCell>
