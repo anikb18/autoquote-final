@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
@@ -6,7 +7,7 @@ import BuyerDashboard from "./BuyerDashboard";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   Sidebar,
@@ -22,7 +23,6 @@ import { SettingsForm } from "./settings/SettingsForm";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { User } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -161,7 +161,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex w-full bg-background">
       <Sidebar>
-        <SidebarHeader className="border-b p-4">
+        <SidebarHeader>
           <img
             src={"/logo/dark.png"}
             alt="AutoQuote24"
