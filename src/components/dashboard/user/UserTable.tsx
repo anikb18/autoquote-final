@@ -133,19 +133,19 @@ export const UserTable = ({
     <div className="space-y-4">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Email</TableHead>
-            <TableHead>Full Name</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Created At</TableHead>
-            <TableHead>Subscription</TableHead>
-            <TableHead>Actions</TableHead>
+          <TableRow className="bg-secondary/50">
+            <TableHead className="w-[250px]">Email</TableHead>
+            <TableHead className="w-[200px]">Full Name</TableHead>
+            <TableHead className="w-[150px]">Role</TableHead>
+            <TableHead className="w-[200px]">Created At</TableHead>
+            <TableHead className="w-[150px]">Subscription</TableHead>
+            <TableHead className="w-[100px] text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {profiles?.map((profile) => (
             <TableRow key={profile.id} className="group">
-              <TableCell>{profile.email}</TableCell>
+              <TableCell className="font-medium">{profile.email}</TableCell>
               <TableCell>{profile.full_name || 'N/A'}</TableCell>
               <TableCell>
                 <UserRoleSelect
@@ -164,7 +164,7 @@ export const UserTable = ({
                   {profile.subscription_status || 'none'}
                 </Badge>
               </TableCell>
-              <TableCell>
+              <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
