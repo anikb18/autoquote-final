@@ -12,15 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Database } from "@/integrations/supabase/types";
 
-interface SupportResponse {
-  id: string;
-  ticket_id: string;
-  responder_id: string;
-  response: string;
-  is_admin_response: boolean;
-  created_at: string;
-}
+type SupportResponse = Database["public"]["Tables"]["support_responses"]["Row"];
 
 interface SupportTicketResponseProps {
   ticketId: string;
@@ -40,7 +34,7 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
         .from('support_responses')
         .select('*')
         .eq('ticket_id', ticketId)
-        .order('created_at', { ascending: true }) as { data: SupportResponse[] | null, error: any };
+        .order('created_at', { ascending: true });
       
       if (error) throw error;
       return data;
@@ -58,7 +52,7 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
             responder_id: (await supabase.auth.getUser()).data.user?.id,
             is_admin_response: role === 'admin'
           }
-        ] as any); // Using 'any' temporarily until types are updated
+        ]);
 
       if (error) throw error;
 
@@ -87,7 +81,7 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
         
         <div className="space-y-6">
           <div className="space-y-4 max-h-[400px] overflow-y-auto">
-            {responses?.map((response: SupportResponse) => (
+            {responses?.map((response) => (
               <div
                 key={response.id}
                 className={`p-4 rounded-lg ${
