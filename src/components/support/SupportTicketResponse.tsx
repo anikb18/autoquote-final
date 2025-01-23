@@ -3,16 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserRole } from "@/hooks/use-user-role";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Database } from "@/integrations/supabase/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
 type SupportResponse = Database['public']['Tables']['support_responses']['Row'];
 
@@ -76,14 +71,19 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
   });
 
   return (
-    <Dialog open={true} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>{t('support.responses')}</DialogTitle>
-        </DialogHeader>
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
+      <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg">
+        <div className="flex flex-col space-y-1.5 text-center sm:text-left">
+          <h2 className="text-lg font-semibold">{t('support.responses')}</h2>
+          <p className="text-sm text-muted-foreground">
+            {role === 'admin' ? t('support.adminResponsePrompt') : t('support.userResponsePrompt')}
+          </p>
+        </div>
         
-        <div className="space-y-6">
-          <div className="space-y-4 max-h-[400px] overflow-y-auto">
+        <Separator />
+        
+        <ScrollArea className="h-[400px] pr-4">
+          <div className="space-y-4">
             {responses?.map((response) => (
               <div
                 key={response.id}
@@ -94,31 +94,34 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
                 }`}
               >
                 <p className="text-sm">{response.response}</p>
+                <span className="text-xs text-muted-foreground mt-2 block">
+                  {new Date(response.created_at).toLocaleString()}
+                </span>
               </div>
             ))}
           </div>
+        </ScrollArea>
 
-          <div className="space-y-4">
-            <Textarea
-              value={newResponse}
-              onChange={(e) => setNewResponse(e.target.value)}
-              placeholder={t('support.writeResponse')}
-              className="min-h-[100px]"
-            />
-            <div className="flex justify-end gap-4">
-              <Button variant="outline" onClick={onClose}>
-                {t('common.cancel')}
-              </Button>
-              <Button 
-                onClick={() => sendResponse.mutate()}
-                disabled={!newResponse.trim() || sendResponse.isPending}
-              >
-                {t('support.sendResponse')}
-              </Button>
-            </div>
+        <div className="space-y-4">
+          <Textarea
+            value={newResponse}
+            onChange={(e) => setNewResponse(e.target.value)}
+            placeholder={t('support.writeResponse')}
+            className="min-h-[100px]"
+          />
+          <div className="flex justify-end gap-4">
+            <Button variant="outline" onClick={onClose}>
+              {t('common.cancel')}
+            </Button>
+            <Button 
+              onClick={() => sendResponse.mutate()}
+              disabled={!newResponse.trim() || sendResponse.isPending}
+            >
+              {t('support.sendResponse')}
+            </Button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

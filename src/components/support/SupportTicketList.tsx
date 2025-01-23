@@ -43,61 +43,50 @@ export function SupportTicketList({ userOnly }: SupportTicketListProps) {
   });
 
   if (isLoading) {
-    return <div className="text-center py-4">{t('common.loading')}</div>;
+    return <div className="flex items-center justify-center py-8">{t('common.loading')}</div>;
   }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'open':
-        return 'bg-green-500';
-      case 'in_progress':
-        return 'bg-blue-500';
-      case 'closed':
-        return 'bg-gray-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
 
   return (
     <div className="space-y-6">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t('support.subject')}</TableHead>
-            <TableHead>{t('support.category')}</TableHead>
-            <TableHead>{t('support.status')}</TableHead>
-            <TableHead>{t('support.created')}</TableHead>
-            <TableHead>{t('support.actions')}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {tickets?.map((ticket) => (
-            <TableRow key={ticket.id}>
-              <TableCell>{ticket.subject}</TableCell>
-              <TableCell>{ticket.category}</TableCell>
-              <TableCell>
-                <Badge className={getStatusColor(ticket.status)}>
-                  {t(`support.status.${ticket.status}`)}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {format(new Date(ticket.created_at), 'PPp')}
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedTicket(ticket.id)}
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  {t('support.viewResponses')}
-                </Button>
-              </TableCell>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t('support.subject')}</TableHead>
+              <TableHead>{t('support.category')}</TableHead>
+              <TableHead>{t('support.status')}</TableHead>
+              <TableHead>{t('support.created')}</TableHead>
+              <TableHead className="text-right">{t('support.actions')}</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {tickets?.map((ticket) => (
+              <TableRow key={ticket.id}>
+                <TableCell className="font-medium">{ticket.subject}</TableCell>
+                <TableCell>{ticket.category}</TableCell>
+                <TableCell>
+                  <Badge variant={ticket.status === 'open' ? 'default' : 'secondary'}>
+                    {t(`support.status.${ticket.status}`)}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  {format(new Date(ticket.created_at), 'PPp')}
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedTicket(ticket.id)}
+                  >
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    {t('support.viewResponses')}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {selectedTicket && (
         <SupportTicketResponse
