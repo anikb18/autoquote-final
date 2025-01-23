@@ -6,12 +6,23 @@ import { SalesTrendChart } from "@/components/dashboard/SalesTrendChart";
 import { MetricsOverview } from "@/components/dashboard/shared/MetricsOverview";
 import { DollarSign, TrendingUp, Users, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import type { LucideIcon } from 'lucide-react';
 
 interface DealerMetrics {
   active_quotes_count: number;
   quote_change: number;
   won_bids_count: number;
   total_revenue: number;
+}
+
+interface MetricItem {
+  id: number;
+  name: string;
+  stat: number;
+  icon: LucideIcon;
+  change: string;
+  changeType: "increase" | "decrease";
+  prefix?: string;
 }
 
 const DealerAnalytics = () => {
@@ -53,7 +64,7 @@ const DealerAnalytics = () => {
     },
   });
 
-  const dealerStats = [
+  const dealerStats: MetricItem[] = [
     {
       id: 1,
       name: "Active Quotes",
@@ -82,7 +93,7 @@ const DealerAnalytics = () => {
     {
       id: 4,
       name: "Response Time",
-      stat: "2.4h",
+      stat: 2.4,
       icon: Clock,
       change: "-10.3%",
       changeType: "decrease"
