@@ -27,21 +27,13 @@ export default function Support() {
         return count || 0;
       } else {
         // For users/dealers, count unread admin responses
-        const { data: tickets } = await supabase
-          .from('support_tickets')
-          .select('id')
-          .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
-
-        if (!tickets?.length) return 0;
-
-        const ticketIds = tickets.map(ticket => ticket.id);
-        
         const { data: responses } = await supabase
           .from('support_responses')
           .select('*')
-          .eq('is_admin_response', true)
-          .in('ticket_id', ticketIds);
+          .eq('is_admin_response', true);
           
+        // Since we don't have a read status column, we'll just show the total number
+        // of admin responses for now. In a future update, we should add a read status column
         return responses?.length || 0;
       }
     },
@@ -51,59 +43,61 @@ export default function Support() {
   const pageTitle = role === 'admin' ? 'Tickets Center' : 'Support';
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex items-center gap-3 mb-8">
-        <h1 className="text-3xl font-bold">{t(`support.${pageTitle}`)}</h1>
-        {unreadCount > 0 && (
-          <Badge variant="destructive" className="h-6 w-6 rounded-full flex items-center justify-center">
-            {unreadCount}
-          </Badge>
-        )}
-      </div>
-      
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList>
+    <DashboardLayout>
+      <div className="container mx-auto py-8">
+        <div className="flex items-center gap-3 mb-8">
+          <h1 className="text-3xl font-bold">{t(`support.${pageTitle}`)}</h1>
+          {unreadCount > 0 && (
+            <Badge variant="destructive" className="h-6 w-6 rounded-full flex items-center justify-center">
+              {unreadCount}
+            </Badge>
+          )}
+        </div>
+        
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList>
+            {role === 'admin' ? (
+              <>
+                <TabsTrigger value="all-tickets">
+                  {t('support.allTickets')}
+                </TabsTrigger>
+                <TabsTrigger value="open-tickets">
+                  {t('support.openTickets')}
+                </TabsTrigger>
+              </>
+            ) : (
+              <>
+                <TabsTrigger value="new-request">
+                  {t('support.newRequest')}
+                </TabsTrigger>
+                <TabsTrigger value="my-tickets">
+                  {t('support.myTickets')}
+                </TabsTrigger>
+              </>
+            )}
+          </TabsList>
+
           {role === 'admin' ? (
             <>
-              <TabsTrigger value="all-tickets">
-                {t('support.allTickets')}
-              </TabsTrigger>
-              <TabsTrigger value="open-tickets">
-                {t('support.openTickets')}
-              </TabsTrigger>
+              <TabsContent value="all-tickets">
+                <SupportTicketList userOnly={false} />
+              </TabsContent>
+              <TabsContent value="open-tickets">
+                <SupportTicketList userOnly={false} status="open" />
+              </TabsContent>
             </>
           ) : (
             <>
-              <TabsTrigger value="new-request">
-                {t('support.newRequest')}
-              </TabsTrigger>
-              <TabsTrigger value="my-tickets">
-                {t('support.myTickets')}
-              </TabsTrigger>
+              <TabsContent value="new-request">
+                <SupportRequest />
+              </TabsContent>
+              <TabsContent value="my-tickets">
+                <SupportTicketList userOnly={true} />
+              </TabsContent>
             </>
           )}
-        </TabsList>
-
-        {role === 'admin' ? (
-          <>
-            <TabsContent value="all-tickets">
-              <SupportTicketList userOnly={false} />
-            </TabsContent>
-            <TabsContent value="open-tickets">
-              <SupportTicketList userOnly={false} status="open" />
-            </TabsContent>
-          </>
-        ) : (
-          <>
-            <TabsContent value="new-request">
-              <SupportRequest />
-            </TabsContent>
-            <TabsContent value="my-tickets">
-              <SupportTicketList userOnly={true} />
-            </TabsContent>
-          </>
-        )}
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </DashboardLayout>
   );
 }
