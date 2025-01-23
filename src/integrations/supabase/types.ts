@@ -281,7 +281,7 @@ export type Database = {
           date_range_start?: string | null
           dealer_id?: string | null
           drill_down_data?: Json | null
-          id: string
+          id?: string
           metric_type: string
           period_end: string
           period_start: string
@@ -587,7 +587,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           down_payment?: number | null
-          id: string
+          id?: string
           interest_rate: number
           loan_amount: number
           monthly_payment: number
@@ -638,7 +638,7 @@ export type Database = {
           coverage_type: string
           created_at?: string | null
           deductible: number
-          id: string
+          id?: string
           provider?: string | null
           quote_id?: string | null
           updated_at?: string | null
@@ -682,7 +682,7 @@ export type Database = {
           approved_amount?: number | null
           created_at?: string | null
           credit_score?: number | null
-          id: string
+          id?: string
           interest_rate?: number | null
           monthly_obligations?: number | null
           quote_id?: string | null
@@ -1071,7 +1071,7 @@ export type Database = {
           created_at?: string | null
           extended_until?: string | null
           extension_applied?: boolean | null
-          id: string
+          id?: string
           quote_id?: string | null
           status?: string | null
         }
@@ -1311,7 +1311,7 @@ export type Database = {
           created_at?: string | null
           error_message?: string | null
           html_content: string
-          id: string
+          id?: string
           scheduled_for: string
           sent_at?: string | null
           status?: Database["public"]["Enums"]["email_status"] | null
@@ -1346,7 +1346,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          id: string
+          id?: string
           meta_description?: string | null
           meta_keywords?: string[] | null
           og_description?: string | null
@@ -1433,15 +1433,276 @@ export type Database = {
             referencedRelation: "support_tickets"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          category: string
+          created_at: string | null
+          id: string
+          message: string
+          status: string | null
+          subject: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          id?: string
+          message: string
+          status?: string | null
+          subject: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          id?: string
+          message?: string
+          status?: string | null
+          subject?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      trade_in_valuations: {
+        Row: {
+          created_at: string | null
+          estimated_value: number | null
+          id: string
+          quote_id: string | null
+          vehicle_details: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          estimated_value?: number | null
+          id: string
+          quote_id?: string | null
+          vehicle_details?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          estimated_value?: number | null
+          id?: string
+          quote_id?: string | null
+          vehicle_details?: Json | null
+        }
+        Relationships: [
           {
-            foreignKeyName: "support_responses_responder_id_fkey"
-            columns: ["responder_id"]
+            foreignKeyName: "trade_in_valuations_quote_id_fkey"
+            columns: ["quote_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "quotes"
             referencedColumns: ["id"]
-          }
-        ];
-      };
+          },
+        ]
+      }
+      user_activities: {
+        Row: {
+          action_type: string | null
+          created_at: string | null
+          details: Json | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action_type?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id: string
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          role?: Database["public"]["Enums"]["user_role_type"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_profile_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_makes: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      vehicle_models: {
+        Row: {
+          created_at: string | null
+          id: string
+          make_id: string | null
+          name: string
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          make_id?: string | null
+          name: string
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          make_id?: string | null
+          name?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_models_make_id_fkey"
+            columns: ["make_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_makes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_photos: {
+        Row: {
+          created_at: string | null
+          id: string
+          photo_url: string
+          quote_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          photo_url: string
+          quote_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          photo_url?: string
+          quote_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_photos_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_trims: {
+        Row: {
+          body_style: string | null
+          created_at: string | null
+          engine_type: string | null
+          id: string
+          model_id: string | null
+          name: string
+          trim_level: string | null
+        }
+        Insert: {
+          body_style?: string | null
+          created_at?: string | null
+          engine_type?: string | null
+          id: string
+          model_id?: string | null
+          name: string
+          trim_level?: string | null
+        }
+        Update: {
+          body_style?: string | null
+          created_at?: string | null
+          engine_type?: string | null
+          id?: string
+          model_id?: string | null
+          name?: string
+          trim_level?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_trims_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wrappers_fdw_stats: {
+        Row: {
+          bytes_in: number | null
+          bytes_out: number | null
+          create_times: number | null
+          created_at: string
+          fdw_name: string
+          metadata: Json | null
+          rows_in: number | null
+          rows_out: number | null
+          updated_at: string
+        }
+        Insert: {
+          bytes_in?: number | null
+          bytes_out?: number | null
+          create_times?: number | null
+          created_at?: string
+          fdw_name: string
+          metadata?: Json | null
+          rows_in?: number | null
+          rows_out?: number | null
+          updated_at?: string
+        }
+        Update: {
+          bytes_in?: number | null
+          bytes_out?: number | null
+          create_times?: number | null
+          created_at?: string
+          fdw_name?: string
+          metadata?: Json | null
+          rows_in?: number | null
+          rows_out?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -1831,7 +2092,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Database } from "@/integrations/supabase/types";
 
-type SupportResponse = Database["public"]["Tables"]["support_responses"]["Row"];
+type SupportResponse = Database['public']['Tables']['support_responses']['Row'];
 
 interface SupportTicketResponseProps {
   ticketId: string;
@@ -26,8 +26,9 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
   const { toast } = useToast();
   const { role } = useUserRole();
   const [newResponse, setNewResponse] = useState("");
+  const queryClient = useQueryClient();
 
-  const { data: responses, refetch } = useQuery({
+  const { data: responses } = useQuery({
     queryKey: ['ticket-responses', ticketId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -37,40 +38,42 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
         .order('created_at', { ascending: true });
       
       if (error) throw error;
-      return data;
+      return data as SupportResponse[];
     }
   });
 
-  const handleSubmitResponse = async () => {
-    try {
+  const sendResponse = useMutation({
+    mutationFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
       const { error } = await supabase
         .from('support_responses')
-        .insert([
-          {
-            ticket_id: ticketId,
-            response: newResponse,
-            responder_id: (await supabase.auth.getUser()).data.user?.id,
-            is_admin_response: role === 'admin'
-          }
-        ]);
+        .insert([{
+          ticket_id: ticketId,
+          response: newResponse,
+          responder_id: user.id,
+          is_admin_response: role === 'admin'
+        }]);
 
       if (error) throw error;
-
+    },
+    onSuccess: () => {
       toast({
         title: t('support.responseSubmitted'),
         description: t('support.responseSubmittedDesc'),
       });
-
       setNewResponse("");
-      refetch();
-    } catch (error) {
+      queryClient.invalidateQueries({ queryKey: ['ticket-responses', ticketId] });
+    },
+    onError: () => {
       toast({
         title: t('common.error'),
         description: t('support.responseError'),
         variant: "destructive",
       });
     }
-  };
+  });
 
   return (
     <Dialog open={true} onOpenChange={() => onClose()}>
@@ -106,7 +109,10 @@ export function SupportTicketResponse({ ticketId, onClose }: SupportTicketRespon
               <Button variant="outline" onClick={onClose}>
                 {t('common.cancel')}
               </Button>
-              <Button onClick={handleSubmitResponse} disabled={!newResponse.trim()}>
+              <Button 
+                onClick={() => sendResponse.mutate()}
+                disabled={!newResponse.trim() || sendResponse.isPending}
+              >
                 {t('support.sendResponse')}
               </Button>
             </div>
