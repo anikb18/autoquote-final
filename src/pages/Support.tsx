@@ -26,13 +26,15 @@ export default function Support() {
           .eq('status', 'open');
         return count || 0;
       } else {
-        // For users/dealers, count unread responses
-        const { count } = await supabase
+        // For users/dealers, count unread admin responses
+        const { data: responses } = await supabase
           .from('support_responses')
-          .select('*', { count: 'exact', head: true })
-          .eq('is_admin_response', true)
-          .eq('read', false);
-        return count || 0;
+          .select('*')
+          .eq('is_admin_response', true);
+          
+        // Since we don't have a read status column, we'll just show the total number
+        // of admin responses for now. In a future update, we should add a read status column
+        return responses?.length || 0;
       }
     },
     refetchInterval: 30000 // Refetch every 30 seconds
