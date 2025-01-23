@@ -3,13 +3,14 @@ import { useUserRole } from "@/hooks/use-user-role";
 import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
 import BuyerDashboard from "./BuyerDashboard";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DashboardLayout } from "./layouts/DashboardLayout";
+import { DashboardSidebar } from "./dashboard/DashboardSidebar";
+import { Button } from "./ui/button";
 
 type ViewMode = "admin" | "dealer" | "user";
 
@@ -17,6 +18,7 @@ const Dashboard = () => {
   const { role, user, isLoading: roleLoading } = useUserRole();
   const [viewMode, setViewMode] = useState<ViewMode>("user");
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useTranslation('admin');
@@ -63,7 +65,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (role) {
-      console.log("Setting viewMode to role:", role);
       setViewMode(role as ViewMode);
     }
   }, [role]);
@@ -84,7 +85,6 @@ const Dashboard = () => {
   }
 
   const renderDashboard = () => {
-    console.log("Current viewMode:", viewMode);
     switch (viewMode) {
       case "admin":
         return <AdminDashboard />;
@@ -99,37 +99,21 @@ const Dashboard = () => {
     <DashboardLayout
       navbar={
         <div className="flex justify-between items-center w-full px-4 py-2">
-          <h1 className="text-xl font-semibold">{t('dashboard.title')}</h1>
-          {role === "admin" && (
-            <Select 
-              value={viewMode} 
-              onValueChange={(value: ViewMode) => {
-                console.log("Changing view mode to:", value);
-                setViewMode(value);
-                toast({
-                  title: "View Changed",
-                  description: `Switched to ${value} view`,
-                });
-              }}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             >
-              <SelectTrigger className="w-[140px] text-sm h-8 bg-white/80 backdrop-blur-sm border-gray-200/50">
-                <SelectValue placeholder="View Mode" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="admin">Admin View</SelectItem>
-                <SelectItem value="dealer">Dealer View</SelectItem>
-                <SelectItem value="user">Buyer View</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
+              <Menu className="h-5 w-5" />
+            </Button>
+            <h1 className="text-xl font-semibold">{t('dashboard.title')}</h1>
+          </div>
         </div>
       }
       sidebar={
-        <div className="h-full bg-white/80 backdrop-blur-md shadow-lg border-r border-gray-200/50">
-          {/* We'll implement the sidebar content in the next step */}
-          <div className="p-4">
-            <p>Sidebar content coming soon</p>
-          </div>
+        <div className="h-full bg-white/80 backdrop-blur-md shadow-lg border-r border-gray-200/50 p-4">
+          <DashboardSidebar isCollapsed={isSidebarCollapsed} />
         </div>
       }
     >

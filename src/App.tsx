@@ -14,6 +14,7 @@ import BuyerDashboard from "./components/BuyerDashboard";
 import { BlogManagement } from "./components/dashboard/BlogManagement";
 import { NewsletterManagement } from "./components/dashboard/NewsletterManagement";
 import { UserManagement } from "./components/dashboard/UserManagement";
+import AdminSettings from "./components/settings/AdminSettings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -83,6 +84,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <BuyerDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/settings"
+                element={
+                  <ProtectedRoute>
+                    <AdminSettings />
                   </ProtectedRoute>
                 }
               />
