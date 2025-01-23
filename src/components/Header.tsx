@@ -47,7 +47,6 @@ const Header = () => {
     return null;
   }
 
-  // Fetch unread notifications for dealers
   const { data: unreadNotifications } = useQuery({
     queryKey: ['unread-notifications'],
     queryFn: async () => {
