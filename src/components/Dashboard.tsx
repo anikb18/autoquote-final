@@ -32,6 +32,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const Dashboard = () => {
   const { role, user, isLoading: roleLoading } = useUserRole();
@@ -164,44 +171,59 @@ const Dashboard = () => {
         <SidebarBody>
           <DashboardSidebar />
         </SidebarBody>
-        {role === 'admin' && (
-          <SidebarFooter className="border-t p-4 space-y-4">
-            <div className="flex items-center gap-4 px-2">
-              <ThemeSwitcher />
-              <LanguageSwitcher />
+        <SidebarFooter className="border-t p-4 space-y-4">
+          <div className="flex items-center gap-4 px-2">
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+          </div>
+          {role === 'admin' && (
+            <div className="px-2 mb-4">
+              <Select
+                value={viewMode}
+                onValueChange={(value: "admin" | "dealer" | "user") => setViewMode(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select view mode" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Admin View</SelectItem>
+                  <SelectItem value="dealer">Dealer View</SelectItem>
+                  <SelectItem value="user">User View</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="flex items-center justify-between px-2">
-              <div className="flex items-center gap-3">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={getAvatarUrl() || ''} />
-                        <AvatarFallback>
-                          <User className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{profile?.full_name}</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                          {user.email}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      Sign out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+          )}
+          <div className="flex items-center justify-between px-2">
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={getAvatarUrl() || ''} />
+                      <AvatarFallback>
+                        <User className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{profile?.full_name}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-          </SidebarFooter>
-        )}
+          </div>
+        </SidebarFooter>
       </Sidebar>
 
       <main className="flex-1 overflow-auto">
