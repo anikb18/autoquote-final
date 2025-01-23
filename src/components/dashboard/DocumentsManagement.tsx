@@ -52,7 +52,7 @@ export const DocumentsManagement = () => {
           quote:quotes (
             car_details,
             user_id,
-            user:profiles!quotes_user_id_fkey (
+            user:profiles (
               full_name,
               email
             ),
@@ -62,8 +62,7 @@ export const DocumentsManagement = () => {
               )
             )
           )
-        `)
-        .order('created_at', { ascending: false });
+        `);
 
       if (error) throw error;
 
@@ -92,7 +91,7 @@ export const DocumentsManagement = () => {
           quote: doc.quote ? {
             ...doc.quote,
             car_details: carDetails,
-            user: doc.quote.user,
+            user: doc.quote.user || null,
             dealer_quotes: doc.quote.dealer_quotes || []
           } : null
         } as Document;
