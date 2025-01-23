@@ -5,6 +5,7 @@ import { PerformanceChart } from "./dashboard/PerformanceChart";
 import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { MetricsCard } from "./dashboard/MetricsCard";
 import { useUser } from "@/hooks/use-user";
+import { Json } from "@/integrations/supabase/types";
 
 interface DashboardData {
   total_quotes: number;
@@ -31,6 +32,18 @@ const defaultDashboardData: DashboardData = {
   }
 };
 
+interface RawDashboardData {
+  total_quotes: number;
+  active_quotes: number;
+  completed_quotes: number;
+  total_revenue: number;
+  metrics_data: Json;
+  id: string;
+  user_id: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
 const Dashboard = () => {
   const { toast } = useToast();
   const { user } = useUser();
@@ -53,7 +66,23 @@ const Dashboard = () => {
         throw error;
       }
 
-      return data ? data as DashboardData : defaultDashboardData;
+      if (!data) return defaultDashboardData;
+
+      // Convert the raw data to our expected format
+      const rawData = data as RawDashboardData;
+      const formattedData: DashboardData = {
+        total_quotes: rawData.total_quotes,
+        active_quotes: rawData.active_quotes,
+        completed_quotes: rawData.completed_quotes,
+        total_revenue: rawData.total_revenue,
+        metrics_data: {
+          performance: Array.isArray((rawData.metrics_data as any)?.performance) 
+            ? (rawData.metrics_data as any).performance 
+            : []
+        }
+      };
+
+      return formattedData;
     },
     enabled: !!user // Only run query when user is available
   });
