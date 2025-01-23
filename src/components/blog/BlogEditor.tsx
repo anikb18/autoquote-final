@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Editor } from '@tinymce/tinymce-react';
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
@@ -7,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { generateImage } from "@/utils/imageGeneration";
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
+import { RichTextEditor } from "../editor/RichTextEditor";
 
 interface BlogEditorProps {
   onSave: (values: { 
@@ -117,24 +117,10 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
         />
       )}
 
-      <Editor
-        apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+      <RichTextEditor
         value={content}
-        onEditorChange={(newContent) => setContent(newContent)}
-        init={{
-          height: 500,
-          menubar: true,
-          plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-          ],
-          toolbar: 'undo redo | blocks | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
+        onChange={(newContent) => setContent(newContent)}
+        className="min-h-[400px]"
       />
 
       <Dialog open={isImagePickerOpen} onOpenChange={setIsImagePickerOpen}>
