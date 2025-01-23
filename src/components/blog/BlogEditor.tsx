@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Editor } from '@tinymce/tinymce-react';
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Input } from "../ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { generateImage } from "@/utils/imageGeneration";
 import { Loader2 } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
+import { RichTextEditor } from "../editor/RichTextEditor";
 
 interface BlogEditorProps {
   onSave: (values: { 
@@ -85,19 +84,40 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
   };
 
   return (
-    <div className="space-y-4">
-      <Input
-        placeholder="Post title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="text-xl font-bold"
-      />
+    <div className="space-y-6">
+      <div className="relative">
+        <label
+          htmlFor="title"
+          className="absolute -top-2 left-2 inline-block bg-background px-1 text-xs font-medium text-foreground"
+        >
+          Post Title
+        </label>
+        <input
+          id="title"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+          placeholder="Enter post title"
+        />
+      </div>
       
-      <Input
-        placeholder="Brief excerpt"
-        value={excerpt}
-        onChange={(e) => setExcerpt(e.target.value)}
-      />
+      <div className="relative">
+        <label
+          htmlFor="excerpt"
+          className="absolute -top-2 left-2 inline-block bg-background px-1 text-xs font-medium text-foreground"
+        >
+          Brief Excerpt
+        </label>
+        <input
+          id="excerpt"
+          type="text"
+          value={excerpt}
+          onChange={(e) => setExcerpt(e.target.value)}
+          className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+          placeholder="Enter brief excerpt"
+        />
+      </div>
 
       <div className="flex items-center gap-4 mb-4">
         {selectedImage && (
@@ -109,32 +129,28 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
       </div>
 
       {selectedImage && (
-        <Input
-          placeholder="Image alt text"
-          value={imageAlt}
-          onChange={(e) => setImageAlt(e.target.value)}
-          className="mb-4"
-        />
+        <div className="relative">
+          <label
+            htmlFor="imageAlt"
+            className="absolute -top-2 left-2 inline-block bg-background px-1 text-xs font-medium text-foreground"
+          >
+            Image Alt Text
+          </label>
+          <input
+            id="imageAlt"
+            type="text"
+            value={imageAlt}
+            onChange={(e) => setImageAlt(e.target.value)}
+            className="block w-full rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+            placeholder="Describe the image"
+          />
+        </div>
       )}
 
-      <Editor
-        apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+      <RichTextEditor
         value={content}
-        onEditorChange={(newContent) => setContent(newContent)}
-        init={{
-          height: 500,
-          menubar: true,
-          plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-          ],
-          toolbar: 'undo redo | blocks | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        }}
+        onChange={(newContent) => setContent(newContent)}
+        className="min-h-[400px]"
       />
 
       <Dialog open={isImagePickerOpen} onOpenChange={setIsImagePickerOpen}>
@@ -145,11 +161,12 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
           <ScrollArea className="flex-1">
             <div className="space-y-4 p-4">
               <div className="flex gap-2">
-                <Input
+                <input
                   placeholder="Describe the image you want..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGenerateImage()}
+                  className="flex-1 rounded-md border-0 py-1.5 text-foreground shadow-sm ring-1 ring-inset ring-border placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
                 />
                 <Button 
                   onClick={handleGenerateImage}
