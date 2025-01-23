@@ -2,6 +2,7 @@ import { useUserRole } from "@/hooks/use-user-role";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import {
+  Sidebar,
   SidebarSection,
   SidebarHeading,
   SidebarItem,

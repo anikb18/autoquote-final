@@ -97,7 +97,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex w-full">
+    <div className="min-h-screen flex w-full bg-background">
       <Sidebar>
         <SidebarHeader className="border-b p-4">
           <h2 className="text-lg font-semibold">AutoQuote24</h2>
