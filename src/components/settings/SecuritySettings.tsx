@@ -27,10 +27,13 @@ export function SecuritySettings() {
         .single();
       
       if (error) throw error;
-      return (data?.value as SecuritySettingsData) || {
+
+      const defaultSettings: SecuritySettingsData = {
         two_factor_auth: false,
         require_email_verification: false
       };
+      
+      return ((data?.value || defaultSettings) as unknown as SecuritySettingsData);
     }
   });
 

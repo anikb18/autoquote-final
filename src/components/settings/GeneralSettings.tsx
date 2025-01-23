@@ -28,11 +28,14 @@ export function GeneralSettings() {
         .single();
       
       if (error) throw error;
-      return (data?.value as GeneralSettingsData) || {
+      
+      const defaultSettings: GeneralSettingsData = {
         site_name: '',
         support_email: '',
         platform_fee: 0
       };
+
+      return ((data?.value || defaultSettings) as unknown as GeneralSettingsData);
     }
   });
 
