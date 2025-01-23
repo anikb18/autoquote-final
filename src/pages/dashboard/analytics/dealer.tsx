@@ -122,7 +122,7 @@ export default function DealerAnalytics() {
             <div>Loading...</div>
           ) : (
             <>
-              <MetricsOverview stats={dealerStats} />
+              <MetricsOverview title="Performance Overview" stats={dealerStats} />
               <SalesTrendChart />
               <DealershipComparison />
             </>
