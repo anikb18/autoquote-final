@@ -43,7 +43,7 @@ export function SecuritySettings() {
         value: {
           two_factor_auth: formData.get('twoFactorAuth') === 'on',
           require_email_verification: formData.get('requireEmailVerification') === 'on',
-        }
+        } satisfies SecuritySettingsData
       };
 
       const { error } = await supabase

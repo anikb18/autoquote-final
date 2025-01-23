@@ -47,7 +47,7 @@ export function NotificationSettings() {
           push_notifications: formData.get('pushNotifications') === 'on',
           quote_alerts: formData.get('quoteAlerts') === 'on',
           marketing_emails: formData.get('marketingEmails') === 'on',
-        }
+        } satisfies NotificationSettingsData
       };
 
       const { error } = await supabase

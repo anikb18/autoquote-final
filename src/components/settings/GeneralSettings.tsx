@@ -42,10 +42,10 @@ export function GeneralSettings() {
         category: 'general',
         key: 'settings',
         value: {
-          site_name: formData.get('siteName'),
-          support_email: formData.get('supportEmail'),
+          site_name: String(formData.get('siteName')),
+          support_email: String(formData.get('supportEmail')),
           platform_fee: Number(formData.get('platformFee')),
-        }
+        } satisfies GeneralSettingsData
       };
 
       const { error } = await supabase
