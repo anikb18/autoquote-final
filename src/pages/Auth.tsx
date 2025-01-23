@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Auth as SupabaseAuth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 const Auth = () => {
@@ -15,13 +14,25 @@ const Auth = () => {
   const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+  const subscribeNewsletterRef = useRef(subscribeNewsletter);
+
+  useEffect(() => {
+    subscribeNewsletterRef.current = subscribeNewsletter;
+  }, [subscribeNewsletter]);
 
   useEffect(() => {
     const checkSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
-          navigate("/dashboard");
+          // Directly navigate if session exists
+          const { data: roleData } = await supabase
+            .from('user_roles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+
+          navigate(roleData?.role === 'admin' ? '/admin/dashboard' : '/dashboard');
         }
       } catch (error) {
         console.error("Session check error:", error);
@@ -32,66 +43,53 @@ const Auth = () => {
 
     checkSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth event:", event, "Session:", session);
-      
-      if (event === 'SIGNED_IN' && session) {
-        setIsLoading(true);
-        try {
-          // Update user metadata
-          await supabase.auth.updateUser({
-            data: { subscribe_newsletter: subscribeNewsletter }
-          });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          setIsLoading(true);
+          try {
+            await supabase.auth.updateUser({
+              data: { subscribe_newsletter: subscribeNewsletterRef.current }
+            });
 
-          // Ensure user has a profile
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
+            // Upsert profile and role in parallel
+            await Promise.all([
+              supabase.from('profiles').upsert({ id: session.user.id }),
+              supabase.from('user_roles').upsert(
+                { id: session.user.id, role: 'user' },
+                { onConflict: 'id', ignoreDuplicates: true }
+              )
+            ]);
 
-          if (!profile && !profileError) {
-            await supabase
-              .from('profiles')
-              .insert([{ id: session.user.id }]);
-          }
-
-          // Ensure user has a role
-          const { data: existingRole, error: roleError } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('id', session.user.id)
-            .single();
-
-          if (!existingRole && !roleError) {
-            await supabase
+            // Get fresh role data
+            const { data: roleData } = await supabase
               .from('user_roles')
-              .insert([{ id: session.user.id, role: 'user' }]);
+              .select('role')
+              .eq('id', session.user.id)
+              .single();
+
+            const redirectPath = roleData?.role === 'admin' 
+              ? '/admin/dashboard' 
+              : '/dashboard';
+
+            navigate(redirectPath);
+            
+          } catch (error) {
+            console.error("Sign in error:", error);
+            toast({
+              title: "Error",
+              description: error instanceof Error ? error.message : "Sign in failed",
+              variant: "destructive",
+            });
+          } finally {
+            setIsLoading(false);
           }
-
-          toast({
-            title: "Success",
-            description: "Successfully signed in!",
-          });
-
-          navigate("/dashboard");
-        } catch (error) {
-          console.error("Error during sign in:", error);
-          toast({
-            title: "Error",
-            description: "There was a problem signing you in. Please try again.",
-            variant: "destructive",
-          });
-        } finally {
-          setIsLoading(false);
         }
-      } else if (event === 'SIGNED_OUT') {
-        navigate("/");
       }
-    });
+    );
 
     return () => subscription.unsubscribe();
-  }, [navigate, subscribeNewsletter, toast]);
+  }, [navigate, toast]);
 
   if (isChecking) {
     return (

@@ -9,9 +9,10 @@ import { toast } from "@/hooks/use-toast";
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requireSubscription?: boolean;
+  allowedRoles?: string[];
 }
 
-const ProtectedRoute = ({ children, requireSubscription = false }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }: ProtectedRouteProps) => {
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
 
@@ -113,6 +114,11 @@ const ProtectedRoute = ({ children, requireSubscription = false }: ProtectedRout
         </div>
       </div>
     );
+  }
+
+  if (allowedRoles && !allowedRoles.includes(profile?.role)) {
+    navigate("/dashboard");
+    return null;
   }
 
   if (requireSubscription && (!profile?.subscription_status || profile.subscription_status !== 'active')) {

@@ -48,5 +48,63 @@ export function DashboardSidebar() {
           src="/logo/dark.svg"
           alt="AutoQuote24"
         />
+        {role === 'admin' && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode('admin')}
+              className={`px-3 py-1 rounded-md text-sm ${
+                viewMode === 'admin' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-muted/50 hover:bg-muted'
+              }`}
+            >
+              Admin
+            </button>
+            <button
+              onClick={() => setViewMode('dealer')}
+              className={`px-3 py-1 rounded-md text-sm ${
+                viewMode === 'dealer' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-muted/50 hover:bg-muted'
+              }`}
+            >
+              Dealer
+            </button>
+            <button
+              onClick={() => setViewMode('user')}
+              className={`px-3 py-1 rounded-md text-sm ${
+                viewMode === 'user' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-muted/50 hover:bg-muted'
+              }`}
+            >
+              User
+            </button>
+          </div>
+        )}
       </div>
       
+      <nav className="flex flex-1 flex-col px-6">
+        <ul role="list" className="flex flex-1 flex-col gap-y-7">
+          <li>
+            <ul role="list" className="space-y-1">
+              {items.map((item) => (
+                <NavigationItem key={item.href} item={item} />
+              ))}
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <SidebarFooter 
+        viewMode={viewMode}
+        role={role}
+        onViewModeChange={setViewMode}
+      />
+      
+      <div className="px-6">
+        <UserProfile user={user} />
+      </div>
+    </div>
+  );
+}

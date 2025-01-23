@@ -1,3 +1,4 @@
+
 import {
   LayoutDashboard,
   BookOpen,
@@ -6,7 +7,6 @@ import {
   Search,
   Palette,
   FileText,
-  Ticket,
   HelpCircle,
   Settings,
   DollarSign,
@@ -17,16 +17,18 @@ import {
   TrendingUp,
   Users,
   Building,
-  MessageSquare
+  MessageSquare,
+  Handshake,
+  AppWindow
 } from "lucide-react";
 
-export const getNavigationItems = (role: string, unreadCount: number) => {
+export const getNavigationItems = (role: string, unreadCount: number, hasActiveQuote = false) => {
   const adminItems = [
-    {
-      title: "Dashboard",
-      icon: LayoutDashboard,
-      href: "/dashboard"
-    },
+        {
+          title: "Dashboard",
+          href: "/dashboard/",
+          icon: CreditCard
+        },
     {
       title: "Blog",
       icon: BookOpen,
@@ -70,22 +72,18 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
           icon: Tag
         },
         {
-          title: "Plans",
-          href: "/dashboard/plans",
+          title: "Subscriptions",
+          href: "/subscription",
           icon: CreditCard
         }
       ]
     },
     {
-      title: "SEO",
-      icon: Search,
-      href: "/dashboard/seo"
+      title: "Pages",
+      icon: AppWindow,
+      href: "/dashboard/page-management"
     },
-    {
-      title: "Design",
-      icon: Palette,
-      href: "/dashboard/design"
-    },
+
     {
       title: "Documents",
       icon: File,
@@ -111,9 +109,14 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       href: "/dashboard"
     },
     {
-      title: "Active Quotes",
+      title: "Quote Requests",
       icon: DollarSign,
       href: "/dashboard/quotes"
+    },
+    {
+      title: "Active Deals",
+      icon: Handshake,
+      href: "/dashboard/active-deals"
     },
     {
       title: "Dealership",
@@ -135,14 +138,20 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
 
   const buyerItems = [
     {
-      title: "My Quotes",
+      title: "New Quote",
       icon: DollarSign,
+      href: "/dashboard/new-quote"
+    },
+    {
+      title: "My Quotes",
+      icon: FileText,
       href: "/dashboard/my-quotes"
     },
     {
-      title: "Communication Hub",
+      title: "Communications",
       icon: MessageSquare,
-      href: "/dashboard/communications"
+      href: "/dashboard/communications",
+      disabled: !hasActiveQuote
     },
     {
       title: "Support",

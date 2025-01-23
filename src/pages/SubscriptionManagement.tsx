@@ -1,37 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { format } from "date-fns";
 import { Users, CreditCard, Settings2, AlertCircle } from "lucide-react";
+import { UserTable } from "@/components/dashboard/user/UserTable";
+import { useState } from "react";
 
 const SubscriptionManagement = () => {
   const { toast } = useToast();
+  const [page, setPage] = useState(1);
+  const ITEMS_PER_PAGE = 25;
 
   const { data: subscriptions, isLoading } = useQuery({
-    queryKey: ['subscriptions'],
+    queryKey: ['subscriptions', page],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
         .select(`
-          id,
-          email,
-          full_name,
-          subscription_status,
-          subscription_type,
-          subscription_id,
-          created_at
+          *,
+          user_roles (
+            role
+          )
         `)
+        .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -42,18 +35,6 @@ const SubscriptionManagement = () => {
     }
   });
 
-  const getStatusColor = (status: string | null) => {
-    switch (status) {
-      case 'active':
-        return 'success';
-      case 'trialing':
-        return 'warning';
-      case 'canceled':
-        return 'destructive';
-      default:
-        return 'secondary';
-    }
-  };
 
   if (isLoading) {
     return (
@@ -65,6 +46,63 @@ const SubscriptionManagement = () => {
       </div>
     );
   }
+
+  const handleSendEmail = async (to: string[], subject: string, content: string, scheduledFor?: string) => {
+    try {
+      const response = await fetch('/api/send-email', { // Assuming you have an API endpoint for sending emails
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to,
+          subject,
+          html: content,
+          scheduledFor
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to send email');
+
+      toast({
+        title: scheduledFor ? "Email Scheduled" : "Email Sent",
+        description: scheduledFor 
+          ? "Email has been scheduled successfully" 
+          : "Email has been sent successfully",
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send email",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleRoleChange = async (userId: string, newRole: "super_admin" | "admin" | "dealer" | "user") => {
+    try {
+      const { error } = await supabase
+        .from('user_roles')
+        .update({ role: newRole })
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "User role updated successfully",
+      });
+    } catch (error) {
+      console.error('Error updating role:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update user role",
+        variant: "destructive",
+      });
+    }
+  };
+
 
   return (
     <div className="container mx-auto py-8 space-y-8">
@@ -128,47 +166,15 @@ const SubscriptionManagement = () => {
           <CardTitle>Subscribers</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Plan Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {subscriptions?.map((subscription) => (
-                <TableRow key={subscription.id}>
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{subscription.full_name}</p>
-                      <p className="text-sm text-muted-foreground">{subscription.email}</p>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className="capitalize">
-                      {subscription.subscription_type || 'basic'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusColor(subscription.subscription_status)}>
-                      {subscription.subscription_status || 'inactive'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {subscription.created_at ? format(new Date(subscription.created_at), 'PP') : 'N/A'}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="outline" size="sm">
-                      Manage
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <UserTable 
+            profiles={subscriptions}
+            isLoading={isLoading}
+            page={page}
+            setPage={setPage}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onRoleChange={handleRoleChange}
+            onSendEmail={handleSendEmail}
+          />
         </CardContent>
       </Card>
     </div>

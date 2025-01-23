@@ -25,6 +25,7 @@ import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { SecuritySettings } from "./components/settings/SecuritySettings";
 import { NotificationSettings } from "./components/settings/NotificationSettings";
 import { ProfileSettings } from "./components/settings/ProfileSettings";
+import PageManagement from "./components/dashboard/PageManagement"; // Import the PageManagement component
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -103,6 +104,15 @@ function App() {
                 <ProtectedRoute>
                   <DashboardLayout>
                     <BuyerDashboard />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+
+              {/* New Page Management Route */}
+              <Route path="/dashboard/page-management" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <PageManagement />
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
