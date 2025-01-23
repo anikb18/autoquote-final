@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { LucideIcon } from "lucide-react";
 
-interface NavigationItemProps {
+export interface NavigationItemProps {
   item: {
     title: string;
     icon: LucideIcon;
