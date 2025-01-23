@@ -8,6 +8,13 @@ import { useToast } from "@/hooks/use-toast";
 import { MetricsOverview } from "@/components/dashboard/shared/MetricsOverview";
 import { DollarSign, TrendingUp, Users, Clock } from "lucide-react";
 
+interface RawDealerMetrics {
+  total_bids: number;
+  won_bids: number;
+  total_revenue: number;
+  average_response_time: string;
+}
+
 interface DealerMetrics {
   total_revenue: number;
   active_quotes: number;
@@ -16,17 +23,10 @@ interface DealerMetrics {
   monthly_change: number;
 }
 
-interface RawDealerMetrics {
-  total_bids: number;
-  won_bids: number;
-  total_revenue: number;
-  average_response_time: string;
-}
-
 export default function DealerAnalytics() {
   const { toast } = useToast();
 
-  const { data: metrics, refetch } = useQuery<DealerMetrics>({
+  const { data: metrics, refetch } = useQuery<DealerMetrics, Error>({
     queryKey: ['dealer-metrics'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
