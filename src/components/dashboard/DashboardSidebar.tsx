@@ -1,33 +1,35 @@
-import { cn } from "@/lib/utils";
 import { useUserRole } from "@/hooks/use-user-role";
-import { Link } from "react-router-dom";
-import { 
-  Users, 
-  Settings, 
-  FileText, 
-  Mail, 
-  Home,
-  Car,
-  MessageSquare,
-  Building2,
-  Receipt,
-  PieChart
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router-dom";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  Mail,
+  Settings,
+  Building2,
+  MessageSquare,
+  Car
+} from "lucide-react";
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  isCollapsed?: boolean;
-}
-
-export function DashboardSidebar({ className, isCollapsed }: SidebarNavProps) {
+export function DashboardSidebar() {
   const { role } = useUserRole();
   const { t } = useTranslation('admin');
+  const location = useLocation();
 
   const adminItems = [
     {
       title: t('tabs.analytics'),
-      icon: PieChart,
+      icon: LayoutDashboard,
       href: "/dashboard"
     },
     {
@@ -50,18 +52,13 @@ export function DashboardSidebar({ className, isCollapsed }: SidebarNavProps) {
   const dealerItems = [
     {
       title: "Overview",
-      icon: Home,
+      icon: LayoutDashboard,
       href: "/dashboard"
     },
     {
       title: "Active Quotes",
-      icon: Receipt,
-      href: "/dashboard/quotes"
-    },
-    {
-      title: "Messages",
       icon: MessageSquare,
-      href: "/dashboard/messages"
+      href: "/dashboard/quotes"
     },
     {
       title: "Dealership",
@@ -73,7 +70,7 @@ export function DashboardSidebar({ className, isCollapsed }: SidebarNavProps) {
   const buyerItems = [
     {
       title: "My Quotes",
-      icon: Receipt,
+      icon: MessageSquare,
       href: "/dashboard/my-quotes"
     },
     {
@@ -85,11 +82,6 @@ export function DashboardSidebar({ className, isCollapsed }: SidebarNavProps) {
       title: "New Quote",
       icon: Car,
       href: "/new-quote"
-    },
-    {
-      title: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages"
     }
   ];
 
@@ -98,46 +90,42 @@ export function DashboardSidebar({ className, isCollapsed }: SidebarNavProps) {
                 buyerItems;
 
   return (
-    <nav className={cn("flex space-y-2 lg:flex-col lg:space-x-0 lg:space-y-1", className)}>
-      {items.map((item) => (
-        <Button
-          key={item.href}
-          variant="ghost"
-          className={cn(
-            "w-full justify-start",
-            isCollapsed ? "h-12 w-12 p-0" : "h-10 px-4",
-          )}
-          asChild
-        >
-          <Link
-            to={item.href}
-            className="flex items-center gap-3"
-          >
-            <item.icon className="h-5 w-5" />
-            {!isCollapsed && (
-              <span>{item.title}</span>
-            )}
-          </Link>
-        </Button>
-      ))}
-      <Button
-        variant="ghost"
-        className={cn(
-          "w-full justify-start",
-          isCollapsed ? "h-12 w-12 p-0" : "h-10 px-4",
-        )}
-        asChild
-      >
-        <Link
-          to="/dashboard/settings"
-          className="flex items-center gap-3"
-        >
-          <Settings className="h-5 w-5" />
-          {!isCollapsed && (
-            <span>Settings</span>
-          )}
-        </Link>
-      </Button>
-    </nav>
+    <SidebarGroup>
+      <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {items.map((item) => (
+            <SidebarMenuItem key={item.href}>
+              <SidebarMenuButton asChild>
+                <Link
+                  to={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900",
+                    location.pathname === item.href && "bg-gray-100 text-gray-900"
+                  )}
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link
+                to="/dashboard/settings"
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900",
+                  location.pathname === "/dashboard/settings" && "bg-gray-100 text-gray-900"
+                )}
+              >
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 }

@@ -6,18 +6,20 @@ import BuyerDashboard from "./BuyerDashboard";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Menu } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarFooter,
+} from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./dashboard/DashboardSidebar";
-import { Button } from "./ui/button";
-
-type ViewMode = "admin" | "dealer" | "user";
 
 const Dashboard = () => {
   const { role, user, isLoading: roleLoading } = useUserRole();
-  const [viewMode, setViewMode] = useState<ViewMode>("user");
+  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">("user");
   const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useTranslation('admin');
@@ -64,7 +66,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (role) {
-      setViewMode(role as ViewMode);
+      setViewMode(role as "admin" | "dealer" | "user");
     }
   }, [role]);
 
@@ -95,36 +97,27 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <div className={`${isSidebarCollapsed ? 'w-16' : 'w-64'} transition-all duration-300 ease-in-out fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-sm z-40`}>
-        <DashboardSidebar isCollapsed={isSidebarCollapsed} />
-      </div>
+    <div className="min-h-screen flex w-full">
+      <Sidebar>
+        <SidebarHeader className="border-b p-4">
+          <h2 className="text-lg font-semibold">AutoQuote24</h2>
+        </SidebarHeader>
+        <SidebarContent>
+          <DashboardSidebar />
+        </SidebarContent>
+        <SidebarFooter className="border-t p-4">
+          <div className="text-sm text-muted-foreground">
+            {user?.email}
+          </div>
+        </SidebarFooter>
+      </Sidebar>
 
       {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-        {/* Top Navigation */}
-        <div className="sticky top-0 z-30 w-full bg-white border-b border-gray-200 shadow-sm">
-          <div className="flex justify-between items-center px-4 py-2">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                className="lg:flex"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-              <h1 className="text-xl font-semibold">{t('dashboard.title')}</h1>
-            </div>
-          </div>
-        </div>
-
-        {/* Dashboard Content */}
-        <main className="p-4 lg:p-8">
+      <main className="flex-1 overflow-auto">
+        <div className="container mx-auto p-6">
           {renderDashboard()}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };
