@@ -6,7 +6,7 @@ import { PerformanceChart, type PerformanceData } from "@/components/dashboard/P
 export default function RevenueAnalytics() {
   const { data: performanceData } = useQuery<PerformanceData[]>({
     queryKey: ['platform-performance'],
-    queryFn: async () => {
+    queryFn: async (): Promise<PerformanceData[]> => {
       // Fetch sales transactions data
       const { data: salesData, error: salesError } = await supabase
         .from('sales_transactions')
@@ -66,13 +66,13 @@ export default function RevenueAnalytics() {
       });
 
       // Convert to array format for the chart
-      return Object.entries(monthlyData).map(([month, data]: [string, any]) => ({
+      return Object.entries(monthlyData).map(([month, data]: [string, any]): PerformanceData => ({
         period: month,
         revenue: data.quoteRevenue + data.subscriptionRevenue,
         subscriptionRevenue: data.subscriptionRevenue,
         quoteRevenue: data.quoteRevenue,
         conversionRate: data.totalQuotes > 0 
-          ? (data.acceptedQuotes / data.totalQuotes) * 100 
+          ? Number((data.acceptedQuotes / data.totalQuotes) * 100)
           : 0,
         responseTime: 0 // This would need actual response time data
       }));
