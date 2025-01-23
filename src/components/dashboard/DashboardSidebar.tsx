@@ -5,7 +5,6 @@ import {
   SidebarSection,
   SidebarHeading,
   SidebarItem,
-  SidebarLabel
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
@@ -100,7 +99,7 @@ export function DashboardSidebar() {
             )}
           >
             <item.icon className="h-4 w-4" />
-            <SidebarLabel>{item.title}</SidebarLabel>
+            {item.title}
           </Link>
         </SidebarItem>
       ))}
@@ -113,7 +112,7 @@ export function DashboardSidebar() {
           )}
         >
           <Settings className="h-4 w-4" />
-          <SidebarLabel>Settings</SidebarLabel>
+          Settings
         </Link>
       </SidebarItem>
     </SidebarSection>
