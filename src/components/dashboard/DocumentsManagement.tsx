@@ -5,6 +5,15 @@ import { Button } from "@/components/ui/button";
 import { FileText, Download, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+interface CarDetails {
+  make: string;
+  model: string;
+  year: number;
+  trim?: string;
+  engine?: string;
+  options?: string;
+}
+
 interface Document {
   id: string;
   quote_id: string;
@@ -16,16 +25,10 @@ interface Document {
     car_details: CarDetails;
     user_id: string;
     profiles: {
-      full_name: string;
-      email: string;
+      full_name: string | null;
+      email: string | null;
     } | null;
   } | null;
-}
-
-interface CarDetails {
-  make: string;
-  model: string;
-  year: number;
 }
 
 export function DocumentsManagement() {
@@ -41,7 +44,7 @@ export function DocumentsManagement() {
           quote:quotes (
             car_details,
             user_id,
-            profiles!quotes_user_id_fkey (
+            profiles:profiles (
               full_name,
               email
             )

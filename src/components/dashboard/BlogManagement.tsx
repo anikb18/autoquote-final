@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle, Filter, SortAsc, SortDesc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import BlogList from "@/components/BlogList";
+import { BlogList } from "@/components/BlogList";
 import {
   Select,
   SelectContent,
