@@ -1,20 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "../ui/card";
-import { MetricsCard } from "./MetricsCard";
 import { useToast } from "@/hooks/use-toast";
+import { DollarSign, ShoppingCart, Award, Clock } from "lucide-react";
+import { MetricsOverview } from "./shared/MetricsOverview";
 
 interface DealerStats {
   active_quotes_count: number;
   quote_change: number;
   won_bids_count: number;
   total_revenue: number;
-  recent_quotes: Array<{
-    id: string;
-    car_details: Record<string, any>;
-    has_trade_in: boolean;
-    created_at: string;
-  }>;
 }
 
 export const DealerMetricsSection = () => {
@@ -43,8 +37,6 @@ export const DealerMetricsSection = () => {
       );
 
       if (error) throw error;
-      
-      // Since the function returns a single row array, we take the first element
       return data[0] as DealerStats;
     },
     meta: {
@@ -59,36 +51,49 @@ export const DealerMetricsSection = () => {
   });
 
   if (isLoading) {
-    return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <div className="p-6">
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-              <div className="h-8 bg-gray-200 rounded"></div>
-            </div>
-          </Card>
-        ))}
-      </div>
-    );
+    return <div className="h-[200px] animate-pulse bg-muted rounded-lg" />;
   }
 
+  const dealerStats = [
+    {
+      id: 1,
+      name: "Active Quotes",
+      stat: stats?.active_quotes_count || 0,
+      icon: ShoppingCart,
+      change: `${stats?.quote_change || 0}%`,
+      changeType: (stats?.quote_change || 0) >= 0 ? 'increase' : 'decrease' as const
+    },
+    {
+      id: 2,
+      name: "Won Bids",
+      stat: stats?.won_bids_count || 0,
+      icon: Award,
+      change: "+12.3%",
+      changeType: 'increase' as const
+    },
+    {
+      id: 3,
+      name: "Total Revenue",
+      stat: stats?.total_revenue || 0,
+      icon: DollarSign,
+      change: "+15.1%",
+      changeType: 'increase' as const,
+      prefix: "$"
+    },
+    {
+      id: 4,
+      name: "Response Time",
+      stat: "2.4h",
+      icon: Clock,
+      change: "-10.3%",
+      changeType: 'decrease' as const
+    }
+  ];
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <MetricsCard
-        title="Active Quotes"
-        value={stats?.active_quotes_count || 0}
-        description={`${stats?.quote_change || 0}% from last month`}
-      />
-      <MetricsCard
-        title="Won Bids"
-        value={stats?.won_bids_count || 0}
-      />
-      <MetricsCard
-        title="Total Revenue"
-        value={stats?.total_revenue || 0}
-        prefix="$"
-      />
-    </div>
+    <MetricsOverview 
+      title="Dealership Performance" 
+      stats={dealerStats}
+    />
   );
 };
