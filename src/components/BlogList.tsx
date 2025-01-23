@@ -111,11 +111,11 @@ const BlogList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1F2C] py-12 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col space-y-8 mb-12">
-          <div className="flex flex-col space-y-2">
-            <h1 className="text-4xl font-bold text-[#D6BCFA]">Blog Posts</h1>
+    <div className="min-h-screen bg-[#1A1F2C] p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex justify-between items-center pb-6 border-b border-[#6E59A5]">
+          <div>
+            <h1 className="text-4xl font-bold text-[#D6BCFA] mb-3">Blog Posts</h1>
             <p className="text-[#8E9196] text-lg">Manage your blog content and create new posts</p>
           </div>
           
@@ -123,7 +123,7 @@ const BlogList = () => {
             <DialogTrigger asChild>
               <Button 
                 size="lg"
-                className="self-start bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
+                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
               >
                 <PlusCircle className="mr-2 h-5 w-5" />
                 Create New Post
@@ -138,8 +138,8 @@ const BlogList = () => {
           </Dialog>
         </div>
 
-        <div className="grid gap-6">
-          {translatedPosts.map((post) => (
+        <div className="grid gap-6 pt-4">
+          {translatedPosts?.map((post) => (
             <Card 
               key={post.id} 
               className="relative bg-[#1A1F2C] border-[#6E59A5] hover:border-[#9b87f5] transition-all duration-300 shadow-lg hover:shadow-xl"
