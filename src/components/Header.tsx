@@ -7,7 +7,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/hooks/use-theme";
 import {
   DropdownMenu,
   DropdownMenuContent,
