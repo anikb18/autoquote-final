@@ -10,7 +10,8 @@ import {
   HelpCircle,
   Settings,
   DollarSign,
-  Car
+  Car,
+  Tag
 } from "lucide-react";
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
@@ -62,7 +63,7 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
     },
     {
       title: "Coupons",
-      icon: Ticket,
+      icon: Tag,
       href: "/dashboard/coupons"
     },
     {

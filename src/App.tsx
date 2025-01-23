@@ -20,6 +20,7 @@ import { DealershipOverview } from "./components/dealership/DealershipOverview";
 import { ActiveQuotes } from "./components/dealership/ActiveQuotes";
 import { DealershipSettings } from "./components/dealership/DealershipSettings";
 import Support from "./pages/Support";
+import { CouponManagement } from "./components/settings/CouponManagement";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,6 +78,13 @@ function App() {
                 <ProtectedRoute>
                   <DashboardLayout>
                     <NewsletterManagement />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/coupons" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <CouponManagement />
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
