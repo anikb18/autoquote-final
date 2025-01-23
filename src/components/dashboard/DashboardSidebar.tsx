@@ -85,6 +85,8 @@ export function DashboardSidebar() {
                 role === 'dealer' ? dealerItems : 
                 buyerItems;
 
+  const firstName = user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'User';
+
   return (
     <div className="flex grow flex-col gap-y-5">
       {/* Header with Logo */}
@@ -167,17 +169,17 @@ export function DashboardSidebar() {
           </Select>
         )}
         
-        <div className="flex items-center gap-x-4 py-3">
+        <div className="flex items-center gap-x-3 py-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.user_metadata?.avatar_url} />
-            <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{firstName.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-gray-900">
-              {user?.email}
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-semibold text-gray-900 truncate">
+              {firstName}
             </span>
-            <span className="text-xs text-gray-500 capitalize">
-              {role}
+            <span className="text-xs text-gray-500 truncate">
+              {user?.email}
             </span>
           </div>
         </div>
