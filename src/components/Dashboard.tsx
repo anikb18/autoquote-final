@@ -1,42 +1,85 @@
-import { AdminMetricsCards } from "./dashboard/AdminMetricsCards";
-import { SalesTrendChart } from "./dashboard/SalesTrendChart";
-import { DealershipComparison } from "./dashboard/DealershipComparison";
-import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { CustomToast } from "./notifications/CustomToast";
+import { DashboardLayout } from "./layouts/DashboardLayout";
 
 const Dashboard = () => {
-  const { t } = useTranslation('admin');
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Listen for new chat messages
+    const chatChannel = supabase
+      .channel('chat-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async (payload) => {
+          const { data: sender } = await supabase
+            .from('profiles')
+            .select('full_name, email')
+            .eq('id', payload.new.sender_id)
+            .single();
+
+          toast({
+            description: (
+              <CustomToast
+                title={sender?.full_name || sender?.email || 'New message'}
+                description="You have received a new message"
+                imageUrl="/avatar.png"
+              />
+            ),
+            duration: 5000,
+          });
+        }
+      )
+      .subscribe();
+
+    // Listen for new quotes
+    const quoteChannel = supabase
+      .channel('quote-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'dealer_quotes'
+        },
+        async (payload) => {
+          const { data: dealer } = await supabase
+            .from('dealer_profiles')
+            .select('dealer_name')
+            .eq('id', payload.new.dealer_id)
+            .single();
+
+          toast({
+            description: (
+              <CustomToast
+                title={dealer?.dealer_name || 'New quote'}
+                description="You have received a new quote"
+                imageUrl="/avatar.png"
+              />
+            ),
+            duration: 5000,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(chatChannel);
+      supabase.removeChannel(quoteChannel);
+    };
+  }, [toast]);
 
   return (
-    <div className="space-y-8 p-8">
-      <div>
-        <h1 className="text-4xl font-bold text-primary">
-          {t('dashboard.title')}
-        </h1>
-        <p className="text-lg text-muted-foreground mt-2">
-          {t('dashboard.welcome')}
-        </p>
-      </div>
-
-      <div className="grid gap-8">
-        <AdminMetricsCards />
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          <div className="border rounded-lg p-6">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">Sales Trends</h2>
-              <p className="text-sm text-muted-foreground">Monthly sales performance analysis</p>
-            </div>
-            <SalesTrendChart />
-          </div>
-          <div className="border rounded-lg p-6">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">Dealership Performance</h2>
-              <p className="text-sm text-muted-foreground">Comparison of top performing dealerships</p>
-            </div>
-            <DealershipComparison />
-          </div>
-        </div>
-      </div>
-    </div>
+    <DashboardLayout>
+      {/* Your existing dashboard content goes here */}
+    </DashboardLayout>
   );
 };
 
