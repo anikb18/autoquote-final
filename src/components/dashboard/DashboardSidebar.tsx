@@ -14,7 +14,8 @@ import {
   History,
   Sun,
   Moon,
-  Globe
+  Globe,
+  Ticket
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -27,15 +28,40 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
+import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export function DashboardSidebar() {
   const { role, user } = useUserRole();
-  const { t, i18n } = useTranslation('admin');
+  const { t } = useTranslation('admin');
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
     role === "super_admin" ? "admin" : role
   );
+
+  // Query for unread support messages/responses
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ['unread-support-messages'],
+    queryFn: async () => {
+      if (role === 'admin') {
+        const { count } = await supabase
+          .from('support_tickets')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'open');
+        return count || 0;
+      } else {
+        const { count } = await supabase
+          .from('support_responses')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_admin_response', true)
+          .eq('read', false);
+        return count || 0;
+      }
+    },
+    refetchInterval: 30000 // Refetch every 30 seconds
+  });
 
   const adminItems = [
     {
@@ -57,6 +83,12 @@ export function DashboardSidebar() {
       title: t('tabs.newsletter'),
       icon: Mail,
       href: "/dashboard/newsletter"
+    },
+    {
+      title: "Ticket Center",
+      icon: Ticket,
+      href: "/support",
+      badge: unreadCount > 0 ? unreadCount : undefined
     },
     {
       title: t('tabs.settings'),
@@ -82,6 +114,12 @@ export function DashboardSidebar() {
       href: "/dashboard/dealership"
     },
     {
+      title: "Support",
+      icon: HelpCircle,
+      href: "/support",
+      badge: unreadCount > 0 ? unreadCount : undefined
+    },
+    {
       title: "Settings",
       icon: Settings,
       href: "/dashboard/settings"
@@ -98,6 +136,12 @@ export function DashboardSidebar() {
       title: "Find Dealers",
       icon: Car,
       href: "/dashboard/dealers"
+    },
+    {
+      title: "Support",
+      icon: HelpCircle,
+      href: "/support",
+      badge: unreadCount > 0 ? unreadCount : undefined
     },
     {
       title: "Settings",
@@ -138,7 +182,12 @@ export function DashboardSidebar() {
                     )}
                   >
                     <item.icon className="h-6 w-6 shrink-0" />
-                    {item.title}
+                    <span className="flex-grow">{item.title}</span>
+                    {item.badge && (
+                      <Badge variant="destructive" className="ml-2">
+                        {item.badge}
+                      </Badge>
+                    )}
                   </Link>
                 </li>
               ))}
@@ -148,18 +197,9 @@ export function DashboardSidebar() {
           {/* Support Section */}
           <li>
             <div className="text-xs font-semibold leading-6 text-gray-400">
-              Support
+              Help
             </div>
             <ul role="list" className="mt-2 space-y-1">
-              <li>
-                <Link
-                  to="/support"
-                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-700 hover:text-primary hover:bg-gray-50"
-                >
-                  <HelpCircle className="h-6 w-6 shrink-0" />
-                  Help Center
-                </Link>
-              </li>
               <li>
                 <Link
                   to="/changelog"
