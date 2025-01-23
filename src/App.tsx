@@ -21,6 +21,9 @@ import { ActiveQuotes } from "./components/dealership/ActiveQuotes";
 import { DealershipSettings } from "./components/dealership/DealershipSettings";
 import Support from "./pages/Support";
 import { CouponManagement } from "./components/settings/CouponManagement";
+import { GeneralSettings } from "./components/settings/GeneralSettings";
+import { SecuritySettings } from "./components/settings/SecuritySettings";
+import { NotificationSettings } from "./components/settings/NotificationSettings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -102,10 +105,33 @@ function App() {
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
+
+              {/* Settings routes */}
               <Route path="/dashboard/settings" element={
                 <ProtectedRoute>
                   <DashboardLayout>
                     <AdminSettings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/settings/general" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <GeneralSettings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/settings/security" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <SecuritySettings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/settings/notifications" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <NotificationSettings />
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
