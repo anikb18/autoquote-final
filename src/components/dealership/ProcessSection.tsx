@@ -3,6 +3,27 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+const defaultTranslations = {
+  benefits: {
+    title: "Why Choose Us",
+    items: [
+      "Competitive Pricing: Best deals in the market",
+      "Quality Service: Expert support team",
+      "Fast Process: Quick and efficient service",
+      "Trusted Network: Verified dealers only"
+    ]
+  },
+  process: {
+    title: "How It Works",
+    steps: [
+      "Submit Request: Fill out our simple form",
+      "Get Quotes: Receive competitive offers",
+      "Compare Options: Review all quotes easily",
+      "Choose Best Deal: Select your preferred offer"
+    ]
+  }
+};
+
 export const ProcessSection = () => {
   const { i18n } = useTranslation();
 
@@ -14,10 +35,10 @@ export const ProcessSection = () => {
         .select('value')
         .eq('category', 'translations')
         .eq('key', 'dealer_hero')
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      return data?.value[i18n.language];
+      return data?.value?.[i18n.language] || defaultTranslations;
     }
   });
 
