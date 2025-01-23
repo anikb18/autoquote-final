@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Separator } from "@/components/ui/separator";
 
 interface AdminMetrics {
   total_sales: number;
@@ -51,9 +50,12 @@ export const AdminMetricsCards = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      {metricItems.map((item, index) => (
-        <div key={item.title}>
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {metricItems.map((item) => (
+        <div 
+          key={item.title}
+          className="p-6 bg-background/50 backdrop-blur-xl border rounded-lg shadow-sm hover:bg-background/60 transition-colors"
+        >
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground">
               {item.title}
@@ -65,9 +67,6 @@ export const AdminMetricsCards = () => {
               {item.description}
             </p>
           </div>
-          {index < metricItems.length - 1 && (
-            <Separator className="mt-6" />
-          )}
         </div>
       ))}
     </div>

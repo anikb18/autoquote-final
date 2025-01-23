@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 
 interface MetricsCardProps {
@@ -12,17 +11,21 @@ export const MetricsCard = ({ title, value, description, prefix = '' }: MetricsC
   const { t } = useTranslation();
   
   return (
-    <Card className="bg-card hover:bg-card/90 transition-colors">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-card-foreground">{t(title)}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold text-card-foreground">{prefix}{value}</div>
+    <div className="p-6 bg-background/50 backdrop-blur-xl border rounded-lg shadow-sm hover:bg-background/60 transition-colors">
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium text-muted-foreground">
+          {t(title)}
+        </h3>
+        <p className="text-2xl font-bold">
+          {prefix}{value}
+        </p>
         {description && (
-          <p className="text-xs text-muted-foreground">{t(description)}</p>
+          <p className="text-sm text-muted-foreground">
+            {t(description)}
+          </p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
