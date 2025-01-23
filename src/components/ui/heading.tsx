@@ -11,7 +11,7 @@ export function Heading({
   level = 1,
   ...props 
 }: HeadingProps) {
-  const Component = `h${level}` as keyof JSX.IntrinsicElements;
+  const Component = `h${level}` as const;
 
   return (
     <Component
