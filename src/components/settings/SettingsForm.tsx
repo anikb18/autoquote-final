@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
+import { Separator } from "@/components/ui/separator";
 
 export function SettingsForm() {
   const { toast } = useToast();
@@ -27,7 +27,6 @@ export function SettingsForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     toast({
       title: "Success",
       description: "Settings have been saved successfully.",
@@ -40,14 +39,15 @@ export function SettingsForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <Card id="branding">
-        <CardHeader>
-          <CardTitle>Branding</CardTitle>
-          <CardDescription>
+      <div id="branding" className="space-y-4">
+        <div>
+          <h3 className="text-lg font-medium">Branding</h3>
+          <p className="text-sm text-muted-foreground">
             Manage your site branding settings
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+        </div>
+        <Separator />
+        <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="siteName">Site Name</Label>
             <Input id="siteName" placeholder="Enter site name" />
@@ -56,62 +56,54 @@ export function SettingsForm() {
             <Label htmlFor="logo">Logo</Label>
             <Input id="logo" type="file" accept="image/*" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card id="seo">
-        <CardHeader>
-          <CardTitle>SEO Settings</CardTitle>
-          <CardDescription>
+      <div id="seo" className="space-y-4">
+        <div>
+          <h3 className="text-lg font-medium">SEO Settings</h3>
+          <p className="text-sm text-muted-foreground">
             Manage your site's SEO and meta information
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Tabs defaultValue="en">
-            <TabsList>
-              <TabsTrigger value="en">English</TabsTrigger>
-              <TabsTrigger value="fr">French</TabsTrigger>
-            </TabsList>
-            <TabsContent value="en" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="metaTitleEn">Meta Title</Label>
-                <Input id="metaTitleEn" placeholder="Enter meta title" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="metaDescriptionEn">Meta Description</Label>
-                <Textarea id="metaDescriptionEn" placeholder="Enter meta description" />
-              </div>
-            </TabsContent>
-            <TabsContent value="fr" className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="metaTitleFr">Meta Title</Label>
-                <Input id="metaTitleFr" placeholder="Entrez le titre meta" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="metaDescriptionFr">Meta Description</Label>
-                <Textarea id="metaDescriptionFr" placeholder="Entrez la description meta" />
-              </div>
-            </TabsContent>
-          </Tabs>
-          <div className="space-y-2">
-            <Label htmlFor="metaKeywords">Meta Keywords</Label>
-            <Input id="metaKeywords" placeholder="keyword1, keyword2, etc" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="googleAnalytics">Google Analytics ID</Label>
-            <Input id="googleAnalytics" placeholder="UA-XXXXXXXX-X or G-XXXXXXXXXX" />
-          </div>
-        </CardContent>
-      </Card>
+          </p>
+        </div>
+        <Separator />
+        <Tabs defaultValue="en">
+          <TabsList>
+            <TabsTrigger value="en">English</TabsTrigger>
+            <TabsTrigger value="fr">French</TabsTrigger>
+          </TabsList>
+          <TabsContent value="en" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="metaTitleEn">Meta Title</Label>
+              <Input id="metaTitleEn" placeholder="Enter meta title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="metaDescriptionEn">Meta Description</Label>
+              <Textarea id="metaDescriptionEn" placeholder="Enter meta description" />
+            </div>
+          </TabsContent>
+          <TabsContent value="fr" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="metaTitleFr">Meta Title</Label>
+              <Input id="metaTitleFr" placeholder="Entrez le titre meta" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="metaDescriptionFr">Meta Description</Label>
+              <Textarea id="metaDescriptionFr" placeholder="Entrez la description meta" />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
 
-      <Card id="email">
-        <CardHeader>
-          <CardTitle>Email Settings</CardTitle>
-          <CardDescription>
+      <div id="email" className="space-y-4">
+        <div>
+          <h3 className="text-lg font-medium">Email Settings</h3>
+          <p className="text-sm text-muted-foreground">
             Configure your SMTP settings
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+        </div>
+        <Separator />
+        <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="smtpHost">SMTP Host</Label>
             <Input id="smtpHost" placeholder="smtp.example.com" />
@@ -128,16 +120,8 @@ export function SettingsForm() {
             <Label htmlFor="smtpPassword">SMTP Password</Label>
             <Input id="smtpPassword" type="password" />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="smtpSenderEmail">Sender Email</Label>
-            <Input id="smtpSenderEmail" type="email" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="smtpSenderName">Sender Name</Label>
-            <Input id="smtpSenderName" />
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Button type="submit">Save Settings</Button>
     </form>
