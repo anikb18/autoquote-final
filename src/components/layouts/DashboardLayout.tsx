@@ -2,7 +2,6 @@
 
 import * as Headless from '@headlessui/react'
 import React, { useState } from 'react'
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 function OpenMenuIcon() {
@@ -13,6 +12,47 @@ function OpenMenuIcon() {
   )
 }
 
+function CloseMenuIcon() {
+  return (
+    <svg data-slot="icon" viewBox="0 0 20 20" aria-hidden="true" className="h-6 w-6">
+      <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+    </svg>
+  )
+}
+
+function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open: boolean; close: () => void }>) {
+  return (
+    <Headless.Transition show={open}>
+      <Headless.Dialog onClose={close} className="lg:hidden">
+        <Headless.TransitionChild
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black/30" />
+        </Headless.TransitionChild>
+        <Headless.TransitionChild
+          enter="ease-in-out duration-300"
+          enterFrom="-translate-x-full"
+          enterTo="translate-x-0"
+          leave="ease-in-out duration-300"
+          leaveFrom="translate-x-0"
+          leaveTo="-translate-x-full"
+        >
+          <Headless.DialogPanel className="fixed inset-y-0 w-full max-w-80">
+            <div className="flex h-full flex-col overflow-y-auto bg-white px-6 py-6 shadow-xl">
+              {children}
+            </div>
+          </Headless.DialogPanel>
+        </Headless.TransitionChild>
+      </Headless.Dialog>
+    </Headless.Transition>
+  )
+}
+
 interface DashboardLayoutProps {
   navbar: React.ReactNode
   sidebar: React.ReactNode
@@ -20,19 +60,36 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutProps) {
+  const [showSidebar, setShowSidebar] = useState(false)
+
   return (
     <div className="flex min-h-screen w-full bg-background">
-      {/* Static sidebar - always visible */}
-      <div className="fixed inset-y-0 z-50 flex w-72 flex-col">
+      {/* Static sidebar for desktop */}
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
           {sidebar}
         </div>
       </div>
 
+      {/* Mobile sidebar */}
+      <MobileSidebar open={showSidebar} close={() => setShowSidebar(false)}>
+        {sidebar}
+      </MobileSidebar>
+
       {/* Main content area */}
-      <div className="flex flex-1 flex-col pl-72">
-        {/* Navbar */}
+      <div className="flex flex-1 flex-col lg:pl-72">
+        {/* Navbar with mobile menu button */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+          <Button
+            variant="ghost"
+            onClick={() => setShowSidebar(true)}
+            className="lg:hidden"
+            size="icon"
+          >
+            <span className="sr-only">Open sidebar</span>
+            <OpenMenuIcon />
+          </Button>
+
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             {navbar}
           </div>
