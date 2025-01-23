@@ -81,6 +81,8 @@ export const BuyerActiveQuotes = () => {
     <div className="space-y-4">
       {quotes.map((quote) => {
         const carDetails = quote.car_details as CarDetails;
+        if (!carDetails) return null;
+        
         return (
           <Card key={quote.id} className="p-4">
             <div className="flex justify-between items-start">
