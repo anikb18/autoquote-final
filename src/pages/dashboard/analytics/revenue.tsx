@@ -7,7 +7,8 @@ export default function RevenueAnalytics() {
   const { data: performanceData } = useQuery<PerformanceData[]>({
     queryKey: ['platform-performance'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Fetch sales transactions data
+      const { data: salesData, error: salesError } = await supabase
         .from('sales_transactions')
         .select(`
           transaction_date,
@@ -16,33 +17,64 @@ export default function RevenueAnalytics() {
         `)
         .order('transaction_date', { ascending: true });
 
-      if (error) throw error;
+      if (salesError) throw salesError;
+
+      // Fetch dealer quotes data for conversion tracking
+      const { data: quotesData, error: quotesError } = await supabase
+        .from('dealer_quotes')
+        .select('created_at, is_accepted')
+        .order('created_at', { ascending: true });
+
+      if (quotesError) throw quotesError;
 
       // Process data for the chart - group by month
-      const monthlyData = data.reduce((acc: Record<string, any>, curr) => {
+      const monthlyData = salesData.reduce((acc: Record<string, any>, curr) => {
         const month = new Date(curr.transaction_date).toLocaleString('default', { month: 'short' });
         
         if (!acc[month]) {
           acc[month] = {
             revenue: 0,
+            subscriptionRevenue: 0,
+            quoteRevenue: 0,
             conversionRate: 0,
             responseTime: 0,
-            count: 0
+            totalQuotes: 0,
+            acceptedQuotes: 0
           };
         }
         
-        acc[month].revenue += curr.selling_price;
-        acc[month].count += 1;
+        // Track revenue by type
+        if (curr.dealer_profiles.subscription_type === 'premium') {
+          acc[month].subscriptionRevenue += 1895; // Premium subscription fee
+        } else {
+          acc[month].subscriptionRevenue += 1595; // Basic subscription fee
+        }
+        acc[month].quoteRevenue += curr.selling_price;
         
         return acc;
       }, {});
 
+      // Calculate conversion rates from quotes data
+      quotesData.forEach((quote) => {
+        const month = new Date(quote.created_at).toLocaleString('default', { month: 'short' });
+        if (monthlyData[month]) {
+          monthlyData[month].totalQuotes += 1;
+          if (quote.is_accepted) {
+            monthlyData[month].acceptedQuotes += 1;
+          }
+        }
+      });
+
       // Convert to array format for the chart
       return Object.entries(monthlyData).map(([month, data]: [string, any]) => ({
         period: month,
-        revenue: data.revenue,
-        conversionRate: ((data.count / 100) * 100).toFixed(1),
-        responseTime: Math.random() * 24 // This should be replaced with actual response time data
+        revenue: data.quoteRevenue + data.subscriptionRevenue,
+        subscriptionRevenue: data.subscriptionRevenue,
+        quoteRevenue: data.quoteRevenue,
+        conversionRate: data.totalQuotes > 0 
+          ? (data.acceptedQuotes / data.totalQuotes) * 100 
+          : 0,
+        responseTime: 0 // This would need actual response time data
       }));
     }
   });

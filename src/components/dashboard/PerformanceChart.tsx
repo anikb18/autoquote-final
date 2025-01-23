@@ -14,6 +14,8 @@ export interface PerformanceData {
   conversionRate: number;
   responseTime: number;
   revenue: number;
+  subscriptionRevenue?: number;
+  quoteRevenue?: number;
 }
 
 interface PerformanceChartProps {
@@ -32,25 +34,29 @@ export const PerformanceChart = ({ data }: PerformanceChartProps) => {
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="period" />
-              <YAxis />
+              <YAxis yAxisId="left" />
+              <YAxis yAxisId="right" orientation="right" />
               <Tooltip />
               <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="subscriptionRevenue"
+                stroke="#8884d8"
+                name="Subscription Revenue"
+              />
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="quoteRevenue"
+                stroke="#82ca9d"
+                name="Quote Revenue"
+              />
+              <Line
+                yAxisId="right"
                 type="monotone"
                 dataKey="conversionRate"
-                stroke="#8884d8"
-                name="Conversion Rate"
-              />
-              <Line
-                type="monotone"
-                dataKey="responseTime"
-                stroke="#82ca9d"
-                name="Response Time"
-              />
-              <Line
-                type="monotone"
-                dataKey="revenue"
                 stroke="#ffc658"
-                name="Revenue"
+                name="Conversion Rate (%)"
               />
             </LineChart>
           </ResponsiveContainer>
