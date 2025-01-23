@@ -19,6 +19,19 @@ import { UserManagement } from "./dashboard/UserManagement";
 import { BlogManagement } from "./dashboard/BlogManagement";
 import { NewsletterManagement } from "./dashboard/NewsletterManagement";
 import { SettingsForm } from "./settings/SettingsForm";
+import { ThemeSwitcher } from "./ThemeSwitcher";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { User } from "lucide-react";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const Dashboard = () => {
   const { role, user, isLoading: roleLoading } = useUserRole();
@@ -28,6 +41,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation('admin');
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -44,6 +58,15 @@ const Dashboard = () => {
           });
           navigate("/auth");
           return;
+        }
+        
+        if (session?.user) {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+          setProfile(profileData);
         }
         
         setIsAuthChecking(false);
@@ -75,6 +98,20 @@ const Dashboard = () => {
     }
   }, [role]);
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
+
+  const getAvatarUrl = () => {
+    if (user?.user_metadata?.avatar_url) {
+      return user.user_metadata.avatar_url;
+    } else if (profile?.avatar_url) {
+      return profile.avatar_url;
+    }
+    return null;
+  };
+
   if (isAuthChecking || roleLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -91,7 +128,6 @@ const Dashboard = () => {
   }
 
   const renderContent = () => {
-    // First check if we're on a specific management route
     if (location.pathname === "/dashboard/users") {
       return <UserManagement />;
     }
@@ -105,7 +141,6 @@ const Dashboard = () => {
       return <SettingsForm />;
     }
 
-    // If no specific route matches, render the appropriate dashboard
     switch (viewMode) {
       case "admin":
         return <AdminDashboard />;
@@ -120,19 +155,55 @@ const Dashboard = () => {
     <div className="min-h-screen flex w-full bg-background">
       <Sidebar>
         <SidebarHeader className="border-b p-4">
-          <h2 className="text-lg font-semibold">AutoQuote24</h2>
+          <img
+            src={"/logo/dark.png"}
+            alt="AutoQuote24"
+            className="h-8 w-auto"
+          />
         </SidebarHeader>
         <SidebarBody>
           <DashboardSidebar />
         </SidebarBody>
-        <SidebarFooter className="border-t p-4">
-          <div className="text-sm text-muted-foreground">
-            {user?.email}
-          </div>
-        </SidebarFooter>
+        {role === 'admin' && (
+          <SidebarFooter className="border-t p-4 space-y-4">
+            <div className="flex items-center gap-4 px-2">
+              <ThemeSwitcher />
+              <LanguageSwitcher />
+            </div>
+            <div className="flex items-center justify-between px-2">
+              <div className="flex items-center gap-3">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={getAvatarUrl() || ''} />
+                        <AvatarFallback>
+                          <User className="h-4 w-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{profile?.full_name}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </SidebarFooter>
+        )}
       </Sidebar>
 
-      {/* Main Content */}
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto p-6">
           {renderContent()}
