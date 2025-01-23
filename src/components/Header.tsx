@@ -42,10 +42,6 @@ const Header = () => {
   const { theme } = useTheme();
   
   const isDashboard = location.pathname.startsWith('/dashboard');
-  
-  if (isDashboard) {
-    return null;
-  }
 
   const { data: unreadNotifications } = useQuery({
     queryKey: ['unread-notifications'],
@@ -58,7 +54,7 @@ const Header = () => {
         .eq('read', false);
       return count || 0;
     },
-    enabled: !!session && role === 'dealer'
+    enabled: !!session && role === 'dealer' && !isDashboard
   });
 
   useEffect(() => {
@@ -126,6 +122,10 @@ const Header = () => {
   const handleSettings = () => {
     navigate("/settings");
   };
+
+  if (isDashboard) {
+    return null;
+  }
 
   const renderAuthenticatedNav = () => {
     if (!session) return null;
