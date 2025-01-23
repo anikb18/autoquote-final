@@ -1,20 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { useNavigate } from "react-router-dom";
-import { PlusCircle, Edit, Trash2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { translateBlogPost } from "@/services/translation";
-import { BlogEditor } from "./blog/BlogEditor";
+import { useState, useEffect } from "react";
 
 const BlogList = () => {
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const { i18n } = useTranslation();
   const [translatedPosts, setTranslatedPosts] = useState<any[]>([]);
 
@@ -23,7 +15,13 @@ const BlogList = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('*')
+        .select(`
+          *,
+          profiles:author_id (
+            full_name,
+            role
+          )
+        `)
         .order('created_at', { ascending: false });
       
       if (error) throw error;
@@ -49,155 +47,61 @@ const BlogList = () => {
     translatePosts();
   }, [blogPosts, i18n.language]);
 
-  const handleCreatePost = async (values: { 
-    title: string; 
-    content: string; 
-    excerpt: string;
-    featured_image?: string;
-    image_alt?: string;
-  }) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { error } = await supabase
-      .from('blog_posts')
-      .insert([
-        {
-          title: values.title,
-          content: values.content,
-          excerpt: values.excerpt,
-          featured_image: values.featured_image,
-          image_alt: values.image_alt,
-          author_id: user.id,
-          status: 'draft'
-        }
-      ]);
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create blog post",
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Success",
-        description: "Blog post created successfully",
-      });
-      setIsCreateDialogOpen(false);
-      refetch();
-    }
-  };
-
-  const handleDeletePost = async (id: string) => {
-    const { error } = await supabase
-      .from('blog_posts')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete blog post",
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Success",
-        description: "Blog post deleted successfully",
-      });
-      refetch();
-    }
-  };
-
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center pb-6 border-b border-[#6E59A5]">
-        <div>
-          <h1 className="text-4xl font-bold text-[#D6BCFA] mb-3">Blog Posts</h1>
-          <p className="text-[#8E9196] text-lg">Manage your blog content and create new posts</p>
+    <div className="bg-[#1A1F2C] py-12 sm:py-16">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-[#D6BCFA] sm:text-4xl">Latest Blog Posts</h2>
+          <p className="mt-2 text-lg leading-8 text-[#8E9196]">
+            Stay updated with the latest automotive insights and industry trends
+          </p>
         </div>
-        
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              size="lg"
-              className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
-            >
-              <PlusCircle className="mr-2 h-5 w-5" />
-              Create New Post
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl bg-[#1A1F2C] border-[#6E59A5]">
-            <DialogHeader>
-              <DialogTitle className="text-[#D6BCFA] text-2xl">Create New Blog Post</DialogTitle>
-            </DialogHeader>
-            <BlogEditor onSave={handleCreatePost} />
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <div className="grid gap-6 pt-4">
-        {translatedPosts?.map((post) => (
-          <Card 
-            key={post.id} 
-            className="relative bg-[#1A1F2C] border-[#6E59A5] hover:border-[#9b87f5] transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            <CardHeader className="p-6">
-              <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
-                <div className="flex gap-6">
-                  {post.featured_image && (
-                    <div className="flex-shrink-0">
-                      <img 
-                        src={post.featured_image} 
-                        alt={post.image_alt || post.title}
-                        className="w-32 h-32 object-cover rounded-lg border border-[#6E59A5] shadow-md"
-                      />
-                    </div>
-                  )}
-                  <div className="space-y-2">
-                    <CardTitle 
-                      className="text-2xl text-[#D6BCFA] hover:text-[#9b87f5] cursor-pointer transition-colors" 
-                      onClick={() => navigate(`/blog/${post.id}`)}
-                    >
+        <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          {translatedPosts?.map((post) => (
+            <article key={post.id} className="flex flex-col items-start justify-between">
+              <div className="relative w-full">
+                <img
+                  src={post.featured_image || '/placeholder.svg'}
+                  alt={post.image_alt || post.title}
+                  className="aspect-[16/9] w-full rounded-2xl bg-[#2A303C] object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
+                />
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-[#6E59A5]/10" />
+              </div>
+              <div className="max-w-xl">
+                <div className="mt-8 flex items-center gap-x-4 text-xs">
+                  <time dateTime={post.created_at} className="text-[#8E9196]">
+                    {new Date(post.created_at).toLocaleDateString()}
+                  </time>
+                  <span className={`inline-flex px-3 py-1.5 rounded-full text-xs ${
+                    post.status === 'published' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'
+                  }`}>
+                    {post.status}
+                  </span>
+                </div>
+                <div className="group relative">
+                  <h3 className="mt-3 text-lg font-semibold leading-6 text-[#D6BCFA] group-hover:text-[#9b87f5]">
+                    <a onClick={() => navigate(`/blog/${post.id}`)}>
+                      <span className="absolute inset-0" />
                       {post.title}
-                    </CardTitle>
-                    <CardDescription className="text-[#8E9196] flex items-center gap-2">
-                      <span className={`inline-flex px-2 py-1 rounded-full text-xs ${
-                        post.status === 'published' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'
-                      }`}>
-                        {post.status}
-                      </span>
-                      <span>•</span>
-                      <span>{new Date(post.created_at).toLocaleDateString()}</span>
-                    </CardDescription>
-                    <CardContent className="p-0">
-                      <p className="text-[#C8C8C9] line-clamp-2 mt-2">{post.excerpt}</p>
-                    </CardContent>
+                    </a>
+                  </h3>
+                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-[#C8C8C9]">{post.excerpt}</p>
+                </div>
+                <div className="relative mt-8 flex items-center gap-x-4">
+                  <div className="h-10 w-10 rounded-full bg-[#2A303C] flex items-center justify-center text-[#D6BCFA]">
+                    {post.profiles?.full_name?.[0] || '?'}
+                  </div>
+                  <div className="text-sm leading-6">
+                    <p className="font-semibold text-[#D6BCFA]">
+                      {post.profiles?.full_name || 'Anonymous'}
+                    </p>
+                    <p className="text-[#8E9196]">{post.profiles?.role || 'Author'}</p>
                   </div>
                 </div>
-                <div className="flex gap-2 md:self-start">
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={() => navigate(`/blog/${post.id}/edit`)}
-                    className="border-[#6E59A5] hover:border-[#9b87f5] text-[#D6BCFA] h-10 w-10"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="destructive" 
-                    size="icon"
-                    onClick={() => handleDeletePost(post.id)}
-                    className="bg-red-500 hover:bg-red-600 h-10 w-10"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
               </div>
-            </CardHeader>
-          </Card>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   );
