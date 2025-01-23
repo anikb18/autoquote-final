@@ -11,9 +11,9 @@ import NewQuoteForm from "./components/NewQuoteForm";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Header from "./components/Header";
 import BuyerDashboard from "./components/BuyerDashboard";
-import BlogManagement from "./components/dashboard/BlogManagement";
-import NewsletterManagement from "./components/dashboard/NewsletterManagement";
-import UserManagement from "./components/dashboard/UserManagement";
+import { BlogManagement } from "./components/dashboard/BlogManagement";
+import { NewsletterManagement } from "./components/dashboard/NewsletterManagement";
+import { UserManagement } from "./components/dashboard/UserManagement";
 
 const queryClient = new QueryClient({
   defaultOptions: {
