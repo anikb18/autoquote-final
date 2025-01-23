@@ -53,72 +53,6 @@ export const UserTable = ({
   const [emailSubject, setEmailSubject] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
 
-  const handleRoleChange = async (userId: string, newRole: UserRole) => {
-    try {
-      const { error } = await supabase
-        .from('user_roles')
-        .update({ role: newRole })
-        .eq('id', userId);
-
-      if (error) throw error;
-
-      toast({
-        title: "Role Updated",
-        description: "User role has been successfully updated.",
-      });
-    } catch (error) {
-      console.error('Error updating role:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update user role. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleSendEmail = async () => {
-    if (!selectedUser || !emailContent || !emailSubject) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const { error } = await supabase.functions.invoke('send-email', {
-        body: {
-          to: [selectedUser.email],
-          subject: emailSubject,
-          html: emailContent,
-          scheduledFor: scheduledDate || undefined
-        },
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: scheduledDate 
-          ? "Email scheduled successfully" 
-          : "Email sent successfully",
-      });
-      setIsEmailOpen(false);
-      setEmailContent('');
-      setEmailSubject('');
-      setScheduledDate('');
-      setSelectedUser(null);
-    } catch (error) {
-      console.error('Error sending email:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send email. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -131,72 +65,74 @@ export const UserTable = ({
 
   return (
     <div className="space-y-4">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-secondary/50">
-            <TableHead className="w-[250px]">Email</TableHead>
-            <TableHead className="w-[200px]">Full Name</TableHead>
-            <TableHead className="w-[150px]">Role</TableHead>
-            <TableHead className="w-[200px]">Created At</TableHead>
-            <TableHead className="w-[150px]">Subscription</TableHead>
-            <TableHead className="w-[100px] text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {profiles?.map((profile) => (
-            <TableRow key={profile.id} className="group">
-              <TableCell className="font-medium">{profile.email}</TableCell>
-              <TableCell>{profile.full_name || 'N/A'}</TableCell>
-              <TableCell>
-                <UserRoleSelect
-                  userId={profile.id}
-                  currentRole={(profile.role as UserRole) || 'user'}
-                  onRoleChange={handleRoleChange}
-                />
-              </TableCell>
-              <TableCell>
-                {profile.created_at 
-                  ? format(new Date(profile.created_at), 'PPpp')
-                  : 'N/A'}
-              </TableCell>
-              <TableCell>
-                <Badge variant={profile.subscription_status === 'active' ? 'default' : 'secondary'}>
-                  {profile.subscription_status || 'none'}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSelectedUser(profile);
-                        setIsDetailsOpen(true);
-                      }}
-                    >
-                      <Eye className="mr-2 h-4 w-4" />
-                      View Details
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSelectedUser(profile);
-                        setIsEmailOpen(true);
-                      }}
-                    >
-                      <Mail className="mr-2 h-4 w-4" />
-                      Send Email
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="w-[250px]">Email</TableHead>
+              <TableHead className="w-[200px]">Full Name</TableHead>
+              <TableHead className="w-[150px]">Role</TableHead>
+              <TableHead className="w-[200px]">Created At</TableHead>
+              <TableHead className="w-[150px]">Subscription</TableHead>
+              <TableHead className="w-[100px] text-right">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {profiles?.map((profile) => (
+              <TableRow key={profile.id} className="group">
+                <TableCell className="font-medium">{profile.email}</TableCell>
+                <TableCell>{profile.full_name || 'N/A'}</TableCell>
+                <TableCell>
+                  <UserRoleSelect
+                    userId={profile.id}
+                    currentRole={(profile.role as UserRole) || 'user'}
+                    onRoleChange={(newRole) => handleRoleChange(profile.id, newRole)}
+                  />
+                </TableCell>
+                <TableCell>
+                  {profile.created_at 
+                    ? format(new Date(profile.created_at), 'PPpp')
+                    : 'N/A'}
+                </TableCell>
+                <TableCell>
+                  <Badge variant={profile.subscription_status === 'active' ? 'default' : 'secondary'}>
+                    {profile.subscription_status || 'none'}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-[160px]">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedUser(profile);
+                          setIsDetailsOpen(true);
+                        }}
+                      >
+                        <Eye className="mr-2 h-4 w-4" />
+                        View Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedUser(profile);
+                          setIsEmailOpen(true);
+                        }}
+                      >
+                        <Mail className="mr-2 h-4 w-4" />
+                        Send Email
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <div className="flex justify-center gap-2">
         <Button

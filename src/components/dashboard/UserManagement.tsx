@@ -18,7 +18,7 @@ export const UserManagement = () => {
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 25;
 
-  const { data: profiles, isLoading, error, refetch: refetchProfiles } = useQuery({
+  const { data: profiles, isLoading, error } = useQuery({
     queryKey: ['user-profiles', search, page],
     queryFn: async () => {
       if (role !== 'admin' && role !== 'super_admin') {
@@ -62,30 +62,6 @@ export const UserManagement = () => {
     }
   }, [error, toast]);
 
-  // Set up real-time subscription
-  useEffect(() => {
-    if (role !== 'admin' && role !== 'super_admin') return;
-
-    const channel = supabase
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'profiles'
-        },
-        () => {
-          refetchProfiles();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [refetchProfiles, role]);
-
   if (role !== 'admin' && role !== 'super_admin') {
     return (
       <div className="flex items-center justify-center h-[50vh]">
@@ -100,29 +76,6 @@ export const UserManagement = () => {
       </div>
     );
   }
-
-  const handleExport = () => {
-    if (!profiles) return;
-    
-    const csv = [
-      ['Email', 'Full Name', 'Role', 'Created At', 'Subscription Status'].join(','),
-      ...profiles.map(profile => [
-        profile.email,
-        profile.full_name,
-        profile.role,
-        profile.created_at,
-        profile.subscription_status
-      ].join(','))
-    ].join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'users.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
 
   return (
     <div className="space-y-6">
