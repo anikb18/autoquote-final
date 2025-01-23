@@ -1,37 +1,67 @@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { CustomToast } from "./notifications/CustomToast";
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { PerformanceChart } from "./dashboard/PerformanceChart";
+import { SalesTrendChart } from "./dashboard/SalesTrendChart";
+import { MetricsCard } from "./dashboard/MetricsCard";
 
 const Dashboard = () => {
   const { toast } = useToast();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch dashboard data
-        const { data, error } = await supabase.from('dashboard_data').select('*');
-        if (error) throw error;
+  const { data: dashboardData, isLoading } = useQuery({
+    queryKey: ['dashboard-data'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('dashboard_data')
+        .select('*')
+        .single();
 
-        // Handle data
-        console.log(data);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+      if (error) {
         toast({
           title: "Error",
           description: "Failed to load dashboard data",
           variant: "destructive",
         });
+        throw error;
       }
-    };
 
-    fetchData();
-  }, [toast]);
+      return data;
+    }
+  });
+
+  if (isLoading) {
+    return <div className="p-8">Loading dashboard data...</div>;
+  }
 
   return (
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+        
+        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <MetricsCard
+            title="Total Quotes"
+            value={dashboardData?.total_quotes || 0}
+          />
+          <MetricsCard
+            title="Active Quotes"
+            value={dashboardData?.active_quotes || 0}
+          />
+          <MetricsCard
+            title="Completed Quotes"
+            value={dashboardData?.completed_quotes || 0}
+          />
+          <MetricsCard
+            title="Total Revenue"
+            value={dashboardData?.total_revenue || 0}
+            prefix="$"
+          />
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <PerformanceChart data={dashboardData?.metrics_data?.performance || []} />
+          <SalesTrendChart />
+        </div>
       </div>
     </div>
   );

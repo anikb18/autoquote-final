@@ -242,6 +242,42 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_data: {
+        Row: {
+          active_quotes: number | null
+          completed_quotes: number | null
+          created_at: string | null
+          id: string
+          metrics_data: Json | null
+          total_quotes: number | null
+          total_revenue: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          active_quotes?: number | null
+          completed_quotes?: number | null
+          created_at?: string | null
+          id?: string
+          metrics_data?: Json | null
+          total_quotes?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          active_quotes?: number | null
+          completed_quotes?: number | null
+          created_at?: string | null
+          id?: string
+          metrics_data?: Json | null
+          total_quotes?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       deadline: {
         Row: {
           created_at: string
