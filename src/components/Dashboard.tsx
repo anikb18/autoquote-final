@@ -1,4 +1,3 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminDashboard from "./AdminDashboard";
@@ -44,11 +43,11 @@ const Dashboard = () => {
   const { role, user, isLoading: roleLoading } = useUserRole();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">("user");
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation('admin');
-  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -119,6 +118,7 @@ const Dashboard = () => {
     return null;
   };
 
+  // Loading state
   if (isAuthChecking || roleLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -130,6 +130,7 @@ const Dashboard = () => {
     );
   }
 
+  // No user state
   if (!user) {
     return null;
   }
@@ -162,7 +163,14 @@ const Dashboard = () => {
     <div className="min-h-screen flex w-full bg-background">
       <Sidebar>
         <SidebarHeader className="border-b p-4">
-          <h2 className="text-lg font-semibold text-primary">AutoQuote24</h2>
+          <div className="flex h-16 shrink-0 items-center px-6 flex-col gap-2">
+            <img
+              className="h-8 w-auto"
+              src="/logo/dark.png"
+              alt="AutoQuote24"
+            />
+            <span className="text-lg font-semibold text-primary">AutoQuote24</span>
+          </div>
         </SidebarHeader>
         <SidebarBody>
           <DashboardSidebar />
