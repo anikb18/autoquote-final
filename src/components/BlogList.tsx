@@ -111,19 +111,19 @@ const BlogList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1F2C] py-8 px-4 md:px-8">
+    <div className="min-h-screen bg-[#1A1F2C] py-12 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-[#D6BCFA] mb-2">Blog Posts</h1>
-            <p className="text-[#8E9196]">Manage your blog content and create new posts</p>
+        <div className="flex flex-col space-y-8 mb-12">
+          <div className="flex flex-col space-y-2">
+            <h1 className="text-4xl font-bold text-[#D6BCFA]">Blog Posts</h1>
+            <p className="text-[#8E9196] text-lg">Manage your blog content and create new posts</p>
           </div>
           
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button 
                 size="lg"
-                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
+                className="self-start bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
               >
                 <PlusCircle className="mr-2 h-5 w-5" />
                 Create New Post
