@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { DashboardSidebar } from "../dashboard/DashboardSidebar";
+import { useLocation } from 'react-router-dom';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -9,6 +10,14 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  // Close sidebar on route change in mobile view
+  useEffect(() => {
+    if (window.innerWidth < 1024) { // 1024px is the 'lg' breakpoint in Tailwind
+      setSidebarOpen(false);
+    }
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex w-full bg-background">
@@ -23,7 +32,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="lg:hidden">
         {sidebarOpen && (
           <div className="fixed inset-0 z-50">
-            <div className="fixed inset-0 bg-gray-900/80" onClick={() => setSidebarOpen(false)} />
+            <div 
+              className="fixed inset-0 bg-gray-900/80" 
+              onClick={() => setSidebarOpen(false)} 
+            />
             <div className="fixed inset-y-0 left-0 w-full max-w-xs">
               <div className="flex h-full flex-col overflow-y-auto bg-white shadow-xl">
                 <DashboardSidebar />
