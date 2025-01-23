@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   Sidebar,
-  SidebarContent,
+  SidebarBody,
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
@@ -102,9 +102,9 @@ const Dashboard = () => {
         <SidebarHeader className="border-b p-4">
           <h2 className="text-lg font-semibold">AutoQuote24</h2>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarBody>
           <DashboardSidebar />
-        </SidebarContent>
+        </SidebarBody>
         <SidebarFooter className="border-t p-4">
           <div className="text-sm text-muted-foreground">
             {user?.email}
