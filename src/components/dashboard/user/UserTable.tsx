@@ -22,13 +22,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Editor } from '@tinymce/tinymce-react';
 import { Eye, Mail, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 type Profile = Tables<'profiles'>;
-type UserRole = "super_admin" | "admin" | "dealer" | "user";
 
 interface UserTableProps {
   profiles?: Profile[];
@@ -36,6 +33,8 @@ interface UserTableProps {
   page: number;
   setPage: (page: number) => void;
   itemsPerPage: number;
+  onRoleChange: (userId: string, newRole: string) => Promise<void>;
+  onSendEmail: (to: string[], subject: string, content: string, scheduledFor?: string) => Promise<void>;
 }
 
 export const UserTable = ({ 
@@ -43,15 +42,32 @@ export const UserTable = ({
   isLoading,
   page,
   setPage,
-  itemsPerPage 
+  itemsPerPage,
+  onRoleChange,
+  onSendEmail
 }: UserTableProps) => {
-  const { toast } = useToast();
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [emailContent, setEmailContent] = useState('');
   const [emailSubject, setEmailSubject] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
+
+  const handleSendEmail = async () => {
+    if (!selectedUser?.email) return;
+    
+    await onSendEmail(
+      [selectedUser.email],
+      emailSubject,
+      emailContent,
+      scheduledDate || undefined
+    );
+    
+    setIsEmailOpen(false);
+    setEmailContent('');
+    setEmailSubject('');
+    setScheduledDate('');
+  };
 
   if (isLoading) {
     return (
@@ -85,8 +101,8 @@ export const UserTable = ({
                 <TableCell>
                   <UserRoleSelect
                     userId={profile.id}
-                    currentRole={(profile.role as UserRole) || 'user'}
-                    onRoleChange={(newRole) => handleRoleChange(profile.id, newRole)}
+                    currentRole={(profile.role as string) || 'user'}
+                    onRoleChange={(newRole) => onRoleChange(profile.id, newRole)}
                   />
                 </TableCell>
                 <TableCell>

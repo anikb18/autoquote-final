@@ -62,6 +62,38 @@ export const UserManagement = () => {
     }
   }, [error, toast]);
 
+  const handleExport = async () => {
+    if (!profiles) return;
+    
+    // Convert profiles to CSV format
+    const headers = ["Email", "Full Name", "Role", "Created At", "Subscription Status"];
+    const csvContent = [
+      headers.join(","),
+      ...profiles.map(profile => [
+        profile.email,
+        profile.full_name,
+        profile.role,
+        profile.created_at,
+        profile.subscription_status
+      ].join(","))
+    ].join("\n");
+
+    // Create and download the CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "users.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Success",
+      description: "User data exported successfully",
+    });
+  };
+
   if (role !== 'admin' && role !== 'super_admin') {
     return (
       <div className="flex items-center justify-center h-[50vh]">
@@ -112,6 +144,60 @@ export const UserManagement = () => {
         page={page}
         setPage={setPage}
         itemsPerPage={ITEMS_PER_PAGE}
+        onRoleChange={async (userId: string, newRole: string) => {
+          try {
+            const { error } = await supabase
+              .from('user_roles')
+              .update({ role: newRole })
+              .eq('id', userId);
+
+            if (error) throw error;
+
+            toast({
+              title: "Success",
+              description: "User role updated successfully",
+            });
+          } catch (error) {
+            console.error('Error updating role:', error);
+            toast({
+              title: "Error",
+              description: "Failed to update user role",
+              variant: "destructive",
+            });
+          }
+        }}
+        onSendEmail={async (to: string[], subject: string, content: string, scheduledFor?: string) => {
+          try {
+            const response = await fetch('/api/send-email', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                to,
+                subject,
+                html: content,
+                scheduledFor
+              }),
+            });
+
+            if (!response.ok) throw new Error('Failed to send email');
+
+            toast({
+              title: scheduledFor ? "Email Scheduled" : "Email Sent",
+              description: scheduledFor 
+                ? "Email has been scheduled successfully" 
+                : "Email has been sent successfully",
+            });
+          } catch (error) {
+            console.error('Error sending email:', error);
+            toast({
+              title: "Error",
+              description: "Failed to send email",
+              variant: "destructive",
+            });
+          }
+        }}
       />
     </div>
   );
