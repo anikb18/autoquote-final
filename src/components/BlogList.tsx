@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { translateBlogPost } from "@/services/translation";
 import { BlogEditor } from "./blog/BlogEditor";
 
-const BlogList = () => {
+export const BlogList = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
