@@ -12,6 +12,9 @@ import { ProgressBar } from './ProgressBar';
 import confetti from 'canvas-confetti';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
+import { Container } from '@/components/ui/container';
+import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
 
 type FinancingType = 'cash' | 'financing' | 'lease';
 
@@ -211,111 +214,120 @@ const NewQuoteForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <Card className="w-full max-w-2xl mx-auto p-6 space-y-8">
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-foreground">
-              {t('form.steps', { step: currentStep, total: 4 })}
-            </h1>
-            <Badge variant="secondary" className="text-sm">
-              {getStepPreview(currentStep + 1 <= 4 ? currentStep + 1 : currentStep)}
-            </Badge>
-          </div>
-          
-          <ProgressBar
-            total={4}
-            remaining={4 - currentStep}
-            className="mb-8"
-          />
+    <Container>
+      <div className="mx-auto max-w-4xl py-8">
+        <Heading level={1} className="mb-6">
+          {t('form.steps', { step: currentStep, total: 4 })}
+        </Heading>
+        
+        <Card className="p-6 space-y-8">
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <Text className="text-lg font-medium">
+                {currentStep === 1 && t('form.steps.vehicle')}
+                {currentStep === 2 && t('form.steps.financing')}
+                {currentStep === 3 && t('form.steps.tradeIn')}
+                {currentStep === 4 && t('form.steps.payment')}
+              </Text>
+              <Badge variant="secondary" className="text-sm">
+                {getStepPreview(currentStep + 1 <= 4 ? currentStep + 1 : currentStep)}
+              </Badge>
+            </div>
+            
+            <ProgressBar
+              total={4}
+              remaining={4 - currentStep}
+              className="mb-8"
+            />
 
-          <motion.p
-            key={currentStep}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-muted-foreground text-center"
-          >
-            {currentStep === 1 && t('form.desiredVehicle.description')}
-            {currentStep === 2 && t('form.financing.description')}
-            {currentStep === 3 && t('form.tradeIn.description')}
-            {currentStep === 4 && t('form.payment.description')}
-          </motion.p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            {currentStep === 1 && (
-              <DesiredVehicleSection
-                desiredVehicle={formData.desiredVehicle}
-                setDesiredVehicle={(data) => setFormData(prev => ({ ...prev, desiredVehicle: data }))}
-                openToVariants={formData.openToVariants}
-                setOpenToVariants={(value) => setFormData(prev => ({ ...prev, openToVariants: value }))}
-              />
-            )}
-
-            {currentStep === 2 && (
-              <FinancingSection
-                financingType={formData.financing.type}
-                setFinancingType={(type: FinancingType) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, type }}))}
-                financingDetails={formData.financing}
-                setFinancingDetails={(data) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, ...data }}))}
-              />
-            )}
-
-            {currentStep === 3 && (
-              <TradeInSection
-                hasTradeIn={formData.tradeIn.hasTradeIn}
-                setHasTradeIn={(value) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, hasTradeIn: value }}))}
-                tradeInVehicle={formData.tradeIn.vehicle}
-                setTradeInVehicle={(data) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, vehicle: data }}))}
-                photos={formData.tradeIn.photos}
-                handlePhotoUpload={(e) => {
-                  const files = Array.from(e.target.files || []);
-                  setFormData(prev => ({
-                    ...prev,
-                    tradeIn: {
-                      ...prev.tradeIn,
-                      photos: [...prev.tradeIn.photos, ...files]
-                    }
-                  }));
-                }}
-              />
-            )}
-
-            {currentStep === 4 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">{t('form.payment.title')}</h3>
-                <div className="p-6 bg-muted rounded-lg border border-border">
-                  <p className="text-3xl font-bold text-center mb-2">$49.95</p>
-                  <p className="text-sm text-muted-foreground text-center">{t('form.payment.details')}</p>
-                </div>
-              </div>
-            )}
-          </motion.div>
-
-          <div className="flex justify-between pt-4">
-            {currentStep > 1 && (
-              <Button type="button" variant="outline" onClick={handleBack}>
-                {t('form.back')}
-              </Button>
-            )}
-            <Button 
-              type="submit"
-              className={currentStep === 1 ? 'w-full' : 'ml-auto'}
-              disabled={loading}
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-muted-foreground text-center"
             >
-              {currentStep === 4 ? t('form.payment.proceed') : t('form.next')}
-            </Button>
+              {currentStep === 1 && t('form.desiredVehicle.description')}
+              {currentStep === 2 && t('form.financing.description')}
+              {currentStep === 3 && t('form.tradeIn.description')}
+              {currentStep === 4 && t('form.payment.description')}
+            </motion.div>
           </div>
-        </form>
-      </Card>
-    </div>
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {currentStep === 1 && (
+                <DesiredVehicleSection
+                  desiredVehicle={formData.desiredVehicle}
+                  setDesiredVehicle={(data) => setFormData(prev => ({ ...prev, desiredVehicle: data }))}
+                  openToVariants={formData.openToVariants}
+                  setOpenToVariants={(value) => setFormData(prev => ({ ...prev, openToVariants: value }))}
+                />
+              )}
+
+              {currentStep === 2 && (
+                <FinancingSection
+                  financingType={formData.financing.type}
+                  setFinancingType={(type: FinancingType) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, type }}))}
+                  financingDetails={formData.financing}
+                  setFinancingDetails={(data) => setFormData(prev => ({ ...prev, financing: { ...prev.financing, ...data }}))}
+                />
+              )}
+
+              {currentStep === 3 && (
+                <TradeInSection
+                  hasTradeIn={formData.tradeIn.hasTradeIn}
+                  setHasTradeIn={(value) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, hasTradeIn: value }}))}
+                  tradeInVehicle={formData.tradeIn.vehicle}
+                  setTradeInVehicle={(data) => setFormData(prev => ({ ...prev, tradeIn: { ...prev.tradeIn, vehicle: data }}))}
+                  photos={formData.tradeIn.photos}
+                  handlePhotoUpload={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setFormData(prev => ({
+                      ...prev,
+                      tradeIn: {
+                        ...prev.tradeIn,
+                        photos: [...prev.tradeIn.photos, ...files]
+                      }
+                    }));
+                  }}
+                />
+              )}
+
+              {currentStep === 4 && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">{t('form.payment.title')}</h3>
+                  <div className="p-6 bg-muted rounded-lg border border-border">
+                    <p className="text-3xl font-bold text-center mb-2">$49.95</p>
+                    <p className="text-sm text-muted-foreground text-center">{t('form.payment.details')}</p>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+
+            <div className="flex justify-between pt-4">
+              {currentStep > 1 && (
+                <Button type="button" variant="outline" onClick={handleBack}>
+                  {t('form.back')}
+                </Button>
+              )}
+              <Button 
+                type="submit"
+                className={currentStep === 1 ? 'w-full' : 'ml-auto'}
+                disabled={loading}
+              >
+                {currentStep === 4 ? t('form.payment.proceed') : t('form.next')}
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </div>
+    </Container>
   );
 };
 

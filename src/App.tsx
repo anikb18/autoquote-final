@@ -42,7 +42,13 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
-              <Route path="/new-quote" element={<NewQuoteForm />} />
+              <Route path="/new-quote" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <NewQuoteForm />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
               <Route path="/quote-requests" element={<NewQuoteForm />} />
               
               {/* Dashboard routes wrapped in DashboardLayout */}
