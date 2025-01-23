@@ -163,13 +163,12 @@ const Dashboard = () => {
     <div className="min-h-screen flex w-full bg-background">
       <Sidebar>
         <SidebarHeader className="border-b p-4">
-          <div className="flex h-16 shrink-0 items-center px-6 flex-col gap-2">
+          <div className="flex h-16 shrink-0 items-center px-6">
             <img
               className="h-8 w-auto"
               src="/logo/dark.png"
               alt="AutoQuote24"
             />
-            <span className="text-lg font-semibold text-primary">AutoQuote24</span>
           </div>
         </SidebarHeader>
         <SidebarBody>
