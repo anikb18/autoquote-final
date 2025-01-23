@@ -10,6 +10,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Json } from "@/integrations/supabase/types";
+
+interface RawPricingPlan {
+  id: string;
+  stripe_product_id: string | null;
+  stripe_price_id: string | null;
+  name: string | null;
+  description: string | null;
+  features: Json | null;
+  monthly_price: number | null;
+  annual_price: number | null;
+  is_featured: boolean | null;
+  metadata: Json | null;
+  created_at: string | null;
+}
 
 interface PricingPlan {
   id: string;
@@ -21,12 +36,22 @@ interface PricingPlan {
   isFeatured: boolean;
 }
 
+const defaultPlan: PricingPlan = {
+  id: '',
+  name: '',
+  description: '',
+  monthlyPrice: 0,
+  annualPrice: 0,
+  features: [],
+  isFeatured: false
+};
+
 const PricingManagement = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [editingPlan, setEditingPlan] = useState<PricingPlan | null>(null);
 
-  const { data: plans, error } = useQuery<PricingPlan[]>({
+  const { data: plans = [], error } = useQuery({
     queryKey: ['pricing-plans'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -34,13 +59,15 @@ const PricingManagement = () => {
         .select('*');
       
       if (error) throw error;
-      return data.map(plan => ({
+
+      // Convert raw data to our expected format
+      return (data as RawPricingPlan[]).map(plan => ({
         id: plan.id,
         name: plan.name || '',
         description: plan.description || '',
         monthlyPrice: plan.monthly_price || 0,
         annualPrice: plan.annual_price || 0,
-        features: plan.features as string[] || [],
+        features: Array.isArray(plan.features) ? plan.features : [],
         isFeatured: plan.is_featured || false
       }));
     }
@@ -171,7 +198,7 @@ const PricingManagement = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {plans?.map((plan) => (
+        {plans.map((plan) => (
           <Card key={plan.id}>
             <CardHeader>
               <CardTitle>{plan.name}</CardTitle>
