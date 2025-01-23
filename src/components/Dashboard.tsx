@@ -4,7 +4,7 @@ import AdminDashboard from "./AdminDashboard";
 import DealerDashboard from "./DealerDashboard";
 import BuyerDashboard from "./BuyerDashboard";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,10 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./dashboard/DashboardSidebar";
+import { UserManagement } from "./dashboard/UserManagement";
+import { BlogManagement } from "./dashboard/BlogManagement";
+import { NewsletterManagement } from "./dashboard/NewsletterManagement";
+import { SettingsForm } from "./settings/SettingsForm";
 
 const Dashboard = () => {
   const { role, user, isLoading: roleLoading } = useUserRole();
@@ -22,6 +26,7 @@ const Dashboard = () => {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('admin');
 
   useEffect(() => {
@@ -85,7 +90,22 @@ const Dashboard = () => {
     return null;
   }
 
-  const renderDashboard = () => {
+  const renderContent = () => {
+    // First check if we're on a specific management route
+    if (location.pathname === "/dashboard/users") {
+      return <UserManagement />;
+    }
+    if (location.pathname === "/dashboard/blog") {
+      return <BlogManagement />;
+    }
+    if (location.pathname === "/dashboard/newsletter") {
+      return <NewsletterManagement />;
+    }
+    if (location.pathname === "/dashboard/settings") {
+      return <SettingsForm />;
+    }
+
+    // If no specific route matches, render the appropriate dashboard
     switch (viewMode) {
       case "admin":
         return <AdminDashboard />;
@@ -115,7 +135,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto p-6">
-          {renderDashboard()}
+          {renderContent()}
         </div>
       </main>
     </div>
