@@ -75,21 +75,36 @@ export const DocumentsManagement = () => {
             : 'N/A'
         };
 
+        // Ensure proper typing for user data
+        const user = doc.quote?.user ? {
+          full_name: doc.quote.user.full_name || null,
+          email: doc.quote.user.email || null
+        } : null;
+
+        // Ensure proper typing for dealer quotes
+        const dealer_quotes = (doc.quote?.dealer_quotes || []).map(dq => ({
+          dealer: dq.dealer ? {
+            dealer_name: dq.dealer.dealer_name || null
+          } : null
+        }));
+
         return {
-          ...doc,
+          id: doc.id,
+          quote_id: doc.quote_id,
+          type: doc.type,
+          file_path: doc.file_path,
+          status: doc.status,
+          created_at: doc.created_at,
           quote: doc.quote ? {
             ...doc.quote,
             car_details: carDetails,
-            user: doc.quote.user || null,
-            dealer_quotes: doc.quote.dealer_quotes.map(dq => ({
-              ...dq,
-              dealer: dq.dealer || null
-            }))
+            user,
+            dealer_quotes
           } : null
-        };
+        } as Document;
       });
 
-      return transformedData as Document[];
+      return transformedData || [];
     },
   });
 

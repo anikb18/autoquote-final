@@ -148,7 +148,7 @@ const SubscriptionManagement = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="capitalize">
+                    <Badge variant="secondary" className="capitalize">
                       {subscription.subscription_type || 'basic'}
                     </Badge>
                   </TableCell>
