@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 
-export default function SupportRequest() {
+const SupportRequest = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -111,4 +111,6 @@ export default function SupportRequest() {
       </div>
     </div>
   );
-}
+};
+
+export default SupportRequest;

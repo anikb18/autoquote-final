@@ -19,37 +19,12 @@ import { SupportTicketResponse } from "./SupportTicketResponse";
 interface SupportTicketListProps {
   userOnly: boolean;
   status?: string;
+  tickets: any[];
 }
 
-export function SupportTicketList({ userOnly, status }: SupportTicketListProps) {
+export function SupportTicketList({ userOnly, status, tickets }: SupportTicketListProps) {
   const { t } = useTranslation();
   const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
-
-  const { data: tickets, isLoading } = useQuery({
-    queryKey: ['support-tickets', userOnly, status],
-    queryFn: async () => {
-      let query = supabase
-        .from('support_tickets')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (userOnly) {
-        query = query.eq('user_id', (await supabase.auth.getUser()).data.user?.id);
-      }
-
-      if (status) {
-        query = query.eq('status', status);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
-    }
-  });
-
-  if (isLoading) {
-    return <div className="flex items-center justify-center py-8">{t('common.loading')}</div>;
-  }
 
   return (
     <div className="space-y-6">
