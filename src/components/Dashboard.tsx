@@ -109,7 +109,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-6">
+    <div>
       {role === 'admin' && (
         <div className="mb-6">
           <Select
