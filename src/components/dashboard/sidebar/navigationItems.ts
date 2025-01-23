@@ -12,7 +12,11 @@ import {
   DollarSign,
   Car,
   Tag,
-  File
+  File,
+  CreditCard,
+  TrendingUp,
+  Users,
+  Building
 } from "lucide-react";
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
@@ -39,11 +43,35 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       children: [
         {
           title: "Dealer Performance",
-          href: "/dashboard/analytics/dealer"
+          href: "/dashboard/analytics/dealer",
+          icon: Building
         },
         {
           title: "Platform Revenue",
-          href: "/dashboard/analytics/revenue"
+          href: "/dashboard/analytics/revenue",
+          icon: TrendingUp
+        },
+        {
+          title: "User Analytics",
+          href: "/dashboard/analytics/users",
+          icon: Users
+        }
+      ]
+    },
+    {
+      title: "Finances",
+      icon: DollarSign,
+      href: "/dashboard/finances",
+      children: [
+        {
+          title: "Coupons",
+          href: "/dashboard/coupons",
+          icon: Tag
+        },
+        {
+          title: "Plans",
+          href: "/dashboard/plans",
+          icon: CreditCard
         }
       ]
     },
@@ -61,16 +89,6 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       title: "Documents",
       icon: File,
       href: "/dashboard/documents"
-    },
-    {
-      title: "Plans",
-      icon: FileText,
-      href: "/dashboard/plans"
-    },
-    {
-      title: "Coupons",
-      icon: Tag,
-      href: "/dashboard/coupons"
     },
     {
       title: "Support Center",

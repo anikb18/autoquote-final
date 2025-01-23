@@ -1,14 +1,48 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Filter, SortAsc, SortDesc } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import BlogList from "@/components/BlogList";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
 
 export const BlogManagement = () => {
   const { t } = useTranslation('admin');
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  const { data: metrics } = useQuery({
+    queryKey: ['blog-metrics'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('status')
+        .throwOnError();
+
+      if (error) throw error;
+
+      const stats = {
+        total: data.length,
+        published: data.filter(post => post.status === 'published').length,
+        draft: data.filter(post => post.status === 'draft').length,
+        scheduled: data.filter(post => post.status === 'scheduled').length
+      };
+
+      return stats;
+    }
+  });
 
   return (
     <div className="space-y-8 p-8">
@@ -21,12 +55,54 @@ export const BlogManagement = () => {
         </p>
       </div>
 
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-semibold">All Posts</h2>
-          <p className="text-muted-foreground">
-            Manage your blog content and create new posts
-          </p>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="p-4">
+          <h3 className="font-semibold">Total Posts</h3>
+          <p className="text-2xl">{metrics?.total || 0}</p>
+        </Card>
+        <Card className="p-4">
+          <h3 className="font-semibold">Published</h3>
+          <p className="text-2xl text-green-600">{metrics?.published || 0}</p>
+        </Card>
+        <Card className="p-4">
+          <h3 className="font-semibold">Drafts</h3>
+          <p className="text-2xl text-yellow-600">{metrics?.draft || 0}</p>
+        </Card>
+        <Card className="p-4">
+          <h3 className="font-semibold">Scheduled</h3>
+          <p className="text-2xl text-blue-600">{metrics?.scheduled || 0}</p>
+        </Card>
+      </div>
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col md:flex-row gap-4 flex-1">
+          <Input
+            placeholder="Search posts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-xs"
+          />
+          <Select
+            value={statusFilter}
+            onValueChange={setStatusFilter}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="published">Published</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="scheduled">Scheduled</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            variant="outline"
+            onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
+          >
+            {sortOrder === "asc" ? <SortAsc className="mr-2" /> : <SortDesc className="mr-2" />}
+            Sort by Date
+          </Button>
         </div>
         <Button 
           onClick={() => navigate("/dashboard/blog/new")}
@@ -38,7 +114,11 @@ export const BlogManagement = () => {
       </div>
 
       <div className="bg-background/60 backdrop-blur-sm rounded-lg border">
-        <BlogList />
+        <BlogList
+          searchTerm={searchTerm}
+          statusFilter={statusFilter}
+          sortOrder={sortOrder}
+        />
       </div>
     </div>
   );
