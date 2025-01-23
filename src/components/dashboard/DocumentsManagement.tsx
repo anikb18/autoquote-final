@@ -15,15 +15,10 @@ interface Document {
   quote: {
     car_details: CarDetails;
     user_id: string;
-    user: {
+    profiles: {
       full_name: string;
       email: string;
     } | null;
-    dealer_quotes: Array<{
-      id: string;
-      dealer_id: string;
-      status: string;
-    }>;
   } | null;
 }
 
@@ -46,14 +41,9 @@ export function DocumentsManagement() {
           quote:quotes (
             car_details,
             user_id,
-            user:profiles (
+            profiles!quotes_user_id_fkey (
               full_name,
               email
-            ),
-            dealer_quotes (
-              id,
-              dealer_id,
-              status
             )
           )
         `)
@@ -61,31 +51,7 @@ export function DocumentsManagement() {
 
       if (error) throw error;
 
-      return data.map((doc: any) => {
-        let carDetails: CarDetails = {
-          make: 'Unknown',
-          model: 'Unknown',
-          year: 0
-        };
-
-        if (doc.quote?.car_details) {
-          carDetails = {
-            make: doc.quote.car_details.make || 'Unknown',
-            model: doc.quote.car_details.model || 'Unknown',
-            year: doc.quote.car_details.year || 0
-          };
-        }
-
-        return {
-          ...doc,
-          quote: doc.quote ? {
-            ...doc.quote,
-            car_details: carDetails,
-            user: doc.quote.user || null,
-            dealer_quotes: doc.quote.dealer_quotes || []
-          } : null
-        } as Document;
-      });
+      return data as Document[];
     }
   });
 
@@ -97,7 +63,6 @@ export function DocumentsManagement() {
       
       if (error) throw error;
 
-      // Create a download link
       const url = URL.createObjectURL(data);
       const a = document.createElement('a');
       a.href = url;
@@ -136,7 +101,7 @@ export function DocumentsManagement() {
                       <div>
                         <h3 className="font-medium">{doc.type}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {doc.quote?.user?.full_name || 'Unknown User'} - {doc.quote?.user?.email || 'No email'}
+                          {doc.quote?.profiles?.full_name || 'Unknown User'} - {doc.quote?.profiles?.email || 'No email'}
                         </p>
                       </div>
                     </div>

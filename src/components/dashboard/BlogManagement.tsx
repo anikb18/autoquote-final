@@ -16,19 +16,13 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 
-type BlogStatus = 'draft' | 'published' | 'scheduled' | 'archived';
+type BlogStatus = 'draft' | 'published' | 'archived' | 'scheduled';
 
 interface BlogMetrics {
   total: number;
   published: number;
   draft: number;
   scheduled: number;
-}
-
-interface BlogListProps {
-  searchTerm: string;
-  statusFilter: BlogStatus | 'all';
-  sortOrder: 'asc' | 'desc';
 }
 
 export const BlogManagement = () => {
@@ -130,11 +124,7 @@ export const BlogManagement = () => {
       </div>
 
       <div className="bg-background/60 backdrop-blur-sm rounded-lg border">
-        <BlogList
-          searchTerm={searchTerm}
-          statusFilter={statusFilter}
-          sortOrder={sortOrder}
-        />
+        <BlogList />
       </div>
     </div>
   );
