@@ -111,75 +111,95 @@ const BlogList = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 bg-[#1A1F2C]">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-[#D6BCFA]">Blog Posts</h1>
-        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white">
-              <PlusCircle className="mr-2" />
-              Create Post
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl bg-[#1A1F2C] border-[#6E59A5]">
-            <DialogHeader>
-              <DialogTitle className="text-[#D6BCFA]">Create New Blog Post</DialogTitle>
-            </DialogHeader>
-            <BlogEditor onSave={handleCreatePost} />
-          </DialogContent>
-        </Dialog>
-      </div>
+    <div className="min-h-screen bg-[#1A1F2C] py-8 px-4 md:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-[#D6BCFA] mb-2">Blog Posts</h1>
+            <p className="text-[#8E9196]">Manage your blog content and create new posts</p>
+          </div>
+          
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                size="lg"
+                className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
+              >
+                <PlusCircle className="mr-2 h-5 w-5" />
+                Create New Post
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl bg-[#1A1F2C] border-[#6E59A5]">
+              <DialogHeader>
+                <DialogTitle className="text-[#D6BCFA] text-2xl">Create New Blog Post</DialogTitle>
+              </DialogHeader>
+              <BlogEditor onSave={handleCreatePost} />
+            </DialogContent>
+          </Dialog>
+        </div>
 
-      <div className="grid gap-4">
-        {translatedPosts.map((post) => (
-          <Card key={post.id} className="relative bg-[#1A1F2C] border-[#6E59A5] hover:border-[#9b87f5] transition-colors">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div className="flex gap-4">
-                  {post.featured_image && (
-                    <img 
-                      src={post.featured_image} 
-                      alt={post.image_alt || post.title}
-                      className="w-24 h-24 object-cover rounded border border-[#6E59A5]"
-                    />
-                  )}
-                  <div>
-                    <CardTitle 
-                      className="text-[#D6BCFA] hover:text-[#9b87f5] cursor-pointer transition-colors" 
-                      onClick={() => navigate(`/blog/${post.id}`)}
+        <div className="grid gap-6">
+          {translatedPosts.map((post) => (
+            <Card 
+              key={post.id} 
+              className="relative bg-[#1A1F2C] border-[#6E59A5] hover:border-[#9b87f5] transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <CardHeader className="p-6">
+                <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
+                  <div className="flex gap-6">
+                    {post.featured_image && (
+                      <div className="flex-shrink-0">
+                        <img 
+                          src={post.featured_image} 
+                          alt={post.image_alt || post.title}
+                          className="w-32 h-32 object-cover rounded-lg border border-[#6E59A5] shadow-md"
+                        />
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <CardTitle 
+                        className="text-2xl text-[#D6BCFA] hover:text-[#9b87f5] cursor-pointer transition-colors" 
+                        onClick={() => navigate(`/blog/${post.id}`)}
+                      >
+                        {post.title}
+                      </CardTitle>
+                      <CardDescription className="text-[#8E9196] flex items-center gap-2">
+                        <span className={`inline-flex px-2 py-1 rounded-full text-xs ${
+                          post.status === 'published' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'
+                        }`}>
+                          {post.status}
+                        </span>
+                        <span>•</span>
+                        <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                      </CardDescription>
+                      <CardContent className="p-0">
+                        <p className="text-[#C8C8C9] line-clamp-2 mt-2">{post.excerpt}</p>
+                      </CardContent>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 md:self-start">
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => navigate(`/blog/${post.id}/edit`)}
+                      className="border-[#6E59A5] hover:border-[#9b87f5] text-[#D6BCFA] h-10 w-10"
                     >
-                      {post.title}
-                    </CardTitle>
-                    <CardDescription className="text-[#8E9196]">
-                      Status: {post.status} | Created: {new Date(post.created_at).toLocaleDateString()}
-                    </CardDescription>
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="destructive" 
+                      size="icon"
+                      onClick={() => handleDeletePost(post.id)}
+                      className="bg-red-500 hover:bg-red-600 h-10 w-10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
-                    onClick={() => navigate(`/blog/${post.id}/edit`)}
-                    className="border-[#6E59A5] hover:border-[#9b87f5] text-[#D6BCFA]"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="destructive" 
-                    size="icon" 
-                    onClick={() => handleDeletePost(post.id)}
-                    className="bg-red-500 hover:bg-red-600"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="line-clamp-2 text-[#C8C8C9]">{post.excerpt}</p>
-            </CardContent>
-          </Card>
-        ))}
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
