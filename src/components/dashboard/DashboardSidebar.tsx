@@ -1,5 +1,4 @@
 import { useUserRole } from "@/hooks/use-user-role";
-import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -18,6 +17,7 @@ import {
   MessageSquare,
   Car
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
@@ -95,8 +95,8 @@ export function DashboardSidebar() {
           <Link
             to={item.href}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900",
-              location.pathname === item.href && "bg-gray-100 text-gray-900"
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100",
+              location.pathname === item.href && "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             )}
           >
             <item.icon className="h-4 w-4" />
@@ -108,8 +108,8 @@ export function DashboardSidebar() {
         <Link
           to="/dashboard/settings"
           className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900",
-            location.pathname === "/dashboard/settings" && "bg-gray-100 text-gray-900"
+            "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100",
+            location.pathname === "/dashboard/settings" && "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
           )}
         >
           <Settings className="h-4 w-4" />
