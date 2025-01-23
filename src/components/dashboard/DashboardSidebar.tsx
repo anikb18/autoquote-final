@@ -85,7 +85,6 @@ export function DashboardSidebar() {
           src="/logo/dark.png"
           alt="AutoQuote24"
         />
-        <span className="text-lg font-semibold text-primary">AutoQuote24</span>
       </div>
       
       <nav className="flex flex-1 flex-col">
