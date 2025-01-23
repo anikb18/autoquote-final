@@ -9,6 +9,19 @@ interface ChatMessageProps {
   isAccepted: boolean;
 }
 
+// Define the profile type based on the actual database schema
+interface Profile {
+  id: string;
+  email: string;
+  full_name: string;
+  role: string;
+  created_at: string;
+  stripe_customer_id: string | null;
+  subscription_status: string | null;
+  subscription_id: string | null;
+  subscription_type: 'basic' | 'premium';
+}
+
 export const ChatMessage = ({ message, isAccepted }: ChatMessageProps) => {
   const { data: senderProfile } = useQuery({
     queryKey: ['user-profile', message.sender_id],
@@ -20,7 +33,7 @@ export const ChatMessage = ({ message, isAccepted }: ChatMessageProps) => {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as Profile;
     },
   });
 
@@ -33,7 +46,6 @@ export const ChatMessage = ({ message, isAccepted }: ChatMessageProps) => {
   return (
     <div className="flex items-start space-x-4 p-4">
       <Avatar>
-        <AvatarImage src={senderProfile?.avatar_url} />
         <AvatarFallback>
           {displayName.charAt(0)}
         </AvatarFallback>
