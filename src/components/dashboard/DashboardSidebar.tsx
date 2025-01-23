@@ -34,7 +34,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function DashboardSidebar() {
   const { role, user } = useUserRole();
-  const { t } = useTranslation('admin');
+  const { t, i18n } = useTranslation('admin');
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
