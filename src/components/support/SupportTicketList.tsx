@@ -1,92 +1,42 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useTranslation } from "react-i18next";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MessageSquare } from "lucide-react";
-import { useState } from "react";
-import { SupportTicketResponse } from "./SupportTicketResponse";
 
-interface Ticket {
+interface SupportTicket {
   id: string;
   subject: string;
   category: string;
   status: string;
   created_at: string;
   message: string;
-  user_id: string;
-  updated_at: string;
 }
 
 interface SupportTicketListProps {
-  userOnly?: boolean;
-  status?: string;
-  tickets: Ticket[];
+  tickets: SupportTicket[];
 }
 
-const SupportTicketList = ({ userOnly = false, status, tickets }: SupportTicketListProps) => {
-  const { t } = useTranslation();
-  const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
+export function SupportTicketList({ tickets }: SupportTicketListProps) {
+  const navigate = useNavigate();
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{t('support.subject')}</TableHead>
-              <TableHead>{t('support.category')}</TableHead>
-              <TableHead>{t('support.status')}</TableHead>
-              <TableHead>{t('support.created')}</TableHead>
-              <TableHead className="text-right">{t('support.actions')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {tickets?.map((ticket) => (
-              <TableRow key={ticket.id}>
-                <TableCell className="font-medium">{ticket.subject}</TableCell>
-                <TableCell>{ticket.category}</TableCell>
-                <TableCell>
-                  <Badge variant={ticket.status === 'open' ? 'destructive' : 'secondary'}>
-                    {t(`support.status.${ticket.status}`)}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {format(new Date(ticket.created_at), 'PPp')}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSelectedTicket(ticket.id)}
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    {t('support.viewResponses')}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      {selectedTicket && (
-        <SupportTicketResponse
-          ticketId={selectedTicket}
-          onClose={() => setSelectedTicket(null)}
-        />
-      )}
+    <div className="space-y-4">
+      {tickets.map((ticket) => (
+        <div key={ticket.id} className="border p-4 rounded-lg">
+          <h3 className="font-semibold">{ticket.subject}</h3>
+          <p className="text-sm text-gray-600">{ticket.category}</p>
+          <p className="text-sm">{ticket.message}</p>
+          <div className="mt-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(`/support/ticket/${ticket.id}`)}
+            >
+              View Details
+            </Button>
+          </div>
+        </div>
+      ))}
     </div>
   );
-};
+}
 
 export default SupportTicketList;

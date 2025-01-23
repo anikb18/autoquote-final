@@ -54,8 +54,7 @@ export function DocumentsManagement() {
 
       if (error) throw error;
 
-      // Type assertion to ensure the data matches our Document interface
-      return (data as unknown) as Document[];
+      return data as unknown as Document[];
     }
   });
 

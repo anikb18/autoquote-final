@@ -6,38 +6,44 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { translateBlogPost } from "@/services/translation";
 import { BlogEditor } from "./blog/BlogEditor";
+
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  status: 'draft' | 'published' | 'archived';
+  created_at: string;
+}
 
 const BlogList = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null);
-  const [blogs, setBlogs] = useState([]);
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   const { data: blogData, refetch } = useQuery({
     queryKey: ['blogs'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('blogs')
+        .from('blog_posts')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as Blog[];
     }
   });
 
-  const handleEdit = (blog) => {
+  const handleEdit = (blog: Blog) => {
     setSelectedBlog(blog);
     setIsDialogOpen(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     const { error } = await supabase
-      .from('blogs')
+      .from('blog_posts')
       .delete()
       .eq('id', id);
 
@@ -69,7 +75,7 @@ const BlogList = () => {
           <DialogHeader>
             <DialogTitle>{selectedBlog ? "Edit Blog" : "Create Blog"}</DialogTitle>
           </DialogHeader>
-          <BlogEditor blog={selectedBlog} onClose={handleDialogClose} />
+          <BlogEditor initialBlog={selectedBlog} onClose={handleDialogClose} />
         </DialogContent>
       </Dialog>
       <ul>
