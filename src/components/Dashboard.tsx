@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CustomToast } from "./notifications/CustomToast";
-import { DashboardLayout } from "./layouts/DashboardLayout";
+import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -77,13 +77,12 @@ const Dashboard = () => {
   }, [toast]);
 
   return (
-    <DashboardLayout>
-      <div className="py-6">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
-        </div>
+    <div className="py-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
+        <Outlet />
       </div>
-    </DashboardLayout>
+    </div>
   );
 };
 
