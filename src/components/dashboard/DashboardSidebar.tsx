@@ -79,12 +79,13 @@ export function DashboardSidebar() {
 
   return (
     <div className="flex grow flex-col gap-y-8">
-      <div className="flex h-16 shrink-0 items-center px-6">
+      <div className="flex h-16 shrink-0 items-center px-6 flex-col gap-2">
         <img
           className="h-8 w-auto"
-          src={"/logo/dark.png"}
+          src="/logo/dark.png"
           alt="AutoQuote24"
         />
+        <span className="text-lg font-semibold text-primary">AutoQuote24</span>
       </div>
       
       <nav className="flex flex-1 flex-col">
