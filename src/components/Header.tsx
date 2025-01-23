@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
@@ -37,6 +37,7 @@ const Header = () => {
   if (isDashboard) {
     return null;
   }
+
   const navigate = useNavigate();
   const [session, setSession] = useState<any>(null);
   const isAuthenticated = !!session;
