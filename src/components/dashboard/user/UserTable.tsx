@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 type Profile = Tables<'profiles'>;
+type UserRole = "super_admin" | "admin" | "dealer" | "user";
 
 interface UserTableProps {
   profiles?: Profile[];
@@ -33,7 +34,7 @@ interface UserTableProps {
   page: number;
   setPage: (page: number) => void;
   itemsPerPage: number;
-  onRoleChange: (userId: string, newRole: string) => Promise<void>;
+  onRoleChange: (userId: string, newRole: UserRole) => Promise<void>;
   onSendEmail: (to: string[], subject: string, content: string, scheduledFor?: string) => Promise<void>;
 }
 
@@ -101,8 +102,8 @@ export const UserTable = ({
                 <TableCell>
                   <UserRoleSelect
                     userId={profile.id}
-                    currentRole={(profile.role as string) || 'user'}
-                    onRoleChange={(newRole) => onRoleChange(profile.id, newRole)}
+                    currentRole={(profile.role as UserRole) || 'user'}
+                    onRoleChange={(newRole) => onRoleChange(profile.id, newRole as UserRole)}
                   />
                 </TableCell>
                 <TableCell>

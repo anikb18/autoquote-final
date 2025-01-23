@@ -10,6 +10,7 @@ import { Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Profile = Tables<'profiles'>;
+type UserRole = "super_admin" | "admin" | "dealer" | "user";
 
 export const UserManagement = () => {
   const { toast } = useToast();
@@ -144,7 +145,7 @@ export const UserManagement = () => {
         page={page}
         setPage={setPage}
         itemsPerPage={ITEMS_PER_PAGE}
-        onRoleChange={async (userId: string, newRole: string) => {
+        onRoleChange={async (userId: string, newRole: UserRole) => {
           try {
             const { error } = await supabase
               .from('user_roles')
