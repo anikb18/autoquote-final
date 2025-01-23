@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Menu } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { DashboardLayout } from "./layouts/DashboardLayout";
 import { DashboardSidebar } from "./dashboard/DashboardSidebar";
 import { Button } from "./ui/button";
 
@@ -96,32 +95,37 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout
-      sidebar={
-        <div className="h-full bg-white/80 backdrop-blur-md shadow-lg border-r border-gray-200/50 p-4">
-          <DashboardSidebar isCollapsed={isSidebarCollapsed} />
-        </div>
-      }
-    >
-      {/* Navbar moved from layout to here */}
-      <div className="sticky top-0 z-40 w-full bg-white border-b border-gray-200 shadow-sm">
-        <div className="flex justify-between items-center px-4 py-2">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-              className="lg:flex"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-            <h1 className="text-xl font-semibold">{t('dashboard.title')}</h1>
-          </div>
-        </div>
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <div className={`${isSidebarCollapsed ? 'w-16' : 'w-64'} transition-all duration-300 ease-in-out fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-sm z-40`}>
+        <DashboardSidebar isCollapsed={isSidebarCollapsed} />
       </div>
 
-      {renderDashboard()}
-    </DashboardLayout>
+      {/* Main Content */}
+      <div className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
+        {/* Top Navigation */}
+        <div className="sticky top-0 z-30 w-full bg-white border-b border-gray-200 shadow-sm">
+          <div className="flex justify-between items-center px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                className="lg:flex"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+              <h1 className="text-xl font-semibold">{t('dashboard.title')}</h1>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Content */}
+        <main className="p-4 lg:p-8">
+          {renderDashboard()}
+        </main>
+      </div>
+    </div>
   );
 };
 
