@@ -22,6 +22,10 @@ interface DesignSettings {
   brandName: string;
 }
 
+type DesignSettingsResponse = {
+  value: DesignSettings;
+}
+
 export default function DesignPage() {
   const { toast } = useToast();
   const [settings, setSettings] = useState<DesignSettings>({
@@ -44,7 +48,18 @@ export default function DesignPage() {
         .single();
 
       if (error) throw error;
-      return data?.value as DesignSettings;
+      
+      // Type assertion to ensure the value is of type DesignSettings
+      const settings = data?.value as DesignSettings;
+      return settings || {
+        primaryColor: "#003139",
+        secondaryColor: "#d1d2c3",
+        accentColor: "#446df6",
+        darkMode: false,
+        customFont: "",
+        logoUrl: "",
+        brandName: "AutoQuote24"
+      };
     }
   });
 
@@ -55,7 +70,7 @@ export default function DesignPage() {
         .upsert({
           category: 'design',
           key: 'theme',
-          value: newSettings
+          value: newSettings as unknown as Json
         });
 
       if (error) throw error;

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DealershipComparison } from "@/components/dashboard/DealershipComparison";
 import { SalesTrendChart } from "@/components/dashboard/SalesTrendChart";
-import { useToast } from "@/hooks/use-toast";
 import { MetricsOverview } from "@/components/dashboard/shared/MetricsOverview";
 import { DollarSign, TrendingUp, Users, Clock } from "lucide-react";
 
