@@ -31,6 +31,12 @@ import { Badge } from "./ui/badge";
 import { useQuery } from "@tanstack/react-query";
 
 const Header = () => {
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard');
+  
+  if (isDashboard) {
+    return null;
+  }
   const navigate = useNavigate();
   const [session, setSession] = useState<any>(null);
   const isAuthenticated = !!session;
