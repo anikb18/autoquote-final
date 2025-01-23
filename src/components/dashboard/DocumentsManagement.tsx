@@ -9,14 +9,36 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { Download, Eye } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Download } from "lucide-react";
+import { format } from "date-fns";
 
-export function DocumentsManagement() {
-  const { toast } = useToast();
+interface Document {
+  id: string;
+  quote_id: string;
+  type: string;
+  file_path: string;
+  status: string;
+  created_at: string;
+  quote: {
+    car_details: {
+      year: string;
+      make: string;
+      model: string;
+    };
+    user: {
+      full_name: string;
+      email: string;
+    };
+    dealer_quotes: {
+      dealer: {
+        dealer_name: string;
+      };
+    }[];
+  };
+}
 
+export const DocumentsManagement = () => {
   const { data: documents, isLoading } = useQuery({
     queryKey: ['documents'],
     queryFn: async () => {
@@ -24,122 +46,107 @@ export function DocumentsManagement() {
         .from('documents')
         .select(`
           *,
-          quotes (
+          quote:quotes (
             car_details,
-            user_id,
-            created_at,
+            user:profiles (full_name, email),
             dealer_quotes (
-              dealer_id,
-              dealer_profile:dealer_profiles(dealer_name)
+              dealer:dealer_profiles (dealer_name)
             )
           )
         `)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        toast({
-          title: "Error fetching documents",
-          description: error.message,
-          variant: "destructive",
-        });
-        throw error;
-      }
-
-      return data;
-    }
+      if (error) throw error;
+      return data as Document[];
+    },
   });
 
-  const handleDownload = async (filePath: string) => {
-    try {
-      const { data, error } = await supabase.storage
-        .from('documents')
-        .download(filePath);
-      
-      if (error) throw error;
-
-      // Create a download link
-      const url = URL.createObjectURL(data);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filePath.split('/').pop() || 'document';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error: any) {
-      toast({
-        title: "Error downloading document",
-        description: error.message,
-        variant: "destructive",
-      });
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-500/10 text-yellow-500';
+      case 'approved':
+        return 'bg-green-500/10 text-green-500';
+      case 'rejected':
+        return 'bg-red-500/10 text-red-500';
+      default:
+        return 'bg-gray-500/10 text-gray-500';
     }
   };
 
+  const handleDownload = async (filePath: string) => {
+    const { data, error } = await supabase.storage
+      .from('documents')
+      .download(filePath);
+    
+    if (error) {
+      console.error('Error downloading file:', error);
+      return;
+    }
+
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filePath.split('/').pop() || 'document';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) {
-    return <div className="flex items-center justify-center py-8">Loading documents...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Quote Documents</h2>
-          <p className="text-muted-foreground">
-            View and manage all quote-related documents
-          </p>
-        </div>
+    <div className="space-y-8 p-8">
+      <div>
+        <h1 className="text-4xl font-bold">Documents</h1>
+        <p className="text-lg text-muted-foreground mt-2">
+          View and manage all quote-related documents
+        </p>
       </div>
 
-      <div className="rounded-md border">
+      <div className="bg-background/60 backdrop-blur-sm rounded-lg border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Type</TableHead>
               <TableHead>Vehicle</TableHead>
               <TableHead>Client</TableHead>
               <TableHead>Dealer</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {documents?.map((doc) => (
               <TableRow key={doc.id}>
-                <TableCell className="font-medium">{doc.type}</TableCell>
                 <TableCell>
-                  {doc.quotes?.car_details?.year} {doc.quotes?.car_details?.make} {doc.quotes?.car_details?.model}
-                </TableCell>
-                <TableCell>{doc.quotes?.user_id}</TableCell>
-                <TableCell>
-                  {doc.quotes?.dealer_quotes?.[0]?.dealer_profile?.dealer_name}
+                  {doc.quote?.car_details?.year} {doc.quote?.car_details?.make} {doc.quote?.car_details?.model}
                 </TableCell>
                 <TableCell>
-                  <Badge 
-                    variant={doc.status === 'pending' ? 'secondary' : 'default'}
-                  >
+                  <div>
+                    <div className="font-medium">{doc.quote?.user?.full_name}</div>
+                    <div className="text-sm text-muted-foreground">{doc.quote?.user?.email}</div>
+                  </div>
+                </TableCell>
+                <TableCell>{doc.quote?.dealer_quotes[0]?.dealer?.dealer_name || 'N/A'}</TableCell>
+                <TableCell className="capitalize">{doc.type}</TableCell>
+                <TableCell>
+                  <Badge className={getStatusColor(doc.status)} variant="outline">
                     {doc.status}
                   </Badge>
                 </TableCell>
+                <TableCell>{format(new Date(doc.created_at), 'MMM d, yyyy')}</TableCell>
                 <TableCell>
-                  {format(new Date(doc.created_at), 'PPp')}
-                </TableCell>
-                <TableCell className="text-right space-x-2">
                   <Button
                     variant="ghost"
-                    size="sm"
+                    size="icon"
                     onClick={() => handleDownload(doc.file_path)}
                   >
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => window.open(doc.file_path, '_blank')}
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    View
+                    <Download className="h-4 w-4" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -149,4 +156,4 @@ export function DocumentsManagement() {
       </div>
     </div>
   );
-}
+};

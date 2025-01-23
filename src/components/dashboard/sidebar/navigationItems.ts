@@ -1,4 +1,5 @@
 import {
+  LayoutDashboard,
   BookOpen,
   Mail,
   BarChart3,
@@ -17,7 +18,12 @@ import {
 export const getNavigationItems = (role: string, unreadCount: number) => {
   const adminItems = [
     {
-      title: "User Blog",
+      title: "Dashboard",
+      icon: LayoutDashboard,
+      href: "/dashboard"
+    },
+    {
+      title: "Blog",
       icon: BookOpen,
       href: "/dashboard/blog"
     },
