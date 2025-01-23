@@ -4,7 +4,7 @@ import * as Headless from '@headlessui/react'
 import { cn } from "@/lib/utils"
 import { LayoutGroup, motion } from 'framer-motion'
 import { default as React, useId } from 'react'
-import { TouchTarget } from './button'
+import { TouchTarget } from './touch-target'
 import { Link } from './link'
 
 export function Sidebar({ className, ...props }: React.ComponentPropsWithoutRef<'nav'>) {
