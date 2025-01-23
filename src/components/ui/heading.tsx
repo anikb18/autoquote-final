@@ -11,10 +11,10 @@ export function Heading({
   level = 1,
   ...props 
 }: HeadingProps) {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+  const Component = `h${level}` as keyof JSX.IntrinsicElements;
 
   return (
-    <Tag
+    <Component
       className={cn(
         "scroll-m-20 tracking-tight",
         {
@@ -30,6 +30,6 @@ export function Heading({
       {...props}
     >
       {children}
-    </Tag>
+    </Component>
   );
 }
