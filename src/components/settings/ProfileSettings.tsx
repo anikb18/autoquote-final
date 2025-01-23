@@ -1,5 +1,5 @@
 import { useUser } from "@/hooks/use-user";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useUserRole } from "@/hooks/use-user-role";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function ProfileSettings() {
   const { user } = useUser();
+  const { role } = useUserRole();
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -45,39 +46,130 @@ export function ProfileSettings() {
     }
   };
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Profile Settings</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleUpdateProfile} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              defaultValue={user?.user_metadata?.full_name}
-              required
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              defaultValue={user?.email}
-              required
-            />
-          </div>
+  const renderBuyerFields = () => (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="fullName">Full Name</Label>
+        <Input
+          id="fullName"
+          name="fullName"
+          defaultValue={user?.user_metadata?.full_name}
+          required
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          defaultValue={user?.email}
+          required
+        />
+      </div>
+    </>
+  );
 
-          <Button type="submit" disabled={isUpdating}>
-            {isUpdating ? "Updating..." : "Update Profile"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+  const renderDealerFields = () => (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="dealerName">Dealership Name</Label>
+        <Input
+          id="dealerName"
+          name="dealerName"
+          defaultValue={user?.user_metadata?.dealer_name}
+          required
+        />
+      </div>
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="firstName">First Name</Label>
+          <Input
+            id="firstName"
+            name="firstName"
+            defaultValue={user?.user_metadata?.first_name}
+            required
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input
+            id="lastName"
+            name="lastName"
+            defaultValue={user?.user_metadata?.last_name}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="businessEmail">Business Email</Label>
+        <Input
+          id="businessEmail"
+          name="businessEmail"
+          type="email"
+          defaultValue={user?.email}
+          required
+        />
+      </div>
+    </>
+  );
+
+  const renderAdminFields = () => (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="adminName">Admin Name</Label>
+        <Input
+          id="adminName"
+          name="adminName"
+          defaultValue={user?.user_metadata?.full_name}
+          required
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="adminEmail">Admin Email</Label>
+        <Input
+          id="adminEmail"
+          name="adminEmail"
+          type="email"
+          defaultValue={user?.email}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="department">Department</Label>
+        <Input
+          id="department"
+          name="department"
+          defaultValue={user?.user_metadata?.department}
+        />
+      </div>
+    </>
+  );
+
+  return (
+    <div className="space-y-6 p-6">
+      <div>
+        <h3 className="text-lg font-medium">Profile Settings</h3>
+        <p className="text-sm text-muted-foreground">
+          Manage your personal information and preferences
+        </p>
+      </div>
+
+      <form onSubmit={handleUpdateProfile} className="space-y-4">
+        {role === 'dealer' && renderDealerFields()}
+        {role === 'admin' && renderAdminFields()}
+        {(!role || role === 'user') && renderBuyerFields()}
+
+        <Button type="submit" disabled={isUpdating}>
+          {isUpdating ? "Updating..." : "Update Profile"}
+        </Button>
+      </form>
+    </div>
   );
 }
