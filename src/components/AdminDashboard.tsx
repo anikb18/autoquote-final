@@ -2,48 +2,41 @@ import { AdminMetricsCards } from "./dashboard/AdminMetricsCards";
 import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const AdminDashboard = () => {
   const { t } = useTranslation('admin');
 
   return (
     <div className="space-y-8 p-8">
-      <Card className="border-none shadow-none bg-transparent">
-        <CardHeader className="px-0">
-          <CardTitle className="text-4xl font-bold">
-            {t('dashboard.title')}
-          </CardTitle>
-          <CardDescription className="text-lg">
-            {t('dashboard.welcome')}
-          </CardDescription>
-          <CardDescription className="text-sm">
-            {t('dashboard.overview')}
-          </CardDescription>
-        </CardHeader>
-      </Card>
+      <div>
+        <h1 className="text-4xl font-bold">
+          {t('dashboard.title')}
+        </h1>
+        <p className="text-lg text-muted-foreground mt-2">
+          {t('dashboard.welcome')}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {t('dashboard.overview')}
+        </p>
+      </div>
 
       <div className="grid gap-8">
         <AdminMetricsCards />
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          <Card className="p-6">
-            <CardHeader className="px-0 pt-0">
-              <CardTitle>Sales Trends</CardTitle>
-              <CardDescription>Monthly sales performance analysis</CardDescription>
-            </CardHeader>
-            <CardContent className="px-0 pb-0">
-              <SalesTrendChart />
-            </CardContent>
-          </Card>
-          <Card className="p-6">
-            <CardHeader className="px-0 pt-0">
-              <CardTitle>Dealership Performance</CardTitle>
-              <CardDescription>Comparison of top performing dealerships</CardDescription>
-            </CardHeader>
-            <CardContent className="px-0 pb-0">
-              <DealershipComparison />
-            </CardContent>
-          </Card>
+          <div className="bg-background/60 backdrop-blur-sm p-6 rounded-lg border">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">Sales Trends</h2>
+              <p className="text-sm text-muted-foreground">Monthly sales performance analysis</p>
+            </div>
+            <SalesTrendChart />
+          </div>
+          <div className="bg-background/60 backdrop-blur-sm p-6 rounded-lg border">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">Dealership Performance</h2>
+              <p className="text-sm text-muted-foreground">Comparison of top performing dealerships</p>
+            </div>
+            <DealershipComparison />
+          </div>
         </div>
       </div>
     </div>
