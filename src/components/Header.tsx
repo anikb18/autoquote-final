@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
@@ -32,6 +32,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [session, setSession] = useState<any>(null);
   const isAuthenticated = !!session;
   const [profile, setProfile] = useState<any>(null);
@@ -39,8 +40,13 @@ const Header = () => {
   const { role } = useUserRole();
   const isMobile = useIsMobile();
   const { theme } = useTheme();
+  
+  const isDashboard = location.pathname.startsWith('/dashboard');
+  
+  if (isDashboard) {
+    return null;
+  }
 
-  // Fetch unread notifications for dealers
   const { data: unreadNotifications } = useQuery({
     queryKey: ['unread-notifications'],
     queryFn: async () => {

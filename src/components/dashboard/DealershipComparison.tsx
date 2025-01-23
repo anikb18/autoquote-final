@@ -1,100 +1,79 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { useTheme } from "@/hooks/use-theme";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface DealerPerformance {
-  dealer_name: string;
-  conversion_rate: number;
-  total_revenue: number;
-  response_time: number;
-  period: string;
+interface DealershipData {
+  name: string;
+  revenue: number;
 }
 
 export const DealershipComparison = () => {
-  const { data: dealerPerformance } = useQuery({
-    queryKey: ['dealer-performance-comparison'],
+  const { theme } = useTheme();
+
+  const { data: dealershipData } = useQuery<DealershipData[]>({
+    queryKey: ['dealership-comparison'],
     queryFn: async () => {
-      const { data: dealerProfiles } = await supabase
-        .from('dealer_profiles')
-        .select('id, dealer_name')
-        .eq('active', true);
+      const { data, error } = await supabase
+        .from('sales_transactions')
+        .select(`
+          dealer_id,
+          dealer_profiles!inner(
+            dealer_name
+          ),
+          selling_price
+        `)
+        .order('selling_price', { ascending: false })
+        .limit(5);
 
-      if (!dealerProfiles) return [];
+      if (error) throw error;
 
-      const performanceData: DealerPerformance[] = [];
-      
-      for (const dealer of dealerProfiles) {
-        const { data: analytics } = await supabase
-          .from('dealer_analytics')
-          .select('*')
-          .eq('dealer_id', dealer.id)
-          .order('period_start', { ascending: true })
-          .limit(6);
-
-        if (analytics) {
-          analytics.forEach(record => {
-            performanceData.push({
-              dealer_name: dealer.dealer_name,
-              conversion_rate: record.conversion_rate || 0,
-              total_revenue: record.total_revenue || 0,
-              response_time: record.quote_response_time ? 
-                typeof record.quote_response_time === 'string' ? 
-                  parseInt(record.quote_response_time.split(':')[1]) : 0 
-                : 0,
-              period: new Date(record.period_start).toLocaleDateString('en-US', { 
-                month: 'short',
-                year: 'numeric'
-              })
-            });
-          });
-        }
-      }
-
-      return performanceData;
+      return data.map(item => ({
+        name: item.dealer_profiles?.dealer_name || 'Unknown Dealer',
+        revenue: item.selling_price
+      }));
     }
   });
 
+  const chartColors = {
+    stroke: theme === 'dark' ? '#fff' : '#000',
+    grid: theme === 'dark' ? '#333' : '#eee',
+    bar: theme === 'dark' ? '#7c3aed' : '#4f46e5'
+  };
+
   return (
-    <Card className="col-span-4">
-      <CardHeader>
-        <CardTitle>Dealership Performance Comparison</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[400px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={dealerPerformance}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="period" />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
-              <Tooltip />
-              <Legend />
-              <Line
-                yAxisId="left"
-                type="monotone"
-                dataKey="conversion_rate"
-                name="Conversion Rate (%)"
-                stroke="#8884d8"
-              />
-              <Line
-                yAxisId="right"
-                type="monotone"
-                dataKey="total_revenue"
-                name="Revenue ($)"
-                stroke="#82ca9d"
-              />
-              <Line
-                yAxisId="left"
-                type="monotone"
-                dataKey="response_time"
-                name="Response Time (min)"
-                stroke="#ffc658"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="h-[300px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={dealershipData || []}>
+          <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+          <XAxis 
+            dataKey="name" 
+            stroke={chartColors.stroke}
+            style={{ fontSize: '12px' }}
+            tickFormatter={(value) => value.length > 15 ? `${value.substring(0, 15)}...` : value}
+          />
+          <YAxis
+            stroke={chartColors.stroke}
+            style={{ fontSize: '12px' }}
+            tickFormatter={(value) => `$${value.toLocaleString()}`}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: theme === 'dark' ? '#1f2937' : '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            }}
+            formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
+          />
+          <Bar 
+            dataKey="revenue" 
+            fill={chartColors.bar}
+            radius={[4, 4, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 };

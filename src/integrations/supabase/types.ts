@@ -306,7 +306,15 @@ export type Database = {
           total_revenue?: number | null
           value?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "dealer_analytics_dealer_profiles_fk"
+            columns: ["dealer_id"]
+            isOneToOne: false
+            referencedRelation: "dealer_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       dealer_bids: {
         Row: {
@@ -1814,6 +1822,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      get_admin_metrics: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["CompositeTypes"]["admin_metrics_result"]
+      }
       get_dealer_stats:
         | {
             Args: Record<PropertyKey, never>
@@ -2023,7 +2035,12 @@ export type Database = {
       user_role_type: "super_admin" | "admin" | "dealer" | "user"
     }
     CompositeTypes: {
-      [_ in never]: never
+      admin_metrics_result: {
+        total_sales: number | null
+        active_dealers: number | null
+        total_users: number | null
+        conversion_rate: number | null
+      }
     }
   }
 }

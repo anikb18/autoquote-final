@@ -1,23 +1,18 @@
 import { AdminMetricsCards } from "./dashboard/AdminMetricsCards";
 import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { DealershipComparison } from "./dashboard/DealershipComparison";
-import { BlogManagement } from "./dashboard/BlogManagement";
-import { NewsletterManagement } from "./dashboard/NewsletterManagement";
-import { UserManagement } from "./dashboard/UserManagement";
-import AdminSettings from "./settings/AdminSettings";
 import { useTranslation } from "react-i18next";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const AdminDashboard = () => {
   const { t } = useTranslation('admin');
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-bold text-foreground">
+    <div className="space-y-8 p-8">
+      <div>
+        <h1 className="text-4xl font-bold">
           {t('dashboard.title')}
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-lg text-muted-foreground mt-2">
           {t('dashboard.welcome')}
         </p>
         <p className="text-sm text-muted-foreground">
@@ -25,37 +20,25 @@ const AdminDashboard = () => {
         </p>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-background/50 backdrop-blur-sm border">
-          <TabsTrigger value="overview">{t('tabs.analytics')}</TabsTrigger>
-          <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
-          <TabsTrigger value="content">{t('tabs.blog')}</TabsTrigger>
-          <TabsTrigger value="marketing">{t('tabs.newsletter')}</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-8">
-          <AdminMetricsCards />
-          <SalesTrendChart />
-          <DealershipComparison />
-        </TabsContent>
-
-        <TabsContent value="users">
-          <UserManagement />
-        </TabsContent>
-
-        <TabsContent value="content">
-          <BlogManagement />
-        </TabsContent>
-
-        <TabsContent value="marketing">
-          <NewsletterManagement />
-        </TabsContent>
-
-        <TabsContent value="settings">
-          <AdminSettings />
-        </TabsContent>
-      </Tabs>
+      <div className="grid gap-8">
+        <AdminMetricsCards />
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+          <div className="bg-background/60 backdrop-blur-sm p-6 rounded-lg border">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">Sales Trends</h2>
+              <p className="text-sm text-muted-foreground">Monthly sales performance analysis</p>
+            </div>
+            <SalesTrendChart />
+          </div>
+          <div className="bg-background/60 backdrop-blur-sm p-6 rounded-lg border">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">Dealership Performance</h2>
+              <p className="text-sm text-muted-foreground">Comparison of top performing dealerships</p>
+            </div>
+            <DealershipComparison />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
