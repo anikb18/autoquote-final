@@ -15,6 +15,7 @@ import { BlogManagement } from "./components/dashboard/BlogManagement";
 import { NewsletterManagement } from "./components/dashboard/NewsletterManagement";
 import { UserManagement } from "./components/dashboard/UserManagement";
 import AdminSettings from "./components/settings/AdminSettings";
+import { DashboardLayout } from "./components/layouts/DashboardLayout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,70 +40,64 @@ function App() {
               <Route path="/dealer-signup" element={<DealerSignup />} />
               <Route path="/new-quote" element={<NewQuoteForm />} />
               <Route path="/quote-requests" element={<NewQuoteForm />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
+              
+              {/* Dashboard routes wrapped in DashboardLayout */}
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/users"
-                element={
-                  <ProtectedRoute>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/users" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <UserManagement />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/blog"
-                element={
-                  <ProtectedRoute>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/blog" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <BlogManagement />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/newsletter"
-                element={
-                  <ProtectedRoute>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/newsletter" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <NewsletterManagement />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/my-quotes"
-                element={
-                  <ProtectedRoute>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/my-quotes" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <BuyerDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/dealers"
-                element={
-                  <ProtectedRoute>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/dealers" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <BuyerDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/settings"
-                element={
-                  <ProtectedRoute>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/settings" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
                     <AdminSettings />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/subscription"
-                element={
-                  <ProtectedRoute requireSubscription={false}>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/subscription" element={
+                <ProtectedRoute requireSubscription={false}>
+                  <DashboardLayout>
                     <SubscriptionManagement />
-                  </ProtectedRoute>
-                }
-              />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
             </Routes>
           </main>
         </Router>
