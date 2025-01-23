@@ -18,22 +18,27 @@ import { SupportTicketResponse } from "./SupportTicketResponse";
 
 interface SupportTicketListProps {
   userOnly: boolean;
+  status?: string;
 }
 
-export function SupportTicketList({ userOnly }: SupportTicketListProps) {
+export function SupportTicketList({ userOnly, status }: SupportTicketListProps) {
   const { t } = useTranslation();
   const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
 
   const { data: tickets, isLoading } = useQuery({
-    queryKey: ['support-tickets', userOnly],
+    queryKey: ['support-tickets', userOnly, status],
     queryFn: async () => {
-      const query = supabase
+      let query = supabase
         .from('support_tickets')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (userOnly) {
-        query.eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+        query = query.eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+      }
+
+      if (status) {
+        query = query.eq('status', status);
       }
 
       const { data, error } = await query;
@@ -65,7 +70,7 @@ export function SupportTicketList({ userOnly }: SupportTicketListProps) {
                 <TableCell className="font-medium">{ticket.subject}</TableCell>
                 <TableCell>{ticket.category}</TableCell>
                 <TableCell>
-                  <Badge variant={ticket.status === 'open' ? 'default' : 'secondary'}>
+                  <Badge variant={ticket.status === 'open' ? 'destructive' : 'secondary'}>
                     {t(`support.status.${ticket.status}`)}
                   </Badge>
                 </TableCell>
