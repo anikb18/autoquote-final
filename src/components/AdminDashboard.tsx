@@ -7,58 +7,106 @@ import { UserManagement } from "./dashboard/UserManagement";
 import AdminSettings from "./settings/AdminSettings";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const AdminDashboard = () => {
   const { t } = useTranslation('admin');
 
   return (
     <div className="space-y-8 p-8">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-bold text-foreground">
-          {t('dashboard.title')}
-        </h1>
-        <p className="text-muted-foreground">
-          {t('dashboard.welcome')}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          {t('dashboard.overview')}
-        </p>
-      </div>
+      <Card className="border-none shadow-none bg-transparent">
+        <CardHeader className="px-0">
+          <CardTitle className="text-4xl font-bold">
+            {t('dashboard.title')}
+          </CardTitle>
+          <CardDescription className="text-lg">
+            {t('dashboard.welcome')}
+          </CardDescription>
+          <CardDescription className="text-sm">
+            {t('dashboard.overview')}
+          </CardDescription>
+        </CardHeader>
+      </Card>
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-background/50 backdrop-blur-sm border w-full justify-start">
-          <TabsTrigger value="overview">{t('tabs.analytics')}</TabsTrigger>
-          <TabsTrigger value="users">{t('tabs.users')}</TabsTrigger>
-          <TabsTrigger value="content">{t('tabs.blog')}</TabsTrigger>
-          <TabsTrigger value="marketing">{t('tabs.newsletter')}</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+        <TabsList className="bg-background/50 backdrop-blur-sm border w-full justify-start h-auto flex-wrap gap-2 p-2">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            {t('tabs.analytics')}
+          </TabsTrigger>
+          <TabsTrigger value="users" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            {t('tabs.users')}
+          </TabsTrigger>
+          <TabsTrigger value="content" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            {t('tabs.blog')}
+          </TabsTrigger>
+          <TabsTrigger value="marketing" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            {t('tabs.newsletter')}
+          </TabsTrigger>
+          <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            Settings
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-8">
-          <div className="grid gap-8">
-            <AdminMetricsCards />
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-              <SalesTrendChart />
-              <DealershipComparison />
+        <ScrollArea className="h-[calc(100vh-12rem)]">
+          <TabsContent value="overview" className="space-y-8 min-h-[calc(100vh-16rem)]">
+            <div className="grid gap-8">
+              <AdminMetricsCards />
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <Card className="p-6">
+                  <CardHeader className="px-0 pt-0">
+                    <CardTitle>Sales Trends</CardTitle>
+                    <CardDescription>Monthly sales performance analysis</CardDescription>
+                  </CardHeader>
+                  <CardContent className="px-0 pb-0">
+                    <SalesTrendChart />
+                  </CardContent>
+                </Card>
+                <Card className="p-6">
+                  <CardHeader className="px-0 pt-0">
+                    <CardTitle>Dealership Performance</CardTitle>
+                    <CardDescription>Comparison of top performing dealerships</CardDescription>
+                  </CardHeader>
+                  <CardContent className="px-0 pb-0">
+                    <DealershipComparison />
+                  </CardContent>
+                </Card>
+              </div>
             </div>
-          </div>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="users">
-          <UserManagement />
-        </TabsContent>
+          <TabsContent value="users" className="min-h-[calc(100vh-16rem)]">
+            <Card className="border-none shadow-none bg-transparent">
+              <CardContent className="p-0">
+                <UserManagement />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="content">
-          <BlogManagement />
-        </TabsContent>
+          <TabsContent value="content" className="min-h-[calc(100vh-16rem)]">
+            <Card className="border-none shadow-none bg-transparent">
+              <CardContent className="p-0">
+                <BlogManagement />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="marketing">
-          <NewsletterManagement />
-        </TabsContent>
+          <TabsContent value="marketing" className="min-h-[calc(100vh-16rem)]">
+            <Card className="border-none shadow-none bg-transparent">
+              <CardContent className="p-0">
+                <NewsletterManagement />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="settings">
-          <AdminSettings />
-        </TabsContent>
+          <TabsContent value="settings" className="min-h-[calc(100vh-16rem)]">
+            <Card className="border-none shadow-none bg-transparent">
+              <CardContent className="p-0">
+                <AdminSettings />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </ScrollArea>
       </Tabs>
     </div>
   );
