@@ -16,13 +16,24 @@ import { MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { SupportTicketResponse } from "./SupportTicketResponse";
 
-interface SupportTicketListProps {
-  userOnly: boolean;
-  status?: string;
-  tickets: any[];
+interface Ticket {
+  id: string;
+  subject: string;
+  category: string;
+  status: string;
+  created_at: string;
+  message: string;
+  user_id: string;
+  updated_at: string;
 }
 
-export function SupportTicketList({ userOnly, status, tickets }: SupportTicketListProps) {
+interface SupportTicketListProps {
+  userOnly?: boolean;
+  status?: string;
+  tickets: Ticket[];
+}
+
+const SupportTicketList = ({ userOnly = false, status, tickets }: SupportTicketListProps) => {
   const { t } = useTranslation();
   const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
 
@@ -76,4 +87,6 @@ export function SupportTicketList({ userOnly, status, tickets }: SupportTicketLi
       )}
     </div>
   );
-}
+};
+
+export default SupportTicketList;
