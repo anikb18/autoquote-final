@@ -43,18 +43,8 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
           leaveFrom="translate-x-0"
           leaveTo="-translate-x-full"
         >
-          <Headless.DialogPanel className="fixed inset-y-0 w-full max-w-80 p-2 transition">
-            <div className="flex h-full flex-col rounded-lg bg-white shadow-sm ring-1 ring-zinc-950/5 dark:bg-zinc-900 dark:ring-white/10">
-              <div className="-mb-3 px-4 pt-3">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={close}
-                  className="h-10 w-10"
-                >
-                  <CloseMenuIcon />
-                </Button>
-              </div>
+          <Headless.DialogPanel className="fixed inset-y-0 w-full max-w-xs">
+            <div className="flex h-full flex-col overflow-y-auto bg-white px-6 py-6 shadow-xl">
               {children}
             </div>
           </Headless.DialogPanel>
@@ -74,37 +64,45 @@ export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutPr
   const [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="relative isolate flex min-h-svh w-full bg-white max-lg:flex-col lg:bg-zinc-100 dark:bg-zinc-900 dark:lg:bg-zinc-950">
-      {/* Sidebar on desktop */}
-      <div className="fixed inset-y-0 left-0 w-64 max-lg:hidden">{sidebar}</div>
+    <div className="flex min-h-screen w-full bg-background">
+      {/* Static sidebar for desktop */}
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
+          {sidebar}
+        </div>
+      </div>
 
-      {/* Sidebar on mobile */}
+      {/* Mobile sidebar */}
       <MobileSidebar open={showSidebar} close={() => setShowSidebar(false)}>
         {sidebar}
       </MobileSidebar>
 
-      {/* Navbar on mobile */}
-      <header className="flex items-center px-4 lg:hidden">
-        <div className="py-2.5">
+      {/* Main content area */}
+      <div className="flex flex-1 flex-col lg:pl-72">
+        {/* Mobile navbar */}
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <Button
             variant="ghost"
-            size="icon"
             onClick={() => setShowSidebar(true)}
-            className="h-10 w-10"
-            aria-label="Open navigation"
+            className="-m-2.5 p-2.5 lg:hidden"
           >
+            <span className="sr-only">Open sidebar</span>
             <OpenMenuIcon />
           </Button>
-        </div>
-        <div className="min-w-0 flex-1">{navbar}</div>
-      </header>
 
-      {/* Content */}
-      <main className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pl-64 lg:pr-2 lg:pt-2">
-        <div className="grow p-6 lg:rounded-lg lg:bg-white lg:p-10 lg:shadow-sm lg:ring-1 lg:ring-zinc-950/5 dark:lg:bg-zinc-900 dark:lg:ring-white/10">
-          <div className="mx-auto max-w-6xl">{children}</div>
+          {/* Navbar content */}
+          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+            {navbar}
+          </div>
         </div>
-      </main>
+
+        {/* Main content */}
+        <main className="flex-1 p-4 lg:p-8">
+          <div className="mx-auto w-full max-w-[1600px]">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }
