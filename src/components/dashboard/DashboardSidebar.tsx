@@ -33,7 +33,9 @@ export function DashboardSidebar() {
   const { t, i18n } = useTranslation('admin');
   const location = useLocation();
   const { theme, setTheme } = useTheme();
-  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(role);
+  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
+    role === "super_admin" ? "admin" : role
+  );
 
   const adminItems = [
     {
@@ -98,7 +100,7 @@ export function DashboardSidebar() {
   return (
     <div className="flex grow flex-col gap-y-5">
       {/* Header with Logo */}
-      <div className="flex h-16 shrink-0 items-center border-b border-gray-200 px-6">
+      <div className="flex h-16 shrink-0 items-center border-b px-6">
         <img
           className="h-8 w-auto"
           src="/logo/dark.svg"
@@ -160,7 +162,7 @@ export function DashboardSidebar() {
       </nav>
 
       {/* Footer with Settings */}
-      <div className="flex flex-col gap-y-2 px-6 pb-4 border-t border-gray-200 pt-4">
+      <div className="flex flex-col gap-y-2 px-6 pb-4 border-t pt-4">
         {/* Theme Switcher */}
         <Button
           variant="ghost"
@@ -192,7 +194,7 @@ export function DashboardSidebar() {
         </Select>
 
         {/* View Mode Switcher (for admin only) */}
-        {role === 'admin' && (
+        {(role === 'admin' || role === 'super_admin') && (
           <Select
             value={viewMode}
             onValueChange={(value: "admin" | "dealer" | "user") => setViewMode(value)}
@@ -212,11 +214,11 @@ export function DashboardSidebar() {
         <div className="flex items-center gap-x-3 py-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.user_metadata?.avatar_url} />
-            <AvatarFallback>{firstName.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-semibold text-gray-900 truncate">
-              {firstName}
+              {user?.email?.split('@')[0]}
             </span>
             <span className="text-xs text-gray-500 truncate">
               {user?.email}
