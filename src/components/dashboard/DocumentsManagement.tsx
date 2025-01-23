@@ -28,6 +28,7 @@ interface Document {
   created_at: string;
   quote: {
     car_details: CarDetails;
+    user_id: string;
     user: {
       full_name: string | null;
       email: string | null;
@@ -50,9 +51,15 @@ export const DocumentsManagement = () => {
           *,
           quote:quotes (
             car_details,
-            user:profiles (full_name, email),
+            user_id,
+            user:profiles!quotes_user_id_fkey (
+              full_name,
+              email
+            ),
             dealer_quotes (
-              dealer:dealer_profiles (dealer_name)
+              dealer:dealer_profiles (
+                dealer_name
+              )
             )
           )
         `)
@@ -75,19 +82,6 @@ export const DocumentsManagement = () => {
             : 'N/A'
         };
 
-        // Ensure proper typing for user data
-        const user = doc.quote?.user ? {
-          full_name: doc.quote.user.full_name || null,
-          email: doc.quote.user.email || null
-        } : null;
-
-        // Ensure proper typing for dealer quotes
-        const dealer_quotes = (doc.quote?.dealer_quotes || []).map(dq => ({
-          dealer: dq.dealer ? {
-            dealer_name: dq.dealer.dealer_name || null
-          } : null
-        }));
-
         return {
           id: doc.id,
           quote_id: doc.quote_id,
@@ -98,8 +92,8 @@ export const DocumentsManagement = () => {
           quote: doc.quote ? {
             ...doc.quote,
             car_details: carDetails,
-            user,
-            dealer_quotes
+            user: doc.quote.user,
+            dealer_quotes: doc.quote.dealer_quotes || []
           } : null
         } as Document;
       });
