@@ -112,25 +112,25 @@ const BlogList = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center pb-6 border-b border-primary/20">
+      <div className="flex justify-between items-center pb-6 border-b border-[#6E59A5]">
         <div>
-          <h1 className="text-4xl font-bold text-primary mb-3">Blog Posts</h1>
-          <p className="text-muted-foreground text-lg">Manage your blog content and create new posts</p>
+          <h1 className="text-4xl font-bold text-[#D6BCFA] mb-3">Blog Posts</h1>
+          <p className="text-[#8E9196] text-lg">Manage your blog content and create new posts</p>
         </div>
         
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
             <Button 
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-white shadow-lg hover:shadow-xl transition-all"
+              className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white shadow-lg hover:shadow-xl transition-all"
             >
               <PlusCircle className="mr-2 h-5 w-5" />
               Create New Post
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl bg-background border-border">
+          <DialogContent className="max-w-4xl bg-[#1A1F2C] border-[#6E59A5]">
             <DialogHeader>
-              <DialogTitle className="text-primary text-2xl">Create New Blog Post</DialogTitle>
+              <DialogTitle className="text-[#D6BCFA] text-2xl">Create New Blog Post</DialogTitle>
             </DialogHeader>
             <BlogEditor onSave={handleCreatePost} />
           </DialogContent>
@@ -141,7 +141,7 @@ const BlogList = () => {
         {translatedPosts?.map((post) => (
           <Card 
             key={post.id} 
-            className="relative bg-background border-border hover:border-accent transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="relative bg-[#1A1F2C] border-[#6E59A5] hover:border-[#9b87f5] transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             <CardHeader className="p-6">
               <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
@@ -151,18 +151,18 @@ const BlogList = () => {
                       <img 
                         src={post.featured_image} 
                         alt={post.image_alt || post.title}
-                        className="w-32 h-32 object-cover rounded-lg border border-border shadow-md"
+                        className="w-32 h-32 object-cover rounded-lg border border-[#6E59A5] shadow-md"
                       />
                     </div>
                   )}
                   <div className="space-y-2">
                     <CardTitle 
-                      className="text-2xl text-primary hover:text-accent cursor-pointer transition-colors" 
+                      className="text-2xl text-[#D6BCFA] hover:text-[#9b87f5] cursor-pointer transition-colors" 
                       onClick={() => navigate(`/blog/${post.id}`)}
                     >
                       {post.title}
                     </CardTitle>
-                    <CardDescription className="text-muted-foreground flex items-center gap-2">
+                    <CardDescription className="text-[#8E9196] flex items-center gap-2">
                       <span className={`inline-flex px-2 py-1 rounded-full text-xs ${
                         post.status === 'published' ? 'bg-green-500/10 text-green-400' : 'bg-yellow-500/10 text-yellow-400'
                       }`}>
@@ -172,7 +172,7 @@ const BlogList = () => {
                       <span>{new Date(post.created_at).toLocaleDateString()}</span>
                     </CardDescription>
                     <CardContent className="p-0">
-                      <p className="text-muted-foreground line-clamp-2 mt-2">{post.excerpt}</p>
+                      <p className="text-[#C8C8C9] line-clamp-2 mt-2">{post.excerpt}</p>
                     </CardContent>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ const BlogList = () => {
                     variant="outline" 
                     size="icon"
                     onClick={() => navigate(`/blog/${post.id}/edit`)}
-                    className="border-border hover:border-accent text-primary h-10 w-10"
+                    className="border-[#6E59A5] hover:border-[#9b87f5] text-[#D6BCFA] h-10 w-10"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -189,7 +189,7 @@ const BlogList = () => {
                     variant="destructive" 
                     size="icon"
                     onClick={() => handleDeletePost(post.id)}
-                    className="h-10 w-10"
+                    className="bg-red-500 hover:bg-red-600 h-10 w-10"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

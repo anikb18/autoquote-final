@@ -11,10 +11,7 @@ import {
   Car,
   MessageSquare,
   HelpCircle,
-  History,
-  Moon,
-  Sun,
-  Globe
+  History
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -24,14 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "@/hooks/use-theme";
 
 export function DashboardSidebar() {
   const { role, user } = useUserRole();
-  const { t, i18n } = useTranslation('admin');
+  const { t } = useTranslation('admin');
   const location = useLocation();
-  const { theme, setTheme } = useTheme();
 
   const adminItems = [
     {
@@ -96,10 +90,10 @@ export function DashboardSidebar() {
   return (
     <div className="flex grow flex-col gap-y-5">
       {/* Header with Logo */}
-      <div className="flex h-16 shrink-0 items-center border-b border-border px-6">
+      <div className="flex h-16 shrink-0 items-center border-b border-gray-200 px-6">
         <img
           className="h-8 w-auto"
-          src={theme === 'dark' ? "/logo/light.svg" : "/logo/dark.svg"}
+          src="/logo/dark.svg"
           alt="AutoQuote24"
         />
       </div>
@@ -116,8 +110,8 @@ export function DashboardSidebar() {
                     className={cn(
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6',
                       location.pathname === item.href
-                        ? 'bg-secondary/10 text-primary font-semibold'
-                        : 'text-muted-foreground hover:text-primary hover:bg-secondary/10'
+                        ? 'bg-gray-50 text-primary font-semibold'
+                        : 'text-gray-700 hover:text-primary hover:bg-gray-50'
                     )}
                   >
                     <item.icon className="h-6 w-6 shrink-0" />
@@ -128,48 +122,16 @@ export function DashboardSidebar() {
             </ul>
           </li>
 
-          {/* Theme and Language Switchers */}
-          <li className="space-y-4">
-            <div className="flex items-center justify-between px-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="rounded-full"
-              >
-                {theme === 'dark' ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Moon className="h-5 w-5" />
-                )}
-              </Button>
-              
-              <Select
-                value={i18n.language}
-                onValueChange={(value) => i18n.changeLanguage(value)}
-              >
-                <SelectTrigger className="w-[100px]">
-                  <Globe className="h-4 w-4 mr-2" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en-US">English</SelectItem>
-                  <SelectItem value="fr-CA">Français</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </li>
-
           {/* Support Section */}
           <li>
-            <div className="text-xs font-semibold leading-6 text-muted-foreground">
+            <div className="text-xs font-semibold leading-6 text-gray-400">
               Support
             </div>
             <ul role="list" className="mt-2 space-y-1">
               <li>
                 <Link
                   to="/support"
-                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-muted-foreground hover:text-primary hover:bg-secondary/10"
+                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-700 hover:text-primary hover:bg-gray-50"
                 >
                   <HelpCircle className="h-6 w-6 shrink-0" />
                   Help Center
@@ -178,7 +140,7 @@ export function DashboardSidebar() {
               <li>
                 <Link
                   to="/changelog"
-                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-muted-foreground hover:text-primary hover:bg-secondary/10"
+                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-700 hover:text-primary hover:bg-gray-50"
                 >
                   <History className="h-6 w-6 shrink-0" />
                   Changelog
