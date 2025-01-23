@@ -80,7 +80,8 @@ export const BuyerActiveQuotes = () => {
   return (
     <div className="space-y-4">
       {quotes.map((quote) => {
-        const carDetails = quote.car_details as CarDetails;
+        // First cast to unknown, then to CarDetails to satisfy TypeScript
+        const carDetails = (quote.car_details as unknown) as CarDetails;
         if (!carDetails) return null;
         
         return (
