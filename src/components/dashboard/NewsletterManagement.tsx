@@ -1,13 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { PlusCircle, Send, Sparkles } from "lucide-react";
+import { PlusCircle, Send, Sparkles, Mail, Users, FileText } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -113,92 +112,88 @@ export const NewsletterManagement = () => {
   };
 
   return (
-    <Tabs defaultValue="create" className="space-y-6">
-      <TabsList className="bg-background/50 backdrop-blur-sm border">
-        <TabsTrigger value="create">Create Newsletter</TabsTrigger>
-        <TabsTrigger value="drafts">Drafts</TabsTrigger>
-        <TabsTrigger value="subscribers">Subscribers</TabsTrigger>
-      </TabsList>
+    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Newsletter Management</h2>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="ml-auto hidden h-8 lg:flex"
+            onClick={() => setIsTemplateModalOpen(true)}
+          >
+            <Sparkles className="mr-2 h-4 w-4" />
+            Use Template
+          </Button>
+        </div>
+      </div>
+      
+      <Tabs defaultValue="create" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="create" className="flex items-center">
+            <FileText className="mr-2 h-4 w-4" />
+            Create
+          </TabsTrigger>
+          <TabsTrigger value="drafts" className="flex items-center">
+            <Mail className="mr-2 h-4 w-4" />
+            Drafts
+          </TabsTrigger>
+          <TabsTrigger value="subscribers" className="flex items-center">
+            <Users className="mr-2 h-4 w-4" />
+            Subscribers
+          </TabsTrigger>
+        </TabsList>
 
-      <TabsContent value="create" className="space-y-4">
-        <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg">
-          <CardHeader>
-            <CardTitle>Create New Newsletter</CardTitle>
-            <CardDescription>
-              Compose a new newsletter to send to your subscribers
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <TabsContent value="create" className="space-y-4">
+          <div className="grid gap-4">
             <div className="space-y-2">
               <div className="flex gap-2 items-center">
                 <Input
                   placeholder="Newsletter Title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  className="max-w-[400px]"
                 />
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => setIsTemplateModalOpen(true)}
-                        className="relative"
-                      >
-                        <Sparkles className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Generate email content with AI templates</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
               </div>
             </div>
-            <Editor
-              apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
-              init={{
-                height: 500,
-                menubar: true,
-                plugins: [
-                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                  'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                  'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                ],
-                toolbar: 'undo redo | blocks | ' +
-                  'bold italic forecolor | alignleft aligncenter ' +
-                  'alignright alignjustify | bullist numlist outdent indent | ' +
-                  'removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-              }}
-              value={content}
-              onEditorChange={setContent}
-            />
+            <div className="border rounded-lg p-4">
+              <Editor
+                apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+                init={{
+                  height: 500,
+                  menubar: true,
+                  plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                  ],
+                  toolbar: 'undo redo | blocks | ' +
+                    'bold italic forecolor | alignleft aligncenter ' +
+                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                    'removeformat | help',
+                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                }}
+                value={content}
+                onEditorChange={setContent}
+              />
+            </div>
             <div className="flex justify-end gap-2">
               <Button onClick={handleCreateNewsletter}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Save as Draft
               </Button>
             </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
+          </div>
+        </TabsContent>
 
-      <TabsContent value="drafts" className="space-y-4">
-        <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg">
-          <CardHeader>
-            <CardTitle>Newsletter Drafts</CardTitle>
-            <CardDescription>
-              Manage your newsletter drafts and scheduled sends
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[400px] pr-4">
-              <div className="space-y-2">
+        <TabsContent value="drafts" className="space-y-4">
+          <div className="rounded-lg border">
+            <ScrollArea className="h-[600px]">
+              <div className="p-4 space-y-2">
                 {newsletters?.map((newsletter) => (
                   <div 
                     key={newsletter.id} 
-                    className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                    className="flex justify-between items-center p-4 bg-white hover:bg-gray-50 rounded-lg border transition-colors"
                   >
                     <div>
                       <h3 className="font-medium">{newsletter.title}</h3>
@@ -217,25 +212,17 @@ export const NewsletterManagement = () => {
                 ))}
               </div>
             </ScrollArea>
-          </CardContent>
-        </Card>
-      </TabsContent>
+          </div>
+        </TabsContent>
 
-      <TabsContent value="subscribers" className="space-y-4">
-        <Card className="bg-white/50 backdrop-blur-sm border border-gray-200 shadow-lg">
-          <CardHeader>
-            <CardTitle>Newsletter Subscribers</CardTitle>
-            <CardDescription>
-              Total Subscribers: {subscribers?.length || 0}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[400px] pr-4">
-              <div className="space-y-2">
+        <TabsContent value="subscribers" className="space-y-4">
+          <div className="rounded-lg border">
+            <ScrollArea className="h-[600px]">
+              <div className="p-4 space-y-2">
                 {subscribers?.map((subscriber) => (
                   <div 
                     key={subscriber.id} 
-                    className="flex justify-between items-center p-4 bg-white/30 backdrop-blur-sm rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                    className="flex justify-between items-center p-4 bg-white hover:bg-gray-50 rounded-lg border transition-colors"
                   >
                     <span>{subscriber.email}</span>
                     <span className="text-sm text-gray-500">
@@ -245,15 +232,15 @@ export const NewsletterManagement = () => {
                 ))}
               </div>
             </ScrollArea>
-          </CardContent>
-        </Card>
-      </TabsContent>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       <EmailTemplateModal
         open={isTemplateModalOpen}
         onOpenChange={setIsTemplateModalOpen}
         onContentGenerated={setContent}
       />
-    </Tabs>
+    </div>
   );
 };
