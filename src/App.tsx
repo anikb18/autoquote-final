@@ -19,6 +19,7 @@ import { DashboardLayout } from "./components/layouts/DashboardLayout";
 import { DealershipOverview } from "./components/dealership/DealershipOverview";
 import { ActiveQuotes } from "./components/dealership/ActiveQuotes";
 import { DealershipSettings } from "./components/dealership/DealershipSettings";
+import Support from "./pages/Support";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -121,6 +122,14 @@ function App() {
                 <ProtectedRoute requireSubscription={false}>
                   <DashboardLayout>
                     <SubscriptionManagement />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/support" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Support />
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
