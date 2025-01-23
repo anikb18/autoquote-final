@@ -14,10 +14,21 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Close sidebar on route change in mobile view
   useEffect(() => {
-    if (window.innerWidth < 1024) { // 1024px is the 'lg' breakpoint in Tailwind
-      setSidebarOpen(false);
-    }
+    setSidebarOpen(false);
   }, [location.pathname]);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar');
+      if (sidebar && !sidebar.contains(event.target as Node) && window.innerWidth < 1024) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="min-h-screen flex w-full bg-background">
@@ -34,9 +45,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="fixed inset-0 z-50">
             <div 
               className="fixed inset-0 bg-gray-900/80" 
-              onClick={() => setSidebarOpen(false)} 
+              onClick={() => setSidebarOpen(false)}
             />
-            <div className="fixed inset-y-0 left-0 w-full max-w-xs">
+            <div id="mobile-sidebar" className="fixed inset-y-0 left-0 w-full max-w-xs">
               <div className="flex h-full flex-col overflow-y-auto bg-white shadow-xl">
                 <DashboardSidebar />
               </div>
