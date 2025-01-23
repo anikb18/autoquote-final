@@ -22,7 +22,7 @@ export const RichTextEditor = ({ value, onChange, className }: RichTextEditorPro
           plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
             'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount',
             'quickbars'
           ],
           toolbar1: 'styles | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright | bullist numlist | link image media blockquote code',
@@ -45,18 +45,15 @@ export const RichTextEditor = ({ value, onChange, className }: RichTextEditorPro
             .dark-mode a:hover { color: #93c5fd; }
           `,
           setup: (editor) => {
-            // Add custom buttons or functionality here if needed
             editor.ui.registry.addButton('customimage', {
               icon: 'image',
               tooltip: 'Insert image',
               onAction: () => {
-                // Custom image upload handling
                 editor.execCommand('mceImage');
               }
             });
           },
           images_upload_handler: async (blobInfo) => {
-            // Implement image upload logic here
             return new Promise((resolve, reject) => {
               const reader = new FileReader();
               reader.readAsDataURL(blobInfo.blob());
@@ -70,13 +67,6 @@ export const RichTextEditor = ({ value, onChange, className }: RichTextEditorPro
           toolbar_sticky_offset: 0,
           quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
           quickbars_insert_toolbar: 'quickimage quicktable',
-          contextmenu: "link image imagetools table spellchecker",
-          powerpaste_word_import: 'clean',
-          powerpaste_html_import: 'clean',
-          content_css: [
-            '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-            '//www.tiny.cloud/css/codepen.min.css'
-          ],
           link_list: [
             { title: 'My page 1', value: 'https://www.tiny.cloud' },
             { title: 'My page 2', value: 'http://www.moxiecode.com' }
@@ -98,12 +88,9 @@ export const RichTextEditor = ({ value, onChange, className }: RichTextEditorPro
           template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
           template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
           image_caption: true,
-          quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-          noneditable_class: 'mceNonEditable',
-          toolbar_mode: 'sliding',
           spellchecker_ignore_list: ['Ephox', 'Moxiecode'],
           tinycomments_mode: 'embedded',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+          noneditable_class: 'mceNonEditable'
         }}
       />
     </div>
