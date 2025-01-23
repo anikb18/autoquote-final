@@ -7,6 +7,7 @@ import { MessageSquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CountdownTimer } from "@/components/ui/countdown-timer";
+import { CarDetails } from "@/types/quotes";
 
 export const BuyerActiveQuotes = () => {
   const { toast } = useToast();
@@ -78,58 +79,61 @@ export const BuyerActiveQuotes = () => {
 
   return (
     <div className="space-y-4">
-      {quotes.map((quote) => (
-        <Card key={quote.id} className="p-4">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-semibold">
-                {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Status: {quote.status}
-              </p>
-              <CountdownTimer 
-                endDate={getExpirationTime(quote.created_at)}
-                onExpire={() => {
-                  toast({
-                    title: t("quotes.expiration.title"),
-                    description: t("quotes.expiration.description"),
-                    variant: "destructive",
-                  });
-                }}
-              />
-            </div>
-            <Button 
-              variant="secondary"
-              size="sm"
-              onClick={() => handleQuoteResponse(quote.id)}
-            >
-              <MessageSquarePlus className="h-4 w-4 mr-2" />
-              {quote.status === 'pending' 
-                ? t("dealer.quotes.actions.respond")
-                : t("dealer.quotes.actions.view")
-              }
-            </Button>
-          </div>
-          {quote.dealer_quotes && quote.dealer_quotes.length > 0 && (
-            <div className="mt-4 border-t pt-4">
-              <p className="text-sm font-medium mb-2">Dealer Responses:</p>
-              <div className="space-y-2">
-                {quote.dealer_quotes.map((dealerQuote) => (
-                  <div key={dealerQuote.id} className="flex justify-between items-center">
-                    <span className="text-sm">
-                      {dealerQuote.dealer_profiles?.dealer_name}
-                    </span>
-                    <span className="text-sm text-muted-foreground">
-                      {dealerQuote.status}
-                    </span>
-                  </div>
-                ))}
+      {quotes.map((quote) => {
+        const carDetails = quote.car_details as CarDetails;
+        return (
+          <Card key={quote.id} className="p-4">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-semibold">
+                  {carDetails.year} {carDetails.make} {carDetails.model}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Status: {quote.status}
+                </p>
+                <CountdownTimer 
+                  endDate={getExpirationTime(quote.created_at)}
+                  onExpire={() => {
+                    toast({
+                      title: t("quotes.expiration.title"),
+                      description: t("quotes.expiration.description"),
+                      variant: "destructive",
+                    });
+                  }}
+                />
               </div>
+              <Button 
+                variant="secondary"
+                size="sm"
+                onClick={() => handleQuoteResponse(quote.id)}
+              >
+                <MessageSquarePlus className="h-4 w-4 mr-2" />
+                {quote.status === 'pending' 
+                  ? t("dealer.quotes.actions.respond")
+                  : t("dealer.quotes.actions.view")
+                }
+              </Button>
             </div>
-          )}
-        </Card>
-      ))}
+            {quote.dealer_quotes && quote.dealer_quotes.length > 0 && (
+              <div className="mt-4 border-t pt-4">
+                <p className="text-sm font-medium mb-2">Dealer Responses:</p>
+                <div className="space-y-2">
+                  {quote.dealer_quotes.map((dealerQuote) => (
+                    <div key={dealerQuote.id} className="flex justify-between items-center">
+                      <span className="text-sm">
+                        {dealerQuote.dealer_profiles?.dealer_name}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {dealerQuote.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </Card>
+        );
+      })}
     </div>
   );
 };
