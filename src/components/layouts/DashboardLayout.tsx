@@ -54,12 +54,11 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
 }
 
 interface DashboardLayoutProps {
-  navbar: React.ReactNode
   sidebar: React.ReactNode
   children: React.ReactNode
 }
 
-export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutProps) {
+export function DashboardLayout({ sidebar, children }: DashboardLayoutProps) {
   const [showSidebar, setShowSidebar] = useState(false)
 
   return (
@@ -78,24 +77,16 @@ export function DashboardLayout({ navbar, sidebar, children }: DashboardLayoutPr
 
       {/* Main content area */}
       <div className="flex flex-1 flex-col lg:pl-72">
-        {/* Navbar with mobile menu button */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-          <Button
-            variant="ghost"
-            onClick={() => setShowSidebar(true)}
-            className="lg:hidden"
-            size="icon"
-          >
-            <span className="sr-only">Open sidebar</span>
-            <OpenMenuIcon />
-          </Button>
+        <Button
+          variant="ghost"
+          onClick={() => setShowSidebar(true)}
+          className="fixed top-4 left-4 lg:hidden"
+          size="icon"
+        >
+          <span className="sr-only">Open sidebar</span>
+          <OpenMenuIcon />
+        </Button>
 
-          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-            {navbar}
-          </div>
-        </div>
-
-        {/* Main content */}
         <main className="flex-1 p-4 lg:p-8">
           <div className="mx-auto w-full max-w-[1600px]">
             {children}
