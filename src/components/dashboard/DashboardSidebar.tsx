@@ -1,23 +1,18 @@
 import { useUserRole } from "@/hooks/use-user-role";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import {
-  Sidebar,
-  SidebarSection,
-  SidebarHeading,
-  SidebarItem,
-} from "@/components/ui/sidebar";
-import {
-  LayoutDashboard,
+  Home,
   Users,
   FileText,
   Mail,
   Settings,
-  Building2,
+  Car,
   MessageSquare,
-  Car
+  HelpCircle,
+  History
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
@@ -26,8 +21,8 @@ export function DashboardSidebar() {
 
   const adminItems = [
     {
-      title: t('tabs.analytics'),
-      icon: LayoutDashboard,
+      title: t('tabs.overview'),
+      icon: Home,
       href: "/dashboard"
     },
     {
@@ -50,7 +45,7 @@ export function DashboardSidebar() {
   const dealerItems = [
     {
       title: "Overview",
-      icon: LayoutDashboard,
+      icon: Home,
       href: "/dashboard"
     },
     {
@@ -60,7 +55,7 @@ export function DashboardSidebar() {
     },
     {
       title: "Dealership",
-      icon: Building2,
+      icon: Car,
       href: "/dashboard/dealership"
     }
   ];
@@ -73,13 +68,8 @@ export function DashboardSidebar() {
     },
     {
       title: "Find Dealers",
-      icon: Building2,
-      href: "/dashboard/dealers"
-    },
-    {
-      title: "New Quote",
       icon: Car,
-      href: "/new-quote"
+      href: "/dashboard/dealers"
     }
   ];
 
@@ -88,34 +78,80 @@ export function DashboardSidebar() {
                 buyerItems;
 
   return (
-    <SidebarSection>
-      <SidebarHeading>Navigation</SidebarHeading>
-      {items.map((item) => (
-        <SidebarItem key={item.href}>
-          <Link
-            to={item.href}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100",
-              location.pathname === item.href && "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
-            )}
-          >
-            <item.icon className="h-4 w-4" />
-            {item.title}
-          </Link>
-        </SidebarItem>
-      ))}
-      <SidebarItem>
-        <Link
-          to="/dashboard/settings"
-          className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100",
-            location.pathname === "/dashboard/settings" && "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
-          )}
-        >
-          <Settings className="h-4 w-4" />
-          Settings
-        </Link>
-      </SidebarItem>
-    </SidebarSection>
+    <div className="flex grow flex-col gap-y-8">
+      <div className="flex h-16 shrink-0 items-center px-6">
+        <img
+          className="h-8 w-auto"
+          src={"/logo/dark.png"}
+          alt="AutoQuote24"
+        />
+      </div>
+      
+      <nav className="flex flex-1 flex-col">
+        <ul role="list" className="flex flex-1 flex-col gap-y-7">
+          <li>
+            <ul role="list" className="space-y-1">
+              {items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    to={item.href}
+                    className={cn(
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6',
+                      location.pathname === item.href
+                        ? 'bg-gray-50 text-primary font-semibold'
+                        : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                    )}
+                  >
+                    <item.icon className="h-6 w-6 shrink-0" />
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </li>
+
+          <li className="mt-auto">
+            <Link
+              to="/dashboard/settings"
+              className={cn(
+                'group flex gap-x-3 rounded-md p-2 text-sm leading-6',
+                location.pathname === '/dashboard/settings'
+                  ? 'bg-gray-50 text-primary font-semibold'
+                  : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+              )}
+            >
+              <Settings className="h-6 w-6 shrink-0" />
+              Settings
+            </Link>
+          </li>
+          
+          <li>
+            <div className="text-xs font-semibold leading-6 text-gray-400">
+              Support
+            </div>
+            <ul role="list" className="mt-2 space-y-1">
+              <li>
+                <Link
+                  to="/support"
+                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-700 hover:text-primary hover:bg-gray-50"
+                >
+                  <HelpCircle className="h-6 w-6 shrink-0" />
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/changelog"
+                  className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-700 hover:text-primary hover:bg-gray-50"
+                >
+                  <History className="h-6 w-6 shrink-0" />
+                  Changelog
+                </Link>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
   );
 }
