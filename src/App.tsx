@@ -16,6 +16,9 @@ import { NewsletterManagement } from "./components/dashboard/NewsletterManagemen
 import { UserManagement } from "./components/dashboard/UserManagement";
 import AdminSettings from "./components/settings/AdminSettings";
 import { DashboardLayout } from "./components/layouts/DashboardLayout";
+import { DealershipOverview } from "./components/dealership/DealershipOverview";
+import { ActiveQuotes } from "./components/dealership/ActiveQuotes";
+import { DealershipSettings } from "./components/dealership/DealershipSettings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -88,6 +91,29 @@ function App() {
                 <ProtectedRoute>
                   <DashboardLayout>
                     <AdminSettings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              
+              {/* Dealership routes */}
+              <Route path="/dashboard/dealership" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <DealershipOverview />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/quotes" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <ActiveQuotes />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/dealership/settings" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <DealershipSettings />
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
