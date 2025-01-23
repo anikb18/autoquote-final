@@ -61,7 +61,7 @@ export const DealerMetricsSection = () => {
       stat: stats?.active_quotes_count || 0,
       icon: ShoppingCart,
       change: `${stats?.quote_change || 0}%`,
-      changeType: (stats?.quote_change || 0) >= 0 ? 'increase' : 'decrease' as const
+      changeType: (stats?.quote_change || 0) >= 0 ? "increase" as const : "decrease" as const
     },
     {
       id: 2,
@@ -69,7 +69,7 @@ export const DealerMetricsSection = () => {
       stat: stats?.won_bids_count || 0,
       icon: Award,
       change: "+12.3%",
-      changeType: 'increase' as const
+      changeType: "increase" as const
     },
     {
       id: 3,
@@ -77,7 +77,7 @@ export const DealerMetricsSection = () => {
       stat: stats?.total_revenue || 0,
       icon: DollarSign,
       change: "+15.1%",
-      changeType: 'increase' as const,
+      changeType: "increase" as const,
       prefix: "$"
     },
     {
@@ -86,7 +86,7 @@ export const DealerMetricsSection = () => {
       stat: "2.4h",
       icon: Clock,
       change: "-10.3%",
-      changeType: 'decrease' as const
+      changeType: "decrease" as const
     }
   ];
 
