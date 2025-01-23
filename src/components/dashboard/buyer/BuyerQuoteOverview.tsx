@@ -62,7 +62,7 @@ export const BuyerQuoteOverview = ({ activeQuote }: BuyerQuoteOverviewProps) => 
               </div>
             </div>
             {latestDealerQuote && (
-              <Badge variant="outline" className="text-sm">
+              <Badge variant="secondary" className="text-sm">
                 Latest response: {responseTime}
               </Badge>
             )}
@@ -80,7 +80,6 @@ export const BuyerQuoteOverview = ({ activeQuote }: BuyerQuoteOverviewProps) => 
             </div>
           )}
 
-          {/* Progress Tracker */}
           <div className="mt-4">
             <ul className="flex justify-between text-xs text-gray-500">
               <li className="flex flex-col items-center">
