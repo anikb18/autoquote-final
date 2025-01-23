@@ -4,16 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Users, DollarSign, Building2, TrendingUp } from "lucide-react";
 
+interface AdminMetrics {
+  total_sales: number;
+  active_dealers: number;
+  total_users: number;
+  conversion_rate: number;
+}
+
 export const AdminMetricsCards = () => {
   const { t } = useTranslation('admin');
 
-  const { data: metrics } = useQuery({
+  const { data: metrics } = useQuery<AdminMetrics>({
     queryKey: ['admin-metrics'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      // Fetch metrics from your database
       const { data, error } = await supabase.rpc('get_admin_metrics');
       if (error) throw error;
       return data;

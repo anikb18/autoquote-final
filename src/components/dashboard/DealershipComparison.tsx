@@ -1,32 +1,37 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/hooks/use-theme";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+interface DealershipData {
+  name: string;
+  revenue: number;
+}
+
 export const DealershipComparison = () => {
   const { theme } = useTheme();
 
-  const { data: dealershipData } = useQuery({
+  const { data: dealershipData } = useQuery<DealershipData[]>({
     queryKey: ['dealership-comparison'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('dealer_analytics')
+        .from('sales_transactions')
         .select(`
           dealer_id,
-          dealer_profiles:dealer_id (
+          dealer_profiles!inner(
             dealer_name
           ),
-          total_revenue
+          selling_price
         `)
-        .order('total_revenue', { ascending: false })
+        .order('selling_price', { ascending: false })
         .limit(5);
 
       if (error) throw error;
 
       return data.map(item => ({
         name: item.dealer_profiles?.dealer_name || 'Unknown Dealer',
-        revenue: item.total_revenue
+        revenue: item.selling_price
       }));
     }
   });

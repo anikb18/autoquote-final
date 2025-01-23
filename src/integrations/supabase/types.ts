@@ -306,7 +306,15 @@ export type Database = {
           total_revenue?: number | null
           value?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "dealer_analytics_dealer_profiles_fk"
+            columns: ["dealer_id"]
+            isOneToOne: false
+            referencedRelation: "dealer_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       dealer_bids: {
         Row: {
