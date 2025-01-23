@@ -13,6 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { format } from "date-fns";
 
+interface CarDetails {
+  year: string;
+  make: string;
+  model: string;
+}
+
 interface Document {
   id: string;
   quote_id: string;
@@ -21,11 +27,7 @@ interface Document {
   status: string;
   created_at: string;
   quote: {
-    car_details: {
-      year: string;
-      make: string;
-      model: string;
-    };
+    car_details: CarDetails;
     user: {
       full_name: string;
       email: string;
@@ -57,7 +59,28 @@ export const DocumentsManagement = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as Document[];
+
+      // Transform and validate the data
+      const transformedData = data?.map(doc => {
+        const carDetails = doc.quote?.car_details as CarDetails;
+        if (!carDetails?.year || !carDetails?.make || !carDetails?.model) {
+          console.warn('Invalid car details format:', doc.quote?.car_details);
+          return {
+            ...doc,
+            quote: {
+              ...doc.quote,
+              car_details: {
+                year: 'N/A',
+                make: 'N/A',
+                model: 'N/A'
+              }
+            }
+          };
+        }
+        return doc;
+      });
+
+      return transformedData as Document[];
     },
   });
 
@@ -124,7 +147,7 @@ export const DocumentsManagement = () => {
             {documents?.map((doc) => (
               <TableRow key={doc.id}>
                 <TableCell>
-                  {doc.quote?.car_details?.year} {doc.quote?.car_details?.make} {doc.quote?.car_details?.model}
+                  {doc.quote?.car_details.year} {doc.quote?.car_details.make} {doc.quote?.car_details.model}
                 </TableCell>
                 <TableCell>
                   <div>
@@ -135,7 +158,7 @@ export const DocumentsManagement = () => {
                 <TableCell>{doc.quote?.dealer_quotes[0]?.dealer?.dealer_name || 'N/A'}</TableCell>
                 <TableCell className="capitalize">{doc.type}</TableCell>
                 <TableCell>
-                  <Badge className={getStatusColor(doc.status)} variant="outline">
+                  <Badge className={getStatusColor(doc.status)}>
                     {doc.status}
                   </Badge>
                 </TableCell>
