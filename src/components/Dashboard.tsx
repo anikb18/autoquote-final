@@ -6,12 +6,37 @@ import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { MetricsCard } from "./dashboard/MetricsCard";
 import { useUser } from "@/hooks/use-user";
 
+interface DashboardData {
+  total_quotes: number;
+  active_quotes: number;
+  completed_quotes: number;
+  total_revenue: number;
+  metrics_data: {
+    performance: Array<{
+      period: string;
+      conversionRate: number;
+      responseTime: number;
+      revenue: number;
+    }>;
+  };
+}
+
+const defaultDashboardData: DashboardData = {
+  total_quotes: 0,
+  active_quotes: 0,
+  completed_quotes: 0,
+  total_revenue: 0,
+  metrics_data: {
+    performance: []
+  }
+};
+
 const Dashboard = () => {
   const { toast } = useToast();
   const { user } = useUser();
 
   const { data: dashboardData, isLoading } = useQuery({
-    queryKey: ['dashboard-data'],
+    queryKey: ['dashboard-data', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('dashboard_data')
@@ -28,20 +53,7 @@ const Dashboard = () => {
         throw error;
       }
 
-      // If no data exists, return default values
-      if (!data) {
-        return {
-          total_quotes: 0,
-          active_quotes: 0,
-          completed_quotes: 0,
-          total_revenue: 0,
-          metrics_data: {
-            performance: []
-          }
-        };
-      }
-
-      return data;
+      return data ? data as DashboardData : defaultDashboardData;
     },
     enabled: !!user // Only run query when user is available
   });
