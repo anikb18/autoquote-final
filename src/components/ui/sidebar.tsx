@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface SidebarProps {
   user: any;
@@ -29,6 +31,37 @@ const Sidebar = ({
   onToggleCollapse
 }: SidebarProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: t('common:signOut'),
+        description: t('common:signOutSuccess'),
+      });
+      navigate('/auth');
+    } catch (error) {
+      toast({
+        title: t('common:error'),
+        description: t('common:signOutError'),
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Map sidebar values to actual routes
+  const getRouteForValue = (value: string) => {
+    const routeMap: { [key: string]: string } = {
+      overview: '/dashboard',
+      users: '/dashboard/users',
+      content: '/dashboard/blog',
+      marketing: '/dashboard/newsletter',
+      settings: '/dashboard/settings'
+    };
+    return routeMap[value] || '/dashboard';
+  };
 
   return (
     <div className="relative h-full flex flex-col">
@@ -64,7 +97,7 @@ const Sidebar = ({
           {items.map((item) => (
             <Link
               key={item.value}
-              to={`#${item.value}`}
+              to={getRouteForValue(item.value)}
               onClick={() => onSelect(item.value)}
             >
               <Button
@@ -89,6 +122,7 @@ const Sidebar = ({
             "w-full justify-start",
             isCollapsed && "justify-center px-2"
           )}
+          onClick={handleSignOut}
         >
           <LogOut className={cn("h-5 w-5", !isCollapsed && "mr-2")} />
           {!isCollapsed && <span>{t('common:signOut')}</span>}

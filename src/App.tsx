@@ -11,6 +11,9 @@ import NewQuoteForm from "./components/NewQuoteForm";
 import { ThemeProvider } from "@/hooks/use-theme";
 import Header from "./components/Header";
 import BuyerDashboard from "./components/BuyerDashboard";
+import BlogManagement from "./components/dashboard/BlogManagement";
+import NewsletterManagement from "./components/dashboard/NewsletterManagement";
+import UserManagement from "./components/dashboard/UserManagement";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,6 +43,30 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/users"
+                element={
+                  <ProtectedRoute>
+                    <UserManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/blog"
+                element={
+                  <ProtectedRoute>
+                    <BlogManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/newsletter"
+                element={
+                  <ProtectedRoute>
+                    <NewsletterManagement />
                   </ProtectedRoute>
                 }
               />
