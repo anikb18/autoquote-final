@@ -16,11 +16,26 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 
+type BlogStatus = 'draft' | 'published' | 'scheduled' | 'archived';
+
+interface BlogMetrics {
+  total: number;
+  published: number;
+  draft: number;
+  scheduled: number;
+}
+
+interface BlogListProps {
+  searchTerm: string;
+  statusFilter: BlogStatus | 'all';
+  sortOrder: 'asc' | 'desc';
+}
+
 export const BlogManagement = () => {
   const { t } = useTranslation('admin');
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState<BlogStatus | 'all'>("all");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const { data: metrics } = useQuery({
@@ -33,7 +48,7 @@ export const BlogManagement = () => {
 
       if (error) throw error;
 
-      const stats = {
+      const stats: BlogMetrics = {
         total: data.length,
         published: data.filter(post => post.status === 'published').length,
         draft: data.filter(post => post.status === 'draft').length,
@@ -84,7 +99,7 @@ export const BlogManagement = () => {
           />
           <Select
             value={statusFilter}
-            onValueChange={setStatusFilter}
+            onValueChange={(value) => setStatusFilter(value as BlogStatus | 'all')}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by status" />
@@ -94,6 +109,7 @@ export const BlogManagement = () => {
               <SelectItem value="published">Published</SelectItem>
               <SelectItem value="draft">Draft</SelectItem>
               <SelectItem value="scheduled">Scheduled</SelectItem>
+              <SelectItem value="archived">Archived</SelectItem>
             </SelectContent>
           </Select>
           <Button

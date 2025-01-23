@@ -1,23 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
-import { format } from "date-fns";
-
-interface CarDetails {
-  year: string;
-  make: string;
-  model: string;
-}
+import { FileText, Download, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Document {
   id: string;
@@ -30,18 +16,26 @@ interface Document {
     car_details: CarDetails;
     user_id: string;
     user: {
-      full_name: string | null;
-      email: string | null;
+      full_name: string;
+      email: string;
     } | null;
-    dealer_quotes: {
-      dealer: {
-        dealer_name: string | null;
-      } | null;
-    }[];
+    dealer_quotes: Array<{
+      id: string;
+      dealer_id: string;
+      status: string;
+    }>;
   } | null;
 }
 
-export const DocumentsManagement = () => {
+interface CarDetails {
+  make: string;
+  model: string;
+  year: number;
+}
+
+export function DocumentsManagement() {
+  const { toast } = useToast();
+
   const { data: documents, isLoading } = useQuery({
     queryKey: ['documents'],
     queryFn: async () => {
@@ -57,37 +51,33 @@ export const DocumentsManagement = () => {
               email
             ),
             dealer_quotes (
-              dealer:dealer_profiles (
-                dealer_name
-              )
+              id,
+              dealer_id,
+              status
             )
           )
-        `);
+        `)
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Transform and validate the data
-      const transformedData = data?.map(doc => {
-        const rawCarDetails = doc.quote?.car_details as any;
-        const carDetails: CarDetails = {
-          year: typeof rawCarDetails?.year === 'string' || typeof rawCarDetails?.year === 'number' 
-            ? String(rawCarDetails.year) 
-            : 'N/A',
-          make: typeof rawCarDetails?.make === 'string' 
-            ? rawCarDetails.make 
-            : 'N/A',
-          model: typeof rawCarDetails?.model === 'string' 
-            ? rawCarDetails.model 
-            : 'N/A'
+      return data.map((doc: any) => {
+        let carDetails: CarDetails = {
+          make: 'Unknown',
+          model: 'Unknown',
+          year: 0
         };
 
+        if (doc.quote?.car_details) {
+          carDetails = {
+            make: doc.quote.car_details.make || 'Unknown',
+            model: doc.quote.car_details.model || 'Unknown',
+            year: doc.quote.car_details.year || 0
+          };
+        }
+
         return {
-          id: doc.id,
-          quote_id: doc.quote_id,
-          type: doc.type,
-          file_path: doc.file_path,
-          status: doc.status,
-          created_at: doc.created_at,
+          ...doc,
           quote: doc.quote ? {
             ...doc.quote,
             car_details: carDetails,
@@ -96,42 +86,33 @@ export const DocumentsManagement = () => {
           } : null
         } as Document;
       });
-
-      return transformedData || [];
-    },
+    }
   });
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending':
-        return 'bg-yellow-500/10 text-yellow-500';
-      case 'approved':
-        return 'bg-green-500/10 text-green-500';
-      case 'rejected':
-        return 'bg-red-500/10 text-red-500';
-      default:
-        return 'bg-gray-500/10 text-gray-500';
-    }
-  };
-
   const handleDownload = async (filePath: string) => {
-    const { data, error } = await supabase.storage
-      .from('documents')
-      .download(filePath);
-    
-    if (error) {
-      console.error('Error downloading file:', error);
-      return;
-    }
+    try {
+      const { data, error } = await supabase.storage
+        .from('documents')
+        .download(filePath);
+      
+      if (error) throw error;
 
-    const url = URL.createObjectURL(data);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filePath.split('/').pop() || 'document';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+      // Create a download link
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filePath.split('/').pop() || 'document';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to download document",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isLoading) {
@@ -139,61 +120,48 @@ export const DocumentsManagement = () => {
   }
 
   return (
-    <div className="space-y-8 p-8">
-      <div>
-        <h1 className="text-4xl font-bold">Documents</h1>
-        <p className="text-lg text-muted-foreground mt-2">
-          View and manage all quote-related documents
-        </p>
-      </div>
-
-      <div className="bg-background/60 backdrop-blur-sm rounded-lg border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Vehicle</TableHead>
-              <TableHead>Client</TableHead>
-              <TableHead>Dealer</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Documents</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
             {documents?.map((doc) => (
-              <TableRow key={doc.id}>
-                <TableCell>
-                  {doc.quote?.car_details.year} {doc.quote?.car_details.make} {doc.quote?.car_details.model}
-                </TableCell>
-                <TableCell>
-                  <div>
-                    <div className="font-medium">{doc.quote?.user?.full_name || 'N/A'}</div>
-                    <div className="text-sm text-muted-foreground">{doc.quote?.user?.email || 'N/A'}</div>
+              <Card key={doc.id} className="bg-muted/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <FileText className="h-8 w-8 text-muted-foreground" />
+                      <div>
+                        <h3 className="font-medium">{doc.type}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {doc.quote?.user?.full_name || 'Unknown User'} - {doc.quote?.user?.email || 'No email'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleDownload(doc.file_path)}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </TableCell>
-                <TableCell>{doc.quote?.dealer_quotes[0]?.dealer?.dealer_name || 'N/A'}</TableCell>
-                <TableCell className="capitalize">{doc.type}</TableCell>
-                <TableCell>
-                  <Badge className={getStatusColor(doc.status)}>
-                    {doc.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{format(new Date(doc.created_at), 'MMM d, yyyy')}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDownload(doc.file_path)}
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </TableCell>
-              </TableRow>
+                </CardContent>
+              </Card>
             ))}
-          </TableBody>
-        </Table>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
-};
+}
