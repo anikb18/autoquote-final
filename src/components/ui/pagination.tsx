@@ -1,117 +1,101 @@
-import * as React from "react"
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
+import { clsx } from "clsx";
+import * as React from "react";
+import { Button } from "./button";
 
-import { cn } from "@/lib/utils"
-import { ButtonProps, buttonVariants } from "@/components/ui/button"
-
-const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
-  <nav
-    role="navigation"
-    aria-label="pagination"
-    className={cn("mx-auto flex w-full justify-center", className)}
-    {...props}
-  />
-)
-Pagination.displayName = "Pagination"
-
-const PaginationContent = React.forwardRef<
-  HTMLUListElement,
-  React.ComponentProps<"ul">
->(({ className, ...props }, ref) => (
-  <ul
-    ref={ref}
-    className={cn("flex flex-row items-center gap-1", className)}
-    {...props}
-  />
-))
-PaginationContent.displayName = "PaginationContent"
-
-const PaginationItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn("", className)} {...props} />
-))
-PaginationItem.displayName = "PaginationItem"
-
-type PaginationLinkProps = {
-  isActive?: boolean
-} & Pick<ButtonProps, "size"> &
-  React.ComponentProps<"a">
-
-const PaginationLink = ({
-  className,
-  isActive,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) => (
-  <a
-    aria-current={isActive ? "page" : undefined}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "outline" : "ghost",
-        size,
-      }),
-      className
-    )}
-    {...props}
-  />
-)
-PaginationLink.displayName = "PaginationLink"
-
-const PaginationPrevious = ({
+export function Pagination({
+  'aria-label': ariaLabel = 'Page navigation',
   className,
   ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-  <PaginationLink
-    aria-label="Go to previous page"
-    size="default"
-    className={cn("gap-1 pl-2.5", className)}
-    {...props}
-  >
-    <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
-  </PaginationLink>
-)
-PaginationPrevious.displayName = "PaginationPrevious"
+}: React.ComponentPropsWithoutRef<'nav'>) {
+  return <nav aria-label={ariaLabel} {...props} className={clsx(className, 'flex gap-x-2')} />;
+}
 
-const PaginationNext = ({
+export function PaginationPrevious({
+  href = null,
   className,
-  ...props
-}: React.ComponentProps<typeof PaginationLink>) => (
-  <PaginationLink
-    aria-label="Go to next page"
-    size="default"
-    className={cn("gap-1 pr-2.5", className)}
-    {...props}
-  >
-    <span>Next</span>
-    <ChevronRight className="h-4 w-4" />
-  </PaginationLink>
-)
-PaginationNext.displayName = "PaginationNext"
+  children = 'Previous',
+}: React.PropsWithChildren<{ href?: string | null; className?: string }>) {
+  return (
+    <span className={clsx(className, 'grow basis-0')}>
+      <Button {...(href === null ? { disabled: true } : { href })} variant="outline" aria-label="Previous page">
+        <svg className="mr-2 h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M2.75 8H13.25M2.75 8L5.25 5.5M2.75 8L5.25 10.5"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        {children}
+      </Button>
+    </span>
+  );
+}
 
-const PaginationEllipsis = ({
+export function PaginationNext({
+  href = null,
   className,
-  ...props
-}: React.ComponentProps<"span">) => (
-  <span
-    aria-hidden
-    className={cn("flex h-9 w-9 items-center justify-center", className)}
-    {...props}
-  >
-    <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
-  </span>
-)
-PaginationEllipsis.displayName = "PaginationEllipsis"
+  children = 'Next',
+}: React.PropsWithChildren<{ href?: string | null; className?: string }>) {
+  return (
+    <span className={clsx(className, 'flex grow basis-0 justify-end')}>
+      <Button {...(href === null ? { disabled: true } : { href })} variant="outline" aria-label="Next page">
+        {children}
+        <svg className="ml-2 h-4 w-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M13.25 8L2.75 8M13.25 8L10.75 10.5M13.25 8L10.75 5.5"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </Button>
+    </span>
+  );
+}
 
-export {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+export function PaginationList({ className, ...props }: React.ComponentPropsWithoutRef<'span'>) {
+  return <span {...props} className={clsx(className, 'hidden items-baseline gap-x-2 sm:flex')} />;
+}
+
+export function PaginationPage({
+  href,
+  className,
+  current = false,
+  children,
+}: React.PropsWithChildren<{ href: string; className?: string; current?: boolean }>) {
+  return (
+    <Button
+      href={href}
+      variant={current ? "default" : "outline"}
+      aria-label={`Page ${children}`}
+      aria-current={current ? 'page' : undefined}
+      className={clsx(
+        className,
+        'min-w-[2.25rem]',
+        current && 'pointer-events-none'
+      )}
+    >
+      <span className="-mx-0.5">{children}</span>
+    </Button>
+  );
+}
+
+export function PaginationGap({
+  className,
+  children = '...',
+  ...props
+}: React.ComponentPropsWithoutRef<'span'>) {
+  return (
+    <span
+      aria-hidden="true"
+      {...props}
+      className={clsx(
+        className,
+        'w-[2.25rem] select-none text-center text-sm/6 font-semibold text-zinc-950 dark:text-white'
+      )}
+    >
+      {children}
+    </span>
+  );
 }
