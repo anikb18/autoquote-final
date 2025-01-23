@@ -16,7 +16,8 @@ import {
   CreditCard,
   TrendingUp,
   Users,
-  Building
+  Building,
+  MessageSquare
 } from "lucide-react";
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
@@ -139,9 +140,9 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       href: "/dashboard/my-quotes"
     },
     {
-      title: "Find Dealers",
-      icon: Car,
-      href: "/dashboard/dealers"
+      title: "Communication Hub",
+      icon: MessageSquare,
+      href: "/dashboard/communications"
     },
     {
       title: "Support",

@@ -1,70 +1,52 @@
-import React from "react";
-import { Globe } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { MessageType } from "@/types/chat";
 
 interface ChatMessageProps {
-  message: {
-    id: string;
-    content: string;
-    sender_id: string;
-    created_at: string;
-    sender?: {
-      email?: string;
-      dealer_profiles?: Array<{
-        first_name?: string;
-        last_name?: string;
-        dealer_name?: string;
-      }>;
-    };
-  };
-  isDealer: boolean;
-  quoteAccepted: boolean;
-  onTranslate: () => Promise<void>;
-  showTranslate: boolean;
+  message: MessageType;
+  isAccepted: boolean;
 }
 
-export const ChatMessage = ({ 
-  message, 
-  isDealer, 
-  quoteAccepted,
-  onTranslate,
-  showTranslate 
-}: ChatMessageProps) => {
-  const getSenderName = () => {
-    const dealerProfile = message.sender?.dealer_profiles?.[0];
-    if (!dealerProfile) return message.sender?.email;
+export const ChatMessage = ({ message, isAccepted }: ChatMessageProps) => {
+  const { data: senderProfile } = useQuery({
+    queryKey: ['user-profile', message.sender_id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', message.sender_id)
+        .single();
 
-    if (isDealer) {
-      return quoteAccepted 
-        ? `${dealerProfile.first_name} ${dealerProfile.last_name}`
-        : dealerProfile.first_name;
-    }
-    return dealerProfile.dealer_name;
-  };
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const displayName = senderProfile ? (
+    isAccepted ? 
+      senderProfile.full_name : 
+      senderProfile.full_name.split(' ')[0] // Only show first name if quote not accepted
+  ) : 'Unknown User';
 
   return (
-    <div className={`flex ${isDealer ? 'justify-start' : 'justify-end'}`}>
-      <div
-        className={`max-w-[80%] rounded-lg p-3 ${
-          isDealer ? 'bg-muted' : 'bg-primary text-primary-foreground'
-        }`}
-      >
-        <p className="text-sm font-semibold">{getSenderName()}</p>
-        <p className="text-sm">{message.content}</p>
-        {showTranslate && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="mt-2"
-            onClick={onTranslate}
-          >
-            <Globe className="h-3 w-3 mr-1" />
-            Translate
-          </Button>
-        )}
-        <span className="text-xs opacity-70">
-          {new Date(message.created_at).toLocaleTimeString()}
-        </span>
+    <div className="flex items-start space-x-4 p-4">
+      <Avatar>
+        <AvatarImage src={message.sender?.avatar_url} />
+        <AvatarFallback>
+          {displayName.charAt(0)}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1 space-y-1">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold">{displayName}</span>
+          <span className="text-xs text-muted-foreground">
+            {format(new Date(message.created_at), 'MMM d, h:mm a')}
+          </span>
+        </div>
+        <p className="text-sm text-foreground">{message.content}</p>
       </div>
     </div>
   );
