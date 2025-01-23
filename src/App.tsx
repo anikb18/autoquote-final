@@ -1,150 +1,55 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import SubscriptionManagement from "./pages/SubscriptionManagement";
-import Dashboard from "./components/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
-import DealershipLanding from "./components/DealershipLanding";
-import DealerSignup from "./pages/DealerSignup";
-import NewQuoteForm from "./components/NewQuoteForm";
-import { ThemeProvider } from "@/hooks/use-theme";
-import Header from "./components/Header";
-import BuyerDashboard from "./components/BuyerDashboard";
-import { BlogManagement } from "./components/dashboard/BlogManagement";
-import { NewsletterManagement } from "./components/dashboard/NewsletterManagement";
-import { UserManagement } from "./components/dashboard/UserManagement";
-import AdminSettings from "./components/settings/AdminSettings";
-import { DashboardLayout } from "./components/layouts/DashboardLayout";
-import { DealershipOverview } from "./components/dealership/DealershipOverview";
-import { ActiveQuotes } from "./components/dealership/ActiveQuotes";
-import { DealershipSettings } from "./components/dealership/DealershipSettings";
-import Support from "./pages/Support";
+import { Routes, Route } from 'react-router-dom';
+import { DashboardLayout } from '@/components/layouts/DashboardLayout';
+import { MediaDashboard } from '@/components/dashboard/MediaDashboard';
+import { Home } from '@/components/Home';
+import { Login } from '@/components/auth/Login';
+import { Register } from '@/components/auth/Register';
+import { ForgotPassword } from '@/components/auth/ForgotPassword';
+import { ResetPassword } from '@/components/auth/ResetPassword';
+import { Profile } from '@/components/profile/Profile';
+import { Settings } from '@/components/settings/Settings';
+import { Quotes } from '@/components/quotes/Quotes';
+import { NewQuote } from '@/components/quotes/NewQuote';
+import { QuoteDetails } from '@/components/quotes/QuoteDetails';
+import { DealerDashboard } from '@/components/dealer/DealerDashboard';
+import { DealerProfile } from '@/components/dealer/DealerProfile';
+import { DealerQuotes } from '@/components/dealer/DealerQuotes';
+import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import { AdminUsers } from '@/components/admin/AdminUsers';
+import { AdminDealers } from '@/components/admin/AdminDealers';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { Toaster } from '@/components/ui/toaster';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      retry: 1,
-    },
-  },
-});
-
-function App() {
+export default function App() {
   return (
-    <ThemeProvider defaultTheme="light">
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <Header />
-          <main className="min-h-screen">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dealership" element={<DealershipLanding />} />
-              <Route path="/dealer-signup" element={<DealerSignup />} />
-              <Route path="/new-quote" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <NewQuoteForm />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/quote-requests" element={<NewQuoteForm />} />
-              
-              {/* Dashboard routes wrapped in DashboardLayout */}
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <Dashboard />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/users" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <UserManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/blog" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <BlogManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/newsletter" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <NewsletterManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/my-quotes" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <BuyerDashboard />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/dealers" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <BuyerDashboard />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/settings" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <AdminSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              
-              {/* Dealership routes */}
-              <Route path="/dashboard/dealership" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <DealershipOverview />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/quotes" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <ActiveQuotes />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/dealership/settings" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <DealershipSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/subscription" element={
-                <ProtectedRoute requireSubscription={false}>
-                  <DashboardLayout>
-                    <SubscriptionManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/support" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <Support />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-            </Routes>
-          </main>
-        </Router>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
+        }>
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="quotes" element={<Quotes />} />
+          <Route path="quotes/new" element={<NewQuote />} />
+          <Route path="quotes/:id" element={<QuoteDetails />} />
+          <Route path="dealer" element={<DealerDashboard />} />
+          <Route path="dealer/profile" element={<DealerProfile />} />
+          <Route path="dealer/quotes" element={<DealerQuotes />} />
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/users" element={<AdminUsers />} />
+          <Route path="admin/dealers" element={<AdminDealers />} />
+          <Route path="media" element={<MediaDashboard />} />
+        </Route>
+      </Routes>
+      <Toaster />
+    </>
   );
 }
-
-export default App;
