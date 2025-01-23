@@ -4,14 +4,14 @@ import {
   BarChart3,
   Search,
   Palette,
-  Image,
   FileText,
   Ticket,
   HelpCircle,
   Settings,
   DollarSign,
   Car,
-  Tag
+  Tag,
+  File
 } from "lucide-react";
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
@@ -52,9 +52,9 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       href: "/dashboard/design"
     },
     {
-      title: "Media Library",
-      icon: Image,
-      href: "/dashboard/media"
+      title: "Documents",
+      icon: File,
+      href: "/dashboard/documents"
     },
     {
       title: "Plans",
