@@ -42,7 +42,7 @@ export function DashboardSidebar() {
 
   return (
     <div className="flex grow flex-col">
-      <div className="flex h-16 shrink-0 items-center border-b px-6">
+      <div className="flex h-16 shrink-0 items-center justify-between border-b px-6">
         <img
           className="h-8 w-auto"
           src="/logo/dark.svg"
@@ -50,27 +50,3 @@ export function DashboardSidebar() {
         />
       </div>
       
-      <nav className="flex flex-1 flex-col px-6">
-        <ul role="list" className="flex flex-1 flex-col gap-y-7">
-          <li>
-            <ul role="list" className="space-y-1">
-              {items.map((item) => (
-                <NavigationItem key={item.href} item={item} />
-              ))}
-            </ul>
-          </li>
-        </ul>
-      </nav>
-
-      <SidebarFooter 
-        viewMode={viewMode}
-        role={role}
-        onViewModeChange={setViewMode}
-      />
-      
-      <div className="px-6">
-        <UserProfile user={user} />
-      </div>
-    </div>
-  );
-}
