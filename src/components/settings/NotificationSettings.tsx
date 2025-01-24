@@ -15,29 +15,32 @@ interface NotificationSettingsData {
   marketing_emails: boolean;
 }
 
+const defaultSettings: NotificationSettingsData = {
+  email_notifications: false,
+  push_notifications: false,
+  quote_alerts: false,
+  marketing_emails: false
+};
+
 export function NotificationSettings() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { data: settings } = useQuery({
+  const { data: settings, isLoading } = useQuery({
     queryKey: ['notification-settings'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('site_settings')
         .select('*')
         .eq('category', 'notifications')
-        .single();
+        .maybeSingle();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching notification settings:', error);
+        throw error;
+      }
 
-      const defaultSettings: NotificationSettingsData = {
-        email_notifications: false,
-        push_notifications: false,
-        quote_alerts: false,
-        marketing_emails: false
-      };
-      
-      return ((data?.value || defaultSettings) as unknown as NotificationSettingsData);
+      return ((data?.value || defaultSettings) as NotificationSettingsData);
     }
   });
 
@@ -69,6 +72,7 @@ export function NotificationSettings() {
         description: "Notification preferences have been updated successfully.",
       });
     } catch (error) {
+      console.error('Error updating settings:', error);
       toast({
         title: "Error",
         description: "Failed to update notification settings",
@@ -78,6 +82,16 @@ export function NotificationSettings() {
       setIsUpdating(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          Loading...
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
