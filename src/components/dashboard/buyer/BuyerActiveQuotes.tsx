@@ -46,14 +46,25 @@ const BuyerActiveQuotes = () => {
                 throw supabaseError;
             }
 
-            return data?.map(quote => ({
-                ...quote,
-                car_details: quote.car_details as CarDetails,
-                dealer_quotes: quote.dealer_quotes.map(dq => ({
-                    ...dq,
-                    is_accepted: dq.is_accepted || false
-                }))
-            })) as QuoteWithDealers[];
+            return data?.map(quote => {
+                // Validate car_details before type assertion
+                const carDetails = quote.car_details as Record<string, any>;
+                if (!carDetails || typeof carDetails.year !== 'number' || 
+                    typeof carDetails.make !== 'string' || 
+                    typeof carDetails.model !== 'string') {
+                    console.error('Invalid car details format:', carDetails);
+                    return null;
+                }
+
+                return {
+                    ...quote,
+                    car_details: carDetails as CarDetails,
+                    dealer_quotes: quote.dealer_quotes.map(dq => ({
+                        ...dq,
+                        is_accepted: dq.is_accepted || false
+                    }))
+                };
+            }).filter(Boolean) as QuoteWithDealers[];
         },
         meta: {
             errorMessage: "Error fetching quotes"
