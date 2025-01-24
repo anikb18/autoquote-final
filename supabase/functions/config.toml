@@ -3,3 +3,16 @@ project_id = "zndolceqzclnprozyudy"
 [api]
 enabled = true
 port = 54321
+
+[db]
+port = 54322
+
+# The directory where your functions are located
+directory = "functions"
+
+# The runtime environment for your functions
+runtime = "deno" # or "node" depending on your setup
+
+# Optional: Enable or disable certain features
+enable_http = true
+enable_auth = true

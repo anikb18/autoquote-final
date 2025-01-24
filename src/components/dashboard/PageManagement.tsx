@@ -122,6 +122,33 @@ const PageManagement = () => {
   if (loading) {
     return <div>Loading...</div>; // You can replace this with a loading spinner or skeleton
   }
+  const saveSeoSettings = async (seoData) => {
+    const { data, error } = await supabase.rpc('upsert_seo_setting', {
+        p_page_identifier: seoData.page_identifier,
+        p_title: seoData.title,
+        p_meta_description: seoData.meta_description,
+        p_meta_keywords: seoData.meta_keywords,
+        p_og_title: seoData.og_title,
+        p_og_description: seoData.og_description,
+        p_og_image: seoData.og_image
+    });
+
+    if (error) {
+        console.error('Error saving SEO settings:', error);
+        toast({
+            title: "Error",
+            description: "Failed to save SEO settings.",
+            variant: "destructive",
+        });
+    } else {
+        console.log('SEO settings saved successfully:', data);
+        toast({
+            title: "Success",
+            description: "SEO settings saved successfully.",
+        });
+        await fetchPages(); // Refetch pages to reflect changes
+    }
+};
 
   return (
     <div className="container mx-auto py-8 space-y-8">
