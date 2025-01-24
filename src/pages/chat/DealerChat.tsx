@@ -5,6 +5,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { MessageSquare } from "lucide-react";
 import ChatInterface from "@/components/ChatInterface";
+import { CarDetails } from "@/types/quotes";
+
+interface DealerChatData {
+  id: string;
+  quote_id: string;
+  dealer_id: string;
+  is_accepted: boolean;
+  quotes: {
+    id: string;
+    car_details: CarDetails;
+    user_id: string;
+    profiles: {
+      full_name: string;
+    };
+  };
+}
 
 const DealerChat = () => {
   const { data: activeChats, isLoading } = useQuery({
@@ -33,7 +49,7 @@ const DealerChat = () => {
         .eq('is_accepted', true);
 
       if (error) throw error;
-      return data;
+      return data as DealerChatData[];
     },
   });
 

@@ -8,11 +8,11 @@ import { MessageSquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CountdownTimer } from "@/components/ui/countdown-timer";
-import { CarDetails, Quote, DealerQuote, DealerProfile } from "@/types/quotes"; // Import all types
-import MyQuotesEmptyState from "@/components/dashboard/MyQuotesEmptyState"; // Import Empty State Component (if you created one)
+import { CarDetails, Quote, DealerQuote } from "@/types/quotes";
+import MyQuotesEmptyState from "@/components/dashboard/MyQuotesEmptyState";
 
 interface QuoteWithDealers extends Quote {
-  dealer_quotes: Array<DealerQuote & { dealer_profiles: DealerProfile }>;
+  dealer_quotes: Array<DealerQuote & { dealer_profiles: { dealer_name: string } }>;
 }
 
 export const BuyerActiveQuotes = () => {
@@ -44,32 +44,28 @@ export const BuyerActiveQuotes = () => {
           )
         `)
         .eq('user_id', user.id)
-        .eq('status', 'active') // Optimized: Fetch only "active" quotes (adjust status value if needed)
+        .eq('status', 'active')
         .order('created_at', { ascending: false });
 
       if (supabaseError) {
         console.error("Supabase error fetching active quotes:", supabaseError);
         throw supabaseError;
       }
-      return (data as any as QuoteWithDealers[]) || [];
+      return data as QuoteWithDealers[];
     },
-    onError: (err) => {
-      let message = "Error fetching quotes";
-      if (err instanceof Error) {
-        message = `${message}: ${err.message}`;
+    meta: {
+      onError: (err: Error) => {
+        toast({
+          title: "Error fetching quotes",
+          description: err.message,
+          variant: "destructive",
+        });
       }
-      toast({
-        title: "Error fetching quotes",
-        description: message,
-        variant: "destructive",
-      });
-    },
-    // refetchInterval: 30000, // Optional: If you want to refetch periodically in the background
-    // refetchOnWindowFocus: false, // Optional: Control refetching behavior on window focus
+    }
   });
 
   const handleQuoteResponse = (quoteId: string) => {
-    navigate(`/quotes/${quoteId}`); // Navigate to detailed quote page
+    navigate(`/quotes/${quoteId}`);
   };
 
   if (isLoading) {
@@ -91,7 +87,7 @@ export const BuyerActiveQuotes = () => {
   }
 
   if (!quotes?.length) {
-    return <MyQuotesEmptyState />; // Use the enhanced Empty State Component
+    return <MyQuotesEmptyState />;
   }
 
   const getExpirationTime = (createdAt: string) => {
@@ -123,7 +119,7 @@ export const BuyerActiveQuotes = () => {
                       description: t("quotes.expiration.description"),
                       variant: "destructive",
                     });
-                    refetch(); // Refetch quotes on expiration
+                    refetch();
                   }}
                 />
               </div>

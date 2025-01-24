@@ -1,33 +1,78 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { useState, useCallback } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
-interface PhotoUploadStepProps {
-  onPhotosChange: (photos: File[]) => void;
+export interface PhotoUploadStepProps {
+  photos: File[];
+  setPhotos: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-const PhotoUploadStep = ({ onPhotosChange }: PhotoUploadStepProps) => {
-  const [photos, setPhotos] = useState<File[]>([]);
+const PhotoUploadStep = ({ photos, setPhotos }: PhotoUploadStepProps) => {
+  const [dragActive, setDragActive] = useState(false);
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const newPhotos = Array.from(event.target.files);
-      const updatedPhotos = [...photos, ...newPhotos];
-      setPhotos(updatedPhotos);
-      onPhotosChange(updatedPhotos);
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
     }
-  };
+  }, []);
 
-  const removePhoto = (index: number) => {
-    const updatedPhotos = photos.filter((_, i) => i !== index);
-    setPhotos(updatedPhotos);
-    onPhotosChange(updatedPhotos);
-  };
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    setPhotos(prevPhotos => [...prevPhotos, ...files]);
+  }, [setPhotos]);
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setPhotos(prevPhotos => [...prevPhotos, ...files]);
+    }
+  }, [setPhotos]);
+
+  const removePhoto = useCallback((index: number) => {
+    setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
+  }, [setPhotos]);
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Upload Photos</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div
+        className={`border-2 border-dashed rounded-lg p-8 text-center ${
+          dragActive ? 'border-primary bg-primary/10' : 'border-gray-300'
+        }`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleChange}
+          className="hidden"
+          id="photo-upload"
+        />
+        <label htmlFor="photo-upload" className="cursor-pointer">
+          <div className="space-y-2">
+            <p className="text-sm text-gray-600">
+              Drag and drop photos here or click to select
+            </p>
+            <Button type="button" variant="outline">
+              Select Photos
+            </Button>
+          </div>
+        </label>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {photos.map((photo, index) => (
           <Card key={index} className="relative p-2">
             <img
@@ -38,27 +83,13 @@ const PhotoUploadStep = ({ onPhotosChange }: PhotoUploadStepProps) => {
             <Button
               variant="destructive"
               size="sm"
-              className="absolute top-2 right-2"
+              className="absolute top-1 right-1"
               onClick={() => removePhoto(index)}
             >
               Remove
             </Button>
           </Card>
         ))}
-        {photos.length < 4 && (
-          <label className="cursor-pointer">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 h-32 flex items-center justify-center">
-              <span className="text-gray-500">+ Add Photo</span>
-            </div>
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handlePhotoUpload}
-              multiple={photos.length === 0}
-            />
-          </label>
-        )}
       </div>
     </div>
   );
