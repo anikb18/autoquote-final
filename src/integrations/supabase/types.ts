@@ -887,6 +887,30 @@ export type Database = {
         }
         Relationships: []
       }
+      pages: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number | null
@@ -1876,6 +1900,12 @@ export type Database = {
         }
         Returns: string
       }
+      delete_seo_setting: {
+        Args: {
+          p_page_identifier: string
+        }
+        Returns: undefined
+      }
       firebase_fdw_handler: {
         Args: Record<PropertyKey, never>
         Returns: unknown
@@ -1921,6 +1951,23 @@ export type Database = {
               total_revenue: number
             }[]
           }
+      get_seo_setting: {
+        Args: {
+          p_page_identifier: string
+        }
+        Returns: {
+          id: number
+          page_identifier: string
+          title: string
+          meta_description: string
+          meta_keywords: string[]
+          og_title: string
+          og_description: string
+          og_image: string
+          created_at: string
+          updated_at: string
+        }[]
+      }
       hello_world_fdw_handler: {
         Args: Record<PropertyKey, never>
         Returns: unknown
@@ -2063,6 +2110,18 @@ export type Database = {
           monthly_price: number
           annual_price: number
           is_featured: boolean
+        }
+        Returns: undefined
+      }
+      upsert_seo_setting: {
+        Args: {
+          p_page_identifier: string
+          p_title: string
+          p_meta_description: string
+          p_meta_keywords: string[]
+          p_og_title: string
+          p_og_description: string
+          p_og_image: string
         }
         Returns: undefined
       }
