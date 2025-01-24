@@ -16,7 +16,7 @@ interface DealerChatData {
     id: string;
     car_details: CarDetails;
     user_id: string;
-    profiles: {
+    user: {
       full_name: string | null;
     };
   };
@@ -40,7 +40,7 @@ const DealerChat = () => {
             id,
             car_details,
             user_id,
-            profiles (
+            user:profiles!user_id (
               full_name
             )
           )
@@ -84,7 +84,7 @@ const DealerChat = () => {
                         {chat.quotes.car_details.year} {chat.quotes.car_details.make} {chat.quotes.car_details.model}
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        Customer: {chat.quotes.profiles?.full_name?.split(' ')[0] || 'Unknown'}
+                        Customer: {chat.quotes.user?.full_name?.split(' ')[0] || 'Unknown'}
                       </p>
                     </div>
                   </div>
