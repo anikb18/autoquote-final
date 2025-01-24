@@ -1528,6 +1528,63 @@ export type Database = {
         }
         Relationships: []
       }
+      trade_in_requests: {
+        Row: {
+          accident_history: boolean | null
+          condition_report: Json
+          created_at: string | null
+          estimated_value: number | null
+          id: string
+          location: string
+          mileage: number
+          ownership_duration: string | null
+          payment_amount: number | null
+          payment_status: string | null
+          photo_urls: string[] | null
+          service_history: boolean | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+          vehicle_info: Json
+        }
+        Insert: {
+          accident_history?: boolean | null
+          condition_report: Json
+          created_at?: string | null
+          estimated_value?: number | null
+          id?: string
+          location: string
+          mileage: number
+          ownership_duration?: string | null
+          payment_amount?: number | null
+          payment_status?: string | null
+          photo_urls?: string[] | null
+          service_history?: boolean | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vehicle_info: Json
+        }
+        Update: {
+          accident_history?: boolean | null
+          condition_report?: Json
+          created_at?: string | null
+          estimated_value?: number | null
+          id?: string
+          location?: string
+          mileage?: number
+          ownership_duration?: string | null
+          payment_amount?: number | null
+          payment_status?: string | null
+          photo_urls?: string[] | null
+          service_history?: boolean | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vehicle_info?: Json
+        }
+        Relationships: []
+      }
       trade_in_valuations: {
         Row: {
           created_at: string | null
