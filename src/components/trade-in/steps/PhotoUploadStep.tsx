@@ -12,18 +12,16 @@ const PhotoUploadStep = ({ onPhotosChange }: PhotoUploadStepProps) => {
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const newPhotos = Array.from(event.target.files);
-      setPhotos(prevPhotos => [...prevPhotos, ...newPhotos]);
-      onPhotosChange([...photos, ...newPhotos]);
+      const updatedPhotos = [...photos, ...newPhotos];
+      setPhotos(updatedPhotos);
+      onPhotosChange(updatedPhotos);
     }
   };
 
   const removePhoto = (index: number) => {
-    setPhotos(prevPhotos => {
-      const updatedPhotos = [...prevPhotos];
-      updatedPhotos.splice(index, 1);
-      onPhotosChange(updatedPhotos);
-      return updatedPhotos;
-    });
+    const updatedPhotos = photos.filter((_, i) => i !== index);
+    setPhotos(updatedPhotos);
+    onPhotosChange(updatedPhotos);
   };
 
   return (

@@ -6,27 +6,6 @@ import { Separator } from "@/components/ui/separator";
 import { MessageSquare } from "lucide-react";
 import ChatInterface from "@/components/ChatInterface";
 
-interface CarDetails {
-  year: number;
-  make: string;
-  model: string;
-}
-
-interface UserChatData {
-  id: string;
-  car_details: CarDetails;
-  dealer_quotes: Array<{
-    id: string;
-    dealer_id: string;
-    is_accepted: boolean;
-    dealer_profiles: {
-      dealer_name: string;
-      first_name: string;
-      last_name: string;
-    };
-  }>;
-}
-
 const UserChat = () => {
   const { data: activeChats, isLoading } = useQuery({
     queryKey: ['user-active-chats'],
@@ -43,7 +22,7 @@ const UserChat = () => {
             id,
             dealer_id,
             is_accepted,
-            dealer_profiles:dealer_profiles!dealer_quotes_dealer_id_fkey (
+            dealer_profiles (
               dealer_name,
               first_name,
               last_name
@@ -54,11 +33,7 @@ const UserChat = () => {
         .eq('dealer_quotes.is_accepted', true);
 
       if (error) throw error;
-      
-      return (data as any[]).map(chat => ({
-        ...chat,
-        car_details: chat.car_details as CarDetails
-      })) as UserChatData[];
+      return data;
     },
   });
 
@@ -88,7 +63,7 @@ const UserChat = () => {
                             {chat.car_details.year} {chat.car_details.make} {chat.car_details.model}
                           </h3>
                           <p className="text-sm text-muted-foreground">
-                            Dealer: {dealerQuote.dealer_profiles.dealer_name}
+                            Dealer: {dealerQuote.dealer_profiles?.dealer_name}
                           </p>
                         </div>
                       </div>
