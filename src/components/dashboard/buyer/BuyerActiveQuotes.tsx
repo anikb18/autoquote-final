@@ -46,14 +46,7 @@ const BuyerActiveQuotes = () => {
                 throw supabaseError;
             }
 
-            return (data as any[]).map(quote => ({
-                ...quote,
-                car_details: quote.car_details as CarDetails,
-                dealer_quotes: quote.dealer_quotes.map(dq => ({
-                    ...dq,
-                    is_accepted: dq.is_accepted || false
-                }))
-            })) as QuoteWithDealers[];
+            return data as QuoteWithDealers[];
         },
         meta: {
             errorMessage: "Error fetching quotes"
@@ -68,7 +61,7 @@ const BuyerActiveQuotes = () => {
         return (
             <div>
                 <p>Error loading quotes: {error.message}</p>
-                <button onClick={refetch}>Retry</button>
+                <button onClick={() => refetch()}>Retry</button>
             </div>
         );
     }

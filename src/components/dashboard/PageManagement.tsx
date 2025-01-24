@@ -59,7 +59,7 @@ const PageManagement = () => {
                         .from('seo_settings')
                         .select('*')
                         .eq('page_identifier', page.id)
-                        .single();
+                        .maybeSingle();
 
                     if (seoError) {
                         console.error('Error fetching SEO settings:', seoError);
@@ -108,36 +108,26 @@ const PageManagement = () => {
         try {
             const { error: pageError } = await supabase
                 .from('pages')
-                .update({ title: updatedPageData.title, description: updatedPageData.description })
+                .update(updatedPageData)
                 .eq('id', pageId);
 
-            if (pageError) {
-                console.error('Error updating page:', pageError);
-                throw pageError;
-            }
+            if (pageError) throw pageError;
 
             const { error: seoError } = await supabase
                 .from('seo_settings')
                 .upsert({
-                    page_identifier: pageId,
-                    title: updatedSeoData.title,
-                    meta_description: updatedSeoData.meta_description,
-                    meta_keywords: updatedSeoData.meta_keywords,
-                    og_title: updatedSeoData.og_title,
-                    og_description: updatedSeoData.og_description,
-                    og_image: updatedSeoData.og_image
-                }, { onConflict: ['page_identifier'] });
+                    ...updatedSeoData,
+                    page_identifier: pageId
+                });
 
-            if (seoError) {
-                console.error('Error updating SEO settings:', seoError);
-                throw seoError;
-            }
+            if (seoError) throw seoError;
 
             toast({
                 title: "Success",
                 description: "Page and SEO settings updated successfully.",
             });
-            queryClient.invalidateQueries(['page-management-pages']);
+            
+            await queryClient.invalidateQueries({ queryKey: ['page-management-pages'] });
         } catch (err: any) {
             toast({
                 title: "Error saving changes",
