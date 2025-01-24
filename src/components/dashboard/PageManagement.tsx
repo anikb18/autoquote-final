@@ -113,12 +113,19 @@ const PageManagement = () => {
 
             if (pageError) throw pageError;
 
+            const seoData: SeoSettings = {
+                page_identifier: pageId,
+                title: updatedSeoData.title || '',
+                meta_description: updatedSeoData.meta_description || '',
+                meta_keywords: updatedSeoData.meta_keywords || [],
+                og_title: updatedSeoData.og_title || '',
+                og_description: updatedSeoData.og_description || '',
+                og_image: updatedSeoData.og_image || ''
+            };
+
             const { error: seoError } = await supabase
                 .from('seo_settings')
-                .upsert({
-                    ...updatedSeoData,
-                    page_identifier: pageId
-                });
+                .upsert(seoData);
 
             if (seoError) throw seoError;
 
