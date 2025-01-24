@@ -1,4 +1,3 @@
-
 import {
   LayoutDashboard,
   BookOpen,
@@ -24,11 +23,11 @@ import {
 
 export const getNavigationItems = (role: string, unreadCount: number, hasActiveQuote = false) => {
   const adminItems = [
-        {
-          title: "Dashboard",
-          href: "/dashboard/",
-          icon: CreditCard
-        },
+    {
+      title: "Dashboard",
+      href: "/dashboard/",
+      icon: CreditCard
+    },
     {
       title: "Blog",
       icon: BookOpen,
@@ -83,7 +82,6 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
       icon: AppWindow,
       href: "/dashboard/page-management"
     },
-
     {
       title: "Documents",
       icon: File,
@@ -124,6 +122,11 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
       href: "/dashboard/dealership"
     },
     {
+      title: "Chat Hub",
+      icon: MessageSquare,
+      href: "/dashboard/dealer-chat"
+    },
+    {
       title: "Support",
       icon: HelpCircle,
       href: "/support",
@@ -151,6 +154,12 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
       title: "Communications",
       icon: MessageSquare,
       href: "/dashboard/communications",
+      disabled: !hasActiveQuote
+    },
+    {
+      title: "My Chats",
+      icon: MessageSquare,
+      href: "/dashboard/my-chats",
       disabled: !hasActiveQuote
     },
     {

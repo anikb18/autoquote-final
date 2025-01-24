@@ -116,8 +116,23 @@ function App() {
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
-
-              {/* Settings routes */}
+              
+              {/* Add new chat routes */}
+              <Route path="/dashboard/dealer-chat" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <DealerChat />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/my-chats" element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <UserChat />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
+              
               <Route path="/dashboard/settings" element={
                 <ProtectedRoute>
                   <DashboardLayout>
