@@ -1,14 +1,9 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { MessageSquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { CountdownTimer } from "@/components/ui/countdown-timer";
-import { CarDetails, Quote, DealerQuote } from "@/types/quotes";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Quote, CarDetails, DealerQuote } from "@/types/quotes";
 import MyQuotesEmptyState from "@/components/dashboard/MyQuotesEmptyState";
 
 interface QuoteWithDealers extends Quote {
@@ -16,147 +11,88 @@ interface QuoteWithDealers extends Quote {
 }
 
 const BuyerActiveQuotes = () => {
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+    const { toast } = useToast();
+    const navigate = useNavigate();
+    const { t } = useTranslation();
 
-  const { data: quotes, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['active-buyer-quotes'],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+    const { data: quotes, isLoading, isError, error, refetch } = useQuery({
+        queryKey: ['active-buyer-quotes'],
+        queryFn: async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) throw new Error("Not authenticated");
 
-      const { data, error: supabaseError } = await supabase
-        .from('quotes')
-        .select(`
-          id,
-          status,
-          created_at,
-          car_details,
-          dealer_quotes (
-            id,
-            dealer_id,
-            status,
-            is_accepted,
-            created_at,
-            dealer_profiles (
-              dealer_name
-            )
-          )
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+            const { data, error: supabaseError } = await supabase
+                .from('quotes')
+                .select(`
+                    id,
+                    status,
+                    created_at,
+                    car_details,
+                    dealer_quotes (
+                        id,
+                        dealer_id,
+                        status,
+                        is_accepted,
+                        created_at,
+                        dealer_profiles (
+                            dealer_name
+                        )
+                    )
+                `)
+                .eq('user_id', user.id);
 
-      if (supabaseError) {
-        console.error("Supabase error fetching active quotes:", supabaseError);
-        throw supabaseError;
-      }
+            if (supabaseError) {
+                console.error("Supabase error fetching active quotes:", supabaseError);
+                throw supabaseError;
+            }
 
-      // Type assertion to ensure car_details is properly typed
-      return (data as any[]).map(quote => ({
-        ...quote,
-        car_details: quote.car_details as CarDetails
-      })) as QuoteWithDealers[];
-    },
-    meta: {
-      errorMessage: "Error fetching quotes"
+            return (data as any[]).map(quote => ({
+                ...quote,
+                car_details: quote.car_details as CarDetails,
+                dealer_quotes: quote.dealer_quotes.map(dq => ({
+                    ...dq,
+                    is_accepted: dq.is_accepted || false
+                }))
+            })) as QuoteWithDealers[];
+        },
+        meta: {
+            errorMessage: "Error fetching quotes"
+        }
+    });
+
+    if (isLoading) {
+        return <div>Loading quotes...</div>;
     }
-  });
 
-  const handleQuoteResponse = (quoteId: string) => {
-    navigate(`/quotes/${quoteId}`);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="space-y-4">
-        <div className="animate-pulse h-8 bg-gray-200 rounded w-1/4"></div>
-        <div className="animate-pulse h-64 bg-gray-200 rounded"></div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Card className="p-6 text-center">
-        <p className="text-destructive">Error loading quotes.</p>
-        <Button onClick={() => refetch()} className="mt-4">Retry</Button>
-      </Card>
-    );
-  }
-
-  if (!quotes?.length) {
-    return <MyQuotesEmptyState />;
-  }
-
-  const getExpirationTime = (createdAt: string) => {
-    const created = new Date(createdAt);
-    return new Date(created.getTime() + (24 * 60 * 60 * 1000));
-  };
-
-  return (
-    <div className="space-y-4">
-      {quotes.map((quote) => {
-        const carDetails = quote.car_details;
-        if (!carDetails) return null;
-
+    if (isError) {
         return (
-          <Card key={quote.id} className="p-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-semibold">
-                  {carDetails.year} {carDetails.make} {carDetails.model}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Status: {quote.status}
-                </p>
-                <CountdownTimer
-                  endDate={getExpirationTime(quote.created_at)}
-                  onExpire={() => {
-                    toast({
-                      title: t("quotes.expiration.title"),
-                      description: t("quotes.expiration.description"),
-                      variant: "destructive",
-                    });
-                    refetch();
-                  }}
-                />
-              </div>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => handleQuoteResponse(quote.id)}
-              >
-                <MessageSquarePlus className="h-4 w-4 mr-2" />
-                {quote.status === 'pending'
-                  ? t("dealer.quotes.actions.respond")
-                  : t("dealer.quotes.actions.view")
-                }
-              </Button>
+            <div>
+                <p>Error loading quotes: {error.message}</p>
+                <button onClick={refetch}>Retry</button>
             </div>
-            {quote.dealer_quotes && quote.dealer_quotes.length > 0 && (
-              <div className="mt-4 border-t pt-4">
-                <p className="text-sm font-medium mb-2">Dealer Responses:</p>
-                <div className="space-y-2">
-                  {quote.dealer_quotes.map((dealerQuote) => (
-                    <div key={dealerQuote.id} className="flex justify-between items-center">
-                      <span className="text-sm">
-                        {dealerQuote.dealer_profiles?.dealer_name}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        {dealerQuote.status}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </Card>
         );
-      })}
-    </div>
-  );
+    }
+
+    if (!quotes || quotes.length === 0) {
+        return <MyQuotesEmptyState />;
+    }
+
+    return (
+        <div>
+            {quotes.map(quote => (
+                <div key={quote.id}>
+                    <h3>{quote.car_details.year} {quote.car_details.make} {quote.car_details.model}</h3>
+                    <p>Status: {quote.status}</p>
+                    {quote.dealer_quotes.map(dealerQuote => (
+                        <div key={dealerQuote.id}>
+                            <p>Dealer: {dealerQuote.dealer_profiles.dealer_name}</p>
+                            <p>Quote Status: {dealerQuote.status}</p>
+                        </div>
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default BuyerActiveQuotes;

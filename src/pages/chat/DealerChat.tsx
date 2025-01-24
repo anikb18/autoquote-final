@@ -50,7 +50,6 @@ const DealerChat = () => {
 
       if (error) throw error;
       
-      // Type assertion to ensure car_details is properly typed
       return (data as any[]).map(chat => ({
         ...chat,
         quotes: {
