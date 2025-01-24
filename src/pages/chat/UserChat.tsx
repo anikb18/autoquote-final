@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,13 +6,15 @@ import { Separator } from "@/components/ui/separator";
 import { MessageSquare } from "lucide-react";
 import ChatInterface from "@/components/ChatInterface";
 
+interface CarDetails {
+  year: number;
+  make: string;
+  model: string;
+}
+
 interface UserChatData {
   id: string;
-  car_details: {
-    year: number;
-    make: string;
-    model: string;
-  };
+  car_details: CarDetails;
   dealer_quotes: Array<{
     id: string;
     dealer_id: string;
@@ -53,7 +54,11 @@ const UserChat = () => {
         .eq('dealer_quotes.is_accepted', true);
 
       if (error) throw error;
-      return data as UserChatData[];
+      
+      return (data as any[]).map(chat => ({
+        ...chat,
+        car_details: chat.car_details as CarDetails
+      })) as UserChatData[];
     },
   });
 

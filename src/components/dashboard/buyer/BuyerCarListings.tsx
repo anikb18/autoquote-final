@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,7 +31,6 @@ const BuyerCarListings = () => {
       if (error) throw error;
 
       return data.map((quote): Quote => {
-        // Ensure car_details is an object and cast it to avoid type errors
         const carDetails = quote.car_details as Record<string, any>;
 
         return {
@@ -47,7 +46,7 @@ const BuyerCarListings = () => {
           dealer_quotes: quote.dealer_quotes.map((dq): DealerQuote => ({
             id: dq.id,
             dealer_id: dq.dealer_id,
-            dealer_profile: dq.dealer_profiles,
+            dealer_profiles: dq.dealer_profiles,
             is_accepted: false,
             created_at: dq.created_at,
             status: 'pending',

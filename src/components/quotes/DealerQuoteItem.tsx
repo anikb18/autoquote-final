@@ -12,7 +12,7 @@ export const DealerQuoteItem = ({ dealerQuote, quoteId, hasTradeIn = false }: De
   return (
     <div className="border-t pt-4">
       <h3 className="font-semibold">
-        {dealerQuote.dealer_profile?.dealer_name}
+        {dealerQuote.dealer_profiles?.dealer_name}
       </h3>
       {dealerQuote.is_accepted ? (
         <ChatInterface

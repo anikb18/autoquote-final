@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,17 +6,19 @@ import { Separator } from "@/components/ui/separator";
 import { MessageSquare } from "lucide-react";
 import ChatInterface from "@/components/ChatInterface";
 
+interface CarDetails {
+  year: number;
+  make: string;
+  model: string;
+}
+
 interface DealerChatData {
   id: string;
   quote_id: string;
   is_accepted: boolean;
   quotes: {
     id: string;
-    car_details: {
-      year: number;
-      make: string;
-      model: string;
-    };
+    car_details: CarDetails;
     user_id: string;
     profiles: {
       full_name: string;
@@ -53,7 +54,14 @@ const DealerChat = () => {
         .eq('is_accepted', true);
 
       if (error) throw error;
-      return data as DealerChatData[];
+      
+      return (data as any[]).map(chat => ({
+        ...chat,
+        quotes: {
+          ...chat.quotes,
+          car_details: chat.quotes.car_details as CarDetails
+        }
+      })) as DealerChatData[];
     },
   });
 
@@ -92,7 +100,7 @@ const DealerChat = () => {
                   <Separator className="my-4" />
                 </div>
               ))}
-              {activeChats?.length === 0 && (
+              {(!activeChats || activeChats.length === 0) && (
                 <div className="text-center py-8 text-muted-foreground">
                   <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>No active conversations</p>
