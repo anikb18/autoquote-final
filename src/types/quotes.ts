@@ -16,13 +16,11 @@ export interface DealerQuote {
   response_notes?: string;
   is_accepted: boolean;
   created_at: string;
-  dealer_profiles?: DealerProfile;
-}
-
-export interface DealerProfile {
-  dealer_name: string;
-  first_name?: string;
-  last_name?: string;
+  dealer_profiles?: {
+    dealer_name: string;
+    first_name?: string;
+    last_name?: string;
+  };
 }
 
 export interface Quote {

@@ -17,7 +17,7 @@ interface DealerChatData {
     car_details: CarDetails;
     user_id: string;
     profiles: {
-      full_name: string;
+      full_name: string | null;
     };
   };
 }
@@ -49,7 +49,15 @@ const DealerChat = () => {
         .eq('is_accepted', true);
 
       if (error) throw error;
-      return data as DealerChatData[];
+      
+      // Type assertion to ensure car_details is properly typed
+      return (data as any[]).map(chat => ({
+        ...chat,
+        quotes: {
+          ...chat.quotes,
+          car_details: chat.quotes.car_details as CarDetails
+        }
+      })) as DealerChatData[];
     },
   });
 

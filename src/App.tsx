@@ -25,7 +25,9 @@ import { GeneralSettings } from "./components/settings/GeneralSettings";
 import { SecuritySettings } from "./components/settings/SecuritySettings";
 import { NotificationSettings } from "./components/settings/NotificationSettings";
 import { ProfileSettings } from "./components/settings/ProfileSettings";
-import PageManagement from "./components/dashboard/PageManagement"; // Import the PageManagement component
+import PageManagement from "./components/dashboard/PageManagement";
+import DealerChat from "./pages/chat/DealerChat";
+import UserChat from "./pages/chat/UserChat";
 
 const queryClient = new QueryClient({
   defaultOptions: {

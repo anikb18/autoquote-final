@@ -12,15 +12,15 @@ import { CarDetails, Quote, DealerQuote } from "@/types/quotes";
 import MyQuotesEmptyState from "@/components/dashboard/MyQuotesEmptyState";
 
 interface QuoteWithDealers extends Quote {
-  dealer_quotes: Array<DealerQuote & { dealer_profiles: { dealer_name: string } }>;
+  dealer_quotes: (DealerQuote & { dealer_profiles: { dealer_name: string } })[];
 }
 
-export const BuyerActiveQuotes = () => {
+const BuyerActiveQuotes = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { data: quotes, isLoading, isError, error, refetch } = useQuery<QuoteWithDealers[]>({
+  const { data: quotes, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['active-buyer-quotes'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -37,6 +37,7 @@ export const BuyerActiveQuotes = () => {
             id,
             dealer_id,
             status,
+            is_accepted,
             created_at,
             dealer_profiles (
               dealer_name
@@ -51,16 +52,15 @@ export const BuyerActiveQuotes = () => {
         console.error("Supabase error fetching active quotes:", supabaseError);
         throw supabaseError;
       }
-      return data as QuoteWithDealers[];
+
+      // Type assertion to ensure car_details is properly typed
+      return (data as any[]).map(quote => ({
+        ...quote,
+        car_details: quote.car_details as CarDetails
+      })) as QuoteWithDealers[];
     },
     meta: {
-      onError: (err: Error) => {
-        toast({
-          title: "Error fetching quotes",
-          description: err.message,
-          variant: "destructive",
-        });
-      }
+      errorMessage: "Error fetching quotes"
     }
   });
 
@@ -98,7 +98,7 @@ export const BuyerActiveQuotes = () => {
   return (
     <div className="space-y-4">
       {quotes.map((quote) => {
-        const carDetails = quote.car_details as CarDetails;
+        const carDetails = quote.car_details;
         if (!carDetails) return null;
 
         return (

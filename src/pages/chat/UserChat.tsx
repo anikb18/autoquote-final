@@ -45,7 +45,12 @@ const UserChat = () => {
         .eq('dealer_quotes.is_accepted', true);
 
       if (error) throw error;
-      return data as UserChatData[];
+      
+      // Type assertion to ensure car_details is properly typed
+      return (data as any[]).map(chat => ({
+        ...chat,
+        car_details: chat.car_details as CarDetails
+      })) as UserChatData[];
     },
   });
 
