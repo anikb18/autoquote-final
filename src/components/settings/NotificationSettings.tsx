@@ -26,22 +26,42 @@ export function NotificationSettings() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { data: settings, isLoading } = useQuery({
+  const { data: settings, isLoading, error } = useQuery({
     queryKey: ['notification-settings'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*')
-        .eq('category', 'notifications')
-        .maybeSingle();
-      
-      if (error) {
-        console.error('Error fetching notification settings:', error);
-        throw error;
-      }
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('*')
+          .eq('category', 'notifications')
+          .maybeSingle();
+        
+        if (error) {
+          console.error('Error fetching notification settings:', error);
+          throw error;
+        }
 
-      return ((data?.value || defaultSettings) as NotificationSettingsData);
-    }
+        return ((data?.value || defaultSettings) as NotificationSettingsData);
+      } catch (error) {
+        console.error('Error in notification settings query:', error);
+        toast({
+          title: "Error fetching settings",
+          description: "Using default notification settings",
+          variant: "destructive",
+        });
+        return defaultSettings;
+      }
+    },
+    meta: {
+      onError: (error: Error) => {
+        console.error('Settings query error:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load notification settings",
+          variant: "destructive",
+        });
+      },
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,7 +89,7 @@ export function NotificationSettings() {
 
       toast({
         title: "Settings updated",
-        description: "Notification preferences have been updated successfully.",
+        description: "Your notification preferences have been saved.",
       });
     } catch (error) {
       console.error('Error updating settings:', error);
@@ -87,7 +107,21 @@ export function NotificationSettings() {
     return (
       <Card>
         <CardContent className="p-6">
-          Loading...
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="text-center text-red-500">
+            Error loading settings. Please try again later.
+          </div>
         </CardContent>
       </Card>
     );
