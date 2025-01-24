@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +6,25 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { MessageSquare } from "lucide-react";
 import ChatInterface from "@/components/ChatInterface";
+
+interface DealerChatData {
+  id: string;
+  quote_id: string;
+  is_accepted: boolean;
+  quotes: {
+    id: string;
+    car_details: {
+      year: number;
+      make: string;
+      model: string;
+    };
+    user_id: string;
+    profiles: {
+      full_name: string;
+    };
+  };
+  dealer_id: string;
+}
 
 const DealerChat = () => {
   const { data: activeChats, isLoading } = useQuery({
@@ -20,6 +39,7 @@ const DealerChat = () => {
           id,
           quote_id,
           is_accepted,
+          dealer_id,
           quotes (
             id,
             car_details,
@@ -33,7 +53,7 @@ const DealerChat = () => {
         .eq('is_accepted', true);
 
       if (error) throw error;
-      return data;
+      return data as DealerChatData[];
     },
   });
 

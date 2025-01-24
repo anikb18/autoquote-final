@@ -11,9 +11,9 @@ import { Editor } from '@tinymce/tinymce-react';
 import { useState } from 'react';
 import { cn } from "@/lib/utils"; // Assuming you have cn utility for class merging
 
-// Define Interfaces (Keep these as they are)
+// Define Interfaces
 interface SeoSettings {
-    page_identifier: number;
+    page_identifier: string;  // Changed from number to string
     title: string;
     meta_description: string;
     meta_keywords: string[];
@@ -23,7 +23,7 @@ interface SeoSettings {
 }
 
 interface Page {
-    id: number;
+    id: string;
     title: string;
     description: string;
 }
@@ -94,18 +94,20 @@ const PageManagement = () => {
                     };
                 })
             );
-            return pagesWithSeoData as PageWithSeo[];
+            return pagesWithSeoData;
         },
-        onError: (err: any) => {
-            toast({
-                title: "Error fetching pages",
-                description: err.message || "Failed to fetch pages.",
-                variant: "destructive",
-            });
+        meta: {
+            onError: (err: any) => {
+                toast({
+                    title: "Error fetching pages",
+                    description: err.message || "Failed to fetch pages.",
+                    variant: "destructive",
+                });
+            },
         },
     });
 
-    const handlePageAndSeoSave = async (pageId: number, updatedPageData: Partial<Page>, updatedSeoData: Partial<SeoSettings>) => {
+    const handlePageAndSeoSave = async (pageId: string, updatedPageData: Partial<Page>, updatedSeoData: Partial<SeoSettings>) => {
         try {
             const { error: pageError } = await supabase
                 .from('pages')
@@ -297,7 +299,7 @@ const PageManagement = () => {
                                                 og_image: ogImage
                                             }
                                         )}
-                                        variant="primary"
+                                        variant="default"
                                     >
                                         Save Changes
                                     </Button>
