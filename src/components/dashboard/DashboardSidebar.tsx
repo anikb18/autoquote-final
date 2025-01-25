@@ -7,10 +7,16 @@ import { NavigationItem } from "./sidebar/NavigationItem";
 import { SidebarFooter } from "./sidebar/SidebarFooter";
 import { UserProfile } from "./sidebar/UserProfile";
 import { getNavigationItems } from "./sidebar/navigationItems";
+import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 export function DashboardSidebar() {
   const { role, user } = useUserRole();
   const { t } = useTranslation('admin');
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
     role === "super_admin" ? "admin" : role
   );
@@ -34,6 +40,23 @@ export function DashboardSidebar() {
     },
     refetchInterval: 30000
   });
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate("/auth");
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out of your account",
+      });
+    } catch (error) {
+      toast({
+        title: "Error signing out",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
+  };
 
   const { adminItems, dealerItems, buyerItems } = getNavigationItems(role, unreadCount);
   const items = viewMode === 'admin' ? adminItems : 
@@ -102,6 +125,17 @@ export function DashboardSidebar() {
         onViewModeChange={setViewMode}
       />
       
+      <div className="px-6 py-4 border-t">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
+          onClick={handleSignOut}
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          {t('common.signOut')}
+        </Button>
+      </div>
+
       <div className="px-6">
         <UserProfile user={user} />
       </div>
