@@ -2,8 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, Trash2 } from "lucide-react";
+import { FileText, Download, Trash2, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
 interface CarDetails {
   make: string;
@@ -33,6 +41,7 @@ interface Document {
 
 export function DocumentsManagement() {
   const { toast } = useToast();
+  const [filter, setFilter] = useState<string>("all");
 
   const { data: documents, isLoading } = useQuery({
     queryKey: ['documents'],
@@ -83,6 +92,41 @@ export function DocumentsManagement() {
     }
   };
 
+  const handleDelete = async (id: string, filePath: string) => {
+    try {
+      // Delete from storage
+      const { error: storageError } = await supabase.storage
+        .from('documents')
+        .remove([filePath]);
+
+      if (storageError) throw storageError;
+
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('documents')
+        .delete()
+        .eq('id', id);
+
+      if (dbError) throw dbError;
+
+      toast({
+        title: "Success",
+        description: "Document deleted successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete document",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const filteredDocuments = documents?.filter(doc => {
+    if (filter === "all") return true;
+    return doc.type === filter;
+  });
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -90,12 +134,25 @@ export function DocumentsManagement() {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Documents</CardTitle>
+          <Select value={filter} onValueChange={setFilter}>
+            <SelectTrigger className="w-[180px]">
+              <Filter className="h-4 w-4 mr-2" />
+              <SelectValue placeholder="Filter documents" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Documents</SelectItem>
+              <SelectItem value="quote_request">Quote Requests</SelectItem>
+              <SelectItem value="trade_in">Trade-in Documents</SelectItem>
+              <SelectItem value="accepted_quote">Accepted Quotes</SelectItem>
+              <SelectItem value="offer">Offers</SelectItem>
+            </SelectContent>
+          </Select>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {documents?.map((doc) => (
+            {filteredDocuments?.map((doc) => (
               <Card key={doc.id} className="bg-muted/50">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
@@ -105,6 +162,9 @@ export function DocumentsManagement() {
                         <h3 className="font-medium">{doc.type}</h3>
                         <p className="text-sm text-muted-foreground">
                           {doc.quote?.profiles?.full_name || 'Unknown User'} - {doc.quote?.profiles?.email || 'No email'}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(doc.created_at).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -119,6 +179,7 @@ export function DocumentsManagement() {
                       <Button
                         variant="destructive"
                         size="icon"
+                        onClick={() => handleDelete(doc.id, doc.file_path)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -127,6 +188,11 @@ export function DocumentsManagement() {
                 </CardContent>
               </Card>
             ))}
+            {filteredDocuments?.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                No documents found
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -2,6 +2,7 @@ import { AdminMetricsCards } from "./dashboard/AdminMetricsCards";
 import { SalesTrendChart } from "./dashboard/SalesTrendChart";
 import { DealershipComparison } from "./dashboard/DealershipComparison";
 import { SeoManagement } from "./dashboard/SeoManagement";
+import { DocumentsManagement } from "./dashboard/DocumentsManagement";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -25,6 +26,7 @@ const AdminDashboard = () => {
       <Tabs defaultValue="overview" className="space-y-8">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="seo">SEO Settings</TabsTrigger>
         </TabsList>
 
@@ -46,6 +48,10 @@ const AdminDashboard = () => {
               <DealershipComparison />
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="documents">
+          <DocumentsManagement />
         </TabsContent>
 
         <TabsContent value="seo">
