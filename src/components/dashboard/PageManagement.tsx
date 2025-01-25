@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from "'integrations/supabase/client"' (see below for file content);
-import { useToast } from "'hooks/use-toast"' (see below for file content);
-import { Button } from "'components/ui/button"' (see below for file content);
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Editor } from '@tinymce/tinymce-react';
+
+// ...existing code...
 
 const PageItem = ({ pageWithSeoItem, onSave }: { pageWithSeoItem: PageWithSeo, onSave: (pageId: string, updatedPageData: Partial<Page>, updatedSeoData: Partial<SeoSettings>) => Promise<void> }) => {
     const [pageTitle, setPageTitle] = useState(pageWithSeoItem.title);
