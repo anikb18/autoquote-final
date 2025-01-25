@@ -3,11 +3,9 @@ import react from '@vitejs/plugin-react-swc';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -16,7 +14,10 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8081,
+    port: 8080,
+  },
+  css: {
+    postcss: './postcss.config.js',
   },
   build: {
     target: 'esnext',
@@ -45,11 +46,7 @@ export default defineConfig({
           'vendor-icons': ['react-icons', 'lucide-react'],
           'vendor-auth': ['@clerk/clerk-react', '@supabase/supabase-js'],
         },
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]',
-        entryFileNames: 'assets/[name]-[hash].js',
       },
     },
-    chunkSizeWarningLimit: 1000,
   },
 });
