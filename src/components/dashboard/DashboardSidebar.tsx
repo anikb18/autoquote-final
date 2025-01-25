@@ -13,13 +13,29 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 export function DashboardSidebar() {
-  const { role, user } = useUserRole();
+  const { role } = useUserRole();
   const { t } = useTranslation('admin');
   const navigate = useNavigate();
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
     role === "super_admin" ? "admin" : role
   );
+
+  const handleViewModeChange = (mode: "admin" | "dealer" | "user") => {
+    setViewMode(mode);
+    // Navigate to the appropriate dashboard based on view mode
+    switch (mode) {
+      case 'admin':
+        navigate('/admin');
+        break;
+      case 'dealer':
+        navigate('/dealer');
+        break;
+      case 'user':
+        navigate('/dashboard');
+        break;
+    }
+  };
 
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ['unread-support-messages'],
@@ -74,7 +90,7 @@ export function DashboardSidebar() {
         {role === 'admin' && (
           <div className="flex gap-2">
             <button
-              onClick={() => setViewMode('admin')}
+              onClick={() => handleViewModeChange('admin')}
               className={`px-3 py-1 rounded-md text-sm ${
                 viewMode === 'admin' 
                   ? 'bg-primary text-primary-foreground' 
@@ -84,7 +100,7 @@ export function DashboardSidebar() {
               Admin
             </button>
             <button
-              onClick={() => setViewMode('dealer')}
+              onClick={() => handleViewModeChange('dealer')}
               className={`px-3 py-1 rounded-md text-sm ${
                 viewMode === 'dealer' 
                   ? 'bg-primary text-primary-foreground' 
@@ -94,7 +110,7 @@ export function DashboardSidebar() {
               Dealer
             </button>
             <button
-              onClick={() => setViewMode('user')}
+              onClick={() => handleViewModeChange('user')}
               className={`px-3 py-1 rounded-md text-sm ${
                 viewMode === 'user' 
                   ? 'bg-primary text-primary-foreground' 
