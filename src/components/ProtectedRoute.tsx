@@ -10,9 +10,15 @@ interface ProtectedRouteProps {
   children: React.ReactNode;
   requireSubscription?: boolean;
   allowedRoles?: string[];
+  redirectPath?: string;
 }
 
-const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ 
+  children, 
+  requireSubscription = false, 
+  allowedRoles,
+  redirectPath = "/auth"
+}: ProtectedRouteProps) => {
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
 
@@ -23,14 +29,19 @@ const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }:
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return null;
         
-        const { data, error } = await supabase
+        const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
           .maybeSingle();
+
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
         
-        if (error) throw error;
-        return data;
+        return { ...profileData, role: roleData?.role };
       } catch (error) {
         console.error('Profile fetch error:', error);
         toast({
@@ -42,16 +53,6 @@ const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }:
       }
     },
     retry: 1,
-    meta: {
-      onError: (error: Error) => {
-        console.error('Profile query error:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load user profile",
-          variant: "destructive",
-        });
-      },
-    },
   });
 
   useEffect(() => {
@@ -62,8 +63,23 @@ const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }:
         if (error) throw error;
         
         if (!session) {
-          navigate("/auth");
+          navigate(redirectPath);
           return;
+        }
+
+        // Check role-based access
+        if (allowedRoles && profile?.role) {
+          if (!allowedRoles.includes(profile.role)) {
+            // Redirect based on role if access is denied
+            if (profile.role === 'admin' || profile.role === 'super_admin') {
+              navigate('/dashboard');
+            } else if (profile.role === 'dealer') {
+              navigate('/dashboard/dealership');
+            } else {
+              navigate('/dashboard/my-quotes');
+            }
+            return;
+          }
         }
         
         setIsChecking(false);
@@ -74,7 +90,7 @@ const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }:
           description: "Please sign in again",
           variant: "destructive",
         });
-        navigate("/auth");
+        navigate(redirectPath);
       }
     };
 
@@ -82,12 +98,12 @@ const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }:
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT" || !session) {
-        navigate("/auth");
+        navigate(redirectPath);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, redirectPath, allowedRoles, profile]);
 
   if (isChecking || profileLoading) {
     return (
@@ -114,11 +130,6 @@ const ProtectedRoute = ({ children, requireSubscription = false, allowedRoles }:
         </div>
       </div>
     );
-  }
-
-  if (allowedRoles && !allowedRoles.includes(profile?.role)) {
-    navigate("/dashboard");
-    return null;
   }
 
   if (requireSubscription && (!profile?.subscription_status || profile.subscription_status !== 'active')) {
