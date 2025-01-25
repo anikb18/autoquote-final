@@ -25,14 +25,21 @@ const Auth = () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
-          // Directly navigate if session exists
+          // Get user role
           const { data: roleData } = await supabase
             .from('user_roles')
             .select('role')
             .eq('id', session.user.id)
             .single();
 
-          navigate(roleData?.role === 'admin' ? '/admin/dashboard' : '/dashboard');
+          // Redirect based on role
+          if (roleData?.role === 'admin' || roleData?.role === 'super_admin') {
+            navigate('/dashboard');
+          } else if (roleData?.role === 'dealer') {
+            navigate('/dashboard/dealership');
+          } else {
+            navigate('/dashboard/my-quotes');
+          }
         }
       } catch (error) {
         console.error("Session check error:", error);
@@ -68,12 +75,15 @@ const Auth = () => {
               .eq('id', session.user.id)
               .single();
 
-            const redirectPath = roleData?.role === 'admin' 
-              ? '/admin/dashboard' 
-              : '/dashboard';
+            // Redirect based on role
+            if (roleData?.role === 'admin' || roleData?.role === 'super_admin') {
+              navigate('/dashboard');
+            } else if (roleData?.role === 'dealer') {
+              navigate('/dashboard/dealership');
+            } else {
+              navigate('/dashboard/my-quotes');
+            }
 
-            navigate(redirectPath);
-            
           } catch (error) {
             console.error("Sign in error:", error);
             toast({
