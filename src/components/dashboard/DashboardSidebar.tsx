@@ -11,12 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@/hooks/use-user";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
   const { t } = useTranslation('admin');
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useUser();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
     role === "super_admin" ? "admin" : role
   );
