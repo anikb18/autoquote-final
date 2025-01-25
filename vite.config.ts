@@ -16,9 +16,6 @@ export default defineConfig({
   server: {
     port: 8080,
   },
-  css: {
-    postcss: './postcss.config.js',
-  },
   build: {
     target: 'esnext',
     modulePreload: true,
