@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ChartBar, Shield, Users, Calendar } from "lucide-react";
+import { BarChart3, Shield, Users, Calendar } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export const BenefitsSection = () => {
@@ -7,7 +7,7 @@ export const BenefitsSection = () => {
 
   const benefits = [
     {
-      icon: ChartBar,
+      icon: BarChart3,
       title: t("benefits.bidding.title"),
       description: t("benefits.bidding.description")
     },

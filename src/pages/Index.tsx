@@ -9,13 +9,13 @@ import Pricing from "@/components/Pricing";
 import { CallToAction } from "@/components/CallToAction";
 import { useEffect, useState } from "react";
 import SubscriptionPlans from "@/components/SubscriptionPlans";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 import { 
   BarChart3, 
   Calendar, 
   Car, 
   CheckCircle2, 
-  HandshakeIcon, 
+  Handshake, 
   LineChart, 
   PhoneCall, 
   ShieldCheck, 
