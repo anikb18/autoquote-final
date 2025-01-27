@@ -22,7 +22,20 @@ export const HeroSection = () => {
         .single();
 
       if (error) throw error;
-      return data?.value[i18n.language];
+      return data?.value?.[i18n.language] || {
+        title: "Get Pre-Qualified Leads Without The Bidding War",
+        subtitle: "Join AutoQuote24's Exclusive Dealer Network - Limited Spots Available",
+        urgency: "Only 3 dealer spots left in your area",
+        cta: {
+          demo: "Schedule Your Private Demo",
+          video: "Watch 2-Minute Demo Video"
+        },
+        stats: {
+          dealers: "200+ Trusted Partners",
+          conversion: "35% Faster Closing",
+          sales: "1,000+ Qualified Leads Monthly"
+        }
+      };
     }
   });
 
