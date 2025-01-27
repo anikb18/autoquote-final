@@ -15,7 +15,7 @@ import {
   Calendar, 
   Car, 
   CheckCircle2, 
-  Handshake, 
+  HandshakeIcon, 
   LineChart, 
   PhoneCall, 
   ShieldCheck, 
@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 const Index = () => {
-  const { t } = useTranslation('common'); // Initialize useTranslation with 'common' namespace
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -55,8 +55,6 @@ const Index = () => {
       <div className="container mx-auto px-4">
       </div>
       <Hero />
-
-      {/* Core Benefits */}
       <PrimaryFeatures />
       <SecondaryFeatures />
       <Testimonials />
