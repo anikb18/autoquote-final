@@ -43,6 +43,7 @@
     "@types/chart.js": "^2.9.41",
     "@types/stripe": "^8.0.417",
     "@types/three": "^0.172.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-react-swc": "^3.7.2",
     "autoprefixer": "^10.4.12",
     "axios": "^1.7.9",

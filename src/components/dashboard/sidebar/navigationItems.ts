@@ -4,7 +4,7 @@ import {
   Users,
   Building,
   MessageSquare,
-  HandshakeIcon,
+  Handshake,
   AppWindow
 } from "lucide-react";
 
@@ -21,7 +21,7 @@ export const dealerNavigationItems = [
   },
   {
     title: "Active Deals",
-    icon: HandshakeIcon,
+    icon: Handshake,
     href: "/dealer/active-deals"
   },
   {
