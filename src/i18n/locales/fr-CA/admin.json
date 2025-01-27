@@ -2,7 +2,11 @@
   "dashboard": {
     "title": "Tableau de Bord Admin",
     "welcome": "Bienvenue sur votre tableau de bord administrateur",
-    "overview": "Voici un aperçu des performances de votre plateforme"
+    "overview": "Voici un aperçu des performances de votre plateforme",
+    "analytics": "Analyses & Rapports",
+    "analyticsDescription": "Aperçu complet des performances et des métriques de la plateforme",
+    "salesTrend": "Tendances des Ventes",
+    "dealershipComparison": "Performance des Concessionnaires"
   },
   "tabs": {
     "analytics": "Analyses & Rapports",

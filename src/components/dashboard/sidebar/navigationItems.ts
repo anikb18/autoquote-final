@@ -6,6 +6,7 @@ import {
   MessageSquare,
   HeartHandshake,
   AppWindow,
+  BarChart,
 } from "lucide-react";
 
 export const dealerNavigationItems = [
@@ -35,7 +36,12 @@ export const adminNavigationItems = [
   {
     title: "Dashboard",
     icon: Home,
-    href: "/admin",
+    href: "/admin/dashboard",
+  },
+  {
+    title: "Analytics",
+    icon: BarChart,
+    href: "/admin/analytics",
   },
   {
     title: "Users",
