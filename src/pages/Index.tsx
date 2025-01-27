@@ -24,7 +24,6 @@ export default function Index() {
     <div className="flex flex-col min-h-screen">
       <main>
         <Hero />
-        <Features />
         <PrimaryFeatures />
         <SecondaryFeatures />
         <CallToAction />
