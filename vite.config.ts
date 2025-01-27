@@ -2,19 +2,34 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import { componentTagger } from "lovable-tagger";
+import type { IncomingMessage, ServerResponse } from "http";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default defineConfig({
-  plugins: [react()],
+export default defineConfig(({ mode }) => ({
+  plugins: [
+    react(),
+    mode === 'development' && componentTagger(),
+  ].filter(Boolean),
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
     },
   },
   server: {
+    host: "::",
     port: 8080,
+    allowedHosts: ['36129237-bfd4-4359-bb23-1a4fa1241306.lovableproject.com', 'localhost'],
+    middlewares: [
+      (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+        if (!req.url?.includes('.')) {
+          req.url = '/index.html';
+        }
+        next();
+      }
+    ]
   },
   build: {
     target: 'esnext',
@@ -46,4 +61,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

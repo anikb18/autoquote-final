@@ -25,37 +25,37 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
   const adminItems = [
     {
       title: "Dashboard",
-      href: "/dashboard/",
+      href: "/admin",
       icon: CreditCard
     },
     {
       title: "Blog",
       icon: BookOpen,
-      href: "/dashboard/blog"
+      href: "/admin/blog"
     },
     {
       title: "Email",
       icon: Mail,
-      href: "/dashboard/newsletter"
+      href: "/admin/newsletter"
     },
     {
       title: "Analytics",
       icon: BarChart3,
-      href: "/dashboard/analytics",
+      href: "/admin/analytics",
       children: [
         {
           title: "Dealer Performance",
-          href: "/dashboard/analytics/dealer",
+          href: "/admin/analytics/dealer",
           icon: Building
         },
         {
           title: "Platform Revenue",
-          href: "/dashboard/analytics/revenue",
+          href: "/admin/analytics/revenue",
           icon: TrendingUp
         },
         {
           title: "User Analytics",
-          href: "/dashboard/analytics/users",
+          href: "/admin/analytics/users",
           icon: Users
         }
       ]
@@ -63,16 +63,16 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
     {
       title: "Finances",
       icon: DollarSign,
-      href: "/dashboard/finances",
+      href: "/admin/finances",
       children: [
         {
           title: "Coupons",
-          href: "/dashboard/coupons",
+          href: "/admin/coupons",
           icon: Tag
         },
         {
           title: "Subscriptions",
-          href: "/subscription",
+          href: "/admin/subscription",
           icon: CreditCard
         }
       ]
@@ -80,12 +80,12 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
     {
       title: "Pages",
       icon: AppWindow,
-      href: "/dashboard/page-management"
+      href: "/admin/page-management"
     },
     {
       title: "Documents",
       icon: File,
-      href: "/dashboard/documents"
+      href: "/admin/documents"
     },
     {
       title: "Support Center",
@@ -96,7 +96,7 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
     {
       title: "Settings",
       icon: Settings,
-      href: "/dashboard/settings"
+      href: "/admin/settings"
     }
   ];
 
@@ -104,27 +104,27 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
     {
       title: "Overview",
       icon: BarChart3,
-      href: "/dashboard"
+      href: "/dealer"
     },
     {
       title: "Quote Requests",
       icon: DollarSign,
-      href: "/dashboard/quotes"
+      href: "/dealer/quotes"
     },
     {
       title: "Active Deals",
       icon: Handshake,
-      href: "/dashboard/active-deals"
+      href: "/dealer/active-deals"
     },
     {
       title: "Dealership",
       icon: Car,
-      href: "/dashboard/dealership"
+      href: "/dealer/dealership"
     },
     {
       title: "Chat Hub",
       icon: MessageSquare,
-      href: "/dashboard/dealer-chat"
+      href: "/dealer/chat"
     },
     {
       title: "Support",
@@ -135,15 +135,15 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
     {
       title: "Settings",
       icon: Settings,
-      href: "/dashboard/settings"
+      href: "/dealer/settings"
     }
   ];
 
   const buyerItems = [
     {
-      title: "New Quote",
-      icon: DollarSign,
-      href: "/dashboard/new-quote"
+      title: "Dashboard",
+      icon: LayoutDashboard,
+      href: "/dashboard"
     },
     {
       title: "My Quotes",

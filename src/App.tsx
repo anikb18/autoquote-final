@@ -50,149 +50,53 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
-              <Route path="/new-quote" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <NewQuoteForm />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/quote-requests" element={<NewQuoteForm />} />
               
-              {/* Dashboard routes wrapped in DashboardLayout */}
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
+              {/* Admin Dashboard Routes */}
+              <Route path="/admin/*" element={
+                <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
                   <DashboardLayout>
-                    <Dashboard />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/users" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <UserManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/blog" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <BlogManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/newsletter" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <NewsletterManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/coupons" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <CouponManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/my-quotes" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <BuyerDashboard />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/dealers" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <BuyerDashboard />
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/users" element={<UserManagement />} />
+                      <Route path="/blog" element={<BlogManagement />} />
+                      <Route path="/newsletter" element={<NewsletterManagement />} />
+                      <Route path="/coupons" element={<CouponManagement />} />
+                      <Route path="/page-management" element={<PageManagement />} />
+                      <Route path="/settings/*" element={<AdminSettings />} />
+                    </Routes>
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
 
-              {/* New Page Management Route */}
-              <Route path="/dashboard/page-management" element={
-                <ProtectedRoute>
+              {/* Dealer Dashboard Routes */}
+              <Route path="/dealer/*" element={
+                <ProtectedRoute allowedRoles={['dealer']}>
                   <DashboardLayout>
-                    <PageManagement />
+                    <Routes>
+                      <Route path="/" element={<DealershipOverview />} />
+                      <Route path="/quotes" element={<ActiveQuotes />} />
+                      <Route path="/settings" element={<DealershipSettings />} />
+                      <Route path="/chat" element={<DealerChat />} />
+                    </Routes>
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
-              
-              {/* Add new chat routes */}
-              <Route path="/dashboard/dealer-chat" element={
+
+              {/* User Dashboard Routes */}
+              <Route path="/dashboard/*" element={
                 <ProtectedRoute>
                   <DashboardLayout>
-                    <DealerChat />
+                    <Routes>
+                      <Route path="/" element={<BuyerDashboard />} />
+                      <Route path="/my-quotes" element={<BuyerDashboard />} />
+                      <Route path="/my-chats" element={<UserChat />} />
+                      <Route path="/new-quote" element={<NewQuoteForm />} />
+                      <Route path="/settings/*" element={<ProfileSettings />} />
+                    </Routes>
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
-              <Route path="/dashboard/my-chats" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <UserChat />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/dashboard/settings" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <AdminSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/settings/profile" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <ProfileSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/settings/general" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <GeneralSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/settings/security" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <SecuritySettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/settings/notifications" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <NotificationSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              
-              {/* Dealership routes */}
-              <Route path="/dashboard/dealership" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <DealershipOverview />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/quotes" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <ActiveQuotes />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard/dealership/settings" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <DealershipSettings />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
+
               <Route path="/subscription" element={
                 <ProtectedRoute requireSubscription={false}>
                   <DashboardLayout>
