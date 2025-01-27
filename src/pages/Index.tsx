@@ -2,7 +2,7 @@ import {
   Calendar, 
   Car, 
   CheckCircle2, 
-  Handshake, 
+  HandshakeCheck, 
   LineChart, 
   PhoneCall, 
   ShieldCheck,
@@ -31,7 +31,7 @@ export default function Index() {
       description: t("home.features.pricing.description"),
     },
     {
-      icon: Handshake,
+      icon: HandshakeCheck,
       title: t("home.features.dealerNetwork.title"),
       description: t("home.features.dealerNetwork.description"),
     },

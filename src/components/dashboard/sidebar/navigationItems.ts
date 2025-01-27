@@ -1,179 +1,68 @@
 import {
-  LayoutDashboard,
-  BookOpen,
-  Mail,
-  BarChart3,
-  Search,
-  Palette,
-  FileText,
-  HelpCircle,
+  Home,
   Settings,
-  DollarSign,
-  Car,
-  Tag,
-  File,
-  CreditCard,
-  TrendingUp,
   Users,
   Building,
   MessageSquare,
-  Handshake,
+  HandshakeCheck,
   AppWindow
 } from "lucide-react";
 
-export const getNavigationItems = (role: string, unreadCount: number, hasActiveQuote = false) => {
-  const adminItems = [
-    {
-      title: "Dashboard",
-      href: "/admin",
-      icon: CreditCard
-    },
-    {
-      title: "Blog",
-      icon: BookOpen,
-      href: "/admin/blog"
-    },
-    {
-      title: "Email",
-      icon: Mail,
-      href: "/admin/newsletter"
-    },
-    {
-      title: "Analytics",
-      icon: BarChart3,
-      href: "/admin/analytics",
-      children: [
-        {
-          title: "Dealer Performance",
-          href: "/admin/analytics/dealer",
-          icon: Building
-        },
-        {
-          title: "Platform Revenue",
-          href: "/admin/analytics/revenue",
-          icon: TrendingUp
-        },
-        {
-          title: "User Analytics",
-          href: "/admin/analytics/users",
-          icon: Users
-        }
-      ]
-    },
-    {
-      title: "Finances",
-      icon: DollarSign,
-      href: "/admin/finances",
-      children: [
-        {
-          title: "Coupons",
-          href: "/admin/coupons",
-          icon: Tag
-        },
-        {
-          title: "Subscriptions",
-          href: "/admin/subscription",
-          icon: CreditCard
-        }
-      ]
-    },
-    {
-      title: "Pages",
-      icon: AppWindow,
-      href: "/admin/page-management"
-    },
-    {
-      title: "Documents",
-      icon: File,
-      href: "/admin/documents"
-    },
-    {
-      title: "Support Center",
-      icon: HelpCircle,
-      href: "/support",
-      badge: unreadCount > 0 ? unreadCount : undefined
-    },
-    {
-      title: "Settings",
-      icon: Settings,
-      href: "/admin/settings"
-    }
-  ];
+export const dealerNavigationItems = [
+  {
+    title: "Dashboard",
+    icon: Home,
+    href: "/dealer"
+  },
+  {
+    title: "Active Quotes",
+    icon: MessageSquare,
+    href: "/dealer/quotes"
+  },
+  {
+    title: "Active Deals",
+    icon: HandshakeCheck,
+    href: "/dealer/active-deals"
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    href: "/dealer/settings"
+  }
+];
 
-  const dealerItems = [
-    {
-      title: "Overview",
-      icon: BarChart3,
-      href: "/dealer"
-    },
-    {
-      title: "Quote Requests",
-      icon: DollarSign,
-      href: "/dealer/quotes"
-    },
-    {
-      title: "Active Deals",
-      icon: Handshake,
-      href: "/dealer/active-deals"
-    },
-    {
-      title: "Dealership",
-      icon: Car,
-      href: "/dealer/dealership"
-    },
-    {
-      title: "Chat Hub",
-      icon: MessageSquare,
-      href: "/dealer/chat"
-    },
-    {
-      title: "Support",
-      icon: HelpCircle,
-      href: "/support",
-      badge: unreadCount > 0 ? unreadCount : undefined
-    },
-    {
-      title: "Settings",
-      icon: Settings,
-      href: "/dealer/settings"
-    }
-  ];
+export const adminNavigationItems = [
+  {
+    title: "Dashboard",
+    icon: Home,
+    href: "/admin"
+  },
+  {
+    title: "Users",
+    icon: Users,
+    href: "/admin/users"
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    href: "/admin/settings"
+  }
+];
 
-  const buyerItems = [
-    {
-      title: "Dashboard",
-      icon: LayoutDashboard,
-      href: "/dashboard"
-    },
-    {
-      title: "My Quotes",
-      icon: FileText,
-      href: "/dashboard/my-quotes"
-    },
-    {
-      title: "Communications",
-      icon: MessageSquare,
-      href: "/dashboard/communications",
-      disabled: !hasActiveQuote
-    },
-    {
-      title: "My Chats",
-      icon: MessageSquare,
-      href: "/dashboard/my-chats",
-      disabled: !hasActiveQuote
-    },
-    {
-      title: "Support",
-      icon: HelpCircle,
-      href: "/support",
-      badge: unreadCount > 0 ? unreadCount : undefined
-    },
-    {
-      title: "Settings",
-      icon: Settings,
-      href: "/dashboard/settings"
-    }
-  ];
-
-  return { adminItems, dealerItems, buyerItems };
-};
+export const userNavigationItems = [
+  {
+    title: "Dashboard",
+    icon: Home,
+    href: "/dashboard"
+  },
+  {
+    title: "My Quotes",
+    icon: MessageSquare,
+    href: "/dashboard/my-quotes"
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    href: "/dashboard/settings"
+  }
+];
