@@ -1,11 +1,21 @@
-import { Shield, Clock, DollarSign, MessageSquare } from "lucide-react";
+import { Shield, Clock, DollarSign, MessageSquare, LucideIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const Features = () => {
+interface Feature {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+interface FeaturesProps {
+  features?: Feature[];
+}
+
+const Features = ({ features: customFeatures }: FeaturesProps) => {
   const { t } = useTranslation('features');
 
-  const features = [
+  const defaultFeatures = [
     {
       icon: Shield,
       title: t('items.trusted.title'),
@@ -28,6 +38,8 @@ const Features = () => {
     },
   ];
 
+  const displayFeatures = customFeatures || defaultFeatures;
+
   return (
     <div>
       <section className="py-24 bg-secondary/10">
@@ -42,7 +54,7 @@ const Features = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
+            {displayFeatures.map((feature, index) => (
               <Link to={`/${index + 1}`} key={index}>
                 <div className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer">
                   <feature.icon className="w-12 h-12 text-accent mb-4" />
