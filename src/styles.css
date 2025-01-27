@@ -76,17 +76,14 @@
   }
 }
 
-/* Dark mode transitions */
 .dark-mode-transition {
   @apply transition-colors duration-200;
 }
 
-/* Glass effect for cards */
 .glass {
   @apply bg-background/80 backdrop-blur-sm border border-border/50;
 }
 
-/* Hover effects */
 .hover-card {
   @apply hover:shadow-lg transition-shadow duration-200;
 }
@@ -118,23 +115,20 @@
   transform: translateY(-2px);
 }
 
-/* Table hover effects */
 .table-row:hover {
   background-color: rgba(0, 0, 0, 0.03);
 }
 
-/* 3D Viewer enhancements */
 .three-container {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-/* Smooth transitions */
+
 .table-row {
   transition: background-color 0.2s;
 }
 
-/* Badge styling */
 .badge {
   transition: opacity 0.2s;
 }
