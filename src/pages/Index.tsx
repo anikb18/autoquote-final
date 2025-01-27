@@ -9,12 +9,12 @@ import {
   Wallet 
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Hero } from "@/components/Hero";
-import { Features } from "@/components/Features";
+import Hero from "@/components/Hero";
+import Features from "@/components/Features";
 import { PrimaryFeatures } from "@/components/PrimaryFeatures";
 import { SecondaryFeatures } from "@/components/SecondaryFeatures";
 import { CallToAction } from "@/components/CallToAction";
-import { Pricing } from "@/components/Pricing";
+import Pricing from "@/components/Pricing";
 import { Testimonials } from "@/components/Testimonials";
 
 export default function Index() {
