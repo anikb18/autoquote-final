@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import { Scene } from "./Scene";
 import { CarModel } from "./CarModel";
 import { Hotspots } from "./Hotspots";
+import { useToast } from "@/hooks/use-toast";
 
 interface CarViewer3DProps {
   carDetails?: {
@@ -23,6 +24,7 @@ const CarViewer3D = ({
 }: CarViewer3DProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleHotspotHover = (label: string | null) => {
     setHoveredHotspot(label);
@@ -52,14 +54,22 @@ const CarViewer3D = ({
           `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${carDetails.make.toLowerCase()}&model=${carDetails.model.toLowerCase()}`,
           {
             headers: {
-              "x-rapidapi-host": "cars-by-api-ninjas.p.rapidapi.com",
-              "x-rapidapi-key": process.env.RAPIDAPI_KEY || "",
+              "X-RapidAPI-Host": "cars-by-api-ninjas.p.rapidapi.com",
+              "X-RapidAPI-Key": import.meta.env.VITE_RAPIDAPI_KEY,
             },
           },
         );
+        
         if (!response.ok) {
+          const errorData = await response.json();
+          toast({
+            title: "Error fetching car data",
+            description: errorData.message || "Failed to fetch car data",
+            variant: "destructive",
+          });
           throw new Error(`API call failed: ${response.statusText}`);
         }
+        
         const data = await response.json();
         console.log("Car API response:", data);
         return data;
