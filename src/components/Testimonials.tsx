@@ -1,11 +1,11 @@
 import { Container } from '@/components/ui/container';
 import { TestimonialHeader } from './testimonials/TestimonialHeader';
 import { TestimonialCard } from './testimonials/TestimonialCard';
-import avatarImage1 from '/images/avatars/avatar-1.png';
-import avatarImage2 from '/images/avatars/avatar-2.png';
-import avatarImage3 from '/images/avatars/avatar-3.png';
-import avatarImage4 from '/images/avatars/avatar-4.png';
-import avatarImage5 from '/images/avatars/avatar-5.png';
+import avatarImage1 from '@/images/avatars/avatar-1.png';
+import avatarImage2 from '@/images/avatars/avatar-2.png';
+import avatarImage3 from '@/images/avatars/avatar-3.png';
+import avatarImage4 from '@/images/avatars/avatar-4.png';
+import avatarImage5 from '@/images/avatars/avatar-5.png';
 
 const testimonials = [
   {
