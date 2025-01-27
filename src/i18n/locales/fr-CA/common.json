@@ -21,11 +21,30 @@
     "notAvailable": "Non disponible",
     "requestQuote": "Demander un devis",
     "myQuotes": "Mes devis",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "navigation": {
+      "dashboard": "Tableau de bord",
+      "quotes": "Devis",
+      "settings": "Paramètres",
+      "users": "Utilisateurs",
+      "blog": "Blog",
+      "newsletter": "Infolettre",
+      "coupons": "Coupons",
+      "pages": "Pages",
+      "support": "Support",
+      "chat": "Chat"
+    }
   },
   "dealer": {
     "quoteRequests": "Demandes de devis",
     "notifications": "Notifications",
     "welcome": "Bienvenue"
+  },
+  "admin": {
+    "dashboard": "Tableau de bord admin",
+    "users": "Gestion des utilisateurs",
+    "blog": "Gestion du blog",
+    "newsletter": "Gestion de l'infolettre",
+    "settings": "Paramètres admin"
   }
 }

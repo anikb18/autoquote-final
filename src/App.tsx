@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -29,6 +29,7 @@ import { ProfileSettings } from "./components/settings/ProfileSettings";
 import PageManagement from "./components/dashboard/PageManagement";
 import DealerChat from "./pages/chat/DealerChat";
 import UserChat from "./pages/chat/UserChat";
+import { useUserRole } from "@/hooks/use-user-role";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,24 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const RoleBasedRedirect = () => {
+  const { role, isLoading } = useUserRole();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  switch (role) {
+    case "admin":
+    case "super_admin":
+      return <Navigate to="/admin/dashboard" replace />;
+    case "dealer":
+      return <Navigate to="/dealer/dashboard" replace />;
+    default:
+      return <Navigate to="/dashboard/my-quotes" replace />;
+  }
+};
 
 function App() {
   return (
@@ -52,6 +71,16 @@ function App() {
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
 
+              {/* Role-based redirect */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <RoleBasedRedirect />
+                  </ProtectedRoute>
+                }
+              />
+
               {/* Admin Dashboard Routes */}
               <Route
                 path="/admin/*"
@@ -59,7 +88,7 @@ function App() {
                   <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
                     <DashboardLayout>
                       <Routes>
-                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/users" element={<UserManagement />} />
                         <Route path="/blog" element={<BlogManagement />} />
                         <Route
@@ -85,7 +114,7 @@ function App() {
                   <ProtectedRoute allowedRoles={["dealer"]}>
                     <DashboardLayout>
                       <Routes>
-                        <Route path="/" element={<DealershipOverview />} />
+                        <Route path="/dashboard" element={<DealershipOverview />} />
                         <Route path="/quotes" element={<ActiveQuotes />} />
                         <Route
                           path="/settings"
@@ -105,7 +134,6 @@ function App() {
                   <ProtectedRoute>
                     <DashboardLayout>
                       <Routes>
-                        <Route path="/" element={<BuyerDashboard />} />
                         <Route path="/my-quotes" element={<BuyerDashboard />} />
                         <Route path="/my-chats" element={<UserChat />} />
                         <Route path="/new-quote" element={<NewQuoteForm />} />

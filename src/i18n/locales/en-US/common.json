@@ -21,11 +21,30 @@
     "notAvailable": "Not Available",
     "requestQuote": "Request Quote",
     "myQuotes": "My Quotes",
-    "settings": "Settings"
+    "settings": "Settings",
+    "navigation": {
+      "dashboard": "Dashboard",
+      "quotes": "Quotes",
+      "settings": "Settings",
+      "users": "Users",
+      "blog": "Blog",
+      "newsletter": "Newsletter",
+      "coupons": "Coupons",
+      "pages": "Pages",
+      "support": "Support",
+      "chat": "Chat"
+    }
   },
   "dealer": {
     "quoteRequests": "Quote Requests",
     "notifications": "Notifications",
     "welcome": "Welcome"
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "User Management",
+    "blog": "Blog Management",
+    "newsletter": "Newsletter Management",
+    "settings": "Admin Settings"
   }
 }
