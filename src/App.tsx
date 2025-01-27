@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
@@ -60,6 +62,40 @@ const RoleBasedRedirect = () => {
 };
 
 function App() {
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Check for an existing session
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error("Error checking session:", error);
+        toast({
+          title: "Authentication Error",
+          description: "There was an error checking your session. Please try logging in again.",
+          variant: "destructive",
+        });
+      }
+    });
+
+    // Set up auth state change listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        // Clear any cached data when user signs out
+        queryClient.clear();
+      } else if (event === 'SIGNED_IN') {
+        // Optionally refresh data when user signs in
+        queryClient.invalidateQueries();
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [toast]);
+
   return (
     <ThemeProvider defaultTheme="light">
       <QueryClientProvider client={queryClient}>
@@ -93,15 +129,9 @@ function App() {
                         <Route path="/analytics" element={<AdminAnalytics />} />
                         <Route path="/users" element={<UserManagement />} />
                         <Route path="/blog" element={<BlogManagement />} />
-                        <Route
-                          path="/newsletter"
-                          element={<NewsletterManagement />}
-                        />
+                        <Route path="/newsletter" element={<NewsletterManagement />} />
                         <Route path="/coupons" element={<CouponManagement />} />
-                        <Route
-                          path="/page-management"
-                          element={<PageManagement />}
-                        />
+                        <Route path="/page-management" element={<PageManagement />} />
                         <Route path="/settings/*" element={<AdminSettings />} />
                       </Routes>
                     </DashboardLayout>
@@ -118,10 +148,7 @@ function App() {
                       <Routes>
                         <Route path="/dashboard" element={<DealershipOverview />} />
                         <Route path="/quotes" element={<ActiveQuotes />} />
-                        <Route
-                          path="/settings"
-                          element={<DealershipSettings />}
-                        />
+                        <Route path="/settings" element={<DealershipSettings />} />
                         <Route path="/chat" element={<DealerChat />} />
                       </Routes>
                     </DashboardLayout>
@@ -139,10 +166,7 @@ function App() {
                         <Route path="/my-quotes" element={<BuyerDashboard />} />
                         <Route path="/my-chats" element={<UserChat />} />
                         <Route path="/new-quote" element={<NewQuoteForm />} />
-                        <Route
-                          path="/settings/*"
-                          element={<ProfileSettings />}
-                        />
+                        <Route path="/settings/*" element={<ProfileSettings />} />
                       </Routes>
                     </DashboardLayout>
                   </ProtectedRoute>
