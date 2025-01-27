@@ -12,6 +12,8 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
@@ -20,7 +22,7 @@ export function DashboardSidebar() {
   const { toast } = useToast();
   const { user } = useUser();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
-    role === "super_admin" ? "admin" : role,
+    role === "super_admin" || role === "admin" ? "admin" : role || "user"
   );
 
   const handleViewModeChange = (mode: "admin" | "dealer" | "user") => {
@@ -28,13 +30,13 @@ export function DashboardSidebar() {
     // Navigate to the appropriate dashboard based on view mode
     switch (mode) {
       case "admin":
-        navigate("/admin");
+        navigate("/admin/dashboard");
         break;
       case "dealer":
-        navigate("/dealer");
+        navigate("/dealer/dashboard");
         break;
       case "user":
-        navigate("/dashboard");
+        navigate("/dashboard/my-quotes");
         break;
     }
   };
@@ -88,42 +90,34 @@ export function DashboardSidebar() {
         : buyerItems;
 
   return (
-    <div className="flex grow flex-col">
+    <div className="flex grow flex-col bg-background">
       <div className="flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <img className="h-8 w-auto" src="/logo/dark.svg" alt="AutoQuote24" />
-        {role === "admin" && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleViewModeChange("admin")}
-              className={`px-3 py-1 rounded-md text-sm ${
-                viewMode === "admin"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted/50 hover:bg-muted"
-              }`}
-            >
-              Admin
-            </button>
-            <button
-              onClick={() => handleViewModeChange("dealer")}
-              className={`px-3 py-1 rounded-md text-sm ${
-                viewMode === "dealer"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted/50 hover:bg-muted"
-              }`}
-            >
-              Dealer
-            </button>
-            <button
-              onClick={() => handleViewModeChange("user")}
-              className={`px-3 py-1 rounded-md text-sm ${
-                viewMode === "user"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted/50 hover:bg-muted"
-              }`}
-            >
-              User
-            </button>
-          </div>
+        <img 
+          className="h-8 w-auto" 
+          src="/logo/dark.png" 
+          alt="AutoQuote24" 
+        />
+        {(role === "admin" || role === "super_admin") && (
+          <RadioGroup
+            value={viewMode}
+            onValueChange={(value: "admin" | "dealer" | "user") =>
+              handleViewModeChange(value)
+            }
+            className="flex gap-2"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="admin" id="admin" />
+              <Label htmlFor="admin">Admin</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="dealer" id="dealer" />
+              <Label htmlFor="dealer">Dealer</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="user" id="user" />
+              <Label htmlFor="user">User</Label>
+            </div>
+          </RadioGroup>
         )}
       </div>
 
