@@ -17,7 +17,7 @@ import {
   Users,
   Building,
   MessageSquare,
-  Handshake,
+  HandshakeSimple,
   AppWindow
 } from "lucide-react";
 
@@ -113,7 +113,7 @@ export const getNavigationItems = (role: string, unreadCount: number, hasActiveQ
     },
     {
       title: "Active Deals",
-      icon: Handshake,
+      icon: HandshakeSimple,
       href: "/dealer/active-deals"
     },
     {
