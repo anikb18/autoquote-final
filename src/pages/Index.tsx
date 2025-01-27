@@ -15,7 +15,7 @@ import {
   Calendar, 
   Car, 
   CheckCircle2, 
-  HandshakeIcon, 
+  Handshake, 
   LineChart, 
   PhoneCall, 
   ShieldCheck, 
