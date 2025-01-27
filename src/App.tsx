@@ -30,6 +30,7 @@ import PageManagement from "./components/dashboard/PageManagement";
 import DealerChat from "./pages/chat/DealerChat";
 import UserChat from "./pages/chat/UserChat";
 import { useUserRole } from "@/hooks/use-user-role";
+import AdminAnalytics from "./pages/admin/Analytics";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,6 +90,7 @@ function App() {
                     <DashboardLayout>
                       <Routes>
                         <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/analytics" element={<AdminAnalytics />} />
                         <Route path="/users" element={<UserManagement />} />
                         <Route path="/blog" element={<BlogManagement />} />
                         <Route

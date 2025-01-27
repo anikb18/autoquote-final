@@ -2,7 +2,11 @@
   "dashboard": {
     "title": "Admin Dashboard",
     "welcome": "Welcome back to your admin dashboard",
-    "overview": "Here's an overview of your platform's performance"
+    "overview": "Here's an overview of your platform's performance",
+    "analytics": "Analytics & Reports",
+    "analyticsDescription": "Comprehensive overview of platform performance and metrics",
+    "salesTrend": "Sales Trends",
+    "dealershipComparison": "Dealership Performance"
   },
   "tabs": {
     "analytics": "Analytics & Reports",
