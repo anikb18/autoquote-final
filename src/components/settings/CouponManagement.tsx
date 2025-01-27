@@ -3,17 +3,36 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface CouponFormData {
   code: string;
   name: string;
   description: string;
-  discount_type: 'percentage' | 'fixed';
+  discount_type: "percentage" | "fixed";
   discount_value: number;
   usage_limit: number;
   expires_at: string;
@@ -24,33 +43,37 @@ export const CouponManagement = () => {
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState<CouponFormData>({
-    code: '',
-    name: '',
-    description: '',
-    discount_type: 'percentage',
+    code: "",
+    name: "",
+    description: "",
+    discount_type: "percentage",
     discount_value: 0,
     usage_limit: -1,
-    expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
   });
 
   const { data: couponsData, refetch } = useQuery({
-    queryKey: ['coupons'],
+    queryKey: ["coupons"],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke<{ coupons: any[] }>('list-coupons');
+      const { data, error } = await supabase.functions.invoke<{
+        coupons: any[];
+      }>("list-coupons");
       if (error) throw error;
       return data;
-    }
+    },
   });
 
   const handleCreateCoupon = async () => {
     setLoading(true);
     try {
-      const { error } = await supabase.functions.invoke('create-coupon', {
-        body: formData
+      const { error } = await supabase.functions.invoke("create-coupon", {
+        body: formData,
       });
-      
+
       if (error) throw error;
-      
+
       toast({
         title: "Success",
         description: "Coupon created successfully",
@@ -58,7 +81,7 @@ export const CouponManagement = () => {
       setIsDialogOpen(false);
       refetch();
     } catch (error) {
-      console.error('Error creating coupon:', error);
+      console.error("Error creating coupon:", error);
       toast({
         title: "Error",
         description: "Failed to create coupon",
@@ -69,10 +92,13 @@ export const CouponManagement = () => {
     }
   };
 
-  const handleInputChange = (field: keyof CouponFormData, value: string | number) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof CouponFormData,
+    value: string | number,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -94,7 +120,7 @@ export const CouponManagement = () => {
                 <Input
                   id="code"
                   value={formData.code}
-                  onChange={(e) => handleInputChange('code', e.target.value)}
+                  onChange={(e) => handleInputChange("code", e.target.value)}
                   placeholder="SUMMER2024"
                 />
               </div>
@@ -103,7 +129,7 @@ export const CouponManagement = () => {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                   placeholder="Summer Sale"
                 />
               </div>
@@ -112,7 +138,9 @@ export const CouponManagement = () => {
                 <Input
                   id="description"
                   value={formData.description}
-                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
                   placeholder="Summer sale discount"
                 />
               </div>
@@ -120,7 +148,9 @@ export const CouponManagement = () => {
                 <Label htmlFor="discount_type">Discount Type</Label>
                 <Select
                   value={formData.discount_type}
-                  onValueChange={(value) => handleInputChange('discount_type', value)}
+                  onValueChange={(value) =>
+                    handleInputChange("discount_type", value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select discount type" />
@@ -137,17 +167,26 @@ export const CouponManagement = () => {
                   id="discount_value"
                   type="number"
                   value={formData.discount_value}
-                  onChange={(e) => handleInputChange('discount_value', parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "discount_value",
+                      parseFloat(e.target.value),
+                    )
+                  }
                   placeholder="10"
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="usage_limit">Usage Limit (-1 for unlimited)</Label>
+                <Label htmlFor="usage_limit">
+                  Usage Limit (-1 for unlimited)
+                </Label>
                 <Input
                   id="usage_limit"
                   type="number"
                   value={formData.usage_limit}
-                  onChange={(e) => handleInputChange('usage_limit', parseInt(e.target.value))}
+                  onChange={(e) =>
+                    handleInputChange("usage_limit", parseInt(e.target.value))
+                  }
                   placeholder="-1"
                 />
               </div>
@@ -157,7 +196,9 @@ export const CouponManagement = () => {
                   id="expires_at"
                   type="date"
                   value={formData.expires_at}
-                  onChange={(e) => handleInputChange('expires_at', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("expires_at", e.target.value)
+                  }
                 />
               </div>
             </div>
@@ -190,23 +231,27 @@ export const CouponManagement = () => {
               <TableCell className="font-mono">{coupon.code}</TableCell>
               <TableCell>{coupon.name}</TableCell>
               <TableCell>
-                {coupon.discount_type === 'percentage' 
-                  ? `${coupon.discount_value}%` 
+                {coupon.discount_type === "percentage"
+                  ? `${coupon.discount_value}%`
                   : `$${coupon.discount_value}`}
               </TableCell>
               <TableCell>
-                {coupon.usage_limit === -1 
-                  ? "Unlimited" 
+                {coupon.usage_limit === -1
+                  ? "Unlimited"
                   : `${coupon.usage_count || 0}/${coupon.usage_limit}`}
               </TableCell>
               <TableCell>
-                {coupon.expires_at 
-                  ? new Date(coupon.expires_at).toLocaleDateString() 
+                {coupon.expires_at
+                  ? new Date(coupon.expires_at).toLocaleDateString()
                   : "Never"}
               </TableCell>
               <TableCell className="text-right space-x-2">
-                <Button variant="outline" size="sm">Edit</Button>
-                <Button variant="destructive" size="sm">Delete</Button>
+                <Button variant="outline" size="sm">
+                  Edit
+                </Button>
+                <Button variant="destructive" size="sm">
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}

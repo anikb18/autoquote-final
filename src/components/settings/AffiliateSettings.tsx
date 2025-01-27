@@ -19,41 +19,45 @@ export const AffiliateSettings = () => {
   const [referralCode, setReferralCode] = useState("");
 
   const { data: affiliateSettings, refetch } = useQuery({
-    queryKey: ['affiliate-settings'],
+    queryKey: ["affiliate-settings"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
 
       const { data, error } = await supabase
-        .from('affiliate_settings')
-        .select('*')
-        .eq('user_id', user.id)
+        .from("affiliate_settings")
+        .select("*")
+        .eq("user_id", user.id)
         .single();
-      
-      if (error && error.code !== 'PGRST116') throw error;
+
+      if (error && error.code !== "PGRST116") throw error;
       return data;
     },
   });
 
   const { data: referrals } = useQuery({
-    queryKey: ['affiliate-referrals'],
+    queryKey: ["affiliate-referrals"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
 
       const { data, error } = await supabase
-        .from('affiliate_referrals')
-        .select('*')
-        .eq('referrer_id', user.id);
-      
+        .from("affiliate_referrals")
+        .select("*")
+        .eq("referrer_id", user.id);
+
       if (error) throw error;
       return data;
     },
   });
 
   const generateReferralCode = () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = '';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
     for (let i = 0; i < 8; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -71,15 +75,15 @@ export const AffiliateSettings = () => {
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
 
-      const { error } = await supabase
-        .from('affiliate_settings')
-        .upsert({
-          user_id: user.id,
-          referral_code: referralCode,
-        });
+      const { error } = await supabase.from("affiliate_settings").upsert({
+        user_id: user.id,
+        referral_code: referralCode,
+      });
 
       if (error) throw error;
 
@@ -87,7 +91,7 @@ export const AffiliateSettings = () => {
         title: "Success",
         description: "Affiliate settings have been saved.",
       });
-      
+
       refetch();
     } catch (error) {
       toast({
@@ -129,15 +133,21 @@ export const AffiliateSettings = () => {
           <div className="grid grid-cols-3 gap-4">
             <div className="p-4 border rounded-lg">
               <h4 className="text-sm font-medium">Total Earnings</h4>
-              <p className="text-2xl font-bold">${affiliateSettings?.total_earnings || "0.00"}</p>
+              <p className="text-2xl font-bold">
+                ${affiliateSettings?.total_earnings || "0.00"}
+              </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h4 className="text-sm font-medium">Pending Earnings</h4>
-              <p className="text-2xl font-bold">${affiliateSettings?.pending_earnings || "0.00"}</p>
+              <p className="text-2xl font-bold">
+                ${affiliateSettings?.pending_earnings || "0.00"}
+              </p>
             </div>
             <div className="p-4 border rounded-lg">
               <h4 className="text-sm font-medium">Paid Earnings</h4>
-              <p className="text-2xl font-bold">${affiliateSettings?.paid_earnings || "0.00"}</p>
+              <p className="text-2xl font-bold">
+                ${affiliateSettings?.paid_earnings || "0.00"}
+              </p>
             </div>
           </div>
 
@@ -157,7 +167,10 @@ export const AffiliateSettings = () => {
         <CardContent>
           <div className="space-y-4">
             {referrals?.map((referral) => (
-              <div key={referral.id} className="flex items-center justify-between p-4 border rounded-lg">
+              <div
+                key={referral.id}
+                className="flex items-center justify-between p-4 border rounded-lg"
+              >
                 <div>
                   <p className="text-sm text-muted-foreground">
                     Status: {referral.status}
@@ -172,7 +185,9 @@ export const AffiliateSettings = () => {
               </div>
             ))}
             {(!referrals || referrals.length === 0) && (
-              <p className="text-center text-muted-foreground">No referrals yet</p>
+              <p className="text-center text-muted-foreground">
+                No referrals yet
+              </p>
             )}
           </div>
         </CardContent>

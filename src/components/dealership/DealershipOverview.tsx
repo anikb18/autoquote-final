@@ -9,15 +9,17 @@ export const DealershipOverview = () => {
   const { toast } = useToast();
 
   const { data: profile } = useQuery({
-    queryKey: ['dealer-profile'],
+    queryKey: ["dealer-profile"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('dealer_profiles')
-        .select('*')
-        .eq('id', user.id)
+        .from("dealer_profiles")
+        .select("*")
+        .eq("id", user.id)
         .single();
 
       if (error) {

@@ -1,4 +1,10 @@
-import { Shield, Clock, DollarSign, MessageSquare, LucideIcon } from "lucide-react";
+import {
+  Shield,
+  Clock,
+  DollarSign,
+  MessageSquare,
+  LucideIcon,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -13,28 +19,28 @@ interface FeaturesProps {
 }
 
 const Features = ({ features: customFeatures }: FeaturesProps) => {
-  const { t } = useTranslation('features');
+  const { t } = useTranslation("features");
 
   const defaultFeatures = [
     {
       icon: Shield,
-      title: t('items.trusted.title'),
-      description: t('items.trusted.description'),
+      title: t("items.trusted.title"),
+      description: t("items.trusted.description"),
     },
     {
       icon: Clock,
-      title: t('items.time.title'),
-      description: t('items.time.description'),
+      title: t("items.time.title"),
+      description: t("items.time.description"),
     },
     {
       icon: DollarSign,
-      title: t('items.prices.title'),
-      description: t('items.prices.description'),
+      title: t("items.prices.title"),
+      description: t("items.prices.description"),
     },
     {
       icon: MessageSquare,
-      title: t('items.communication.title'),
-      description: t('items.communication.description'),
+      title: t("items.communication.title"),
+      description: t("items.communication.description"),
     },
   ];
 
@@ -46,10 +52,10 @@ const Features = ({ features: customFeatures }: FeaturesProps) => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-              {t('title')}
+              {t("title")}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {t('subtitle')}
+              {t("subtitle")}
             </p>
           </div>
 

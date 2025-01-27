@@ -44,11 +44,12 @@ export function DocumentsManagement() {
   const [filter, setFilter] = useState<string>("all");
 
   const { data: documents, isLoading } = useQuery({
-    queryKey: ['documents'],
+    queryKey: ["documents"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('documents')
-        .select(`
+        .from("documents")
+        .select(
+          `
           *,
           quote:quotes (
             car_details,
@@ -58,27 +59,28 @@ export function DocumentsManagement() {
               email
             )
           )
-        `)
-        .order('created_at', { ascending: false });
+        `,
+        )
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
       return data as unknown as Document[];
-    }
+    },
   });
 
   const handleDownload = async (filePath: string) => {
     try {
       const { data, error } = await supabase.storage
-        .from('documents')
+        .from("documents")
         .download(filePath);
-      
+
       if (error) throw error;
 
       const url = URL.createObjectURL(data);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = filePath.split('/').pop() || 'document';
+      a.download = filePath.split("/").pop() || "document";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -96,16 +98,16 @@ export function DocumentsManagement() {
     try {
       // Delete from storage
       const { error: storageError } = await supabase.storage
-        .from('documents')
+        .from("documents")
         .remove([filePath]);
 
       if (storageError) throw storageError;
 
       // Delete from database
       const { error: dbError } = await supabase
-        .from('documents')
+        .from("documents")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (dbError) throw dbError;
 
@@ -122,7 +124,7 @@ export function DocumentsManagement() {
     }
   };
 
-  const filteredDocuments = documents?.filter(doc => {
+  const filteredDocuments = documents?.filter((doc) => {
     if (filter === "all") return true;
     return doc.type === filter;
   });
@@ -161,7 +163,8 @@ export function DocumentsManagement() {
                       <div>
                         <h3 className="font-medium">{doc.type}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {doc.quote?.profiles?.full_name || 'Unknown User'} - {doc.quote?.profiles?.email || 'No email'}
+                          {doc.quote?.profiles?.full_name || "Unknown User"} -{" "}
+                          {doc.quote?.profiles?.email || "No email"}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {new Date(doc.created_at).toLocaleDateString()}

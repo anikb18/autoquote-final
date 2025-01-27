@@ -1,6 +1,6 @@
-import { Container } from '@/components/ui/container';
-import { PricingHeader } from './pricing/PricingHeader';
-import { PricingCard } from './pricing/PricingCard';
+import { Container } from "@/components/ui/container";
+import { PricingHeader } from "./pricing/PricingHeader";
+import { PricingCard } from "./pricing/PricingCard";
 
 const Pricing = () => {
   return (

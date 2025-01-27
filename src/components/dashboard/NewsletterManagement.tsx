@@ -6,7 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Editor } from "@tinymce/tinymce-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { PlusCircle, Send, Sparkles, Mail, Users, FileText } from "lucide-react";
+import {
+  PlusCircle,
+  Send,
+  Sparkles,
+  Mail,
+  Users,
+  FileText,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -20,33 +27,35 @@ export const NewsletterManagement = () => {
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [selectedNewsletter, setSelectedNewsletter] = useState<string | null>(null);
+  const [selectedNewsletter, setSelectedNewsletter] = useState<string | null>(
+    null,
+  );
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   const { data: subscribers } = useQuery({
-    queryKey: ['newsletter-subscribers'],
+    queryKey: ["newsletter-subscribers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('newsletter_subscribers')
-        .select('*')
-        .order('subscribed_at', { ascending: false });
-      
+        .from("newsletter_subscribers")
+        .select("*")
+        .order("subscribed_at", { ascending: false });
+
       if (error) throw error;
       return data;
-    }
+    },
   });
 
   const { data: newsletters, refetch: refetchNewsletters } = useQuery({
-    queryKey: ['newsletters'],
+    queryKey: ["newsletters"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('newsletters')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
+        .from("newsletters")
+        .select("*")
+        .order("created_at", { ascending: false });
+
       if (error) throw error;
       return data;
-    }
+    },
   });
 
   const handleCreateNewsletter = async () => {
@@ -54,33 +63,31 @@ export const NewsletterManagement = () => {
       toast({
         title: "Error",
         description: "Please fill in all fields",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
-    const { error } = await supabase
-      .from('newsletters')
-      .insert([
-        { 
-          title,
-          content,
-          status: 'draft'
-        }
-      ]);
+    const { error } = await supabase.from("newsletters").insert([
+      {
+        title,
+        content,
+        status: "draft",
+      },
+    ]);
 
     if (error) {
       toast({
         title: "Error",
         description: "Failed to create newsletter",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
     toast({
       title: "Success",
-      description: "Newsletter created successfully"
+      description: "Newsletter created successfully",
     });
 
     setTitle("");
@@ -90,15 +97,18 @@ export const NewsletterManagement = () => {
 
   const handleSendNewsletter = async (newsletterId: string) => {
     try {
-      const { data, error } = await supabase.functions.invoke('send-newsletter', {
-        body: { newsletterId }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        "send-newsletter",
+        {
+          body: { newsletterId },
+        },
+      );
 
       if (error) throw error;
 
       toast({
         title: "Success",
-        description: "Newsletter sending started"
+        description: "Newsletter sending started",
       });
 
       refetchNewsletters();
@@ -106,7 +116,7 @@ export const NewsletterManagement = () => {
       toast({
         title: "Error",
         description: "Failed to send newsletter",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -114,7 +124,9 @@ export const NewsletterManagement = () => {
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Newsletter Management</h2>
+        <h2 className="text-3xl font-bold tracking-tight">
+          Newsletter Management
+        </h2>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
@@ -127,7 +139,7 @@ export const NewsletterManagement = () => {
           </Button>
         </div>
       </div>
-      
+
       <Tabs defaultValue="create" className="space-y-4">
         <TabsList>
           <TabsTrigger value="create" className="flex items-center">
@@ -163,15 +175,32 @@ export const NewsletterManagement = () => {
                   height: 500,
                   menubar: true,
                   plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
                   ],
-                  toolbar: 'undo redo | blocks | ' +
-                    'bold italic forecolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat | help',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
+                  content_style:
+                    "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                 }}
                 value={content}
                 onEditorChange={setContent}
@@ -191,19 +220,25 @@ export const NewsletterManagement = () => {
             <ScrollArea className="h-[600px]">
               <div className="p-4 space-y-2">
                 {newsletters?.map((newsletter) => (
-                  <div 
-                    key={newsletter.id} 
+                  <div
+                    key={newsletter.id}
                     className="flex justify-between items-center p-4 bg-white hover:bg-gray-50 rounded-lg border transition-colors"
                   >
                     <div>
                       <h3 className="font-medium">{newsletter.title}</h3>
                       <p className="text-sm text-gray-500">
-                        Created: {new Date(newsletter.created_at).toLocaleDateString()}
+                        Created:{" "}
+                        {new Date(newsletter.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">Edit</Button>
-                      <Button size="sm" onClick={() => handleSendNewsletter(newsletter.id)}>
+                      <Button variant="outline" size="sm">
+                        Edit
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => handleSendNewsletter(newsletter.id)}
+                      >
                         <Send className="mr-2 h-4 w-4" />
                         Send
                       </Button>
@@ -220,13 +255,14 @@ export const NewsletterManagement = () => {
             <ScrollArea className="h-[600px]">
               <div className="p-4 space-y-2">
                 {subscribers?.map((subscriber) => (
-                  <div 
-                    key={subscriber.id} 
+                  <div
+                    key={subscriber.id}
                     className="flex justify-between items-center p-4 bg-white hover:bg-gray-50 rounded-lg border transition-colors"
                   >
                     <span>{subscriber.email}</span>
                     <span className="text-sm text-gray-500">
-                      Subscribed: {new Date(subscriber.subscribed_at).toLocaleDateString()}
+                      Subscribed:{" "}
+                      {new Date(subscriber.subscribed_at).toLocaleDateString()}
                     </span>
                   </div>
                 ))}

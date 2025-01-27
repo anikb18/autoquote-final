@@ -19,7 +19,11 @@ interface SupportTicketListProps {
   onTicketRead?: () => void;
 }
 
-export function SupportTicketList({ tickets, isAdmin, onTicketRead }: SupportTicketListProps) {
+export function SupportTicketList({
+  tickets,
+  isAdmin,
+  onTicketRead,
+}: SupportTicketListProps) {
   const navigate = useNavigate();
 
   const handleTicketClick = (ticketId: string) => {
@@ -33,7 +37,9 @@ export function SupportTicketList({ tickets, isAdmin, onTicketRead }: SupportTic
     <div className="space-y-4">
       {tickets.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
-          {isAdmin ? "No support tickets to review" : "No support tickets found"}
+          {isAdmin
+            ? "No support tickets to review"
+            : "No support tickets found"}
         </div>
       ) : (
         tickets.map((ticket) => (
@@ -42,13 +48,16 @@ export function SupportTicketList({ tickets, isAdmin, onTicketRead }: SupportTic
               <h3 className="font-semibold">{ticket.subject}</h3>
               <div className="flex items-center gap-2">
                 {ticket.support_responses?.count > 0 && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
+                  <Badge
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
                     <MessageSquare className="h-3 w-3" />
                     {ticket.support_responses.count}
                   </Badge>
                 )}
                 <Badge
-                  variant={ticket.status === 'open' ? 'destructive' : 'default'}
+                  variant={ticket.status === "open" ? "destructive" : "default"}
                 >
                   {ticket.status}
                 </Badge>

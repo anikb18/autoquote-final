@@ -7,9 +7,14 @@ interface MetricsCardProps {
   prefix?: string;
 }
 
-export const MetricsCard = ({ title, value, description, prefix = '' }: MetricsCardProps) => {
+export const MetricsCard = ({
+  title,
+  value,
+  description,
+  prefix = "",
+}: MetricsCardProps) => {
   const { t } = useTranslation();
-  
+
   return (
     <div className="p-6 bg-background/50 backdrop-blur-xl border rounded-lg shadow-sm hover:bg-background/60 transition-colors">
       <div className="space-y-2">
@@ -17,12 +22,11 @@ export const MetricsCard = ({ title, value, description, prefix = '' }: MetricsC
           {t(title)}
         </h3>
         <p className="text-2xl font-bold">
-          {prefix}{value}
+          {prefix}
+          {value}
         </p>
         {description && (
-          <p className="text-sm text-muted-foreground">
-            {t(description)}
-          </p>
+          <p className="text-sm text-muted-foreground">{t(description)}</p>
         )}
       </div>
     </div>

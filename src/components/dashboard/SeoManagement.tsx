@@ -26,11 +26,13 @@ export const SeoManagement = () => {
     dealerDescription: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -39,31 +41,28 @@ export const SeoManagement = () => {
     setIsLoading(true);
 
     try {
-      const { error: homeError } = await supabase
-        .from('seo_settings')
-        .upsert({
-          page_identifier: 'home',
-          title: formData.homeTitle,
-          meta_description: formData.homeDescription,
-        });
+      const { error: homeError } = await supabase.from("seo_settings").upsert({
+        page_identifier: "home",
+        title: formData.homeTitle,
+        meta_description: formData.homeDescription,
+      });
 
-      const { error: blogError } = await supabase
-        .from('seo_settings')
-        .upsert({
-          page_identifier: 'blog',
-          title: formData.blogTitle,
-          meta_description: formData.blogDescription,
-        });
+      const { error: blogError } = await supabase.from("seo_settings").upsert({
+        page_identifier: "blog",
+        title: formData.blogTitle,
+        meta_description: formData.blogDescription,
+      });
 
       const { error: dealerError } = await supabase
-        .from('seo_settings')
+        .from("seo_settings")
         .upsert({
-          page_identifier: 'dealers',
+          page_identifier: "dealers",
           title: formData.dealerTitle,
           meta_description: formData.dealerDescription,
         });
 
-      if (homeError || blogError || dealerError) throw new Error('Failed to update SEO settings');
+      if (homeError || blogError || dealerError)
+        throw new Error("Failed to update SEO settings");
 
       toast({
         title: "Success",

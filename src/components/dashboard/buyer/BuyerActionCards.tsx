@@ -13,7 +13,7 @@ export const BuyerActionCards = () => {
           <CardTitle>Start New Quote</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button className="w-full" onClick={() => navigate('/quotes/new')}>
+          <Button className="w-full" onClick={() => navigate("/quotes/new")}>
             Get Started
           </Button>
         </CardContent>
@@ -25,7 +25,7 @@ export const BuyerActionCards = () => {
           <CardTitle>Chat with Us</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button className="w-full" onClick={() => navigate('/chat')}>
+          <Button className="w-full" onClick={() => navigate("/chat")}>
             Start Chat
           </Button>
         </CardContent>
@@ -37,7 +37,7 @@ export const BuyerActionCards = () => {
           <CardTitle>Need Help?</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button className="w-full" onClick={() => navigate('/support')}>
+          <Button className="w-full" onClick={() => navigate("/support")}>
             Contact Support
           </Button>
         </CardContent>

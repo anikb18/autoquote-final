@@ -14,7 +14,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
     <nav
       className={cn(
         "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -22,10 +22,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         <Link
           key={item.href}
           to={item.href}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "justify-start"
-          )}
+          className={cn(buttonVariants({ variant: "ghost" }), "justify-start")}
         >
           {item.title}
         </Link>

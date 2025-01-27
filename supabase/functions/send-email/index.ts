@@ -4,7 +4,8 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
 interface EmailRequest {
@@ -21,26 +22,28 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const emailRequest: EmailRequest = await req.json();
-    
+
     // If scheduledFor is in the future, store in database for later sending
     if (emailRequest.scheduledFor) {
       const scheduledTime = new Date(emailRequest.scheduledFor);
       if (scheduledTime > new Date()) {
         const { data: scheduledEmail, error } = await supabase
-          .from('scheduled_emails')
-          .insert([{
-            to_addresses: emailRequest.to,
-            subject: emailRequest.subject,
-            html_content: emailRequest.html,
-            scheduled_for: emailRequest.scheduledFor,
-            status: 'pending'
-          }]);
-          
+          .from("scheduled_emails")
+          .insert([
+            {
+              to_addresses: emailRequest.to,
+              subject: emailRequest.subject,
+              html_content: emailRequest.html,
+              scheduled_for: emailRequest.scheduledFor,
+              status: "pending",
+            },
+          ]);
+
         if (error) throw error;
-        
+
         return new Response(
-          JSON.stringify({ message: "Email scheduled successfully" }), 
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          JSON.stringify({ message: "Email scheduled successfully" }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
     }
@@ -71,13 +74,10 @@ const handler = async (req: Request): Promise<Response> => {
     });
   } catch (error) {
     console.error("Error in send-email function:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }), 
-      { 
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      }
-    );
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   }
 };
 

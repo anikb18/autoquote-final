@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,11 +10,12 @@ import { CarDetails, Quote, DealerQuote } from "@/types/quotes";
 const BuyerCarListings = () => {
   const { t } = useTranslation();
   const { data: quotes, isLoading } = useQuery({
-    queryKey: ['buyer-quotes'],
+    queryKey: ["buyer-quotes"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('quotes')
-        .select(`
+        .from("quotes")
+        .select(
+          `
           id,
           car_details,
           dealer_quotes!inner (
@@ -25,9 +26,10 @@ const BuyerCarListings = () => {
               dealer_name
             )
           )
-        `)
-        .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
-      
+        `,
+        )
+        .eq("user_id", (await supabase.auth.getUser()).data.user?.id);
+
       if (error) throw error;
 
       return data.map((quote): Quote => {
@@ -37,21 +39,25 @@ const BuyerCarListings = () => {
           id: quote.id,
           car_details: {
             year: Number(carDetails?.year) || 0,
-            make: String(carDetails?.make || ''),
-            model: String(carDetails?.model || ''),
+            make: String(carDetails?.make || ""),
+            model: String(carDetails?.model || ""),
             trim: carDetails?.trim ? String(carDetails.trim) : undefined,
             engine: carDetails?.engine ? String(carDetails.engine) : undefined,
-            options: carDetails?.options ? String(carDetails.options) : undefined,
+            options: carDetails?.options
+              ? String(carDetails.options)
+              : undefined,
           },
-          dealer_quotes: quote.dealer_quotes.map((dq): DealerQuote => ({
-            id: dq.id,
-            dealer_id: dq.dealer_id,
-            dealer_profiles: dq.dealer_profiles,
-            is_accepted: false,
-            created_at: dq.created_at,
-            status: 'pending',
-          })),
-          status: 'active',
+          dealer_quotes: quote.dealer_quotes.map(
+            (dq): DealerQuote => ({
+              id: dq.id,
+              dealer_id: dq.dealer_id,
+              dealer_profiles: dq.dealer_profiles,
+              is_accepted: false,
+              created_at: dq.created_at,
+              status: "pending",
+            }),
+          ),
+          status: "active",
           created_at: new Date().toISOString(),
         };
       });
@@ -66,7 +72,8 @@ const BuyerCarListings = () => {
         <Card key={quote.id} className="p-4">
           <CardHeader>
             <CardTitle>
-              {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
+              {quote.car_details.year} {quote.car_details.make}{" "}
+              {quote.car_details.model}
             </CardTitle>
           </CardHeader>
           <CardContent>

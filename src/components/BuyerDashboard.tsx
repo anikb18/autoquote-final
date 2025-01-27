@@ -13,11 +13,12 @@ const BuyerDashboard = () => {
     error: quoteError,
     isLoading,
   } = useQuery({
-    queryKey: ['activeQuote'],
+    queryKey: ["activeQuote"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('quotes')
-        .select(`
+        .from("quotes")
+        .select(
+          `
           *,
           dealer_quotes (
             id,
@@ -32,8 +33,9 @@ const BuyerDashboard = () => {
               dealer_name
             )
           )
-        `)
-        .eq('status', 'active')
+        `,
+        )
+        .eq("status", "active")
         .maybeSingle();
 
       if (error) throw error;
@@ -43,18 +45,18 @@ const BuyerDashboard = () => {
       const isValidCarDetails = (details: any): details is CarDetails => {
         return (
           details &&
-          typeof details === 'object' &&
-          'year' in details &&
-          typeof details.year === 'number' &&
-          'make' in details &&
-          typeof details.make === 'string' &&
-          'model' in details &&
-          typeof details.model === 'string'
+          typeof details === "object" &&
+          "year" in details &&
+          typeof details.year === "number" &&
+          "make" in details &&
+          typeof details.make === "string" &&
+          "model" in details &&
+          typeof details.model === "string"
         );
       };
 
       if (!isValidCarDetails(data.car_details)) {
-        console.error('Invalid car details format:', data.car_details);
+        console.error("Invalid car details format:", data.car_details);
         return null;
       }
 
@@ -82,10 +84,13 @@ const BuyerDashboard = () => {
   });
 
   if (quoteError) {
-    console.error('Error fetching active quote:', quoteError);
-    return <div className="text-red-500 p-6">Error loading dashboard. Please try again later.</div>;
+    console.error("Error fetching active quote:", quoteError);
+    return (
+      <div className="text-red-500 p-6">
+        Error loading dashboard. Please try again later.
+      </div>
+    );
   }
-
 
   return (
     <div className="p-6 space-y-8 macOS-style">
@@ -96,40 +101,45 @@ const BuyerDashboard = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Car Image */}
-          <div className="md:order-2 flex justify-center">
-            {isLoading ? (
-              <Skeleton className="w-full h-64 rounded-lg" />
-            ) : (activeQuote?.car_details && (
-              <CarViewer3D carDetails={activeQuote.car_details} />
-            ))}
-          </div>
+            {/* Car Image */}
+            <div className="md:order-2 flex justify-center">
+              {isLoading ? (
+                <Skeleton className="w-full h-64 rounded-lg" />
+              ) : (
+                activeQuote?.car_details && (
+                  <CarViewer3D carDetails={activeQuote.car_details} />
+                )
+              )}
+            </div>
 
-          {/* Vehicle Details */}
-          <div className="md:order-1 space-y-4">
-            {isLoading ? (
-              <>
-                <Skeleton className="h-6 w-1/2" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-              </>
-            ) : (activeQuote && activeQuote.car_details && (
-              <div className="space-y-2">
-                <h3 className="text-xl font-semibold">{`${activeQuote.car_details.year} ${activeQuote.car_details.make} ${activeQuote.car_details.model}`}</h3>
-                <p className="text-gray-500">
-                  Trim: {activeQuote.car_details.trim || 'N/A'}
-                </p>
-                 <p className="text-gray-500">
-                  Engine: {activeQuote.car_details.engine || 'N/A'}
-                </p>
-                 <p className="text-gray-500">
-                  Options: {activeQuote.car_details.options || 'N/A'}
-                </p>
-                {/* Add more vehicle details here if available */}
-              </div>
-            ))}
+            {/* Vehicle Details */}
+            <div className="md:order-1 space-y-4">
+              {isLoading ? (
+                <>
+                  <Skeleton className="h-6 w-1/2" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </>
+              ) : (
+                activeQuote &&
+                activeQuote.car_details && (
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-semibold">{`${activeQuote.car_details.year} ${activeQuote.car_details.make} ${activeQuote.car_details.model}`}</h3>
+                    <p className="text-gray-500">
+                      Trim: {activeQuote.car_details.trim || "N/A"}
+                    </p>
+                    <p className="text-gray-500">
+                      Engine: {activeQuote.car_details.engine || "N/A"}
+                    </p>
+                    <p className="text-gray-500">
+                      Options: {activeQuote.car_details.options || "N/A"}
+                    </p>
+                    {/* Add more vehicle details here if available */}
+                  </div>
+                )
+              )}
+            </div>
           </div>
-        </div>
         </CardContent>
       </Card>
 
@@ -139,31 +149,34 @@ const BuyerDashboard = () => {
           <CardTitle>Active Quote Overview</CardTitle>
         </CardHeader>
         <CardContent>
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-6 w-1/2" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-          </div>
-        ) : (
-          activeQuote && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <BuyerQuoteOverview activeQuote={activeQuote} />
-              </div>
-              <div>
-                {/* Placeholder for charts or additional info */}
-                <div className="bg-gray-100 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-2">Quote Analytics</h3>
-                  <p className="text-sm text-gray-500">
-                    Charts or key metrics related to the quote will be displayed here.
-                  </p>
-                  {/* Add charts or graphs here */}
+          {isLoading ? (
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-1/2" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          ) : (
+            activeQuote && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <BuyerQuoteOverview activeQuote={activeQuote} />
+                </div>
+                <div>
+                  {/* Placeholder for charts or additional info */}
+                  <div className="bg-gray-100 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold mb-2">
+                      Quote Analytics
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      Charts or key metrics related to the quote will be
+                      displayed here.
+                    </p>
+                    {/* Add charts or graphs here */}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        )}
+            )
+          )}
         </CardContent>
       </Card>
 

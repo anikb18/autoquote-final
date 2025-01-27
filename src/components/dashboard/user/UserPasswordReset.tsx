@@ -24,16 +24,16 @@ export const UserPasswordReset = ({ userId }: UserPasswordResetProps) => {
   const handleOpenDialog = async () => {
     try {
       const { data: profile } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('id', userId)
+        .from("profiles")
+        .select("email")
+        .eq("id", userId)
         .single();
 
       if (profile?.email) {
         setResetEmailAddress(profile.email);
       }
     } catch (error) {
-      console.error('Error fetching user email:', error);
+      console.error("Error fetching user email:", error);
     }
     setIsResetDialogOpen(true);
   };
@@ -43,14 +43,15 @@ export const UserPasswordReset = ({ userId }: UserPasswordResetProps) => {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/reset-password`,
       });
-      
+
       if (error) throw error;
-      
+
       toast({
         title: "Password reset email sent",
-        description: "The user will receive instructions to reset their password.",
+        description:
+          "The user will receive instructions to reset their password.",
       });
-      
+
       setIsResetDialogOpen(false);
     } catch (error) {
       toast({
@@ -64,11 +65,7 @@ export const UserPasswordReset = ({ userId }: UserPasswordResetProps) => {
   return (
     <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm"
-          onClick={handleOpenDialog}
-        >
+        <Button variant="outline" size="sm" onClick={handleOpenDialog}>
           Reset Password
         </Button>
       </DialogTrigger>

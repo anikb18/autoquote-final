@@ -12,20 +12,25 @@ import { Tables } from "@/integrations/supabase/types";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger 
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Editor } from '@tinymce/tinymce-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Editor } from "@tinymce/tinymce-react";
 import { Eye, Mail, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-type Profile = Tables<'profiles'>;
+type Profile = Tables<"profiles">;
 type UserRole = "super_admin" | "admin" | "dealer" | "user";
 
 interface UserTableProps {
@@ -35,39 +40,44 @@ interface UserTableProps {
   setPage: (page: number) => void;
   itemsPerPage: number;
   onRoleChange: (userId: string, newRole: UserRole) => Promise<void>;
-  onSendEmail: (to: string[], subject: string, content: string, scheduledFor?: string) => Promise<void>;
+  onSendEmail: (
+    to: string[],
+    subject: string,
+    content: string,
+    scheduledFor?: string,
+  ) => Promise<void>;
 }
 
-export const UserTable = ({ 
-  profiles, 
+export const UserTable = ({
+  profiles,
   isLoading,
   page,
   setPage,
   itemsPerPage,
   onRoleChange,
-  onSendEmail
+  onSendEmail,
 }: UserTableProps) => {
   const [selectedUser, setSelectedUser] = useState<Profile | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
-  const [emailContent, setEmailContent] = useState('');
-  const [emailSubject, setEmailSubject] = useState('');
-  const [scheduledDate, setScheduledDate] = useState('');
+  const [emailContent, setEmailContent] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [scheduledDate, setScheduledDate] = useState("");
 
   const handleSendEmail = async () => {
     if (!selectedUser?.email) return;
-    
+
     await onSendEmail(
       [selectedUser.email],
       emailSubject,
       emailContent,
-      scheduledDate || undefined
+      scheduledDate || undefined,
     );
-    
+
     setIsEmailOpen(false);
-    setEmailContent('');
-    setEmailSubject('');
-    setScheduledDate('');
+    setEmailContent("");
+    setEmailSubject("");
+    setScheduledDate("");
   };
 
   if (isLoading) {
@@ -98,22 +108,30 @@ export const UserTable = ({
             {profiles?.map((profile) => (
               <TableRow key={profile.id} className="group">
                 <TableCell className="font-medium">{profile.email}</TableCell>
-                <TableCell>{profile.full_name || 'N/A'}</TableCell>
+                <TableCell>{profile.full_name || "N/A"}</TableCell>
                 <TableCell>
                   <UserRoleSelect
                     userId={profile.id}
-                    currentRole={(profile.role as UserRole) || 'user'}
-                    onRoleChange={(newRole) => onRoleChange(profile.id, newRole as UserRole)}
+                    currentRole={(profile.role as UserRole) || "user"}
+                    onRoleChange={(newRole) =>
+                      onRoleChange(profile.id, newRole as UserRole)
+                    }
                   />
                 </TableCell>
                 <TableCell>
-                  {profile.created_at 
-                    ? format(new Date(profile.created_at), 'PPpp')
-                    : 'N/A'}
+                  {profile.created_at
+                    ? format(new Date(profile.created_at), "PPpp")
+                    : "N/A"}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={profile.subscription_status === 'active' ? 'default' : 'secondary'}>
-                    {profile.subscription_status || 'none'}
+                  <Badge
+                    variant={
+                      profile.subscription_status === "active"
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {profile.subscription_status || "none"}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
@@ -181,22 +199,24 @@ export const UserTable = ({
             </div>
             <div className="space-y-2">
               <h4 className="font-medium">Full Name</h4>
-              <p className="text-sm">{selectedUser?.full_name || 'N/A'}</p>
+              <p className="text-sm">{selectedUser?.full_name || "N/A"}</p>
             </div>
             <div className="space-y-2">
               <h4 className="font-medium">Role</h4>
-              <p className="text-sm">{selectedUser?.role || 'user'}</p>
+              <p className="text-sm">{selectedUser?.role || "user"}</p>
             </div>
             <div className="space-y-2">
               <h4 className="font-medium">Subscription Status</h4>
-              <p className="text-sm">{selectedUser?.subscription_status || 'none'}</p>
+              <p className="text-sm">
+                {selectedUser?.subscription_status || "none"}
+              </p>
             </div>
             <div className="space-y-2">
               <h4 className="font-medium">Created At</h4>
               <p className="text-sm">
-                {selectedUser?.created_at 
-                  ? format(new Date(selectedUser.created_at), 'PPpp')
-                  : 'N/A'}
+                {selectedUser?.created_at
+                  ? format(new Date(selectedUser.created_at), "PPpp")
+                  : "N/A"}
               </p>
             </div>
           </div>
@@ -236,15 +256,32 @@ export const UserTable = ({
                 height: 400,
                 menubar: false,
                 plugins: [
-                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                  'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                  'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "code",
+                  "help",
+                  "wordcount",
                 ],
-                toolbar: 'undo redo | blocks | ' +
-                  'bold italic forecolor | alignleft aligncenter ' +
-                  'alignright alignjustify | bullist numlist outdent indent | ' +
-                  'removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                toolbar:
+                  "undo redo | blocks | " +
+                  "bold italic forecolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat | help",
+                content_style:
+                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
               }}
             />
           </div>
@@ -253,7 +290,7 @@ export const UserTable = ({
               Cancel
             </Button>
             <Button onClick={handleSendEmail}>
-              {scheduledDate ? 'Schedule Email' : 'Send Email'}
+              {scheduledDate ? "Schedule Email" : "Send Email"}
             </Button>
           </div>
         </DialogContent>

@@ -10,22 +10,18 @@ interface MessageListProps {
   onTranslate: (messageId: string) => Promise<void>;
 }
 
-export const MessageList = ({ 
-  messages, 
-  dealerId, 
+export const MessageList = ({
+  messages,
+  dealerId,
   quoteAccepted,
   autoTranslate,
-  onTranslate 
+  onTranslate,
 }: MessageListProps) => {
   return (
     <ScrollArea className="flex-1 p-4">
       <div className="space-y-4">
         {messages?.map((msg) => (
-          <ChatMessage
-            key={msg.id}
-            message={msg}
-            isAccepted={quoteAccepted}
-          />
+          <ChatMessage key={msg.id} message={msg} isAccepted={quoteAccepted} />
         ))}
       </div>
     </ScrollArea>

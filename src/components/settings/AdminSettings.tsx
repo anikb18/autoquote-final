@@ -18,14 +18,14 @@ export default function AdminSettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        full_name: formData.get('fullName')?.toString(),
-        email: formData.get('email')?.toString(),
+        full_name: formData.get("fullName")?.toString(),
+        email: formData.get("email")?.toString(),
       };
 
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update(updates)
-        .eq('id', user?.id);
+        .eq("id", user?.id);
 
       if (error) throw error;
 

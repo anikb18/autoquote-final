@@ -1,7 +1,13 @@
 import { useTheme } from "@/hooks/use-theme";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Moon, Sun, Globe } from "lucide-react";
 
 interface SidebarFooterProps {
@@ -10,7 +16,11 @@ interface SidebarFooterProps {
   onViewModeChange: (value: "admin" | "dealer" | "user") => void;
 }
 
-export function SidebarFooter({ viewMode, role, onViewModeChange }: SidebarFooterProps) {
+export function SidebarFooter({
+  viewMode,
+  role,
+  onViewModeChange,
+}: SidebarFooterProps) {
   const { theme, setTheme } = useTheme();
   const { i18n } = useTranslation();
 
@@ -44,10 +54,12 @@ export function SidebarFooter({ viewMode, role, onViewModeChange }: SidebarFoote
         </SelectContent>
       </Select>
 
-      {(role === 'admin' || role === 'super_admin') && (
+      {(role === "admin" || role === "super_admin") && (
         <Select
           value={viewMode}
-          onValueChange={(value: "admin" | "dealer" | "user") => onViewModeChange(value)}
+          onValueChange={(value: "admin" | "dealer" | "user") =>
+            onViewModeChange(value)
+          }
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select view mode" />

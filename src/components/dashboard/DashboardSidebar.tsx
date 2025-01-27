@@ -15,48 +15,48 @@ import { useUser } from "@/hooks/use-user";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
-  const { t } = useTranslation('admin');
+  const { t } = useTranslation("admin");
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useUser();
   const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
-    role === "super_admin" ? "admin" : role
+    role === "super_admin" ? "admin" : role,
   );
 
   const handleViewModeChange = (mode: "admin" | "dealer" | "user") => {
     setViewMode(mode);
     // Navigate to the appropriate dashboard based on view mode
     switch (mode) {
-      case 'admin':
-        navigate('/admin');
+      case "admin":
+        navigate("/admin");
         break;
-      case 'dealer':
-        navigate('/dealer');
+      case "dealer":
+        navigate("/dealer");
         break;
-      case 'user':
-        navigate('/dashboard');
+      case "user":
+        navigate("/dashboard");
         break;
     }
   };
 
   const { data: unreadCount = 0 } = useQuery({
-    queryKey: ['unread-support-messages'],
+    queryKey: ["unread-support-messages"],
     queryFn: async () => {
-      if (role === 'admin') {
+      if (role === "admin") {
         const { count } = await supabase
-          .from('support_tickets')
-          .select('*', { count: 'exact', head: true })
-          .eq('status', 'open');
+          .from("support_tickets")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "open");
         return count || 0;
       } else {
         const { data: responses } = await supabase
-          .from('support_responses')
-          .select('*')
-          .eq('is_admin_response', true);
+          .from("support_responses")
+          .select("*")
+          .eq("is_admin_response", true);
         return responses?.length || 0;
       }
     },
-    refetchInterval: 30000
+    refetchInterval: 30000,
   });
 
   const handleSignOut = async () => {
@@ -76,47 +76,49 @@ export function DashboardSidebar() {
     }
   };
 
-  const { adminItems, dealerItems, buyerItems } = getNavigationItems(role, unreadCount);
-  const items = viewMode === 'admin' ? adminItems : 
-                viewMode === 'dealer' ? dealerItems : 
-                buyerItems;
+  const { adminItems, dealerItems, buyerItems } = getNavigationItems(
+    role,
+    unreadCount,
+  );
+  const items =
+    viewMode === "admin"
+      ? adminItems
+      : viewMode === "dealer"
+        ? dealerItems
+        : buyerItems;
 
   return (
     <div className="flex grow flex-col">
       <div className="flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <img
-          className="h-8 w-auto"
-          src="/logo/dark.svg"
-          alt="AutoQuote24"
-        />
-        {role === 'admin' && (
+        <img className="h-8 w-auto" src="/logo/dark.svg" alt="AutoQuote24" />
+        {role === "admin" && (
           <div className="flex gap-2">
             <button
-              onClick={() => handleViewModeChange('admin')}
+              onClick={() => handleViewModeChange("admin")}
               className={`px-3 py-1 rounded-md text-sm ${
-                viewMode === 'admin' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted/50 hover:bg-muted'
+                viewMode === "admin"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted/50 hover:bg-muted"
               }`}
             >
               Admin
             </button>
             <button
-              onClick={() => handleViewModeChange('dealer')}
+              onClick={() => handleViewModeChange("dealer")}
               className={`px-3 py-1 rounded-md text-sm ${
-                viewMode === 'dealer' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted/50 hover:bg-muted'
+                viewMode === "dealer"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted/50 hover:bg-muted"
               }`}
             >
               Dealer
             </button>
             <button
-              onClick={() => handleViewModeChange('user')}
+              onClick={() => handleViewModeChange("user")}
               className={`px-3 py-1 rounded-md text-sm ${
-                viewMode === 'user' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted/50 hover:bg-muted'
+                viewMode === "user"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted/50 hover:bg-muted"
               }`}
             >
               User
@@ -124,7 +126,7 @@ export function DashboardSidebar() {
           </div>
         )}
       </div>
-      
+
       <nav className="flex flex-1 flex-col px-6">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
@@ -137,12 +139,12 @@ export function DashboardSidebar() {
         </ul>
       </nav>
 
-      <SidebarFooter 
+      <SidebarFooter
         viewMode={viewMode}
         role={role}
         onViewModeChange={setViewMode}
       />
-      
+
       <div className="px-6 py-4 border-t">
         <Button
           variant="ghost"
@@ -150,7 +152,7 @@ export function DashboardSidebar() {
           onClick={handleSignOut}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          {t('common.signOut')}
+          {t("common.signOut")}
         </Button>
       </div>
 

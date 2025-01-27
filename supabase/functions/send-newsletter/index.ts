@@ -7,7 +7,8 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
 interface NewsletterRequest {
@@ -23,7 +24,8 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { newsletterId, filterCriteria } = await req.json() as NewsletterRequest;
+    const { newsletterId, filterCriteria } =
+      (await req.json()) as NewsletterRequest;
 
     // Get newsletter content
     const { data: newsletter, error: newsletterError } = await supabase
@@ -37,7 +39,10 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Get subscribers based on filter criteria
-    let query = supabase.from("newsletter_subscribers").select("*").eq("status", "active");
+    let query = supabase
+      .from("newsletter_subscribers")
+      .select("*")
+      .eq("status", "active");
 
     if (filterCriteria) {
       // Apply additional filters based on filterCriteria
@@ -57,44 +62,45 @@ const handler = async (req: Request): Promise<Response> => {
     const batchSize = 10;
     for (let i = 0; i < subscribers.length; i += batchSize) {
       const batch = subscribers.slice(i, i + batchSize);
-      
-      await Promise.all(batch.map(async (subscriber) => {
-        try {
-          const response = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${RESEND_API_KEY}`,
-            },
-            body: JSON.stringify({
-              from: "newsletter@yourdomain.com",
-              to: subscriber.email,
-              subject: newsletter.title,
-              html: newsletter.content,
-            }),
-          });
 
-          const result = await response.json();
+      await Promise.all(
+        batch.map(async (subscriber) => {
+          try {
+            const response = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${RESEND_API_KEY}`,
+              },
+              body: JSON.stringify({
+                from: "newsletter@yourdomain.com",
+                to: subscriber.email,
+                subject: newsletter.title,
+                html: newsletter.content,
+              }),
+            });
 
-          // Record the send attempt
-          await supabase.from("newsletter_sends").insert({
-            newsletter_id: newsletterId,
-            subscriber_id: subscriber.id,
-            status: response.ok ? "sent" : "failed",
-            error_message: response.ok ? null : JSON.stringify(result),
-            metadata: { resend_id: result.id }
-          });
+            const result = await response.json();
 
-        } catch (error) {
-          console.error(`Failed to send to ${subscriber.email}:`, error);
-          await supabase.from("newsletter_sends").insert({
-            newsletter_id: newsletterId,
-            subscriber_id: subscriber.id,
-            status: "failed",
-            error_message: error.message
-          });
-        }
-      }));
+            // Record the send attempt
+            await supabase.from("newsletter_sends").insert({
+              newsletter_id: newsletterId,
+              subscriber_id: subscriber.id,
+              status: response.ok ? "sent" : "failed",
+              error_message: response.ok ? null : JSON.stringify(result),
+              metadata: { resend_id: result.id },
+            });
+          } catch (error) {
+            console.error(`Failed to send to ${subscriber.email}:`, error);
+            await supabase.from("newsletter_sends").insert({
+              newsletter_id: newsletterId,
+              subscriber_id: subscriber.id,
+              status: "failed",
+              error_message: error.message,
+            });
+          }
+        }),
+      );
     }
 
     // Update newsletter status
@@ -104,18 +110,20 @@ const handler = async (req: Request): Promise<Response> => {
       .eq("id", newsletterId);
 
     return new Response(
-      JSON.stringify({ success: true, message: "Newsletter sent successfully" }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: true,
+        message: "Newsletter sent successfully",
+      }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
-
   } catch (error) {
     console.error("Error in send-newsletter function:", error);
     return new Response(
       JSON.stringify({ success: false, error: error.message }),
-      { 
+      {
         status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" }
-      }
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
     );
   }
 };

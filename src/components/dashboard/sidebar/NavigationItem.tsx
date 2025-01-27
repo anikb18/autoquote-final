@@ -38,10 +38,10 @@ export function NavigationItem({ item }: NavigationItemProps) {
         to={hasChildren ? "#" : item.href}
         onClick={toggleOpen}
         className={cn(
-          'group flex items-center justify-between rounded-md p-2 text-sm leading-6',
+          "group flex items-center justify-between rounded-md p-2 text-sm leading-6",
           isActive
-            ? 'bg-gray-50 text-primary font-semibold'
-            : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+            ? "bg-gray-50 text-primary font-semibold"
+            : "text-gray-700 hover:text-primary hover:bg-gray-50",
         )}
       >
         <div className="flex items-center gap-x-3">
@@ -70,10 +70,10 @@ export function NavigationItem({ item }: NavigationItemProps) {
               <Link
                 to={child.href}
                 className={cn(
-                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6',
+                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6",
                   location.pathname === child.href
-                    ? 'bg-gray-50 text-primary font-semibold'
-                    : 'text-gray-700 hover:text-primary hover:bg-gray-50'
+                    ? "bg-gray-50 text-primary font-semibold"
+                    : "text-gray-700 hover:text-primary hover:bg-gray-50",
                 )}
               >
                 {child.icon && <child.icon className="h-5 w-5" />}

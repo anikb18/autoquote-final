@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import React, { useEffect, useRef } from "react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 interface SceneProps {
   containerRef: React.RefObject<HTMLDivElement>;
@@ -8,7 +8,7 @@ interface SceneProps {
     scene: THREE.Scene,
     camera: THREE.PerspectiveCamera,
     renderer: THREE.WebGLRenderer,
-    controls: OrbitControls
+    controls: OrbitControls,
   ) => void;
 }
 
@@ -25,18 +25,18 @@ export const Scene = ({ containerRef, onSceneReady }: SceneProps) => {
       75,
       containerRef.current.clientWidth / containerRef.current.clientHeight,
       0.1,
-      1000
+      1000,
     );
     camera.position.set(3, 2, 5);
 
     // Setup renderer
-    const renderer = new THREE.WebGLRenderer({ 
+    const renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: true 
+      alpha: true,
     });
     renderer.setSize(
       containerRef.current.clientWidth,
-      containerRef.current.clientHeight
+      containerRef.current.clientHeight,
     );
     renderer.shadowMap.enabled = true;
     containerRef.current.appendChild(renderer.domElement);

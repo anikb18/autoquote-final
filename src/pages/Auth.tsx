@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Auth as SupabaseAuth } from '@supabase/auth-ui-react';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -23,22 +23,24 @@ const Auth = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session) {
           // Get user role
           const { data: roleData } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('id', session.user.id)
+            .from("user_roles")
+            .select("role")
+            .eq("id", session.user.id)
             .single();
 
           // Redirect based on role
-          if (roleData?.role === 'admin' || roleData?.role === 'super_admin') {
-            navigate('/dashboard');
-          } else if (roleData?.role === 'dealer') {
-            navigate('/dashboard/dealership');
+          if (roleData?.role === "admin" || roleData?.role === "super_admin") {
+            navigate("/dashboard");
+          } else if (roleData?.role === "dealer") {
+            navigate("/dashboard/dealership");
           } else {
-            navigate('/dashboard/my-quotes');
+            navigate("/dashboard/my-quotes");
           }
         }
       } catch (error) {
@@ -50,53 +52,55 @@ const Auth = () => {
 
     checkSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          setIsLoading(true);
-          try {
-            await supabase.auth.updateUser({
-              data: { subscribe_newsletter: subscribeNewsletterRef.current }
-            });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        setIsLoading(true);
+        try {
+          await supabase.auth.updateUser({
+            data: { subscribe_newsletter: subscribeNewsletterRef.current },
+          });
 
-            // Upsert profile and role in parallel
-            await Promise.all([
-              supabase.from('profiles').upsert({ id: session.user.id }),
-              supabase.from('user_roles').upsert(
-                { id: session.user.id, role: 'user' },
-                { onConflict: 'id', ignoreDuplicates: true }
-              )
-            ]);
+          // Upsert profile and role in parallel
+          await Promise.all([
+            supabase.from("profiles").upsert({ id: session.user.id }),
+            supabase
+              .from("user_roles")
+              .upsert(
+                { id: session.user.id, role: "user" },
+                { onConflict: "id", ignoreDuplicates: true },
+              ),
+          ]);
 
-            // Get fresh role data
-            const { data: roleData } = await supabase
-              .from('user_roles')
-              .select('role')
-              .eq('id', session.user.id)
-              .single();
+          // Get fresh role data
+          const { data: roleData } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("id", session.user.id)
+            .single();
 
-            // Redirect based on role
-            if (roleData?.role === 'admin' || roleData?.role === 'super_admin') {
-              navigate('/dashboard');
-            } else if (roleData?.role === 'dealer') {
-              navigate('/dashboard/dealership');
-            } else {
-              navigate('/dashboard/my-quotes');
-            }
-
-          } catch (error) {
-            console.error("Sign in error:", error);
-            toast({
-              title: "Error",
-              description: error instanceof Error ? error.message : "Sign in failed",
-              variant: "destructive",
-            });
-          } finally {
-            setIsLoading(false);
+          // Redirect based on role
+          if (roleData?.role === "admin" || roleData?.role === "super_admin") {
+            navigate("/dashboard");
+          } else if (roleData?.role === "dealer") {
+            navigate("/dashboard/dealership");
+          } else {
+            navigate("/dashboard/my-quotes");
           }
+        } catch (error) {
+          console.error("Sign in error:", error);
+          toast({
+            title: "Error",
+            description:
+              error instanceof Error ? error.message : "Sign in failed",
+            variant: "destructive",
+          });
+        } finally {
+          setIsLoading(false);
         }
       }
-    );
+    });
 
     return () => subscription.unsubscribe();
   }, [navigate, toast]);
@@ -121,24 +125,26 @@ const Auth = () => {
           <Checkbox
             id="newsletter"
             checked={subscribeNewsletter}
-            onCheckedChange={(checked) => setSubscribeNewsletter(checked as boolean)}
+            onCheckedChange={(checked) =>
+              setSubscribeNewsletter(checked as boolean)
+            }
           />
           <Label htmlFor="newsletter">Subscribe to our newsletter</Label>
         </div>
 
-        <SupabaseAuth 
+        <SupabaseAuth
           supabaseClient={supabase}
-          appearance={{ 
+          appearance={{
             theme: ThemeSupa,
             style: {
-              button: { 
-                background: '#003139', 
-                color: 'white',
+              button: {
+                background: "#003139",
+                color: "white",
                 opacity: isLoading ? 0.7 : 1,
-                cursor: isLoading ? 'not-allowed' : 'pointer'
+                cursor: isLoading ? "not-allowed" : "pointer",
               },
-              anchor: { color: '#003139' },
-            }
+              anchor: { color: "#003139" },
+            },
           }}
           providers={["google"]}
           theme="light"

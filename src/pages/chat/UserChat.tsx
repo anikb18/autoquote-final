@@ -22,14 +22,17 @@ interface UserChatData {
 
 const UserChat = () => {
   const { data: activeChats, isLoading } = useQuery({
-    queryKey: ['user-active-chats'],
+    queryKey: ["user-active-chats"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('quotes')
-        .select(`
+        .from("quotes")
+        .select(
+          `
           id,
           car_details,
           dealer_quotes!inner (
@@ -40,15 +43,16 @@ const UserChat = () => {
               dealer_name
             )
           )
-        `)
-        .eq('user_id', user.id)
-        .eq('dealer_quotes.is_accepted', true);
+        `,
+        )
+        .eq("user_id", user.id)
+        .eq("dealer_quotes.is_accepted", true);
 
       if (error) throw error;
-      
-      return (data as any[]).map(chat => ({
+
+      return (data as any[]).map((chat) => ({
         ...chat,
-        car_details: chat.car_details as CarDetails
+        car_details: chat.car_details as CarDetails,
       })) as UserChatData[];
     },
   });
@@ -76,7 +80,8 @@ const UserChat = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-semibold">
-                            {chat.car_details.year} {chat.car_details.make} {chat.car_details.model}
+                            {chat.car_details.year} {chat.car_details.make}{" "}
+                            {chat.car_details.model}
                           </h3>
                           <p className="text-sm text-muted-foreground">
                             Dealer: {dealerQuote.dealer_profiles?.dealer_name}

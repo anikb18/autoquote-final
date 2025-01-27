@@ -1,15 +1,15 @@
 import { useUserRole } from "@/hooks/use-user-role";
 import { useUser } from "@/hooks/use-user";
-import { 
-  Settings, 
-  UserCircle, 
-  Bell, 
-  CreditCard, 
-  Lock, 
-  Building2, 
-  Users, 
+import {
+  Settings,
+  UserCircle,
+  Bell,
+  CreditCard,
+  Lock,
+  Building2,
+  Users,
   Gauge,
-  Receipt
+  Receipt,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,27 +28,27 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
 
   const getNavigationItems = () => {
     const commonItems = [
-      { name: 'Profile', href: '/settings/profile', icon: UserCircle },
-      { name: 'Notifications', href: '/settings/notifications', icon: Bell },
-      { name: 'Security', href: '/settings/security', icon: Lock },
+      { name: "Profile", href: "/settings/profile", icon: UserCircle },
+      { name: "Notifications", href: "/settings/notifications", icon: Bell },
+      { name: "Security", href: "/settings/security", icon: Lock },
     ];
 
     const dealerItems = [
-      { name: 'Dealership', href: '/settings/dealership', icon: Building2 },
-      { name: 'Billing', href: '/settings/billing', icon: CreditCard },
-      { name: 'Performance', href: '/settings/performance', icon: Gauge },
+      { name: "Dealership", href: "/settings/dealership", icon: Building2 },
+      { name: "Billing", href: "/settings/billing", icon: CreditCard },
+      { name: "Performance", href: "/settings/performance", icon: Gauge },
     ];
 
     const adminItems = [
-      { name: 'User Management', href: '/settings/users', icon: Users },
-      { name: 'Billing Plans', href: '/settings/plans', icon: Receipt },
-      { name: 'System Settings', href: '/settings/system', icon: Settings },
+      { name: "User Management", href: "/settings/users", icon: Users },
+      { name: "Billing Plans", href: "/settings/plans", icon: Receipt },
+      { name: "System Settings", href: "/settings/system", icon: Settings },
     ];
 
     switch (role) {
-      case 'admin':
+      case "admin":
         return [...commonItems, ...adminItems];
-      case 'dealer':
+      case "dealer":
         return [...commonItems, ...dealerItems];
       default:
         return commonItems;
@@ -60,10 +60,10 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <div className="space-y-6 p-6 pb-16">
       <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">{t('settings.title')}</h2>
-        <p className="text-muted-foreground">
-          {t('settings.description')}
-        </p>
+        <h2 className="text-2xl font-bold tracking-tight">
+          {t("settings.title")}
+        </h2>
+        <p className="text-muted-foreground">{t("settings.description")}</p>
       </div>
       <Separator className="my-6" />
 
@@ -76,7 +76,7 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
                 variant="ghost"
                 className={cn(
                   "justify-start",
-                  window.location.pathname === item.href && "bg-muted"
+                  window.location.pathname === item.href && "bg-muted",
                 )}
                 asChild
               >
@@ -89,9 +89,7 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
           </nav>
         </aside>
         <div className="flex-1 lg:max-w-2xl">
-          <div className="h-full space-y-6">
-            {children}
-          </div>
+          <div className="h-full space-y-6">{children}</div>
         </div>
       </div>
     </div>

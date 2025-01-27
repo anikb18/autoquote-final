@@ -13,8 +13,8 @@ const VehicleInfoStep = ({ formData, setFormData }: VehicleInfoStepProps) => {
       ...formData,
       vehicleInfo: {
         ...formData.vehicleInfo,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
   };
 

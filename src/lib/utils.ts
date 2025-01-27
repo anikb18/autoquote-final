@@ -7,12 +7,13 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatCarDetails(carDetails: any) {
   if (!carDetails) return "N/A";
-  
+
   try {
-    const details = typeof carDetails === 'string' ? JSON.parse(carDetails) : carDetails;
+    const details =
+      typeof carDetails === "string" ? JSON.parse(carDetails) : carDetails;
     return `${details.year} ${details.make} ${details.model}`;
   } catch (error) {
-    console.error('Error formatting car details:', error);
+    console.error("Error formatting car details:", error);
     return "Invalid car details";
   }
 }

@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/ui/button'
-import { Container } from '@/components/ui/container'
-import backgroundImage from '/src/images/background-call-to-action.jpg'
-import { Link } from 'react-router-dom'
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import backgroundImage from "/src/images/background-call-to-action.jpg";
+import { Link } from "react-router-dom";
 
 export function CallToAction() {
-  const { t } = useTranslation('common')
+  const { t } = useTranslation("common");
 
   return (
     <section
@@ -24,18 +24,19 @@ export function CallToAction() {
       <Container className="relative">
         <div className="mx-auto max-w-lg text-center">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
-            {t('callToAction.title')}
+            {t("callToAction.title")}
           </h2>
           <p className="mt-4 text-lg tracking-tight text-white">
-            {t('callToAction.description')}
+            {t("callToAction.description")}
           </p>
-          <Button asChild className="mt-10 bg-white text-blue-600 hover:bg-gray-50">
-            <Link to="/register">
-              {t('callToAction.button')}
-            </Link>
+          <Button
+            asChild
+            className="mt-10 bg-white text-blue-600 hover:bg-gray-50"
+          >
+            <Link to="/register">{t("callToAction.button")}</Link>
           </Button>
         </div>
       </Container>
     </section>
-  )
+  );
 }

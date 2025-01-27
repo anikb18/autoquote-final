@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -12,7 +17,7 @@ interface Blog {
   id: string;
   title: string;
   content: string;
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   created_at: string;
   excerpt: string;
   featured_image?: string;
@@ -27,16 +32,16 @@ const BlogList = () => {
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   const { data: blogData, refetch } = useQuery({
-    queryKey: ['blogs'],
+    queryKey: ["blogs"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("blog_posts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data as Blog[];
-    }
+    },
   });
 
   const handleEdit = (blog: Blog) => {
@@ -45,10 +50,7 @@ const BlogList = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await supabase
-      .from('blog_posts')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from("blog_posts").delete().eq("id", id);
 
     if (error) {
       toast({
@@ -70,20 +72,18 @@ const BlogList = () => {
     setSelectedBlog(null);
   };
 
-  const handleSave = async (values: { 
-    title: string; 
-    content: string; 
-    excerpt: string; 
-    featured_image?: string; 
-    image_alt?: string; 
+  const handleSave = async (values: {
+    title: string;
+    content: string;
+    excerpt: string;
+    featured_image?: string;
+    image_alt?: string;
   }) => {
-    const { error } = await supabase
-      .from('blog_posts')
-      .upsert({
-        id: selectedBlog?.id,
-        ...values,
-        status: selectedBlog?.status || 'draft'
-      });
+    const { error } = await supabase.from("blog_posts").upsert({
+      id: selectedBlog?.id,
+      ...values,
+      status: selectedBlog?.status || "draft",
+    });
 
     if (error) {
       toast({
@@ -107,17 +107,23 @@ const BlogList = () => {
       <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{selectedBlog ? "Edit Blog" : "Create Blog"}</DialogTitle>
+            <DialogTitle>
+              {selectedBlog ? "Edit Blog" : "Create Blog"}
+            </DialogTitle>
           </DialogHeader>
-          <BlogEditor 
+          <BlogEditor
             onSave={handleSave}
-            initialValues={selectedBlog ? {
-              title: selectedBlog.title,
-              content: selectedBlog.content,
-              excerpt: selectedBlog.excerpt,
-              featured_image: selectedBlog.featured_image,
-              image_alt: selectedBlog.image_alt
-            } : undefined}
+            initialValues={
+              selectedBlog
+                ? {
+                    title: selectedBlog.title,
+                    content: selectedBlog.content,
+                    excerpt: selectedBlog.excerpt,
+                    featured_image: selectedBlog.featured_image,
+                    image_alt: selectedBlog.image_alt,
+                  }
+                : undefined
+            }
           />
         </DialogContent>
       </Dialog>

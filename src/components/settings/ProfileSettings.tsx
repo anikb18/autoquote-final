@@ -20,14 +20,14 @@ export function ProfileSettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        full_name: formData.get('fullName')?.toString(),
-        email: formData.get('email')?.toString(),
+        full_name: formData.get("fullName")?.toString(),
+        email: formData.get("email")?.toString(),
       };
 
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update(updates)
-        .eq('id', user?.id);
+        .eq("id", user?.id);
 
       if (error) throw error;
 
@@ -57,7 +57,7 @@ export function ProfileSettings() {
           required
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -82,7 +82,7 @@ export function ProfileSettings() {
           required
         />
       </div>
-      
+
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
@@ -93,7 +93,7 @@ export function ProfileSettings() {
             required
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="lastName">Last Name</Label>
           <Input
@@ -129,7 +129,7 @@ export function ProfileSettings() {
           required
         />
       </div>
-      
+
       <div className="space-y-2">
         <Label htmlFor="adminEmail">Admin Email</Label>
         <Input
@@ -162,9 +162,9 @@ export function ProfileSettings() {
       </div>
 
       <form onSubmit={handleUpdateProfile} className="space-y-4">
-        {role === 'dealer' && renderDealerFields()}
-        {role === 'admin' && renderAdminFields()}
-        {(!role || role === 'user') && renderBuyerFields()}
+        {role === "dealer" && renderDealerFields()}
+        {role === "admin" && renderAdminFields()}
+        {(!role || role === "user") && renderBuyerFields()}
 
         <Button type="submit" disabled={isUpdating}>
           {isUpdating ? "Updating..." : "Update Profile"}

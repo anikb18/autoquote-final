@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
 
 // Comprehensive list of car manufacturers available in Canada
 const CANADIAN_CAR_MAKES = [
@@ -43,7 +43,7 @@ const CANADIAN_CAR_MAKES = [
   { value: "tesla", label: "Tesla" },
   { value: "toyota", label: "Toyota" },
   { value: "volkswagen", label: "Volkswagen" },
-  { value: "volvo", label: "Volvo" }
+  { value: "volvo", label: "Volvo" },
 ];
 
 export async function fetchCarMakes() {
@@ -53,7 +53,7 @@ export async function fetchCarMakes() {
 export async function fetchCarModels(make: string, year: string) {
   try {
     const genModel = genAI.getGenerativeModel({ model: "gemini-pro" });
-    
+
     const prompt = `List all ${make} models available in Canada for ${year} as a JSON array of objects with 'value' and 'label' properties. Only include models that are actually available in Canada for that year. Format as:
     [{"value": "lowercase-model", "label": "Model Name"}]
     
@@ -66,23 +66,27 @@ export async function fetchCarModels(make: string, year: string) {
     const result = await genModel.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     try {
       return JSON.parse(text);
     } catch (parseError) {
-      console.error('Error parsing car models:', parseError);
+      console.error("Error parsing car models:", parseError);
       return [];
     }
   } catch (error) {
-    console.error('Error fetching car models:', error);
+    console.error("Error fetching car models:", error);
     return [];
   }
 }
 
-export async function fetchCarDetailsFromGemini(make: string, model: string, year: string) {
+export async function fetchCarDetailsFromGemini(
+  make: string,
+  model: string,
+  year: string,
+) {
   try {
     const genModel = genAI.getGenerativeModel({ model: "gemini-pro" });
-    
+
     const prompt = `Provide detailed specifications for a ${year} ${make} ${model} available in Canada. Include:
     1. Engine options and power output
     2. Fuel efficiency (city/highway)
@@ -104,22 +108,22 @@ export async function fetchCarDetailsFromGemini(make: string, model: string, yea
     const result = await genModel.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     try {
       return JSON.parse(text);
     } catch (parseError) {
-      console.error('Error parsing car details:', parseError);
+      console.error("Error parsing car details:", parseError);
       return {
         engine: "Specifications unavailable",
         fuelEfficiency: "Fuel efficiency data unavailable",
         safetyFeatures: "Safety features information unavailable",
         technology: "Technology features unavailable",
         trims: "Trim levels unavailable",
-        priceRange: "Price range unavailable"
+        priceRange: "Price range unavailable",
       };
     }
   } catch (error) {
-    console.error('Error fetching car details:', error);
+    console.error("Error fetching car details:", error);
     return null;
   }
 }

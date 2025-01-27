@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 interface Hotspot {
   position: THREE.Vector3;
@@ -16,11 +16,11 @@ export const Hotspots = ({ scene, carType, onHotspotHover }: HotspotsProps) => {
   console.log("Hotspots component rendered"); // Add console log
   const fetchHotspotInfo = async (carType: string): Promise<Hotspot[]> => {
     try {
-      const response = await fetch('https://api.gemini.com/v1/hotspots', {
-        method: 'POST',
+      const response = await fetch("https://api.gemini.com/v1/hotspots", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.GEMINI_API_KEY}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GEMINI_API_KEY}`,
         },
         body: JSON.stringify({
           carType: carType,
@@ -28,17 +28,21 @@ export const Hotspots = ({ scene, carType, onHotspotHover }: HotspotsProps) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch hotspot information');
+        throw new Error("Failed to fetch hotspot information");
       }
 
       const data = await response.json();
       return data.hotspots.map((hotspot: any) => ({
-        position: new THREE.Vector3(hotspot.position.x, hotspot.position.y, hotspot.position.z),
+        position: new THREE.Vector3(
+          hotspot.position.x,
+          hotspot.position.y,
+          hotspot.position.z,
+        ),
         label: hotspot.label,
         description: hotspot.description,
       }));
     } catch (error) {
-      console.error('Error fetching hotspot information:', error);
+      console.error("Error fetching hotspot information:", error);
       return [];
     }
   };
@@ -67,7 +71,7 @@ export const Hotspots = ({ scene, carType, onHotspotHover }: HotspotsProps) => {
       scene.add(spotlight);
       scene.add(spotlight.target);
     });
-  })
+  });
 
   return null;
 };

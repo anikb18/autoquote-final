@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -20,32 +20,41 @@ const PhotoUploadStep = ({ photos, setPhotos }: PhotoUploadStepProps) => {
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    setPhotos(prevPhotos => [...prevPhotos, ...files]);
-  }, [setPhotos]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setPhotos(prevPhotos => [...prevPhotos, ...files]);
-    }
-  }, [setPhotos]);
+      const files = Array.from(e.dataTransfer.files);
+      setPhotos((prevPhotos) => [...prevPhotos, ...files]);
+    },
+    [setPhotos],
+  );
 
-  const removePhoto = useCallback((index: number) => {
-    setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
-  }, [setPhotos]);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      if (e.target.files) {
+        const files = Array.from(e.target.files);
+        setPhotos((prevPhotos) => [...prevPhotos, ...files]);
+      }
+    },
+    [setPhotos],
+  );
+
+  const removePhoto = useCallback(
+    (index: number) => {
+      setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+    },
+    [setPhotos],
+  );
 
   return (
     <div className="space-y-4">
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center ${
-          dragActive ? 'border-primary bg-primary/10' : 'border-gray-300'
+          dragActive ? "border-primary bg-primary/10" : "border-gray-300"
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}

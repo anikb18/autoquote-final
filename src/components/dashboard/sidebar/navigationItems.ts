@@ -5,72 +5,72 @@ import {
   Building,
   MessageSquare,
   HeartHandshake,
-  AppWindow
+  AppWindow,
 } from "lucide-react";
 
 export const dealerNavigationItems = [
   {
     title: "Dashboard",
     icon: Home,
-    href: "/dealer"
+    href: "/dealer",
   },
   {
     title: "Active Quotes",
     icon: MessageSquare,
-    href: "/dealer/quotes"
+    href: "/dealer/quotes",
   },
   {
     title: "Active Deals",
     icon: HeartHandshake,
-    href: "/dealer/active-deals"
+    href: "/dealer/active-deals",
   },
   {
     title: "Settings",
     icon: Settings,
-    href: "/dealer/settings"
-  }
+    href: "/dealer/settings",
+  },
 ];
 
 export const adminNavigationItems = [
   {
     title: "Dashboard",
     icon: Home,
-    href: "/admin"
+    href: "/admin",
   },
   {
     title: "Users",
     icon: Users,
-    href: "/admin/users"
+    href: "/admin/users",
   },
   {
     title: "Settings",
     icon: Settings,
-    href: "/admin/settings"
-  }
+    href: "/admin/settings",
+  },
 ];
 
 export const userNavigationItems = [
   {
     title: "Dashboard",
     icon: Home,
-    href: "/dashboard"
+    href: "/dashboard",
   },
   {
     title: "My Quotes",
     icon: MessageSquare,
-    href: "/dashboard/my-quotes"
+    href: "/dashboard/my-quotes",
   },
   {
     title: "Settings",
     icon: Settings,
-    href: "/dashboard/settings"
-  }
+    href: "/dashboard/settings",
+  },
 ];
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
   return {
     adminItems: adminNavigationItems,
     dealerItems: dealerNavigationItems,
-    buyerItems: userNavigationItems
+    buyerItems: userNavigationItems,
   };
 };

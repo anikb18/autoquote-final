@@ -1,15 +1,15 @@
-import { cn } from "@/lib/utils"
-import { HTMLAttributes } from "react"
+import { cn } from "@/lib/utils";
+import { HTMLAttributes } from "react";
 
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export function Heading({ 
-  children, 
-  className, 
+export function Heading({
+  children,
+  className,
   level = 1,
-  ...props 
+  ...props
 }: HeadingProps) {
   const Component = `h${level}` as const;
 
@@ -25,7 +25,7 @@ export function Heading({
           "text-lg font-semibold": level === 5,
           "text-base font-semibold": level === 6,
         },
-        className
+        className,
       )}
       {...props}
     >

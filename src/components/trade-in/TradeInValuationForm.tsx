@@ -17,7 +17,7 @@ const TradeInValuationForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
-  
+
   const [formData, setFormData] = useState({
     vehicleInfo: {
       make: "",
@@ -25,35 +25,35 @@ const TradeInValuationForm = () => {
       year: "",
       trim: "",
       mileage: "",
-      vin: ""
+      vin: "",
     },
     conditionReport: {
       exterior: {
         paint: "excellent",
         body: "excellent",
         wheels: "excellent",
-        glass: "excellent"
+        glass: "excellent",
       },
       interior: {
         seats: "excellent",
         dashboard: "excellent",
         electronics: "excellent",
-        headliner: "excellent"
+        headliner: "excellent",
       },
       mechanical: {
         engine: "excellent",
         transmission: "excellent",
         brakes: "excellent",
-        suspension: "excellent"
-      }
+        suspension: "excellent",
+      },
     },
     serviceHistory: {
       hasServiceRecords: false,
       lastServiceDate: "",
-      serviceNotes: ""
+      serviceNotes: "",
     },
     accidentHistory: false,
-    location: ""
+    location: "",
   });
 
   const totalSteps = 5;
@@ -62,36 +62,36 @@ const TradeInValuationForm = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       // Upload photos
       const photoUrls = [];
       for (const photo of photos) {
-        const fileExt = photo.name.split('.').pop();
+        const fileExt = photo.name.split(".").pop();
         const fileName = `${crypto.randomUUID()}.${fileExt}`;
         const { error: uploadError } = await supabase.storage
-          .from('vehicle-photos')
+          .from("vehicle-photos")
           .upload(fileName, photo);
-        
+
         if (!uploadError) {
           photoUrls.push(fileName);
         }
       }
 
       // Create trade-in request
-      const { error } = await supabase
-        .from('trade_in_requests')
-        .insert({
-          user_id: user.id,
-          vehicle_info: formData.vehicleInfo,
-          condition_report: formData.conditionReport,
-          photo_urls: photoUrls,
-          mileage: parseInt(formData.vehicleInfo.mileage),
-          accident_history: formData.accidentHistory,
-          service_history: formData.serviceHistory.hasServiceRecords,
-          location: formData.location
-        });
+      const { error } = await supabase.from("trade_in_requests").insert({
+        user_id: user.id,
+        vehicle_info: formData.vehicleInfo,
+        condition_report: formData.conditionReport,
+        photo_urls: photoUrls,
+        mileage: parseInt(formData.vehicleInfo.mileage),
+        accident_history: formData.accidentHistory,
+        service_history: formData.serviceHistory.hasServiceRecords,
+        location: formData.location,
+      });
 
       if (error) throw error;
 
@@ -99,10 +99,10 @@ const TradeInValuationForm = () => {
         title: "Success",
         description: "Your trade-in request has been submitted successfully.",
       });
-      
+
       navigate("/dashboard");
     } catch (error) {
-      console.error('Error submitting trade-in request:', error);
+      console.error("Error submitting trade-in request:", error);
       toast({
         title: "Error",
         description: "Failed to submit trade-in request. Please try again.",
@@ -117,38 +117,18 @@ const TradeInValuationForm = () => {
     switch (currentStep) {
       case 1:
         return (
-          <VehicleInfoStep
-            formData={formData}
-            setFormData={setFormData}
-          />
+          <VehicleInfoStep formData={formData} setFormData={setFormData} />
         );
       case 2:
-        return (
-          <ConditionStep
-            formData={formData}
-            setFormData={setFormData}
-          />
-        );
+        return <ConditionStep formData={formData} setFormData={setFormData} />;
       case 3:
-        return (
-          <PhotoUploadStep
-            photos={photos}
-            setPhotos={setPhotos}
-          />
-        );
+        return <PhotoUploadStep photos={photos} setPhotos={setPhotos} />;
       case 4:
         return (
-          <ServiceHistoryStep
-            formData={formData}
-            setFormData={setFormData}
-          />
+          <ServiceHistoryStep formData={formData} setFormData={setFormData} />
         );
       case 5:
-        return (
-          <PaymentStep
-            onSuccess={handleSubmit}
-          />
-        );
+        return <PaymentStep onSuccess={handleSubmit} />;
       default:
         return null;
     }
@@ -166,7 +146,7 @@ const TradeInValuationForm = () => {
           <div className="flex justify-between mt-6">
             {currentStep > 1 && (
               <Button
-                onClick={() => setCurrentStep(prev => prev - 1)}
+                onClick={() => setCurrentStep((prev) => prev - 1)}
                 variant="outline"
               >
                 Previous
@@ -174,7 +154,7 @@ const TradeInValuationForm = () => {
             )}
             {currentStep < totalSteps && (
               <Button
-                onClick={() => setCurrentStep(prev => prev + 1)}
+                onClick={() => setCurrentStep((prev) => prev + 1)}
                 className="ml-auto"
               >
                 Next

@@ -7,20 +7,23 @@ interface NotificationHandlerProps {
   onNotificationReceived: () => void;
 }
 
-export const NotificationHandler = ({ dealerId, onNotificationReceived }: NotificationHandlerProps) => {
+export const NotificationHandler = ({
+  dealerId,
+  onNotificationReceived,
+}: NotificationHandlerProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
     if (!dealerId) return;
 
     const channel = supabase
-      .channel('dealer-notifications')
+      .channel("dealer-notifications")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'dealer_notifications',
+          event: "INSERT",
+          schema: "public",
+          table: "dealer_notifications",
           filter: `dealer_id=eq.${dealerId}`,
         },
         () => {
@@ -29,7 +32,7 @@ export const NotificationHandler = ({ dealerId, onNotificationReceived }: Notifi
             description: "You have a new quote request.",
           });
           onNotificationReceived();
-        }
+        },
       )
       .subscribe();
 

@@ -50,68 +50,95 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
-              
+
               {/* Admin Dashboard Routes */}
-              <Route path="/admin/*" element={
-                <ProtectedRoute allowedRoles={['admin', 'super_admin']}>
-                  <DashboardLayout>
-                    <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/users" element={<UserManagement />} />
-                      <Route path="/blog" element={<BlogManagement />} />
-                      <Route path="/newsletter" element={<NewsletterManagement />} />
-                      <Route path="/coupons" element={<CouponManagement />} />
-                      <Route path="/page-management" element={<PageManagement />} />
-                      <Route path="/settings/*" element={<AdminSettings />} />
-                    </Routes>
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
+                    <DashboardLayout>
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/users" element={<UserManagement />} />
+                        <Route path="/blog" element={<BlogManagement />} />
+                        <Route
+                          path="/newsletter"
+                          element={<NewsletterManagement />}
+                        />
+                        <Route path="/coupons" element={<CouponManagement />} />
+                        <Route
+                          path="/page-management"
+                          element={<PageManagement />}
+                        />
+                        <Route path="/settings/*" element={<AdminSettings />} />
+                      </Routes>
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Dealer Dashboard Routes */}
-              <Route path="/dealer/*" element={
-                <ProtectedRoute allowedRoles={['dealer']}>
-                  <DashboardLayout>
-                    <Routes>
-                      <Route path="/" element={<DealershipOverview />} />
-                      <Route path="/quotes" element={<ActiveQuotes />} />
-                      <Route path="/settings" element={<DealershipSettings />} />
-                      <Route path="/chat" element={<DealerChat />} />
-                    </Routes>
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/dealer/*"
+                element={
+                  <ProtectedRoute allowedRoles={["dealer"]}>
+                    <DashboardLayout>
+                      <Routes>
+                        <Route path="/" element={<DealershipOverview />} />
+                        <Route path="/quotes" element={<ActiveQuotes />} />
+                        <Route
+                          path="/settings"
+                          element={<DealershipSettings />}
+                        />
+                        <Route path="/chat" element={<DealerChat />} />
+                      </Routes>
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
 
               {/* User Dashboard Routes */}
-              <Route path="/dashboard/*" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <Routes>
-                      <Route path="/" element={<BuyerDashboard />} />
-                      <Route path="/my-quotes" element={<BuyerDashboard />} />
-                      <Route path="/my-chats" element={<UserChat />} />
-                      <Route path="/new-quote" element={<NewQuoteForm />} />
-                      <Route path="/settings/*" element={<ProfileSettings />} />
-                    </Routes>
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/dashboard/*"
+                element={
+                  <ProtectedRoute>
+                    <DashboardLayout>
+                      <Routes>
+                        <Route path="/" element={<BuyerDashboard />} />
+                        <Route path="/my-quotes" element={<BuyerDashboard />} />
+                        <Route path="/my-chats" element={<UserChat />} />
+                        <Route path="/new-quote" element={<NewQuoteForm />} />
+                        <Route
+                          path="/settings/*"
+                          element={<ProfileSettings />}
+                        />
+                      </Routes>
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/subscription" element={
-                <ProtectedRoute requireSubscription={false}>
-                  <DashboardLayout>
-                    <SubscriptionManagement />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/support" element={
-                <ProtectedRoute>
-                  <DashboardLayout>
-                    <Support />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/subscription"
+                element={
+                  <ProtectedRoute requireSubscription={false}>
+                    <DashboardLayout>
+                      <SubscriptionManagement />
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/support"
+                element={
+                  <ProtectedRoute>
+                    <DashboardLayout>
+                      <Support />
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </main>
         </Router>

@@ -21,18 +21,20 @@ export const LoanPreApprovalForm = ({
   formData,
   setFormData,
   loading,
-  onSubmit
+  onSubmit,
 }: LoanPreApprovalFormProps) => {
   const { t } = useTranslation();
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label>{t('preApproval.creditScore')}</Label>
+        <Label>{t("preApproval.creditScore")}</Label>
         <Input
           type="number"
           value={formData.creditScore}
-          onChange={(e) => setFormData({ ...formData, creditScore: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, creditScore: e.target.value })
+          }
           min="300"
           max="900"
           required
@@ -40,29 +42,33 @@ export const LoanPreApprovalForm = ({
       </div>
 
       <div className="space-y-2">
-        <Label>{t('preApproval.annualIncome')}</Label>
+        <Label>{t("preApproval.annualIncome")}</Label>
         <Input
           type="number"
           value={formData.annualIncome}
-          onChange={(e) => setFormData({ ...formData, annualIncome: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, annualIncome: e.target.value })
+          }
           min="0"
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label>{t('preApproval.monthlyObligations')}</Label>
+        <Label>{t("preApproval.monthlyObligations")}</Label>
         <Input
           type="number"
           value={formData.monthlyObligations}
-          onChange={(e) => setFormData({ ...formData, monthlyObligations: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, monthlyObligations: e.target.value })
+          }
           min="0"
           required
         />
       </div>
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? t('preApproval.submitting') : t('preApproval.submit')}
+        {loading ? t("preApproval.submitting") : t("preApproval.submit")}
       </Button>
     </form>
   );

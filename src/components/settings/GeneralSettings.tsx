@@ -19,24 +19,24 @@ export function GeneralSettings() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data: settings } = useQuery({
-    queryKey: ['site-settings'],
+    queryKey: ["site-settings"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('site_settings')
-        .select('*')
-        .eq('category', 'general')
+        .from("site_settings")
+        .select("*")
+        .eq("category", "general")
         .single();
-      
+
       if (error) throw error;
-      
+
       const defaultSettings: GeneralSettingsData = {
-        site_name: '',
-        support_email: '',
-        platform_fee: 0
+        site_name: "",
+        support_email: "",
+        platform_fee: 0,
       };
 
-      return ((data?.value || defaultSettings) as unknown as GeneralSettingsData);
-    }
+      return (data?.value || defaultSettings) as unknown as GeneralSettingsData;
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,18 +46,16 @@ export function GeneralSettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        category: 'general',
-        key: 'settings',
+        category: "general",
+        key: "settings",
         value: {
-          site_name: String(formData.get('siteName')),
-          support_email: String(formData.get('supportEmail')),
-          platform_fee: Number(formData.get('platformFee')),
-        } satisfies GeneralSettingsData
+          site_name: String(formData.get("siteName")),
+          support_email: String(formData.get("supportEmail")),
+          platform_fee: Number(formData.get("platformFee")),
+        } satisfies GeneralSettingsData,
       };
 
-      const { error } = await supabase
-        .from('site_settings')
-        .upsert(updates);
+      const { error } = await supabase.from("site_settings").upsert(updates);
 
       if (error) throw error;
 
@@ -95,7 +93,7 @@ export function GeneralSettings() {
               required
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="supportEmail">Support Email</Label>
             <Input

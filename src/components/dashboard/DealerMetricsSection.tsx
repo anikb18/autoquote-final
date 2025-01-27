@@ -15,26 +15,23 @@ export const DealerMetricsSection = () => {
   const { toast } = useToast();
 
   const { data: stats, isLoading } = useQuery({
-    queryKey: ['dealer-stats'],
+    queryKey: ["dealer-stats"],
     queryFn: async () => {
       const { data: profile } = await supabase.auth.getUser();
       if (!profile.user) throw new Error("Not authenticated");
 
       const { data: dealerProfile } = await supabase
-        .from('dealer_profiles')
-        .select('subscription_type')
-        .eq('id', profile.user.id)
+        .from("dealer_profiles")
+        .select("subscription_type")
+        .eq("id", profile.user.id)
         .single();
 
       if (!dealerProfile) throw new Error("Dealer profile not found");
 
-      const { data, error } = await supabase.rpc(
-        'get_dealer_stats',
-        {
-          p_dealer_id: profile.user.id,
-          p_subscription_type: dealerProfile.subscription_type
-        }
-      );
+      const { data, error } = await supabase.rpc("get_dealer_stats", {
+        p_dealer_id: profile.user.id,
+        p_subscription_type: dealerProfile.subscription_type,
+      });
 
       if (error) throw error;
       return data[0] as DealerStats;
@@ -61,7 +58,10 @@ export const DealerMetricsSection = () => {
       stat: stats?.active_quotes_count || 0,
       icon: ShoppingCart,
       change: `${stats?.quote_change || 0}%`,
-      changeType: (stats?.quote_change || 0) >= 0 ? "increase" as const : "decrease" as const
+      changeType:
+        (stats?.quote_change || 0) >= 0
+          ? ("increase" as const)
+          : ("decrease" as const),
     },
     {
       id: 2,
@@ -69,7 +69,7 @@ export const DealerMetricsSection = () => {
       stat: stats?.won_bids_count || 0,
       icon: Award,
       change: "+12.3%",
-      changeType: "increase" as const
+      changeType: "increase" as const,
     },
     {
       id: 3,
@@ -78,7 +78,7 @@ export const DealerMetricsSection = () => {
       icon: DollarSign,
       change: "+15.1%",
       changeType: "increase" as const,
-      prefix: "$"
+      prefix: "$",
     },
     {
       id: 4,
@@ -86,14 +86,9 @@ export const DealerMetricsSection = () => {
       stat: "2.4h",
       icon: Clock,
       change: "-10.3%",
-      changeType: "decrease" as const
-    }
+      changeType: "decrease" as const,
+    },
   ];
 
-  return (
-    <MetricsOverview 
-      title="Dealership Performance" 
-      stats={dealerStats}
-    />
-  );
+  return <MetricsOverview title="Dealership Performance" stats={dealerStats} />;
 };

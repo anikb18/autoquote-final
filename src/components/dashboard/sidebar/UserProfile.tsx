@@ -20,11 +20,9 @@ export function UserProfile({ user }: UserProfileProps) {
       </Avatar>
       <div className="flex flex-col min-w-0">
         <span className="text-sm font-semibold text-gray-900 truncate">
-          {user.email?.split('@')[0]}
+          {user.email?.split("@")[0]}
         </span>
-        <span className="text-xs text-gray-500 truncate">
-          {user.email}
-        </span>
+        <span className="text-xs text-gray-500 truncate">{user.email}</span>
       </div>
     </div>
   );

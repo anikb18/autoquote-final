@@ -8,22 +8,24 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    allowedHosts: ['36129237-bfd4-4359-bb23-1a4fa1241306.lovableproject.com', 'localhost'],
+    allowedHosts: [
+      "36129237-bfd4-4359-bb23-1a4fa1241306.lovableproject.com",
+      "localhost",
+    ],
     // Add middleware to handle client-side routing
     middlewares: [
       (req: IncomingMessage, res: ServerResponse, next: () => void) => {
         // Redirect all requests that aren't files to index.html
-        if (!req.url?.includes('.')) {
-          req.url = '/index.html';
+        if (!req.url?.includes(".")) {
+          req.url = "/index.html";
         }
         next();
-      }
-    ]
+      },
+    ],
   },
-  plugins: [
-    react(),
-    mode === 'development' && componentTagger(),
-  ].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean,
+  ),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

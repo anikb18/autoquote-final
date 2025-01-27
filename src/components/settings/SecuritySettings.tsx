@@ -18,23 +18,24 @@ export function SecuritySettings() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data: settings } = useQuery({
-    queryKey: ['security-settings'],
+    queryKey: ["security-settings"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('site_settings')
-        .select('*')
-        .eq('category', 'security')
+        .from("site_settings")
+        .select("*")
+        .eq("category", "security")
         .single();
-      
+
       if (error) throw error;
 
       const defaultSettings: SecuritySettingsData = {
         two_factor_auth: false,
-        require_email_verification: false
+        require_email_verification: false,
       };
-      
-      return ((data?.value || defaultSettings) as unknown as SecuritySettingsData);
-    }
+
+      return (data?.value ||
+        defaultSettings) as unknown as SecuritySettingsData;
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,17 +45,16 @@ export function SecuritySettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        category: 'security',
-        key: 'settings',
+        category: "security",
+        key: "settings",
         value: {
-          two_factor_auth: formData.get('twoFactorAuth') === 'on',
-          require_email_verification: formData.get('requireEmailVerification') === 'on',
-        } satisfies SecuritySettingsData
+          two_factor_auth: formData.get("twoFactorAuth") === "on",
+          require_email_verification:
+            formData.get("requireEmailVerification") === "on",
+        } satisfies SecuritySettingsData,
       };
 
-      const { error } = await supabase
-        .from('site_settings')
-        .upsert(updates);
+      const { error } = await supabase.from("site_settings").upsert(updates);
 
       if (error) throw error;
 
@@ -99,7 +99,9 @@ export function SecuritySettings() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label htmlFor="requireEmailVerification">Email Verification</Label>
+              <Label htmlFor="requireEmailVerification">
+                Email Verification
+              </Label>
               <p className="text-sm text-muted-foreground">
                 Require email verification for new accounts
               </p>

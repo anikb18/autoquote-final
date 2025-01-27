@@ -10,8 +10,8 @@ const defaultTranslations = {
       "Competitive Pricing: Best deals in the market",
       "Quality Service: Expert support team",
       "Fast Process: Quick and efficient service",
-      "Trusted Network: Verified dealers only"
-    ]
+      "Trusted Network: Verified dealers only",
+    ],
   },
   process: {
     title: "How It Works",
@@ -19,27 +19,27 @@ const defaultTranslations = {
       "Submit Request: Fill out our simple form",
       "Get Quotes: Receive competitive offers",
       "Compare Options: Review all quotes easily",
-      "Choose Best Deal: Select your preferred offer"
-    ]
-  }
+      "Choose Best Deal: Select your preferred offer",
+    ],
+  },
 };
 
 export const ProcessSection = () => {
   const { i18n } = useTranslation();
 
   const { data: translations } = useQuery({
-    queryKey: ['dealer_hero_translations'],
+    queryKey: ["dealer_hero_translations"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('site_settings')
-        .select('value')
-        .eq('category', 'translations')
-        .eq('key', 'dealer_hero')
+        .from("site_settings")
+        .select("value")
+        .eq("category", "translations")
+        .eq("key", "dealer_hero")
         .maybeSingle();
 
       if (error) throw error;
       return data?.value?.[i18n.language] || defaultTranslations;
-    }
+    },
   });
 
   if (!translations) return null;
@@ -50,30 +50,36 @@ export const ProcessSection = () => {
         <div className="grid md:grid-cols-2 gap-12">
           {/* Benefits Section */}
           <div>
-            <h2 className="text-3xl font-bold mb-8">{translations.benefits.title}</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {translations.benefits.title}
+            </h2>
             <div className="space-y-6">
-              {translations.benefits.items.map((benefit: string, index: number) => {
-                const [title, description] = benefit.split(': ');
-                return (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="text-xl">{title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{description}</p>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+              {translations.benefits.items.map(
+                (benefit: string, index: number) => {
+                  const [title, description] = benefit.split(": ");
+                  return (
+                    <Card key={index}>
+                      <CardHeader>
+                        <CardTitle className="text-xl">{title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground">{description}</p>
+                      </CardContent>
+                    </Card>
+                  );
+                },
+              )}
             </div>
           </div>
 
           {/* Process Steps Section */}
           <div>
-            <h2 className="text-3xl font-bold mb-8">{translations.process.title}</h2>
+            <h2 className="text-3xl font-bold mb-8">
+              {translations.process.title}
+            </h2>
             <div className="space-y-6">
               {translations.process.steps.map((step: string, index: number) => {
-                const [title, description] = step.split(': ');
+                const [title, description] = step.split(": ");
                 return (
                   <Card key={index}>
                     <CardHeader>

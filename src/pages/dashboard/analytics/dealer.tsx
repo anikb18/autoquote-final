@@ -24,19 +24,22 @@ export default function DealerAnalytics() {
   const isMobile = useIsMobile();
 
   const { data: stats, isLoading } = useQuery<DealerPerformanceStats>({
-    queryKey: ['dealer-performance-stats'],
+    queryKey: ["dealer-performance-stats"],
     queryFn: async () => {
-      const { data: canAccess } = await supabase.rpc('can_access_dealer_stats', {
-        dealer_id: (await supabase.auth.getUser()).data.user?.id
-      });
+      const { data: canAccess } = await supabase.rpc(
+        "can_access_dealer_stats",
+        {
+          dealer_id: (await supabase.auth.getUser()).data.user?.id,
+        },
+      );
 
       if (!canAccess) {
-        throw new Error('Unauthorized access to dealer stats');
+        throw new Error("Unauthorized access to dealer stats");
       }
 
       const { data, error } = await supabase
-        .from('dealer_performance_stats')
-        .select('*')
+        .from("dealer_performance_stats")
+        .select("*")
         .single();
 
       if (error) throw error;
@@ -59,8 +62,8 @@ export default function DealerAnalytics() {
       name: "Total Quotes",
       stat: stats?.total_quotes || 0,
       icon: BarChart,
-      change: `${((stats?.accepted_quotes || 0) / (stats?.total_quotes || 1) * 100).toFixed(1)}%`,
-      changeType: "increase" as const
+      change: `${(((stats?.accepted_quotes || 0) / (stats?.total_quotes || 1)) * 100).toFixed(1)}%`,
+      changeType: "increase" as const,
     },
     {
       id: 2,
@@ -68,7 +71,7 @@ export default function DealerAnalytics() {
       stat: stats?.total_sales || 0,
       icon: TrendingUp,
       change: `${stats?.conversion_rate.toFixed(1)}%`,
-      changeType: "increase" as const
+      changeType: "increase" as const,
     },
     {
       id: 3,
@@ -77,7 +80,7 @@ export default function DealerAnalytics() {
       icon: DollarSign,
       change: `${stats?.avg_profit_margin.toFixed(1)}%`,
       changeType: "increase" as const,
-      prefix: "$"
+      prefix: "$",
     },
     {
       id: 4,
@@ -85,8 +88,8 @@ export default function DealerAnalytics() {
       stat: stats?.accepted_quotes || 0,
       icon: Users,
       change: "+12.3%",
-      changeType: "increase" as const
-    }
+      changeType: "increase" as const,
+    },
   ];
 
   return (
@@ -111,15 +114,22 @@ export default function DealerAnalytics() {
                           {stat.name}
                         </p>
                         <p className="text-2xl font-bold">
-                          {stat.prefix}{typeof stat.stat === 'number' ? stat.stat.toLocaleString() : stat.stat}
+                          {stat.prefix}
+                          {typeof stat.stat === "number"
+                            ? stat.stat.toLocaleString()
+                            : stat.stat}
                         </p>
                       </div>
                       <stat.icon className="h-8 w-8 text-muted-foreground" />
                     </div>
                     <div className="mt-4">
-                      <span className={`text-sm font-medium ${
-                        stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-                      }`}>
+                      <span
+                        className={`text-sm font-medium ${
+                          stat.changeType === "increase"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
                         {stat.change}
                       </span>
                     </div>
@@ -127,7 +137,9 @@ export default function DealerAnalytics() {
                 ))}
               </div>
 
-              <div className={`grid gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-2'}`}>
+              <div
+                className={`grid gap-6 ${isMobile ? "grid-cols-1" : "grid-cols-2"}`}
+              >
                 <Card>
                   <CardHeader>
                     <CardTitle>Sales Trend</CardTitle>

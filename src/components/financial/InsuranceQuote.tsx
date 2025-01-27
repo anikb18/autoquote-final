@@ -23,30 +23,31 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
     setLoading(true);
 
     try {
-      const annualPremium = calculatePremium(formData.coverageType, parseFloat(formData.deductible));
+      const annualPremium = calculatePremium(
+        formData.coverageType,
+        parseFloat(formData.deductible),
+      );
 
       if (quoteId) {
-        const { error } = await supabase
-          .from('insurance_quotes')
-          .insert({
-            quote_id: quoteId,
-            coverage_type: formData.coverageType,
-            deductible: parseFloat(formData.deductible),
-            annual_premium: annualPremium,
-            provider: "Sample Insurance Co."
-          });
+        const { error } = await supabase.from("insurance_quotes").insert({
+          quote_id: quoteId,
+          coverage_type: formData.coverageType,
+          deductible: parseFloat(formData.deductible),
+          annual_premium: annualPremium,
+          provider: "Sample Insurance Co.",
+        });
 
         if (error) throw error;
       }
 
       toast({
-        title: t('insurance.success'),
-        description: t('insurance.quoteReady'),
+        title: t("insurance.success"),
+        description: t("insurance.quoteReady"),
       });
     } catch (error) {
       toast({
-        title: t('insurance.error'),
-        description: t('insurance.failed'),
+        title: t("insurance.error"),
+        description: t("insurance.failed"),
         variant: "destructive",
       });
     } finally {
@@ -54,17 +55,20 @@ const InsuranceQuote = ({ quoteId }: InsuranceQuoteProps) => {
     }
   };
 
-  const calculatePremium = (coverageType: string, deductible: number): number => {
+  const calculatePremium = (
+    coverageType: string,
+    deductible: number,
+  ): number => {
     const basePremium = 1200;
-    const coverageMultiplier = coverageType === 'full' ? 1.5 : 1;
-    const deductibleFactor = 1 - (deductible / 10000);
+    const coverageMultiplier = coverageType === "full" ? 1.5 : 1;
+    const deductibleFactor = 1 - deductible / 10000;
     return basePremium * coverageMultiplier * deductibleFactor;
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('insurance.title')}</CardTitle>
+        <CardTitle>{t("insurance.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <InsuranceQuoteForm

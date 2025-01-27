@@ -5,13 +5,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 const DealerSignup = () => {
-  const { t } = useTranslation('dealer');
+  const { t } = useTranslation("dealer");
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -29,16 +35,19 @@ const DealerSignup = () => {
     const location = formData.get("location") as string;
 
     try {
-      const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+      const {
+        data: { user },
+        error: signUpError,
+      } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             dealership_name: dealershipName,
             location: location,
-            user_type: 'dealer' // Add this to help identify user type
-          }
-        }
+            user_type: "dealer", // Add this to help identify user type
+          },
+        },
       });
 
       if (signUpError) throw signUpError;
@@ -46,27 +55,25 @@ const DealerSignup = () => {
       if (user) {
         // Create dealer profile
         const { error: profileError } = await supabase
-          .from('dealer_profiles')
+          .from("dealer_profiles")
           .insert([
             {
               id: user.id,
               dealer_name: dealershipName,
               active: true,
-              subscription_type: 'basic'
-            }
+              subscription_type: "basic",
+            },
           ]);
 
         if (profileError) throw profileError;
 
         // Set user role as dealer
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .insert([
-            {
-              id: user.id,
-              role: 'dealer'
-            }
-          ]);
+        const { error: roleError } = await supabase.from("user_roles").insert([
+          {
+            id: user.id,
+            role: "dealer",
+          },
+        ]);
 
         if (roleError) throw roleError;
 
@@ -106,7 +113,9 @@ const DealerSignup = () => {
             )}
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="dealershipName">{t("signup.form.dealershipName")}</Label>
+                <Label htmlFor="dealershipName">
+                  {t("signup.form.dealershipName")}
+                </Label>
                 <Input
                   id="dealershipName"
                   name="dealershipName"

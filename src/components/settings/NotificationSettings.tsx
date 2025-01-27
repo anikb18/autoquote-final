@@ -19,31 +19,35 @@ const defaultSettings: NotificationSettingsData = {
   email_notifications: false,
   push_notifications: false,
   quote_alerts: false,
-  marketing_emails: false
+  marketing_emails: false,
 };
 
 export function NotificationSettings() {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { data: settings, isLoading, error } = useQuery({
-    queryKey: ['notification-settings'],
+  const {
+    data: settings,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["notification-settings"],
     queryFn: async () => {
       try {
         const { data, error } = await supabase
-          .from('site_settings')
-          .select('*')
-          .eq('category', 'notifications')
+          .from("site_settings")
+          .select("*")
+          .eq("category", "notifications")
           .maybeSingle();
-        
+
         if (error) {
-          console.error('Error fetching notification settings:', error);
+          console.error("Error fetching notification settings:", error);
           throw error;
         }
 
-        return ((data?.value || defaultSettings) as NotificationSettingsData);
+        return (data?.value || defaultSettings) as NotificationSettingsData;
       } catch (error) {
-        console.error('Error in notification settings query:', error);
+        console.error("Error in notification settings query:", error);
         toast({
           title: "Error fetching settings",
           description: "Using default notification settings",
@@ -54,7 +58,7 @@ export function NotificationSettings() {
     },
     meta: {
       onError: (error: Error) => {
-        console.error('Settings query error:', error);
+        console.error("Settings query error:", error);
         toast({
           title: "Error",
           description: "Failed to load notification settings",
@@ -71,19 +75,17 @@ export function NotificationSettings() {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        category: 'notifications',
-        key: 'settings',
+        category: "notifications",
+        key: "settings",
         value: {
-          email_notifications: formData.get('emailNotifications') === 'on',
-          push_notifications: formData.get('pushNotifications') === 'on',
-          quote_alerts: formData.get('quoteAlerts') === 'on',
-          marketing_emails: formData.get('marketingEmails') === 'on',
-        } satisfies NotificationSettingsData
+          email_notifications: formData.get("emailNotifications") === "on",
+          push_notifications: formData.get("pushNotifications") === "on",
+          quote_alerts: formData.get("quoteAlerts") === "on",
+          marketing_emails: formData.get("marketingEmails") === "on",
+        } satisfies NotificationSettingsData,
       };
 
-      const { error } = await supabase
-        .from('site_settings')
-        .upsert(updates);
+      const { error } = await supabase.from("site_settings").upsert(updates);
 
       if (error) throw error;
 
@@ -92,7 +94,7 @@ export function NotificationSettings() {
         description: "Your notification preferences have been saved.",
       });
     } catch (error) {
-      console.error('Error updating settings:', error);
+      console.error("Error updating settings:", error);
       toast({
         title: "Error",
         description: "Failed to update notification settings",

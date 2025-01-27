@@ -1,12 +1,12 @@
-import { 
-  Calendar, 
-  Car, 
-  CheckCircle2, 
-  HeartHandshake, 
-  LineChart, 
-  PhoneCall, 
+import {
+  Calendar,
+  Car,
+  CheckCircle2,
+  HeartHandshake,
+  LineChart,
+  PhoneCall,
   ShieldCheck,
-  Wallet 
+  Wallet,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Hero from "@/components/Hero";

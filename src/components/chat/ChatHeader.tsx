@@ -8,9 +8,9 @@ interface ChatHeaderProps {
   onAutoTranslateChange: (checked: boolean) => void;
 }
 
-export const ChatHeader = ({ 
-  autoTranslate, 
-  onAutoTranslateChange 
+export const ChatHeader = ({
+  autoTranslate,
+  onAutoTranslateChange,
 }: ChatHeaderProps) => {
   return (
     <div className="p-4 border-b bg-muted/50">

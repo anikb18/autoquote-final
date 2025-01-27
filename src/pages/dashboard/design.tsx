@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/integrations/supabase/types";
 
-type Json = Database['public']['Tables']['site_settings']['Row']['value'];
+type Json = Database["public"]["Tables"]["site_settings"]["Row"]["value"];
 
 interface DesignSettings {
   primaryColor: string;
@@ -34,43 +34,43 @@ export default function DesignPage() {
     darkMode: false,
     customFont: "",
     logoUrl: "",
-    brandName: "AutoQuote24"
+    brandName: "AutoQuote24",
   });
 
   const { data: savedSettings } = useQuery<DesignSettings, Error>({
-    queryKey: ['design-settings'],
+    queryKey: ["design-settings"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('site_settings')
-        .select('value')
-        .eq('category', 'design')
-        .eq('key', 'theme')
+        .from("site_settings")
+        .select("value")
+        .eq("category", "design")
+        .eq("key", "theme")
         .single();
 
       if (error) throw error;
-      
+
       const settingsData = data?.value as unknown as DesignSettings;
-      return settingsData || {
-        primaryColor: "#003139",
-        secondaryColor: "#d1d2c3",
-        accentColor: "#446df6",
-        darkMode: false,
-        customFont: "",
-        logoUrl: "",
-        brandName: "AutoQuote24"
-      };
-    }
+      return (
+        settingsData || {
+          primaryColor: "#003139",
+          secondaryColor: "#d1d2c3",
+          accentColor: "#446df6",
+          darkMode: false,
+          customFont: "",
+          logoUrl: "",
+          brandName: "AutoQuote24",
+        }
+      );
+    },
   });
 
   const mutation = useMutation({
     mutationFn: async (newSettings: DesignSettings) => {
-      const { error } = await supabase
-        .from('site_settings')
-        .upsert({
-          category: 'design',
-          key: 'theme',
-          value: newSettings as unknown as Json
-        });
+      const { error } = await supabase.from("site_settings").upsert({
+        category: "design",
+        key: "theme",
+        value: newSettings as unknown as Json,
+      });
 
       if (error) throw error;
       return newSettings;
@@ -103,7 +103,9 @@ export default function DesignPage() {
               <Input
                 type="color"
                 value={settings.primaryColor}
-                onChange={(e) => setSettings({ ...settings, primaryColor: e.target.value })}
+                onChange={(e) =>
+                  setSettings({ ...settings, primaryColor: e.target.value })
+                }
               />
             </div>
             <div>
@@ -111,7 +113,9 @@ export default function DesignPage() {
               <Input
                 type="color"
                 value={settings.secondaryColor}
-                onChange={(e) => setSettings({ ...settings, secondaryColor: e.target.value })}
+                onChange={(e) =>
+                  setSettings({ ...settings, secondaryColor: e.target.value })
+                }
               />
             </div>
             <div>
@@ -119,14 +123,18 @@ export default function DesignPage() {
               <Input
                 type="color"
                 value={settings.accentColor}
-                onChange={(e) => setSettings({ ...settings, accentColor: e.target.value })}
+                onChange={(e) =>
+                  setSettings({ ...settings, accentColor: e.target.value })
+                }
               />
             </div>
             <div>
               <Label>Dark Mode</Label>
               <Switch
                 checked={settings.darkMode}
-                onCheckedChange={(checked) => setSettings({ ...settings, darkMode: checked })}
+                onCheckedChange={(checked) =>
+                  setSettings({ ...settings, darkMode: checked })
+                }
               />
             </div>
             <div>
@@ -134,7 +142,9 @@ export default function DesignPage() {
               <Input
                 type="text"
                 value={settings.customFont}
-                onChange={(e) => setSettings({ ...settings, customFont: e.target.value })}
+                onChange={(e) =>
+                  setSettings({ ...settings, customFont: e.target.value })
+                }
               />
             </div>
             <div>
@@ -142,7 +152,9 @@ export default function DesignPage() {
               <Input
                 type="text"
                 value={settings.logoUrl}
-                onChange={(e) => setSettings({ ...settings, logoUrl: e.target.value })}
+                onChange={(e) =>
+                  setSettings({ ...settings, logoUrl: e.target.value })
+                }
               />
             </div>
             <div>
@@ -150,10 +162,14 @@ export default function DesignPage() {
               <Input
                 type="text"
                 value={settings.brandName}
-                onChange={(e) => setSettings({ ...settings, brandName: e.target.value })}
+                onChange={(e) =>
+                  setSettings({ ...settings, brandName: e.target.value })
+                }
               />
             </div>
-            <Button onClick={() => mutation.mutate(settings)}>Save Settings</Button>
+            <Button onClick={() => mutation.mutate(settings)}>
+              Save Settings
+            </Button>
           </div>
         </CardContent>
       </Card>

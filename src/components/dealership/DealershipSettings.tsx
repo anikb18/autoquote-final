@@ -11,15 +11,17 @@ export const DealershipSettings = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data: profile, refetch } = useQuery({
-    queryKey: ['dealer-profile'],
+    queryKey: ["dealer-profile"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('dealer_profiles')
-        .select('*')
-        .eq('id', user.id)
+        .from("dealer_profiles")
+        .select("*")
+        .eq("id", user.id)
         .single();
 
       if (error) throw error;
@@ -34,15 +36,15 @@ export const DealershipSettings = () => {
     try {
       const formData = new FormData(e.currentTarget);
       const updates = {
-        dealer_name: formData.get('dealerName')?.toString() || '',
-        first_name: formData.get('firstName')?.toString() || '',
-        last_name: formData.get('lastName')?.toString() || '',
+        dealer_name: formData.get("dealerName")?.toString() || "",
+        first_name: formData.get("firstName")?.toString() || "",
+        last_name: formData.get("lastName")?.toString() || "",
       };
 
       const { error } = await supabase
-        .from('dealer_profiles')
+        .from("dealer_profiles")
         .update(updates)
-        .eq('id', profile?.id);
+        .eq("id", profile?.id);
 
       if (error) throw error;
 
@@ -54,7 +56,8 @@ export const DealershipSettings = () => {
     } catch (error) {
       toast({
         title: "Error updating settings",
-        description: error instanceof Error ? error.message : "An error occurred",
+        description:
+          error instanceof Error ? error.message : "An error occurred",
         variant: "destructive",
       });
     } finally {
@@ -65,7 +68,7 @@ export const DealershipSettings = () => {
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold">Dealership Settings</h1>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>Profile Information</CardTitle>
@@ -83,7 +86,7 @@ export const DealershipSettings = () => {
                 required
               />
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label htmlFor="firstName" className="text-sm font-medium">
@@ -96,7 +99,7 @@ export const DealershipSettings = () => {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <label htmlFor="lastName" className="text-sm font-medium">
                   Last Name

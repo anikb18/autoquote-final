@@ -3,7 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -23,20 +29,20 @@ const SupportRequest = () => {
     setIsSubmitting(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase
-        .from('support_tickets')
-        .insert([
-          {
-            user_id: user.id,
-            subject,
-            category,
-            message,
-            status: 'open'
-          }
-        ]);
+      const { error } = await supabase.from("support_tickets").insert([
+        {
+          user_id: user.id,
+          subject,
+          category,
+          message,
+          status: "open",
+        },
+      ]);
 
       if (error) throw error;
 
@@ -45,9 +51,9 @@ const SupportRequest = () => {
         description: "We'll get back to you as soon as possible.",
       });
 
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
-      console.error('Error submitting support request:', error);
+      console.error("Error submitting support request:", error);
       toast({
         title: "Error",
         description: "Failed to submit support request. Please try again.",
@@ -62,8 +68,8 @@ const SupportRequest = () => {
     <div className="container max-w-2xl mx-auto p-6">
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">{t('support.title')}</h1>
-          <p className="text-muted-foreground">{t('support.description')}</p>
+          <h1 className="text-2xl font-bold">{t("support.title")}</h1>
+          <p className="text-muted-foreground">{t("support.description")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

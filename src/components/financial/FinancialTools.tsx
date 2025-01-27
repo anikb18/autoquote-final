@@ -11,28 +11,28 @@ const FinancialTools = () => {
 
   const tools = [
     {
-      title: t('financial.paymentCalculator'),
-      description: t('financial.paymentCalculatorDesc'),
+      title: t("financial.paymentCalculator"),
+      description: t("financial.paymentCalculatorDesc"),
       icon: <Calculator className="w-6 h-6" />,
-      path: '/tools/payment-calculator'
+      path: "/tools/payment-calculator",
     },
     {
-      title: t('financial.loanPreApproval'),
-      description: t('financial.loanPreApprovalDesc'),
+      title: t("financial.loanPreApproval"),
+      description: t("financial.loanPreApprovalDesc"),
       icon: <BadgeCheck className="w-6 h-6" />,
-      path: '/tools/loan-pre-approval'
+      path: "/tools/loan-pre-approval",
     },
     {
-      title: t('financial.insuranceQuote'),
-      description: t('financial.insuranceQuoteDesc'),
+      title: t("financial.insuranceQuote"),
+      description: t("financial.insuranceQuoteDesc"),
       icon: <ShieldCheck className="w-6 h-6" />,
-      path: '/tools/insurance-quote'
-    }
+      path: "/tools/insurance-quote",
+    },
   ];
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">{t('financial.toolsTitle')}</h1>
+      <h1 className="text-3xl font-bold mb-8">{t("financial.toolsTitle")}</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {tools.map((tool) => (
           <Card key={tool.path} className="hover:shadow-lg transition-shadow">
@@ -44,11 +44,8 @@ const FinancialTools = () => {
             </CardHeader>
             <CardContent>
               <p className="mb-4 text-muted-foreground">{tool.description}</p>
-              <Button 
-                onClick={() => navigate(tool.path)}
-                className="w-full"
-              >
-                {t('financial.tryNow')}
+              <Button onClick={() => navigate(tool.path)} className="w-full">
+                {t("financial.tryNow")}
               </Button>
             </CardContent>
           </Card>

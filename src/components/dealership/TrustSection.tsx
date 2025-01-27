@@ -2,24 +2,24 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 
 export const TrustSection = () => {
-  const { t } = useTranslation('dealer');
+  const { t } = useTranslation("dealer");
 
   const metrics = [
     {
       title: t("trust.metrics.network.title"),
       value: t("trust.metrics.network.value"),
-      label: t("trust.metrics.network.label")
+      label: t("trust.metrics.network.label"),
     },
     {
       title: t("trust.metrics.success.title"),
       value: t("trust.metrics.success.value"),
-      label: t("trust.metrics.success.label")
+      label: t("trust.metrics.success.label"),
     },
     {
       title: t("trust.metrics.value.title"),
       value: t("trust.metrics.value.value"),
-      label: t("trust.metrics.value.label")
-    }
+      label: t("trust.metrics.value.label"),
+    },
   ];
 
   return (
@@ -35,7 +35,9 @@ export const TrustSection = () => {
                 <CardTitle className="text-xl">{metric.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-4xl font-bold text-primary mb-2">{metric.value}</p>
+                <p className="text-4xl font-bold text-primary mb-2">
+                  {metric.value}
+                </p>
                 <p className="text-muted-foreground">{metric.label}</p>
               </CardContent>
             </Card>

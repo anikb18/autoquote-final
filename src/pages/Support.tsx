@@ -12,23 +12,25 @@ export default function Support() {
   const [unreadCount, setUnreadCount] = useState(0);
   const { role } = useUserRole();
   const { toast } = useToast();
-  const isAdmin = role === 'admin';
+  const isAdmin = role === "admin";
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
         const { data, error } = await supabase
-          .from('support_tickets')
-          .select(`
+          .from("support_tickets")
+          .select(
+            `
             *,
             support_responses(count)
-          `)
-          .order('created_at', { ascending: false });
+          `,
+          )
+          .order("created_at", { ascending: false });
 
         if (error) throw error;
         setTickets(data || []);
       } catch (error) {
-        console.error('Error fetching tickets:', error);
+        console.error("Error fetching tickets:", error);
         toast({
           title: "Error",
           description: "Failed to load support tickets",
@@ -41,18 +43,18 @@ export default function Support() {
 
     // Set up realtime subscription for new tickets and responses
     const channel = supabase
-      .channel('support-updates')
+      .channel("support-updates")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'support_tickets'
+          event: "*",
+          schema: "public",
+          table: "support_tickets",
         },
         () => {
           fetchTickets();
-          setUnreadCount(prev => prev + 1);
-        }
+          setUnreadCount((prev) => prev + 1);
+        },
       )
       .subscribe();
 
@@ -76,10 +78,10 @@ export default function Support() {
       </div>
 
       {!isAdmin && <SupportRequest />}
-      <SupportTicketList 
-        tickets={tickets} 
+      <SupportTicketList
+        tickets={tickets}
         isAdmin={isAdmin}
-        onTicketRead={() => setUnreadCount(prev => Math.max(0, prev - 1))}
+        onTicketRead={() => setUnreadCount((prev) => Math.max(0, prev - 1))}
       />
     </div>
   );

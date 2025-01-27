@@ -9,14 +9,17 @@ interface ServiceHistoryStepProps {
   setFormData: (data: any) => void;
 }
 
-const ServiceHistoryStep = ({ formData, setFormData }: ServiceHistoryStepProps) => {
+const ServiceHistoryStep = ({
+  formData,
+  setFormData,
+}: ServiceHistoryStepProps) => {
   const handleServiceHistoryChange = (field: string, value: any) => {
     setFormData({
       ...formData,
       serviceHistory: {
         ...formData.serviceHistory,
-        [field]: value
-      }
+        [field]: value,
+      },
     });
   };
 
@@ -27,7 +30,9 @@ const ServiceHistoryStep = ({ formData, setFormData }: ServiceHistoryStepProps) 
         <Switch
           id="hasServiceRecords"
           checked={formData.serviceHistory.hasServiceRecords}
-          onCheckedChange={(checked) => handleServiceHistoryChange('hasServiceRecords', checked)}
+          onCheckedChange={(checked) =>
+            handleServiceHistoryChange("hasServiceRecords", checked)
+          }
         />
       </div>
 
@@ -39,7 +44,9 @@ const ServiceHistoryStep = ({ formData, setFormData }: ServiceHistoryStepProps) 
               type="date"
               id="lastServiceDate"
               value={formData.serviceHistory.lastServiceDate}
-              onChange={(e) => handleServiceHistoryChange('lastServiceDate', e.target.value)}
+              onChange={(e) =>
+                handleServiceHistoryChange("lastServiceDate", e.target.value)
+              }
             />
           </div>
 
@@ -48,7 +55,9 @@ const ServiceHistoryStep = ({ formData, setFormData }: ServiceHistoryStepProps) 
             <Textarea
               id="serviceNotes"
               value={formData.serviceHistory.serviceNotes}
-              onChange={(e) => handleServiceHistoryChange('serviceNotes', e.target.value)}
+              onChange={(e) =>
+                handleServiceHistoryChange("serviceNotes", e.target.value)
+              }
               placeholder="Please provide details about maintenance history, repairs, etc."
               className="h-32"
             />
@@ -60,10 +69,12 @@ const ServiceHistoryStep = ({ formData, setFormData }: ServiceHistoryStepProps) 
         <Label>Has the vehicle been in any accidents?</Label>
         <RadioGroup
           value={formData.accidentHistory ? "yes" : "no"}
-          onValueChange={(value) => setFormData({
-            ...formData,
-            accidentHistory: value === "yes"
-          })}
+          onValueChange={(value) =>
+            setFormData({
+              ...formData,
+              accidentHistory: value === "yes",
+            })
+          }
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="no" id="accident-no" />
@@ -81,10 +92,12 @@ const ServiceHistoryStep = ({ formData, setFormData }: ServiceHistoryStepProps) 
         <Input
           id="location"
           value={formData.location}
-          onChange={(e) => setFormData({
-            ...formData,
-            location: e.target.value
-          })}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              location: e.target.value,
+            })
+          }
           placeholder="City, Province"
           required
         />

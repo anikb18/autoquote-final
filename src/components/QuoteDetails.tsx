@@ -17,29 +17,31 @@ const QuoteDetails = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data: quote, isLoading } = useQuery({
-    queryKey: ['quote-details', id],
+    queryKey: ["quote-details", id],
     queryFn: async () => {
-      if (!id) throw new Error('Quote ID is required');
-      
+      if (!id) throw new Error("Quote ID is required");
+
       const { data, error } = await supabase
-        .from('quotes')
-        .select(`
+        .from("quotes")
+        .select(
+          `
           *,
           dealer_quotes(
             *,
             dealer_profile:dealer_profiles(*)
           )
-        `)
-        .eq('id', id)
+        `,
+        )
+        .eq("id", id)
         .single();
 
       if (error) throw error;
-      
+
       const rawCarDetails = data?.car_details as unknown;
       const carDetails = rawCarDetails as CarDetails;
-      
+
       if (!carDetails?.year || !carDetails?.make || !carDetails?.model) {
-        throw new Error('Invalid car details format');
+        throw new Error("Invalid car details format");
       }
 
       const transformedData: Quote = {
@@ -51,15 +53,15 @@ const QuoteDetails = () => {
           is_accepted: dq.is_accepted,
           dealer_profile: dq.dealer_profile,
           created_at: dq.created_at,
-          status: dq.status
+          status: dq.status,
         })),
         status: data.status,
-        created_at: data.created_at
+        created_at: data.created_at,
       };
 
       return transformedData;
     },
-    enabled: !!id
+    enabled: !!id,
   });
 
   if (isLoading) {
@@ -82,14 +84,17 @@ const QuoteDetails = () => {
             <div className="space-y-2">
               <CardTitle className="text-2xl font-bold flex items-center gap-2">
                 <Car className="h-6 w-6 text-primary" />
-                {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
+                {quote.car_details.year} {quote.car_details.make}{" "}
+                {quote.car_details.model}
               </CardTitle>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
                   {new Date(quote.created_at).toLocaleDateString()}
                 </span>
-                <Badge variant={quote.status === 'pending' ? 'secondary' : 'default'}>
+                <Badge
+                  variant={quote.status === "pending" ? "secondary" : "default"}
+                >
                   {quote.status}
                 </Badge>
               </div>
@@ -103,7 +108,10 @@ const QuoteDetails = () => {
                 <MessageSquare className="h-4 w-4" />
                 Quotes
               </TabsTrigger>
-              <TabsTrigger value="calculator" className="flex items-center gap-2">
+              <TabsTrigger
+                value="calculator"
+                className="flex items-center gap-2"
+              >
                 <DollarSign className="h-4 w-4" />
                 Calculator
               </TabsTrigger>
@@ -116,7 +124,7 @@ const QuoteDetails = () => {
                 {quote.dealer_quotes?.map((dealerQuote) => (
                   <Card key={dealerQuote.id} className="bg-gray-50">
                     <CardContent className="p-4">
-                      <DealerQuoteItem 
+                      <DealerQuoteItem
                         dealerQuote={dealerQuote}
                         quoteId={quote.id}
                       />

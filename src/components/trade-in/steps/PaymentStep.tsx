@@ -15,19 +15,21 @@ const PaymentStep = ({ onSuccess }: PaymentStepProps) => {
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       // Call the create-checkout edge function
-      const response = await fetch('/api/create-checkout', {
-        method: 'POST',
+      const response = await fetch("/api/create-checkout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
         body: JSON.stringify({
-          priceId: 'price_1Qh3Z5G6N4q5lhXvVfvvNFvP' // Trade-in valuation price ID
-        })
+          priceId: "price_1Qh3Z5G6N4q5lhXvVfvvNFvP", // Trade-in valuation price ID
+        }),
       });
 
       const { url, error } = await response.json();
@@ -36,11 +38,11 @@ const PaymentStep = ({ onSuccess }: PaymentStepProps) => {
         window.location.href = url;
       }
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error("Payment error:", error);
       toast({
         title: "Payment Error",
         description: "Failed to process payment. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -52,9 +54,12 @@ const PaymentStep = ({ onSuccess }: PaymentStepProps) => {
       <Card>
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
-            <h3 className="text-lg font-semibold">Trade-In Valuation Service</h3>
+            <h3 className="text-lg font-semibold">
+              Trade-In Valuation Service
+            </h3>
             <p className="text-gray-500">
-              Get your vehicle professionally valued by our network of certified dealers
+              Get your vehicle professionally valued by our network of certified
+              dealers
             </p>
             <div className="text-2xl font-bold">$16.95</div>
             <ul className="text-left space-y-2">

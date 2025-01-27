@@ -28,8 +28,8 @@ const defaultDashboardData: DashboardData = {
   completed_quotes: 0,
   total_revenue: 0,
   metrics_data: {
-    performance: []
-  }
+    performance: [],
+  },
 };
 
 interface RawDashboardData {
@@ -49,12 +49,12 @@ const Dashboard = () => {
   const { user } = useUser();
 
   const { data: dashboardData, isLoading } = useQuery({
-    queryKey: ['dashboard-data', user?.id],
+    queryKey: ["dashboard-data", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('dashboard_data')
-        .select('*')
-        .eq('user_id', user?.id)
+        .from("dashboard_data")
+        .select("*")
+        .eq("user_id", user?.id)
         .maybeSingle();
 
       if (error) {
@@ -76,15 +76,15 @@ const Dashboard = () => {
         completed_quotes: rawData.completed_quotes,
         total_revenue: rawData.total_revenue,
         metrics_data: {
-          performance: Array.isArray((rawData.metrics_data as any)?.performance) 
-            ? (rawData.metrics_data as any).performance 
-            : []
-        }
+          performance: Array.isArray((rawData.metrics_data as any)?.performance)
+            ? (rawData.metrics_data as any).performance
+            : [],
+        },
       };
 
       return formattedData;
     },
-    enabled: !!user // Only run query when user is available
+    enabled: !!user, // Only run query when user is available
   });
 
   if (isLoading) {
@@ -94,8 +94,10 @@ const Dashboard = () => {
   return (
     <div className="py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Dashboard</h1>
-        
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Dashboard
+        </h1>
+
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <MetricsCard
             title="Total Quotes"
@@ -117,7 +119,9 @@ const Dashboard = () => {
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <PerformanceChart data={dashboardData?.metrics_data?.performance || []} />
+          <PerformanceChart
+            data={dashboardData?.metrics_data?.performance || []}
+          />
           <SalesTrendChart />
         </div>
       </div>

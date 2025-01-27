@@ -1,5 +1,5 @@
-import * as THREE from 'three';
-import React, { useEffect } from 'react';
+import * as THREE from "three";
+import React, { useEffect } from "react";
 
 interface SceneSetupProps {
   scene: THREE.Scene | null; // Allow scene to be null
@@ -18,21 +18,21 @@ export const SceneSetup = ({ scene }: SceneSetupProps) => {
     directionalLight.position.set(1, 1, 1);
     directionalLight.castShadow = true;
     const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 2);
-    
+
     scene.add(ambientLight, directionalLight, hemisphereLight);
 
     // Add ground plane
     const groundGeometry = new THREE.PlaneGeometry(20, 20);
-    const groundMaterial = new THREE.MeshPhongMaterial({ 
+    const groundMaterial = new THREE.MeshPhongMaterial({
       color: 0xcccccc,
-      side: THREE.DoubleSide 
+      side: THREE.DoubleSide,
     });
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
     ground.rotation.x = Math.PI / 2;
     ground.position.y = -1;
     ground.receiveShadow = true;
     scene.add(ground);
-    
+
     // Cleanup function to remove lights and ground if needed
     return () => {
       scene.remove(ambientLight);

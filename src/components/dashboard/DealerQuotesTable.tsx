@@ -33,14 +33,15 @@ export const DealerQuotesTable = () => {
   const { t } = useTranslation();
 
   const { data: quotes, isLoading } = useQuery({
-    queryKey: ['dealer-quotes'],
+    queryKey: ["dealer-quotes"],
     queryFn: async () => {
       const { data: profile } = await supabase.auth.getUser();
       if (!profile.user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('dealer_quotes')
-        .select(`
+        .from("dealer_quotes")
+        .select(
+          `
           quote_id,
           quotes:quote_id (
             id,
@@ -48,13 +49,14 @@ export const DealerQuotesTable = () => {
             status,
             created_at
           )
-        `)
-        .eq('dealer_id', profile.user.id)
-        .order('created_at', { ascending: false })
+        `,
+        )
+        .eq("dealer_id", profile.user.id)
+        .order("created_at", { ascending: false })
         .limit(5);
 
       if (error) throw error;
-      return data.map(q => q.quotes) as Quote[];
+      return data.map((q) => q.quotes) as Quote[];
     },
     meta: {
       onError: (error: Error) => {
@@ -83,7 +85,7 @@ export const DealerQuotesTable = () => {
   // Calculate expiration time (24 hours from creation)
   const getExpirationTime = (createdAt: string) => {
     const created = new Date(createdAt);
-    return new Date(created.getTime() + (24 * 60 * 60 * 1000));
+    return new Date(created.getTime() + 24 * 60 * 60 * 1000);
   };
 
   return (
@@ -102,18 +104,19 @@ export const DealerQuotesTable = () => {
           {quotes?.map((quote) => (
             <TableRow key={quote.id} className="group">
               <TableCell>
-                {quote.car_details.year} {quote.car_details.make} {quote.car_details.model}
+                {quote.car_details.year} {quote.car_details.make}{" "}
+                {quote.car_details.model}
               </TableCell>
               <TableCell>
-                <Badge 
-                  variant={quote.status === 'pending' ? 'secondary' : 'default'}
+                <Badge
+                  variant={quote.status === "pending" ? "secondary" : "default"}
                   className="transition-all group-hover:scale-105"
                 >
                   {t(`dealer.quotes.status.${quote.status}`)}
                 </Badge>
               </TableCell>
               <TableCell>
-                <CountdownTimer 
+                <CountdownTimer
                   endDate={getExpirationTime(quote.created_at)}
                   onExpire={() => {
                     toast({
@@ -127,14 +130,13 @@ export const DealerQuotesTable = () => {
               <TableCell>
                 <Button
                   onClick={() => handleQuoteResponse(quote.id)}
-                  variant={quote.status === 'pending' ? 'default' : 'secondary'}
+                  variant={quote.status === "pending" ? "default" : "secondary"}
                   className="flex items-center gap-2 transition-all hover:scale-105"
                 >
                   <MessageSquarePlus className="h-4 w-4" />
-                  {quote.status === 'pending' 
+                  {quote.status === "pending"
                     ? t("dealer.quotes.actions.respond")
-                    : t("dealer.quotes.actions.view")
-                  }
+                    : t("dealer.quotes.actions.view")}
                 </Button>
               </TableCell>
             </TableRow>

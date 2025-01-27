@@ -9,12 +9,12 @@ import { ScrollArea } from "../ui/scroll-area";
 import { RichTextEditor } from "../editor/RichTextEditor";
 
 interface BlogEditorProps {
-  onSave: (values: { 
-    title: string; 
-    content: string; 
-    excerpt: string; 
-    featured_image?: string; 
-    image_alt?: string; 
+  onSave: (values: {
+    title: string;
+    content: string;
+    excerpt: string;
+    featured_image?: string;
+    image_alt?: string;
   }) => Promise<void>;
   initialValues?: {
     title: string;
@@ -92,7 +92,7 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
         onChange={(e) => setTitle(e.target.value)}
         className="text-xl font-bold"
       />
-      
+
       <Input
         placeholder="Brief excerpt"
         value={excerpt}
@@ -101,7 +101,11 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
 
       <div className="flex items-center gap-4 mb-4">
         {selectedImage && (
-          <img src={selectedImage} alt={imageAlt} className="w-32 h-32 object-cover rounded" />
+          <img
+            src={selectedImage}
+            alt={imageAlt}
+            className="w-32 h-32 object-cover rounded"
+          />
         )}
         <Button onClick={() => setIsImagePickerOpen(true)}>
           {selectedImage ? "Change Featured Image" : "Add Featured Image"}
@@ -137,7 +141,7 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleGenerateImage()}
                 />
-                <Button 
+                <Button
                   onClick={handleGenerateImage}
                   disabled={isGeneratingImage}
                 >
@@ -157,7 +161,9 @@ export const BlogEditor = ({ onSave, initialValues }: BlogEditorProps) => {
                     <div
                       key={image.id}
                       className={`cursor-pointer relative ${
-                        selectedImage === image.src.medium ? "ring-2 ring-primary" : ""
+                        selectedImage === image.src.medium
+                          ? "ring-2 ring-primary"
+                          : ""
                       }`}
                       onClick={() => {
                         setSelectedImage(image.src.medium);

@@ -5,60 +5,68 @@ import { useToast } from "./use-toast";
 export const useUserRole = () => {
   const { toast } = useToast();
 
-  const { data: authData, isLoading, error } = useQuery({
-    queryKey: ['user-role'],
+  const {
+    data: authData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["user-role"],
     queryFn: async () => {
       try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
         if (sessionError) {
-          console.error('Session error:', sessionError);
+          console.error("Session error:", sessionError);
           throw sessionError;
         }
-        
+
         if (!session?.user) {
           return { role: null, user: null };
         }
 
         // Get profile data first
         const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
           .maybeSingle();
 
         if (profileError) {
-          console.error('Profile fetch error:', profileError);
+          console.error("Profile fetch error:", profileError);
           throw profileError;
         }
 
         // Get user role
         const { data: roleData, error: roleError } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('id', session.user.id)
+          .from("user_roles")
+          .select("role")
+          .eq("id", session.user.id)
           .maybeSingle();
 
-        if (roleError && roleError.code !== 'PGRST116') {
-          console.error('Role fetch error:', roleError);
+        if (roleError && roleError.code !== "PGRST116") {
+          console.error("Role fetch error:", roleError);
           throw roleError;
         }
 
         // Default to 'user' role if no specific role is found
-        const userRole = roleData?.role || 'user';
+        const userRole = roleData?.role || "user";
 
         return {
           role: userRole,
           user: {
             ...session.user,
-            profile: profileData || null
-          }
+            profile: profileData || null,
+          },
         };
       } catch (error) {
-        console.error('Auth error:', error);
+        console.error("Auth error:", error);
         toast({
           title: "Error",
-          description: "Failed to fetch user data. Please try refreshing the page.",
+          description:
+            "Failed to fetch user data. Please try refreshing the page.",
           variant: "destructive",
         });
         throw error;
@@ -72,6 +80,6 @@ export const useUserRole = () => {
     role: authData?.role || null,
     user: authData?.user || null,
     isLoading,
-    error
+    error,
   };
 };

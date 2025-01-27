@@ -14,27 +14,28 @@ const SubscriptionManagement = () => {
   const ITEMS_PER_PAGE = 25;
 
   const { data: subscriptions, isLoading } = useQuery({
-    queryKey: ['subscriptions', page],
+    queryKey: ["subscriptions", page],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
-        .select(`
+        .from("profiles")
+        .select(
+          `
           *,
           user_roles (
             role
           )
-        `)
+        `,
+        )
         .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
-        .order('created_at', { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data;
     },
     meta: {
-      errorMessage: "Failed to fetch subscription data"
-    }
+      errorMessage: "Failed to fetch subscription data",
+    },
   });
-
 
   if (isLoading) {
     return (
@@ -47,31 +48,37 @@ const SubscriptionManagement = () => {
     );
   }
 
-  const handleSendEmail = async (to: string[], subject: string, content: string, scheduledFor?: string) => {
+  const handleSendEmail = async (
+    to: string[],
+    subject: string,
+    content: string,
+    scheduledFor?: string,
+  ) => {
     try {
-      const response = await fetch('/api/send-email', { // Assuming you have an API endpoint for sending emails
-        method: 'POST',
+      const response = await fetch("/api/send-email", {
+        // Assuming you have an API endpoint for sending emails
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           to,
           subject,
           html: content,
-          scheduledFor
+          scheduledFor,
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to send email');
+      if (!response.ok) throw new Error("Failed to send email");
 
       toast({
         title: scheduledFor ? "Email Scheduled" : "Email Sent",
-        description: scheduledFor 
-          ? "Email has been scheduled successfully" 
+        description: scheduledFor
+          ? "Email has been scheduled successfully"
           : "Email has been sent successfully",
       });
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error("Error sending email:", error);
       toast({
         title: "Error",
         description: "Failed to send email",
@@ -80,12 +87,15 @@ const SubscriptionManagement = () => {
     }
   };
 
-  const handleRoleChange = async (userId: string, newRole: "super_admin" | "admin" | "dealer" | "user") => {
+  const handleRoleChange = async (
+    userId: string,
+    newRole: "super_admin" | "admin" | "dealer" | "user",
+  ) => {
     try {
       const { error } = await supabase
-        .from('user_roles')
+        .from("user_roles")
         .update({ role: newRole })
-        .eq('id', userId);
+        .eq("id", userId);
 
       if (error) throw error;
 
@@ -94,7 +104,7 @@ const SubscriptionManagement = () => {
         description: "User role updated successfully",
       });
     } catch (error) {
-      console.error('Error updating role:', error);
+      console.error("Error updating role:", error);
       toast({
         title: "Error",
         description: "Failed to update user role",
@@ -102,7 +112,6 @@ const SubscriptionManagement = () => {
       });
     }
   };
-
 
   return (
     <div className="container mx-auto py-8 space-y-8">
@@ -129,33 +138,34 @@ const SubscriptionManagement = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {subscriptions?.filter(s => s.subscription_status === 'active').length || 0}
+              {subscriptions?.filter((s) => s.subscription_status === "active")
+                .length || 0}
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Trials
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Active Trials</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {subscriptions?.filter(s => s.subscription_status === 'trialing').length || 0}
+              {subscriptions?.filter(
+                (s) => s.subscription_status === "trialing",
+              ).length || 0}
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Canceled
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Canceled</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {subscriptions?.filter(s => s.subscription_status === 'canceled').length || 0}
+              {subscriptions?.filter(
+                (s) => s.subscription_status === "canceled",
+              ).length || 0}
             </div>
           </CardContent>
         </Card>
@@ -166,7 +176,7 @@ const SubscriptionManagement = () => {
           <CardTitle>Subscribers</CardTitle>
         </CardHeader>
         <CardContent>
-          <UserTable 
+          <UserTable
             profiles={subscriptions}
             isLoading={isLoading}
             page={page}

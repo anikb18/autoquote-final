@@ -10,12 +10,12 @@ interface CustomToastProps {
   onClose?: () => void;
 }
 
-export const CustomToast = ({ 
-  title, 
-  description, 
-  imageUrl, 
+export const CustomToast = ({
+  title,
+  description,
+  imageUrl,
   timestamp = "a few seconds ago",
-  onClose 
+  onClose,
 }: CustomToastProps) => {
   return (
     <Toast className="w-full max-w-xs bg-white dark:bg-gray-800 p-4 rounded-lg shadow">

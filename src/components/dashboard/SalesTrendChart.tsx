@@ -2,26 +2,37 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useTheme } from "next-themes";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export const SalesTrendChart = () => {
   const { theme } = useTheme();
 
   const { data: salesData } = useQuery({
-    queryKey: ['sales-trends'],
+    queryKey: ["sales-trends"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('sales_transactions')
-        .select('selling_price, transaction_date')
-        .order('transaction_date', { ascending: true });
+        .from("sales_transactions")
+        .select("selling_price, transaction_date")
+        .order("transaction_date", { ascending: true });
 
       if (error) throw error;
 
       // Process data for the chart
       const processedData = data.reduce((acc: any[], curr) => {
-        const date = new Date(curr.transaction_date).toLocaleDateString('en-US', { month: 'short' });
-        const existingEntry = acc.find(item => item.name === date);
-        
+        const date = new Date(curr.transaction_date).toLocaleDateString(
+          "en-US",
+          { month: "short" },
+        );
+        const existingEntry = acc.find((item) => item.name === date);
+
         if (existingEntry) {
           existingEntry.amount += curr.selling_price;
         } else {
@@ -31,13 +42,13 @@ export const SalesTrendChart = () => {
       }, []);
 
       return processedData;
-    }
+    },
   });
 
   const chartColors = {
-    stroke: theme === 'dark' ? '#fff' : '#000',
-    grid: theme === 'dark' ? '#333' : '#eee',
-    line: theme === 'dark' ? '#7c3aed' : '#4f46e5'
+    stroke: theme === "dark" ? "#fff" : "#000",
+    grid: theme === "dark" ? "#333" : "#eee",
+    line: theme === "dark" ? "#7c3aed" : "#4f46e5",
   };
 
   return (
@@ -45,24 +56,27 @@ export const SalesTrendChart = () => {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={salesData || []}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-          <XAxis 
-            dataKey="name" 
+          <XAxis
+            dataKey="name"
             stroke={chartColors.stroke}
-            style={{ fontSize: '12px' }}
+            style={{ fontSize: "12px" }}
           />
           <YAxis
             stroke={chartColors.stroke}
-            style={{ fontSize: '12px' }}
+            style={{ fontSize: "12px" }}
             tickFormatter={(value) => `$${value.toLocaleString()}`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: theme === 'dark' ? '#1f2937' : '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+              backgroundColor: theme === "dark" ? "#1f2937" : "#fff",
+              border: "none",
+              borderRadius: "8px",
+              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
             }}
-            formatter={(value: number) => [`$${value.toLocaleString()}`, 'Sales']}
+            formatter={(value: number) => [
+              `$${value.toLocaleString()}`,
+              "Sales",
+            ]}
           />
           <Line
             type="monotone"

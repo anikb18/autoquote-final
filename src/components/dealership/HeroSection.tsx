@@ -12,31 +12,34 @@ export const HeroSection = () => {
   const { i18n } = useTranslation();
 
   const { data: translations } = useQuery({
-    queryKey: ['dealer_hero_translations'],
+    queryKey: ["dealer_hero_translations"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('site_settings')
-        .select('value')
-        .eq('category', 'translations')
-        .eq('key', 'dealer_hero')
+        .from("site_settings")
+        .select("value")
+        .eq("category", "translations")
+        .eq("key", "dealer_hero")
         .single();
 
       if (error) throw error;
-      return data?.value?.[i18n.language] || {
-        title: "Get Pre-Qualified Leads Without The Bidding War",
-        subtitle: "Join AutoQuote24's Exclusive Dealer Network - Limited Spots Available",
-        urgency: "Only 3 dealer spots left in your area",
-        cta: {
-          demo: "Schedule Your Private Demo",
-          video: "Watch 2-Minute Demo Video"
-        },
-        stats: {
-          dealers: "200+ Trusted Partners",
-          conversion: "35% Faster Closing",
-          sales: "1,000+ Qualified Leads Monthly"
+      return (
+        data?.value?.[i18n.language] || {
+          title: "Get Pre-Qualified Leads Without The Bidding War",
+          subtitle:
+            "Join AutoQuote24's Exclusive Dealer Network - Limited Spots Available",
+          urgency: "Only 3 dealer spots left in your area",
+          cta: {
+            demo: "Schedule Your Private Demo",
+            video: "Watch 2-Minute Demo Video",
+          },
+          stats: {
+            dealers: "200+ Trusted Partners",
+            conversion: "35% Faster Closing",
+            sales: "1,000+ Qualified Leads Monthly",
+          },
         }
-      };
-    }
+      );
+    },
   });
 
   if (!translations) return null;
@@ -54,7 +57,7 @@ export const HeroSection = () => {
           <p className="text-lg text-red-600 font-semibold mb-8">
             {translations.urgency}
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Dialog>
               <DialogTrigger asChild>
@@ -67,7 +70,7 @@ export const HeroSection = () => {
                 <InlineWidget url="https://calendly.com/your-calendly-url" />
               </DialogContent>
             </Dialog>
-            
+
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="lg" variant="outline">
@@ -91,13 +94,19 @@ export const HeroSection = () => {
 
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
-              <p className="text-3xl font-bold text-primary mb-2">{translations.stats.dealers}</p>
+              <p className="text-3xl font-bold text-primary mb-2">
+                {translations.stats.dealers}
+              </p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-primary mb-2">{translations.stats.conversion}</p>
+              <p className="text-3xl font-bold text-primary mb-2">
+                {translations.stats.conversion}
+              </p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-primary mb-2">{translations.stats.sales}</p>
+              <p className="text-3xl font-bold text-primary mb-2">
+                {translations.stats.sales}
+              </p>
             </div>
           </div>
         </div>

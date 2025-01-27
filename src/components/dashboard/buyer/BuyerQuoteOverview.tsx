@@ -6,10 +6,16 @@ interface BuyerQuoteOverviewProps {
   activeQuote: Quote;
 }
 
-export const BuyerQuoteOverview = ({ activeQuote }: BuyerQuoteOverviewProps) => {
+export const BuyerQuoteOverview = ({
+  activeQuote,
+}: BuyerQuoteOverviewProps) => {
   const totalDealerQuotes = activeQuote.dealer_quotes.length;
-  const acceptedQuotes = activeQuote.dealer_quotes.filter(q => q.is_accepted).length;
-  const pendingQuotes = activeQuote.dealer_quotes.filter(q => !q.is_accepted).length;
+  const acceptedQuotes = activeQuote.dealer_quotes.filter(
+    (q) => q.is_accepted,
+  ).length;
+  const pendingQuotes = activeQuote.dealer_quotes.filter(
+    (q) => !q.is_accepted,
+  ).length;
 
   return (
     <div className="space-y-4">
@@ -43,9 +49,14 @@ export const BuyerQuoteOverview = ({ activeQuote }: BuyerQuoteOverviewProps) => 
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Recent Dealer Responses</h3>
         {activeQuote.dealer_quotes.map((quote) => (
-          <div key={quote.id} className="flex items-center justify-between p-4 border rounded-lg">
+          <div
+            key={quote.id}
+            className="flex items-center justify-between p-4 border rounded-lg"
+          >
             <div>
-              <p className="font-medium">{quote.dealer_profiles?.dealer_name}</p>
+              <p className="font-medium">
+                {quote.dealer_profiles?.dealer_name}
+              </p>
               <p className="text-sm text-muted-foreground">
                 {new Date(quote.created_at).toLocaleDateString()}
               </p>

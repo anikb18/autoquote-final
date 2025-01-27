@@ -13,37 +13,43 @@ interface ProtectedRouteProps {
   redirectPath?: string;
 }
 
-const ProtectedRoute = ({ 
-  children, 
-  requireSubscription = false, 
+const ProtectedRoute = ({
+  children,
+  requireSubscription = false,
   allowedRoles,
-  redirectPath = "/auth"
+  redirectPath = "/auth",
 }: ProtectedRouteProps) => {
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
 
-  const { data: profile, isLoading: profileLoading, error: profileError } = useQuery({
-    queryKey: ['profile'],
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useQuery({
+    queryKey: ["profile"],
     queryFn: async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (!session) return null;
-        
+
         const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
           .maybeSingle();
 
         const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('id', session.user.id)
+          .from("user_roles")
+          .select("role")
+          .eq("id", session.user.id)
           .single();
-        
+
         return { ...profileData, role: roleData?.role };
       } catch (error) {
-        console.error('Profile fetch error:', error);
+        console.error("Profile fetch error:", error);
         toast({
           title: "Error fetching profile",
           description: "Please try refreshing the page",
@@ -58,10 +64,13 @@ const ProtectedRoute = ({
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
         if (error) throw error;
-        
+
         if (!session) {
           navigate(redirectPath);
           return;
@@ -71,17 +80,17 @@ const ProtectedRoute = ({
         if (allowedRoles && profile?.role) {
           if (!allowedRoles.includes(profile.role)) {
             // Redirect based on role if access is denied
-            if (profile.role === 'admin' || profile.role === 'super_admin') {
-              navigate('/dashboard');
-            } else if (profile.role === 'dealer') {
-              navigate('/dashboard/dealership');
+            if (profile.role === "admin" || profile.role === "super_admin") {
+              navigate("/dashboard");
+            } else if (profile.role === "dealer") {
+              navigate("/dashboard/dealership");
             } else {
-              navigate('/dashboard/my-quotes');
+              navigate("/dashboard/my-quotes");
             }
             return;
           }
         }
-        
+
         setIsChecking(false);
       } catch (error) {
         console.error("Auth check error:", error);
@@ -96,7 +105,9 @@ const ProtectedRoute = ({
 
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT" || !session) {
         navigate(redirectPath);
       }
@@ -121,7 +132,7 @@ const ProtectedRoute = ({
       <div className="flex items-center justify-center h-screen">
         <div className="text-center space-y-2">
           <p className="text-red-500">Error loading profile</p>
-          <button 
+          <button
             onClick={() => navigate("/auth")}
             className="text-blue-500 hover:underline"
           >
@@ -132,7 +143,10 @@ const ProtectedRoute = ({
     );
   }
 
-  if (requireSubscription && (!profile?.subscription_status || profile.subscription_status !== 'active')) {
+  if (
+    requireSubscription &&
+    (!profile?.subscription_status || profile.subscription_status !== "active")
+  ) {
     return (
       <div className="container mx-auto py-8">
         <h2 className="text-2xl font-bold mb-4">Premium Feature</h2>

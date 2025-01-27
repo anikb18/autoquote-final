@@ -1,9 +1,9 @@
-import { useId } from 'react'
-import { Tab } from '@headlessui/react'
-import { Container } from '@/components/ui/container'
-import { useTranslation } from 'react-i18next'
-import clsx from 'clsx'
-import { motion } from 'framer-motion'
+import { useId } from "react";
+import { Tab } from "@headlessui/react";
+import { Container } from "@/components/ui/container";
+import { useTranslation } from "react-i18next";
+import clsx from "clsx";
+import { motion } from "framer-motion";
 
 interface Feature {
   name?: string | React.ReactElement;
@@ -15,12 +15,12 @@ interface Feature {
 
 const features: Array<Feature> = [
   {
-    name: 'valuation',
-    summary: 'items.valuation.title',
-    description: 'items.valuation.description',
-    image: '/images/screenshots/inventory.webp',
+    name: "valuation",
+    summary: "items.valuation.title",
+    description: "items.valuation.description",
+    image: "/images/screenshots/inventory.webp",
     icon: function ReportingIcon() {
-      let id = useId()
+      let id = useId();
       return (
         <>
           <defs>
@@ -44,14 +44,14 @@ const features: Array<Feature> = [
             strokeLinejoin="round"
           />
         </>
-      )
+      );
     },
   },
   {
-    name: 'financing',
-    summary: 'items.financing.title',
-    description: 'items.financing.description',
-    image: '/images/screenshots/leads.webp',
+    name: "financing",
+    summary: "items.financing.title",
+    description: "items.financing.description",
+    image: "/images/screenshots/leads.webp",
     icon: function InventoryIcon() {
       return (
         <>
@@ -70,14 +70,14 @@ const features: Array<Feature> = [
             fill="#fff"
           />
         </>
-      )
+      );
     },
   },
   {
-    name: 'comparison',
-    summary: 'items.comparison.title',
-    description: 'items.comparison.description',
-    image: '/images/screenshots/analytics.webp',
+    name: "comparison",
+    summary: "items.comparison.title",
+    description: "items.comparison.description",
+    image: "/images/screenshots/analytics.webp",
     icon: function ContactsIcon() {
       return (
         <>
@@ -91,10 +91,10 @@ const features: Array<Feature> = [
             fill="#fff"
           />
         </>
-      )
+      );
     },
   },
-]
+];
 
 function Feature({
   feature,
@@ -102,19 +102,19 @@ function Feature({
   className,
   ...props
 }: {
-  feature: Feature
-  isActive: boolean
-  className?: string
+  feature: Feature;
+  isActive: boolean;
+  className?: string;
 }) {
   return (
     <div
-      className={clsx(className, !isActive && 'opacity-75 hover:opacity-100')}
+      className={clsx(className, !isActive && "opacity-75 hover:opacity-100")}
       {...props}
     >
       <div
         className={clsx(
-          'w-9 rounded-lg',
-          isActive ? 'bg-primary' : 'bg-slate-500'
+          "w-9 rounded-lg",
+          isActive ? "bg-primary" : "bg-slate-500",
         )}
       >
         <svg aria-hidden="true" className="h-9 w-9" fill="none">
@@ -123,8 +123,8 @@ function Feature({
       </div>
       <h3
         className={clsx(
-          'mt-6 text-sm font-medium',
-          isActive ? 'text-primary' : 'text-slate-600'
+          "mt-6 text-sm font-medium",
+          isActive ? "text-primary" : "text-slate-600",
         )}
       >
         {feature.name}
@@ -134,25 +134,25 @@ function Feature({
       </p>
       <p className="mt-4 text-sm text-slate-600">{feature.description}</p>
     </div>
-  )
+  );
 }
 
 function FeaturesMobile() {
-  const { t } = useTranslation('features')
+  const { t } = useTranslation("features");
 
   return (
     <div className="-mx-4 mt-20 flex flex-col gap-y-10 overflow-hidden px-4 sm:-mx-6 sm:px-6 lg:hidden">
       {features.map((feature) => (
         <div key={feature.summary}>
-          <Feature 
+          <Feature
             feature={{
               ...feature,
               name: t(`secondary.items.${feature.name}.title`),
               summary: t(`secondary.items.${feature.name}.title`),
               description: t(`secondary.items.${feature.name}.description`),
-            }} 
-            className="mx-auto max-w-2xl" 
-            isActive 
+            }}
+            className="mx-auto max-w-2xl"
+            isActive
           />
           <div className="relative mt-10 pb-10">
             <div className="absolute -inset-x-4 bottom-0 top-8 bg-slate-200 sm:-inset-x-6" />
@@ -168,11 +168,11 @@ function FeaturesMobile() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function FeaturesDesktop() {
-  const { t } = useTranslation('features')
+  const { t } = useTranslation("features");
 
   return (
     <Tab.Group as="div" className="hidden lg:mt-20 lg:block">
@@ -205,8 +205,8 @@ function FeaturesDesktop() {
                   static
                   key={feature.summary}
                   className={clsx(
-                    'px-5 transition duration-500 ease-in-out ui-not-focus-visible:outline-none',
-                    featureIndex !== selectedIndex && 'opacity-60'
+                    "px-5 transition duration-500 ease-in-out ui-not-focus-visible:outline-none",
+                    featureIndex !== selectedIndex && "opacity-60",
                   )}
                   style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
                   aria-hidden={featureIndex !== selectedIndex}
@@ -227,11 +227,11 @@ function FeaturesDesktop() {
         </>
       )}
     </Tab.Group>
-  )
+  );
 }
 
 export function SecondaryFeatures() {
-  const { t } = useTranslation('features')
+  const { t } = useTranslation("features");
 
   return (
     <section
@@ -242,15 +242,15 @@ export function SecondaryFeatures() {
       <Container>
         <div className="mx-auto max-w-2xl md:text-center">
           <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
-            {t('secondary.title')}
+            {t("secondary.title")}
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            {t('secondary.subtitle')}
+            {t("secondary.subtitle")}
           </p>
         </div>
         <FeaturesMobile />
         <FeaturesDesktop />
       </Container>
     </section>
-  )
+  );
 }

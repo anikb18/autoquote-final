@@ -27,7 +27,9 @@ const LoanPreApproval = ({ quoteId }: LoanPreApprovalProps) => {
     setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
       const preApprovalData = {
@@ -39,19 +41,19 @@ const LoanPreApproval = ({ quoteId }: LoanPreApprovalProps) => {
       };
 
       const { error } = await supabase
-        .from('loan_pre_approvals')
+        .from("loan_pre_approvals")
         .insert(preApprovalData);
 
       if (error) throw error;
 
       toast({
-        title: t('preApproval.success'),
-        description: t('preApproval.submitted'),
+        title: t("preApproval.success"),
+        description: t("preApproval.submitted"),
       });
     } catch (error) {
       toast({
-        title: t('preApproval.error'),
-        description: t('preApproval.failed'),
+        title: t("preApproval.error"),
+        description: t("preApproval.failed"),
         variant: "destructive",
       });
     } finally {
@@ -62,7 +64,7 @@ const LoanPreApproval = ({ quoteId }: LoanPreApprovalProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('preApproval.title')}</CardTitle>
+        <CardTitle>{t("preApproval.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <LoanPreApprovalForm

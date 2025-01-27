@@ -7,19 +7,21 @@ import { useToast } from "@/hooks/use-toast";
 
 const SubscriptionStatus = () => {
   const { toast } = useToast();
-  
+
   const { data: profile, isLoading } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ["profile"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
         .single();
-      
+
       if (error) throw error;
       return data;
     },
@@ -27,9 +29,11 @@ const SubscriptionStatus = () => {
 
   const handleManageSubscription = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('create-portal-session');
+      const { data, error } = await supabase.functions.invoke(
+        "create-portal-session",
+      );
       if (error) throw error;
-      
+
       if (data?.url) {
         window.location.href = data.url;
       }
@@ -52,19 +56,27 @@ const SubscriptionStatus = () => {
       <CardContent className="space-y-4">
         <div className="flex items-center gap-4">
           <span>Current Plan:</span>
-          <Badge variant={profile?.subscription_type === 'premium' ? 'default' : 'secondary'}>
-            {profile?.subscription_type === 'premium' ? 'Premium' : 'Basic'}
+          <Badge
+            variant={
+              profile?.subscription_type === "premium" ? "default" : "secondary"
+            }
+          >
+            {profile?.subscription_type === "premium" ? "Premium" : "Basic"}
           </Badge>
         </div>
         <div className="flex items-center gap-4">
           <span>Status:</span>
-          <Badge variant={profile?.subscription_status === 'active' ? 'default' : 'destructive'}>
-            {profile?.subscription_status || 'Inactive'}
+          <Badge
+            variant={
+              profile?.subscription_status === "active"
+                ? "default"
+                : "destructive"
+            }
+          >
+            {profile?.subscription_status || "Inactive"}
           </Badge>
         </div>
-        <Button onClick={handleManageSubscription}>
-          Manage Subscription
-        </Button>
+        <Button onClick={handleManageSubscription}>Manage Subscription</Button>
       </CardContent>
     </Card>
   );

@@ -27,14 +27,14 @@ export const PaymentCalculatorForm = ({
   term,
   setTerm,
   onCalculate,
-  isQuoteContext
+  isQuoteContext,
 }: PaymentCalculatorFormProps) => {
   const { t } = useTranslation();
 
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>{t('calculator.vehiclePrice')}</Label>
+        <Label>{t("calculator.vehiclePrice")}</Label>
         <Input
           type="number"
           value={price}
@@ -45,7 +45,7 @@ export const PaymentCalculatorForm = ({
       </div>
 
       <div className="space-y-2">
-        <Label>{t('calculator.downPayment')}</Label>
+        <Label>{t("calculator.downPayment")}</Label>
         <Input
           type="number"
           value={downPayment}
@@ -56,7 +56,7 @@ export const PaymentCalculatorForm = ({
       </div>
 
       <div className="space-y-2">
-        <Label>{t('calculator.interestRate')}</Label>
+        <Label>{t("calculator.interestRate")}</Label>
         <Input
           type="number"
           value={interestRate}
@@ -67,7 +67,7 @@ export const PaymentCalculatorForm = ({
       </div>
 
       <div className="space-y-2">
-        <Label>{t('calculator.term')}</Label>
+        <Label>{t("calculator.term")}</Label>
         <Input
           type="number"
           value={term}
@@ -79,7 +79,7 @@ export const PaymentCalculatorForm = ({
       </div>
 
       <Button onClick={onCalculate} className="w-full">
-        {t('calculator.calculate')}
+        {t("calculator.calculate")}
       </Button>
     </div>
   );

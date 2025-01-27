@@ -9,7 +9,7 @@ export async function fetchCars() {
               "979015f2femsh9e2e1e9106c00cap11f09ajsn78da3339b575",
             "X-RapidAPI-Host": "cars-by-api-ninjas.p.rapidapi.com",
           },
-        }
+        },
       )
     ).json();
     return response;

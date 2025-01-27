@@ -24,14 +24,17 @@ interface DealerChatData {
 
 const DealerChat = () => {
   const { data: activeChats, isLoading } = useQuery({
-    queryKey: ['dealer-active-chats'],
+    queryKey: ["dealer-active-chats"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('dealer_quotes')
-        .select(`
+        .from("dealer_quotes")
+        .select(
+          `
           id,
           quote_id,
           is_accepted,
@@ -44,18 +47,19 @@ const DealerChat = () => {
               full_name
             )
           )
-        `)
-        .eq('dealer_id', user.id)
-        .eq('is_accepted', true);
+        `,
+        )
+        .eq("dealer_id", user.id)
+        .eq("is_accepted", true);
 
       if (error) throw error;
-      
-      return (data as any[]).map(chat => ({
+
+      return (data as any[]).map((chat) => ({
         ...chat,
         quotes: {
           ...chat.quotes,
-          car_details: chat.quotes.car_details as CarDetails
-        }
+          car_details: chat.quotes.car_details as CarDetails,
+        },
       })) as DealerChatData[];
     },
   });
@@ -81,10 +85,14 @@ const DealerChat = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-semibold">
-                        {chat.quotes.car_details.year} {chat.quotes.car_details.make} {chat.quotes.car_details.model}
+                        {chat.quotes.car_details.year}{" "}
+                        {chat.quotes.car_details.make}{" "}
+                        {chat.quotes.car_details.model}
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        Customer: {chat.quotes.profiles?.full_name?.split(' ')[0] || 'Unknown'}
+                        Customer:{" "}
+                        {chat.quotes.profiles?.full_name?.split(" ")[0] ||
+                          "Unknown"}
                       </p>
                     </div>
                   </div>

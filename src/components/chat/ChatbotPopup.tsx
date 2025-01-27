@@ -15,10 +15,11 @@ export const ChatbotPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      content: "Hello! I'm your AutoQuote24 assistant. How can I help you today?",
-      isBot: true
-    }
+      id: "1",
+      content:
+        "Hello! I'm your AutoQuote24 assistant. How can I help you today?",
+      isBot: true,
+    },
   ]);
 
   const handleSendMessage = async (content: string) => {
@@ -26,19 +27,19 @@ export const ChatbotPopup = () => {
     const userMessage: Message = {
       id: Date.now().toString(),
       content,
-      isBot: false
+      isBot: false,
     };
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     // TODO: Integrate with actual chatbot API
     // For now, just echo a response
     const botMessage: Message = {
       id: (Date.now() + 1).toString(),
       content: `I received your message: "${content}". How else can I assist you?`,
-      isBot: true
+      isBot: true,
     };
     setTimeout(() => {
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     }, 1000);
   };
 
@@ -71,13 +72,13 @@ export const ChatbotPopup = () => {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}
+                  className={`flex ${msg.isBot ? "justify-start" : "justify-end"}`}
                 >
                   <div
                     className={`max-w-[80%] rounded-lg p-3 ${
                       msg.isBot
-                        ? 'bg-muted'
-                        : 'bg-primary text-primary-foreground'
+                        ? "bg-muted"
+                        : "bg-primary text-primary-foreground"
                     }`}
                   >
                     <p className="text-sm">{msg.content}</p>

@@ -11,15 +11,17 @@ interface WelcomeHeaderProps {
 export const WelcomeHeader = ({ unreadNotifications }: WelcomeHeaderProps) => {
   const { t } = useTranslation();
   const { data: profile } = useQuery({
-    queryKey: ['dealer-profile'],
+    queryKey: ["dealer-profile"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('dealer_profiles')
-        .select('*')
-        .eq('id', user.id)
+        .from("dealer_profiles")
+        .select("*")
+        .eq("id", user.id)
         .single();
 
       if (error) throw error;
@@ -31,18 +33,16 @@ export const WelcomeHeader = ({ unreadNotifications }: WelcomeHeaderProps) => {
     <div className="flex justify-between items-center">
       <div>
         <h1 className="text-3xl font-bold">
-          {t('dealer.welcome')}, {profile?.dealer_name}
+          {t("dealer.welcome")}, {profile?.dealer_name}
         </h1>
         <p className="text-muted-foreground mt-1">
-          {t('dealer.metrics.todayActivity')}
+          {t("dealer.metrics.todayActivity")}
         </p>
       </div>
       <div className="relative">
         <BellIcon className="h-6 w-6 text-gray-500 cursor-pointer" />
         {unreadNotifications > 0 && (
-          <Badge 
-            className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-red-500"
-          >
+          <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center rounded-full bg-red-500">
             {unreadNotifications}
           </Badge>
         )}

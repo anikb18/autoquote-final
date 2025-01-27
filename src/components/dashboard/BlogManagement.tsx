@@ -46,7 +46,9 @@ export function BlogManagement() {
               </Select>
               <Button
                 variant="outline"
-                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                onClick={() =>
+                  setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                }
               >
                 {sortOrder === "asc" ? (
                   <SortAsc className="h-4 w-4 mr-2" />

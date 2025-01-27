@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,25 +17,27 @@ import { useTranslation } from "react-i18next";
 
 const PRICE_IDS = {
   FORFAIT_NOUVELLE_VOITURE: "price_1Qjb7xG6N4q5lhXvL2EsKg6n",
-  FORFAIT_REVENTE: "price_1Qjb7wG6N4q5lhXv4FJrSWLj"
-}
+  FORFAIT_REVENTE: "price_1Qjb7wG6N4q5lhXv4FJrSWLj",
+};
 
 const SubscriptionPlans = () => {
   const { toast } = useToast();
-  const { t } = useTranslation('dealer');
+  const { t } = useTranslation("dealer");
 
   const { data: userRole } = useQuery({
-    queryKey: ['user-role'],
+    queryKey: ["user-role"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return null;
-      
+
       const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('id', user.id)
+        .from("user_roles")
+        .select("role")
+        .eq("id", user.id)
         .single();
-      
+
       if (error) throw error;
       return data?.role;
     },
@@ -36,7 +45,9 @@ const SubscriptionPlans = () => {
 
   const handleSubscribe = async (priceId: string) => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         toast({
           title: "Authentication required",
@@ -46,16 +57,19 @@ const SubscriptionPlans = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { priceId }
-      });
+      const { data, error } = await supabase.functions.invoke(
+        "create-checkout",
+        {
+          body: { priceId },
+        },
+      );
 
       if (error) throw error;
       if (data?.url) {
         window.location.href = data.url;
       }
     } catch (error) {
-      console.error('Error creating checkout session:', error);
+      console.error("Error creating checkout session:", error);
       toast({
         title: "Error",
         description: "Failed to initiate checkout. Please try again.",
@@ -64,13 +78,14 @@ const SubscriptionPlans = () => {
     }
   };
 
-  if (userRole === 'dealer') {
+  if (userRole === "dealer") {
     return (
       <div className="py-16 px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Contact Our Sales Team</h2>
           <p className="text-muted-foreground mb-8">
-            Schedule a demo or request a callback to learn more about our dealer solutions
+            Schedule a demo or request a callback to learn more about our dealer
+            solutions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Dialog>
@@ -83,11 +98,11 @@ const SubscriptionPlans = () => {
                 <InlineWidget url="https://calendly.com/your-calendly-url" />
               </DialogContent>
             </Dialog>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
               className="min-w-[200px]"
-              onClick={() => window.location.href = "/contact"}
+              onClick={() => (window.location.href = "/contact")}
             >
               Request Callback
             </Button>
@@ -117,8 +132,8 @@ const SubscriptionPlans = () => {
           </ul>
         </CardContent>
         <CardFooter>
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             onClick={() => handleSubscribe(PRICE_IDS.FORFAIT_NOUVELLE_VOITURE)}
           >
             Subscribe to New Car Plan
@@ -148,8 +163,8 @@ const SubscriptionPlans = () => {
           </ul>
         </CardContent>
         <CardFooter>
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             onClick={() => handleSubscribe(PRICE_IDS.FORFAIT_REVENTE)}
           >
             Subscribe to Trade-in Plan

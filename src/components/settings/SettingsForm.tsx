@@ -14,12 +14,10 @@ export function SettingsForm() {
   const { t } = useTranslation();
 
   const { data: settings, isLoading } = useQuery({
-    queryKey: ['site-settings'],
+    queryKey: ["site-settings"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*');
-      
+      const { data, error } = await supabase.from("site_settings").select("*");
+
       if (error) throw error;
       return data;
     },
@@ -79,7 +77,10 @@ export function SettingsForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="metaDescriptionEn">Meta Description</Label>
-              <Textarea id="metaDescriptionEn" placeholder="Enter meta description" />
+              <Textarea
+                id="metaDescriptionEn"
+                placeholder="Enter meta description"
+              />
             </div>
           </TabsContent>
           <TabsContent value="fr" className="space-y-4">
@@ -89,7 +90,10 @@ export function SettingsForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="metaDescriptionFr">Meta Description</Label>
-              <Textarea id="metaDescriptionFr" placeholder="Entrez la description meta" />
+              <Textarea
+                id="metaDescriptionFr"
+                placeholder="Entrez la description meta"
+              />
             </div>
           </TabsContent>
         </Tabs>

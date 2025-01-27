@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export function TouchTarget({ children }: { children: React.ReactNode }) {
   return (
@@ -9,5 +9,5 @@ export function TouchTarget({ children }: { children: React.ReactNode }) {
       />
       {children}
     </>
-  )
+  );
 }

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Search, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-type Profile = Tables<'profiles'>;
+type Profile = Tables<"profiles">;
 type UserRole = "super_admin" | "admin" | "dealer" | "user";
 
 export const UserManagement = () => {
@@ -19,16 +19,18 @@ export const UserManagement = () => {
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 25;
 
-  const { data: profiles, isLoading, error } = useQuery({
-    queryKey: ['user-profiles', search, page],
+  const {
+    data: profiles,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["user-profiles", search, page],
     queryFn: async () => {
-      if (role !== 'admin' && role !== 'super_admin') {
-        throw new Error('Unauthorized: Admin access required');
+      if (role !== "admin" && role !== "super_admin") {
+        throw new Error("Unauthorized: Admin access required");
       }
-      
-      let query = supabase
-        .from('profiles')
-        .select(`
+
+      let query = supabase.from("profiles").select(`
           *,
           user_roles (
             role
@@ -41,16 +43,16 @@ export const UserManagement = () => {
 
       const { data: profilesData, error: profilesError } = await query
         .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1)
-        .order('created_at', { ascending: false });
-      
+        .order("created_at", { ascending: false });
+
       if (profilesError) {
-        console.error('Error fetching profiles:', profilesError);
+        console.error("Error fetching profiles:", profilesError);
         throw profilesError;
       }
-      
+
       return profilesData as Profile[];
     },
-    enabled: role === 'admin' || role === 'super_admin',
+    enabled: role === "admin" || role === "super_admin",
   });
 
   useEffect(() => {
@@ -65,20 +67,28 @@ export const UserManagement = () => {
 
   const handleExport = async () => {
     if (!profiles) return;
-    
-    const headers = ["Email", "Full Name", "Role", "Created At", "Subscription Status"];
+
+    const headers = [
+      "Email",
+      "Full Name",
+      "Role",
+      "Created At",
+      "Subscription Status",
+    ];
     const csvContent = [
       headers.join(","),
-      ...profiles.map(profile => [
-        profile.email,
-        profile.full_name,
-        profile.role,
-        profile.created_at,
-        profile.subscription_status
-      ].join(","))
+      ...profiles.map((profile) =>
+        [
+          profile.email,
+          profile.full_name,
+          profile.role,
+          profile.created_at,
+          profile.subscription_status,
+        ].join(","),
+      ),
     ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
@@ -86,14 +96,14 @@ export const UserManagement = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     toast({
       title: "Success",
       description: "User data exported successfully",
     });
   };
 
-  if (role !== 'admin' && role !== 'super_admin') {
+  if (role !== "admin" && role !== "super_admin") {
     return (
       <div className="flex items-center justify-center h-[50vh]">
         <div className="text-center">
@@ -137,8 +147,8 @@ export const UserManagement = () => {
         </div>
       </div>
 
-      <UserTable 
-        profiles={profiles} 
+      <UserTable
+        profiles={profiles}
         isLoading={isLoading}
         page={page}
         setPage={setPage}
@@ -146,9 +156,9 @@ export const UserManagement = () => {
         onRoleChange={async (userId: string, newRole: UserRole) => {
           try {
             const { error } = await supabase
-              .from('user_roles')
+              .from("user_roles")
               .update({ role: newRole })
-              .eq('id', userId);
+              .eq("id", userId);
 
             if (error) throw error;
 
@@ -157,7 +167,7 @@ export const UserManagement = () => {
               description: "User role updated successfully",
             });
           } catch (error) {
-            console.error('Error updating role:', error);
+            console.error("Error updating role:", error);
             toast({
               title: "Error",
               description: "Failed to update user role",
@@ -165,31 +175,36 @@ export const UserManagement = () => {
             });
           }
         }}
-        onSendEmail={async (to: string[], subject: string, content: string, scheduledFor?: string) => {
+        onSendEmail={async (
+          to: string[],
+          subject: string,
+          content: string,
+          scheduledFor?: string,
+        ) => {
           try {
-            const response = await fetch('/api/send-email', {
-              method: 'POST',
+            const response = await fetch("/api/send-email", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 to,
                 subject,
                 html: content,
-                scheduledFor
+                scheduledFor,
               }),
             });
 
-            if (!response.ok) throw new Error('Failed to send email');
+            if (!response.ok) throw new Error("Failed to send email");
 
             toast({
               title: scheduledFor ? "Email Scheduled" : "Email Sent",
-              description: scheduledFor 
-                ? "Email has been scheduled successfully" 
+              description: scheduledFor
+                ? "Email has been scheduled successfully"
                 : "Email has been sent successfully",
             });
           } catch (error) {
-            console.error('Error sending email:', error);
+            console.error("Error sending email:", error);
             toast({
               title: "Error",
               description: "Failed to send email",

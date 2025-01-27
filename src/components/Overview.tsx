@@ -1,53 +1,53 @@
-import React, { useState } from 'react';
-import { Card } from './ui/card';
-import { Editor } from '@tinymce/tinymce-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
+import React, { useState } from "react";
+import { Card } from "./ui/card";
+import { Editor } from "@tinymce/tinymce-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+} from "./ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Overview: React.FC = () => {
-  const [emailContent, setEmailContent] = useState('');
-  const [emailSubject, setEmailSubject] = useState('');
-  const [scheduledDate, setScheduledDate] = useState('');
+  const [emailContent, setEmailContent] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [scheduledDate, setScheduledDate] = useState("");
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSendEmail = async () => {
     try {
       const emailData = {
-        to: ['recipient@example.com'], // Replace with actual recipient
+        to: ["recipient@example.com"], // Replace with actual recipient
         subject: emailSubject,
         html: emailContent,
-        scheduledFor: scheduledDate || undefined
+        scheduledFor: scheduledDate || undefined,
       };
 
-      const { data, error } = await supabase.functions.invoke('send-email', {
-        body: emailData
+      const { data, error } = await supabase.functions.invoke("send-email", {
+        body: emailData,
       });
 
       if (error) throw error;
 
       toast({
         title: scheduledDate ? "Email Scheduled" : "Email Sent",
-        description: scheduledDate 
+        description: scheduledDate
           ? `Email will be sent on ${new Date(scheduledDate).toLocaleString()}`
           : "Email has been sent successfully",
       });
 
       setIsEmailDialogOpen(false);
-      setEmailContent('');
-      setEmailSubject('');
-      setScheduledDate('');
+      setEmailContent("");
+      setEmailSubject("");
+      setScheduledDate("");
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error("Error sending email:", error);
       toast({
         title: "Error",
         description: "Failed to send email. Please try again.",
@@ -58,11 +58,14 @@ const Overview: React.FC = () => {
 
   return (
     <Card className="p-6 bg-white/80 backdrop-blur-md border-gray-200/50 shadow-sm">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">Dashboard Overview</h2>
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        Dashboard Overview
+      </h2>
       <p className="text-gray-600 mb-4">
-        This is the overview section of the dashboard. Here you can find key metrics and insights.
+        This is the overview section of the dashboard. Here you can find key
+        metrics and insights.
       </p>
-      
+
       <Dialog open={isEmailDialogOpen} onOpenChange={setIsEmailDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="outline">Send Email</Button>
@@ -83,7 +86,7 @@ const Overview: React.FC = () => {
                 placeholder="Enter email subject"
               />
             </div>
-            
+
             <div className="grid gap-2">
               <label htmlFor="schedule" className="text-sm font-medium">
                 Schedule Send (Optional)
@@ -98,23 +101,37 @@ const Overview: React.FC = () => {
             </div>
 
             <div className="grid gap-2">
-              <label className="text-sm font-medium">
-                Content
-              </label>
+              <label className="text-sm font-medium">Content</label>
               <Editor
                 apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
                 init={{
                   height: 350,
                   menubar: false,
                   plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                    "advlist",
+                    "autolink",
+                    "lists",
+                    "link",
+                    "image",
+                    "charmap",
+                    "preview",
+                    "anchor",
+                    "searchreplace",
+                    "visualblocks",
+                    "code",
+                    "fullscreen",
+                    "insertdatetime",
+                    "media",
+                    "table",
+                    "code",
+                    "help",
+                    "wordcount",
                   ],
-                  toolbar: 'undo redo | blocks | ' +
-                    'bold italic forecolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat | help',
+                  toolbar:
+                    "undo redo | blocks | " +
+                    "bold italic forecolor | alignleft aligncenter " +
+                    "alignright alignjustify | bullist numlist outdent indent | " +
+                    "removeformat | help",
                 }}
                 value={emailContent}
                 onEditorChange={(content) => setEmailContent(content)}
@@ -132,7 +149,7 @@ const Overview: React.FC = () => {
                 onClick={handleSendEmail}
                 disabled={!emailSubject.trim() || !emailContent.trim()}
               >
-                {scheduledDate ? 'Schedule Email' : 'Send Now'}
+                {scheduledDate ? "Schedule Email" : "Send Now"}
               </Button>
             </div>
           </div>

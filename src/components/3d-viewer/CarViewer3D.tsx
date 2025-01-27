@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { useQuery } from '@tanstack/react-query';
-import { Card } from '../ui/card';
-import { Loader2 } from 'lucide-react';
-import { Scene } from './Scene';
-import { CarModel } from './CarModel';
-import { Hotspots } from './Hotspots';
+import React, { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { useQuery } from "@tanstack/react-query";
+import { Card } from "../ui/card";
+import { Loader2 } from "lucide-react";
+import { Scene } from "./Scene";
+import { CarModel } from "./CarModel";
+import { Hotspots } from "./Hotspots";
 
 interface CarViewer3DProps {
   carDetails?: {
@@ -17,7 +17,10 @@ interface CarViewer3DProps {
   showHotspots?: boolean;
 }
 
-const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => {
+const CarViewer3D = ({
+  carDetails,
+  showHotspots = false,
+}: CarViewer3DProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
 
@@ -32,11 +35,15 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     controls: OrbitControls;
   } | null>(null);
 
-  const { data: carData, isLoading, error } = useQuery({
-    queryKey: ['car-data', carDetails?.make, carDetails?.model],
+  const {
+    data: carData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["car-data", carDetails?.make, carDetails?.model],
     queryFn: async () => {
       if (!carDetails?.make || !carDetails?.model) {
-        console.warn('Missing car details:', carDetails);
+        console.warn("Missing car details:", carDetails);
         return null;
       }
 
@@ -45,19 +52,19 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
           `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${carDetails.make.toLowerCase()}&model=${carDetails.model.toLowerCase()}`,
           {
             headers: {
-              'x-rapidapi-host': 'cars-by-api-ninjas.p.rapidapi.com',
-              'x-rapidapi-key': process.env.RAPIDAPI_KEY || '',
+              "x-rapidapi-host": "cars-by-api-ninjas.p.rapidapi.com",
+              "x-rapidapi-key": process.env.RAPIDAPI_KEY || "",
             },
-          }
+          },
         );
         if (!response.ok) {
           throw new Error(`API call failed: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log('Car API response:', data);
+        console.log("Car API response:", data);
         return data;
       } catch (error) {
-        console.error('Error fetching car data:', error);
+        console.error("Error fetching car data:", error);
         return null;
       }
     },
@@ -77,19 +84,20 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
 
     const handleResize = () => {
       if (!containerRef.current || !sceneState) return;
-      
-      sceneState.camera.aspect = containerRef.current.clientWidth / containerRef.current.clientHeight;
+
+      sceneState.camera.aspect =
+        containerRef.current.clientWidth / containerRef.current.clientHeight;
       sceneState.camera.updateProjectionMatrix();
       sceneState.renderer.setSize(
         containerRef.current.clientWidth,
-        containerRef.current.clientHeight
+        containerRef.current.clientHeight,
       );
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, [sceneState]);
 
@@ -97,7 +105,7 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
     scene: THREE.Scene,
     camera: THREE.PerspectiveCamera,
     renderer: THREE.WebGLRenderer,
-    controls: OrbitControls
+    controls: OrbitControls,
   ) => {
     setSceneState({ scene, camera, renderer, controls });
 
@@ -120,10 +128,12 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
   }
 
   if (error) {
-    console.error('Error in CarViewer3D:', error);
+    console.error("Error in CarViewer3D:", error);
     return (
       <Card className="p-4">
-        <div className="text-red-500">Error loading car model. Please try again later.</div>
+        <div className="text-red-500">
+          Error loading car model. Please try again later.
+        </div>
       </Card>
     );
   }
@@ -138,18 +148,24 @@ const CarViewer3D = ({ carDetails, showHotspots = false }: CarViewer3DProps) => 
 
   return (
     <Card className="p-4 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg">
-      <div ref={containerRef} className="h-[400px] w-full relative rounded-lg overflow-hidden">
+      <div
+        ref={containerRef}
+        className="h-[400px] w-full relative rounded-lg overflow-hidden"
+      >
         <Scene containerRef={containerRef} onSceneReady={handleSceneReady} />
         {sceneState && carData && (
           <CarModel scene={sceneState.scene} carData={carData} />
         )}
-        {sceneState && showHotspots && carDetails?.make && carDetails?.model && (
-          <Hotspots 
-            scene={sceneState.scene} 
-            carType={`${carDetails.year} ${carDetails.make} ${carDetails.model}`} 
-            onHotspotHover={handleHotspotHover}
-          />
-        )}
+        {sceneState &&
+          showHotspots &&
+          carDetails?.make &&
+          carDetails?.model && (
+            <Hotspots
+              scene={sceneState.scene}
+              carType={`${carDetails.year} ${carDetails.make} ${carDetails.model}`}
+              onHotspotHover={handleHotspotHover}
+            />
+          )}
       </div>
     </Card>
   );

@@ -67,16 +67,15 @@ export const UserRoleSelect = ({
           <DialogHeader>
             <DialogTitle>Confirm Role Change</DialogTitle>
             <DialogDescription>
-              Are you sure you want to change this user's role to {selectedRole}? This action will update their permissions.
+              Are you sure you want to change this user's role to {selectedRole}
+              ? This action will update their permissions.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsConfirmOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleConfirm}>
-              Confirm Change
-            </Button>
+            <Button onClick={handleConfirm}>Confirm Change</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

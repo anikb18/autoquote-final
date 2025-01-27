@@ -14,11 +14,12 @@ const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
   const { i18n } = useTranslation();
 
   const { data: messages, isLoading } = useQuery({
-    queryKey: ['chat-messages', quoteId],
+    queryKey: ["chat-messages", quoteId],
     queryFn: async () => {
       const { data: messagesData, error: messagesError } = await supabase
-        .from('chat_messages')
-        .select(`
+        .from("chat_messages")
+        .select(
+          `
           id,
           content,
           sender_id,
@@ -32,24 +33,25 @@ const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
               dealer_name
             )
           )
-        `)
-        .eq('quote_id', quoteId);
-      
+        `,
+        )
+        .eq("quote_id", quoteId);
+
       if (messagesError) throw messagesError;
       return messagesData as MessageType[];
     },
   });
 
   const { data: quoteDetails } = useQuery({
-    queryKey: ['quote-details', quoteId],
+    queryKey: ["quote-details", quoteId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('dealer_quotes')
-        .select('is_accepted')
-        .eq('quote_id', quoteId)
-        .eq('dealer_id', dealerId)
+        .from("dealer_quotes")
+        .select("is_accepted")
+        .eq("quote_id", quoteId)
+        .eq("dealer_id", dealerId)
         .maybeSingle();
-      
+
       if (error) throw error;
       return data;
     },
@@ -57,18 +59,20 @@ const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
 
   useEffect(() => {
     const channel = supabase
-      .channel('chat-updates')
+      .channel("chat-updates")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'chat_messages',
-          filter: `quote_id=eq.${quoteId}`
+          event: "INSERT",
+          schema: "public",
+          table: "chat_messages",
+          filter: `quote_id=eq.${quoteId}`,
         },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['chat-messages', quoteId] });
-        }
+          queryClient.invalidateQueries({
+            queryKey: ["chat-messages", quoteId],
+          });
+        },
       )
       .subscribe();
 
@@ -80,7 +84,7 @@ const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
   const sendMessage = useMutation({
     mutationFn: async (content: string) => {
       const { data, error } = await supabase
-        .from('chat_messages')
+        .from("chat_messages")
         .insert([
           {
             quote_id: quoteId,
@@ -89,24 +93,24 @@ const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
           },
         ])
         .select();
-      
+
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chat-messages', quoteId] });
+      queryClient.invalidateQueries({ queryKey: ["chat-messages", quoteId] });
     },
   });
 
   const handleTranslate = async (messageId: string) => {
-    const message = messages?.find(m => m.id === messageId);
+    const message = messages?.find((m) => m.id === messageId);
     if (!message) return;
 
     const translated = await translateMessage(message.content, i18n.language);
-    queryClient.setQueryData(['chat-messages', quoteId], (old: any) =>
+    queryClient.setQueryData(["chat-messages", quoteId], (old: any) =>
       old.map((m: any) =>
-        m.id === messageId ? { ...m, content: translated } : m
-      )
+        m.id === messageId ? { ...m, content: translated } : m,
+      ),
     );
   };
 
@@ -114,11 +118,11 @@ const ChatInterface = ({ quoteId, dealerId }: ChatProps) => {
 
   return (
     <div className="flex flex-col h-[400px] border rounded-lg">
-      <ChatHeader 
+      <ChatHeader
         autoTranslate={autoTranslate}
         onAutoTranslateChange={setAutoTranslate}
       />
-      
+
       <MessageList
         messages={messages || []}
         dealerId={dealerId}

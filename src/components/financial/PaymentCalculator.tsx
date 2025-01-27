@@ -14,7 +14,10 @@ interface PaymentCalculatorProps {
   vehiclePrice?: number;
 }
 
-const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorProps) => {
+const PaymentCalculator = ({
+  quoteId,
+  vehiclePrice = 25000,
+}: PaymentCalculatorProps) => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const [price, setPrice] = useState<number>(vehiclePrice);
@@ -31,9 +34,9 @@ const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorP
     const monthlyRate = interestRate / 12 / 100;
     const totalTax = price * QC_TAX_RATE;
     const totalWithTaxAmount = price + totalTax;
-    
-    const monthlyPaymentAmount = 
-      (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, term)) / 
+
+    const monthlyPaymentAmount =
+      (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, term)) /
       (Math.pow(1 + monthlyRate, term) - 1);
 
     setMonthlyPayment(monthlyPaymentAmount);
@@ -41,29 +44,27 @@ const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorP
 
     if (quoteId) {
       try {
-        const { error } = await supabase
-          .from('financing_calculations')
-          .insert({
-            quote_id: quoteId,
-            loan_amount: loanAmount,
-            down_payment: downPayment,
-            interest_rate: interestRate,
-            term_months: term,
-            monthly_payment: monthlyPaymentAmount,
-            tax_rate: QC_TAX_RATE,
-            total_with_tax: totalWithTaxAmount
-          });
+        const { error } = await supabase.from("financing_calculations").insert({
+          quote_id: quoteId,
+          loan_amount: loanAmount,
+          down_payment: downPayment,
+          interest_rate: interestRate,
+          term_months: term,
+          monthly_payment: monthlyPaymentAmount,
+          tax_rate: QC_TAX_RATE,
+          total_with_tax: totalWithTaxAmount,
+        });
 
         if (error) throw error;
 
         toast({
-          title: t('calculator.success'),
-          description: t('calculator.saved'),
+          title: t("calculator.success"),
+          description: t("calculator.saved"),
         });
       } catch (error) {
         toast({
-          title: t('calculator.error'),
-          description: t('calculator.saveFailed'),
+          title: t("calculator.error"),
+          description: t("calculator.saveFailed"),
           variant: "destructive",
         });
       }
@@ -73,7 +74,7 @@ const PaymentCalculator = ({ quoteId, vehiclePrice = 25000 }: PaymentCalculatorP
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('calculator.title')}</CardTitle>
+        <CardTitle>{t("calculator.title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <PaymentCalculatorForm
