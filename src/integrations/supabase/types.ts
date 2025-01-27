@@ -347,6 +347,13 @@ export type Database = {
             foreignKeyName: "dealer_analytics_dealer_profiles_fk"
             columns: ["dealer_id"]
             isOneToOne: false
+            referencedRelation: "dealer_performance_stats"
+            referencedColumns: ["dealer_id"]
+          },
+          {
+            foreignKeyName: "dealer_analytics_dealer_profiles_fk"
+            columns: ["dealer_id"]
+            isOneToOne: false
             referencedRelation: "dealer_profiles"
             referencedColumns: ["id"]
           },
@@ -471,6 +478,13 @@ export type Database = {
             foreignKeyName: "dealer_notifications_dealer_id_fkey"
             columns: ["dealer_id"]
             isOneToOne: false
+            referencedRelation: "dealer_performance_stats"
+            referencedColumns: ["dealer_id"]
+          },
+          {
+            foreignKeyName: "dealer_notifications_dealer_id_fkey"
+            columns: ["dealer_id"]
+            isOneToOne: false
             referencedRelation: "dealer_profiles"
             referencedColumns: ["id"]
           },
@@ -554,6 +568,13 @@ export type Database = {
           status?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "dealer_quotes_dealer_profiles_fk"
+            columns: ["dealer_id"]
+            isOneToOne: false
+            referencedRelation: "dealer_performance_stats"
+            referencedColumns: ["dealer_id"]
+          },
           {
             foreignKeyName: "dealer_quotes_dealer_profiles_fk"
             columns: ["dealer_id"]
@@ -1351,6 +1372,13 @@ export type Database = {
             foreignKeyName: "sales_transactions_dealer_id_fkey"
             columns: ["dealer_id"]
             isOneToOne: false
+            referencedRelation: "dealer_performance_stats"
+            referencedColumns: ["dealer_id"]
+          },
+          {
+            foreignKeyName: "sales_transactions_dealer_id_fkey"
+            columns: ["dealer_id"]
+            isOneToOne: false
             referencedRelation: "dealer_profiles"
             referencedColumns: ["id"]
           },
@@ -1830,7 +1858,19 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      dealer_performance_stats: {
+        Row: {
+          accepted_quotes: number | null
+          avg_profit_margin: number | null
+          conversion_rate: number | null
+          dealer_id: string | null
+          dealer_name: string | null
+          total_quotes: number | null
+          total_revenue: number | null
+          total_sales: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       add_coupon: {
@@ -1916,6 +1956,12 @@ export type Database = {
           total_revenue: number
           average_response_time: unknown
         }[]
+      }
+      can_access_dealer_stats: {
+        Args: {
+          dealer_id: string
+        }
+        Returns: boolean
       }
       click_house_fdw_handler: {
         Args: Record<PropertyKey, never>
