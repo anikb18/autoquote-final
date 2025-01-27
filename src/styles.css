@@ -1,3 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -44,6 +59,46 @@
     --ring: 212.7 26.8% 83.9%;
   }
 }
+@layer components {
+  .bg-background {
+    background-color: var(--background);
+  }
+  .bg-background\/80 {
+    background-color: rgba(var(--background), 0.8);
+  }
+  .bg-background\/50 {
+    background-color: rgba(var(--background), 0.5);
+  }
+  .bg-background\/30 {
+    background-color: rgba(var(--background), 0.3);
+  }
+  .bg-background\/20 {
+    background-color: rgba(var(--background), 0.2);
+  }
+  .bg-background\/10 {
+    background-color: rgba(var(--background), 0.1);
+  }
+  .text-foreground {
+    color: var(--foreground);
+  }
+}
+@layer components {
+  .border-border {
+    border-color: var(--border-color);
+  }
+  .border-border\/50 {
+    border-color: rgba(var(--border-color), 0.5);
+  }
+  .border-border\/30 {
+    border-color: rgba(var(--border-color), 0.3);
+  }
+  .border-border\/20 {
+    border-color: rgba(var(--border-color), 0.2);
+  }
+  .border-border\/10 {
+    border-color: rgba(var(--border-color), 0.1);
+  }
+}
 
 @layer base {
   * {
@@ -61,6 +116,7 @@
     @apply tracking-tight text-foreground;
   }
 }
+
 
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out;

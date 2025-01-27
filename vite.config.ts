@@ -1,3 +1,6 @@
+import postcssImport from 'postcss-import';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "url";
@@ -10,10 +13,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig(({ mode }) => ({
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-  ].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean,
+  ),
 
   resolve: {
     alias: {
@@ -29,7 +31,7 @@ export default defineConfig(({ mode }) => ({
       "localhost",
     ],
     middlewares: [
-      (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+      (req: IncomingMessage, _res: ServerResponse, next: () => void) => {
         if (!req.url?.includes(".")) {
           req.url = "/index.html";
         }
@@ -76,7 +78,11 @@ export default defineConfig(({ mode }) => ({
   // Add CSS configuration for Tailwind and PostCSS
   css: {
     postcss: {
-      config: resolve(__dirname, "postcss.config.js"),
+      plugins: [
+        postcssImport(),
+        tailwindcss(),
+        autoprefixer(),
+      ],
     },
   },
 }));
