@@ -10,7 +10,7 @@ import enUSHome from "./locales/en-US/home.json";
 import enUSPricing from "./locales/en-US/pricing.json";
 import enUSTestimonials from "./locales/en-US/testimonials.json";
 import enUSFeatures from "./locales/en-US/features.json";
-
+import enUSForm from "./locales/en-US/form.json";
 import frCACommon from "./locales/fr-CA/common.json";
 import frCADealer from "./locales/fr-CA/dealer.json";
 import frCAAdmin from "./locales/fr-CA/admin.json";
@@ -59,6 +59,7 @@ i18n
       "pricing",
       "testimonials",
       "features",
+      "form",
     ],
     defaultNS: "common",
   });

@@ -210,14 +210,26 @@
       "title": "Soumission envoyée",
       "description": "Votre demande de soumission a été envoyée avec succès. Nous vous contacterons bientôt!"
     },
+    "stepTitle": "Étape {{step}} sur {{total}}",
     "error": {
       "title": "Erreur",
       "description": "Une erreur s'est produite lors de l'envoi de votre soumission. Veuillez réessayer."
     },
-    "submitting": "Envoi en cours...",
-    "submit": "Envoyer la demande de soumission"
-  },
-  "dealership": {
+      "submitting": "Envoi en cours...",
+      "submit": "Envoyer la demande de soumission",
+      "steps": {
+        "vehicle": "Véhicule",
+        "financing": "Financement",
+        "tradeIn": "Reprise",
+        "payment": "Paiement"
+      },
+      "payment": {
+        "title": "Paiement",
+        "details": "Vous êtes sur le point de payer 49,95 $ pour soumettre votre demande de soumission.",
+        "proceed": "Procéder au paiement"
+      }
+    },
+    "dealership": {
     "title": "Bienvenue dans notre concession",
     "subtitle": "Votre solution unique pour acheter et vendre des voitures",
     "carBuyingService": {

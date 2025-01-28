@@ -94,7 +94,7 @@ const DesiredVehicleSection = ({
             value={desiredVehicle.year}
           >
             <SelectTrigger>
-              <SelectValue placeholder={t("form.year.selectYear")} />
+              <SelectValue placeholder={t("form.year.placeholder")} />
             </SelectTrigger>
             <SelectContent>
               {availableYears.map((year) => (

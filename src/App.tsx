@@ -34,9 +34,26 @@ import UserChat from "./pages/chat/UserChat";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminAnalytics from "./pages/admin/Analytics";
 import DealerAnalyticsPage from "./pages/DealerAnalyticsPage";
+import { Tolgee, DevTools, TolgeeProvider, FormatSimple } from "@tolgee/react";
 import { useState } from "react"; // Import useState
 import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
 
+
+const tolgee = Tolgee()
+  .use(DevTools())
+  .use(FormatSimple())
+  .init({
+    language: 'en',
+
+    // for development
+    apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
+    apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
+
+    // for production
+    staticData: {
+      ...
+    }
+  });
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -72,13 +89,13 @@ function App() {
     <ThemeProvider defaultTheme={viewMode}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <ViewModeContext.Provider value={{ viewMode, setViewMode }}> {/* Wrap Routes with ViewModeContext.Provider */}
             <main className="min-h-screen">
               <Routes>
                 <Route path="/" element={<><Header /><Index /></>} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
+              <Route path="/new-quote" element={<NewQuoteForm />} /> {/* Add new-quote route here */}
 
               {/* Role-based redirect */}
               <Route
@@ -146,7 +163,6 @@ function App() {
                       <Routes>
                         <Route path="/my-quotes" element={<BuyerDashboard />} />
                         <Route path="/chat" element={<UserChat />} />
-                        <Route path="/new-quote" element={<NewQuoteForm />} />
                         <Route path="/settings/*" element={<ProfileSettings />} />
                       </Routes>
                     </DashboardLayout>
@@ -177,7 +193,6 @@ function App() {
               />
             </Routes>
           </main>
-        </ViewModeContext.Provider>
       </Router>
     </QueryClientProvider>
   </ThemeProvider>
@@ -185,3 +200,9 @@ function App() {
 }
 
 export default App;
+<TolgeeProvider
+  tolgee={tolgee}
+  fallback="Loading..." // loading fallback
+>
+  <App />
+</TolgeeProvider>

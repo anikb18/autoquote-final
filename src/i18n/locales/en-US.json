@@ -151,7 +151,8 @@
   "form": {
     "title": "Vehicle Quote Request",
     "desiredVehicle": {
-      "title": "Desired Vehicle"
+      "title": "Desired Vehicle",
+      "description": "Tell us about the vehicle you are looking for."
     },
     "make": {
       "label": "Make",
@@ -200,14 +201,26 @@
       "title": "Quote Submitted",
       "description": "Your quote request has been submitted successfully. We'll be in touch soon!"
     },
+    "stepTitle": "Step {{step}} of {{total}}",
     "error": {
       "title": "Error",
       "description": "There was an error submitting your quote. Please try again."
     },
-    "submitting": "Submitting...",
-    "submit": "Submit Quote Request"
-  },
-  "dealership": {
+      "submitting": "Submitting...",
+      "submit": "Submit Quote Request",
+      "steps": {
+        "vehicle": "Vehicle",
+        "financing": "Financing",
+        "tradeIn": "Trade-In",
+        "payment": "Payment"
+      },
+      "payment": {
+        "title": "Payment",
+        "details": "You are about to pay $49.95 to submit your quote request.",
+        "proceed": "Proceed to Payment"
+      }
+    },
+    "dealership": {
     "title": "Welcome to Our Dealership",
     "subtitle": "Your one-stop solution for buying and selling cars",
     "carBuyingService": {

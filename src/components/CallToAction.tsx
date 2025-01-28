@@ -29,12 +29,12 @@ export function CallToAction() {
           <p className="mt-4 text-lg tracking-tight text-white">
             {t("callToAction.description")}
           </p>
-          <Button
-            asChild
-            className="mt-10 bg-white text-blue-600 hover:bg-gray-50"
+          <Link
+            to="/new-quote"
+            className="mt-10 inline-flex items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-blue-600 hover:bg-gray-50"
           >
-            <Link to="/register">{t("callToAction.button")}</Link>
-          </Button>
+            {t("callToAction.button")}
+          </Link>
         </div>
       </Container>
     </section>

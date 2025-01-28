@@ -27,7 +27,7 @@ const Hero = () => {
         {t("hero.description")}
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-        <Button asChild>
+        <Button plain >
           <Link to="/new-quote">{t("hero.getStarted")}</Link>
         </Button>
       </div>

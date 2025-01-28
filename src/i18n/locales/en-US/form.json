@@ -1,0 +1,104 @@
+{
+  "form": {
+    "authRequired": "Authentication Required",
+    "pleaseSignIn": "Please sign in to proceed",
+    "error": {
+      "title": "Payment Error",
+      "paymentFailed": "Failed to initiate payment. Please try again."
+    },
+    "steps": "Step {{step}} of {{total}}",
+    "steps.vehicle": "Vehicle",
+    "steps.financing": "Financing",
+    "steps.tradeIn": "Trade-in",
+    "steps.payment": "Payment",
+    "desiredVehicle": {
+      "title": "Desired Vehicle",
+      "newCarOnly": "New Car Only",
+      "variantQuestion": "Do you have any specific variants in mind?",
+      "title": "Desired Vehicle",
+      "newCarOnly": "New Car Only",
+      "description": "Tell us about the vehicle you're looking for."
+    },
+    "financing": {
+      "description": "How would you like to finance your vehicle?"
+    },
+    "tradeIn": {
+      "description": "Do you have a trade-in vehicle?"
+    },
+    "payment": {
+      "description": "Review your order and proceed to payment.",
+      "title": "Payment Details",
+      "details": "One-time payment of $49.95 for quote processing."
+    },
+    "back": "Back",
+    "next": "Next",
+    "payment.proceed": "Proceed to Payment",
+    "spotsRemaining": "Spots Remaining",
+    "totalSpots": "Total Spots",
+    "year": {
+      "label": "Year",
+      "selectYear": "Select year"
+    },
+    "make": {
+      "label": "Make"
+    },
+    "model": {
+      "label": "Model",
+      "selectModel": "Select Model"
+    },
+    "variant": {
+      "label": "Variant"
+    },
+    "bodyStyle": {
+      "label": "Body Style"
+    },
+    "transmission": {
+      "label": "Transmission"
+    },
+    "engine": {
+      "label": "Engine"
+    },
+    "exteriorColor": {
+      "label": "Exterior Color"
+    },
+    "interiorColor": {
+      "label": "Interior Color"
+    },
+    "trim": {
+      "label": "Trim"
+    },
+    "drivetrain": {
+      "label": "Drivetrain"
+    },
+    "zipCode": {
+      "label": "Zip Code"
+    },
+     "email": {
+      "label": "Email"
+    },
+     "phone": {
+      "label": "Phone"
+    },
+    "firstName": {
+      "label": "First Name"
+    },
+    "lastName": {
+      "label": "Last Name"
+    },
+    "submit": {
+      "label": "Submit"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "city": {
+      "label": "City"
+    },
+    "province": {
+      "label": "Province"
+    },
+    "postalCode": {
+      "label": "Postal Code"
+    }
+  }
+}

@@ -7,10 +7,8 @@ import { NavigationItem } from "./sidebar/NavigationItem";
 import { SidebarFooter } from "./sidebar/SidebarFooter";
 import { UserProfile } from "./sidebar/UserProfile";
 import { getNavigationItems } from "./sidebar/navigationItems";
-import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
 
@@ -18,8 +16,6 @@ import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Imp
 export function DashboardSidebar() {
   const { role } = useUserRole();
   const { t } = useTranslation("admin");
-  const navigate = useNavigate();
-  const { toast } = useToast();
   const { user } = useUser();
   const { viewMode, setViewMode } = useContext(ViewModeContext); // Use ViewModeContext
 
@@ -48,22 +44,6 @@ export function DashboardSidebar() {
     refetchInterval: 30000,
   });
 
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      navigate("/auth");
-      toast({
-        title: "Signed out successfully",
-        description: "You have been logged out of your account",
-      });
-    } catch (error) {
-      toast({
-        title: "Error signing out",
-        description: "Please try again",
-        variant: "destructive",
-      });
-    }
-  };
 
   const { adminItems, dealerItems, buyerItems } = getNavigationItems(
     role,
@@ -109,7 +89,7 @@ export function DashboardSidebar() {
         <Button
           plain
           className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
-          onClick={handleSignOut}
+          to="/auth"
         >
           <LogOut className="mr-2 h-4 w-4" />
 {t("common.signOut")}

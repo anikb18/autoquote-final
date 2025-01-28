@@ -166,12 +166,11 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-4">
           <Button
             variant="ghost"
-            size="sm"
             onClick={handleNewQuote}
             className="flex items-center gap-2"
           >
             <PlusCircle className="h-4 w-4" />
-            {t("common.requestQuote")}
+            {t("common.newQuote")}
           </Button>
           <Button
             variant="ghost"

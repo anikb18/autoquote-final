@@ -217,9 +217,10 @@ const NewQuoteForm = () => {
     <Container>
       <div className="mx-auto max-w-4xl py-8">
         <Heading level={1} className="mb-6">
-          {t("form.steps", { step: currentStep, total: 4 })}
+          {t("form.stepTitle", { step: currentStep, total: 4 })}
         </Heading>
 
+        <Heading level={2} className="mb-4">{t("form.desiredVehicle.title")}</Heading>
         <Card className="p-6 space-y-8">
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -344,8 +345,8 @@ const NewQuoteForm = () => {
 
             <div className="flex justify-between pt-4">
               {currentStep > 1 && (
-                <Button type="button" variant="outline" onClick={handleBack}>
-                  {t("form.back")}
+                <Button type="button" outline={true} onClick={handleBack}>
+                  {t("common.back")}
                 </Button>
               )}
               <Button
@@ -353,7 +354,7 @@ const NewQuoteForm = () => {
                 className={currentStep === 1 ? "w-full" : "ml-auto"}
                 disabled={loading}
               >
-                {currentStep === 4 ? t("form.payment.proceed") : t("form.next")}
+                {currentStep === 4 ? t("form.payment.proceed") : t("common.next")}
               </Button>
             </div>
           </form>

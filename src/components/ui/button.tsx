@@ -162,7 +162,7 @@ type ButtonProps = (
   | { color?: keyof typeof styles.colors; outline?: never; plain?: never }
   | { color?: never; outline: true; plain?: never }
   | { color?: never; outline?: never; plain: true }
-) & { className?: string; children: React.ReactNode } & (
+) & { className?: string; children: React.ReactNode; to?: string; variant?: string; disabled?: boolean } & (
     | Omit<typeof HeadlessButton, 'className'>
     | Omit<React.ComponentPropsWithoutRef<typeof Link>, 'className'>
   )
@@ -177,7 +177,11 @@ export const Button = React.forwardRef(function Button(
     outline ? styles.outline : plain ? styles.plain : clsx(styles.solid, styles.colors[color ?? 'dark/zinc']),
   )
 
-  return 'href' in props ? (
+  return props.to ? (
+    <Link to={props.to} className={classes} ref={ref as React.ForwardedRef<HTMLAnchorElement>}>
+      <TouchTarget>{children}</TouchTarget>
+    </Link>
+  ) : 'href' in props ? (
     <Link to={props.href} className={classes} ref={ref as React.ForwardedRef<HTMLAnchorElement>}>
       <TouchTarget>{children}</TouchTarget>
     </Link>

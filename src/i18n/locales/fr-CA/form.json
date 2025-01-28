@@ -1,0 +1,130 @@
+{
+  "form": {
+    "authRequired": "Authentification Requise",
+    "pleaseSignIn": "Veuillez vous connecter pour continuer",
+    "error": {
+      "title": "Erreur de Paiement",
+      "paymentFailed": "Échec de l'initialisation du paiement. Veuillez réessayer."
+    },
+    "steps": "Étape {{step}} sur {{total}}",
+    "steps.vehicle": "Véhicule",
+    "steps.financing": "Financement",
+    "steps.vehicle": "Véhicule",
+    "steps.financing": "Financement",
+    "steps.vehicle": "Véhicule",
+    "steps.financing": "Financement",
+    "spotsRemaining": "Places Restantes",
+    "totalSpots": "Nombre Total de Places",
+    "desiredVehicle": {
+      "description": "Parlez-nous du véhicule que vous recherchez.",
+      "title": "Véhicule Désiré",
+      "newCarOnly": "Voiture Neuve Seulement",
+      "variantQuestion": "Avez-vous des variantes spécifiques en tête ?"
+    },
+    "spotsRemaining": "Places Restantes",
+    "totalSpots": "Nombre Total de Places",
+    "desiredVehicle": {
+      "title": "Véhicule Désiré",
+      "newCarOnly": "Voiture Neuve Seulement",
+      "variantQuestion": "Avez-vous des variantes spécifiques en tête ?",
+      "description": "Parlez-nous du véhicule que vous recherchez.",
+      "description": "Parlez-nous du véhicule que vous recherchez.",
+      "title": "Véhicule Désiré",
+      "newCarOnly": "Voiture Neuve Seulement"
+    },
+    "financing": {
+      "description": "Comment souhaitez-vous financer votre véhicule ?"
+    },
+    "year": {
+      "label": "Année",
+      "selectYear": "Sélectionner l'année"
+    },
+    "make": {
+      "label": "Marque",
+      "selectMake": "Sélectionner la marque"
+    },
+    "model": {
+      "label": "Modèle",
+      "selectModel": "Sélectionner le modèle"
+    },
+    "tradeIn": {
+      "description": "Avez-vous un véhicule de reprise ?"
+    },
+    "payment": {
+      "description": "Vérifiez votre commande et passez au paiement.",
+      "title": "Détails du Paiement",
+      "details": "Paiement unique de 49,95 $ pour le traitement du devis."
+    },
+    "back": "Retour",
+    "next": "Suivant",
+    "payment.proceed": "Procéder au Paiement",
+    "spotsRemaining": "Places Restantes",
+    "totalSpots": "Nombre Total de Places",
+    "year": {
+      "label": "Année",
+      "selectYear": "Sélectionner l'année"
+    },
+    "make": {
+      "label": "Marque",
+      "selectMake": "Sélectionner la marque"
+    },
+    "model": {
+      "label": "Modèle",
+      "selectModel": "Sélectionner le modèle"
+    },
+    "variant": {
+      "label": "Variante"
+    },
+    "bodyStyle": {
+      "label": "Type de Carrosserie"
+    },
+    "transmission": {
+      "label": "Transmission"
+    },
+    "engine": {
+      "label": "Moteur"
+    },
+    "exteriorColor": {
+      "label": "Couleur Extérieure"
+    },
+    "interiorColor": {
+      "label": "Couleur Intérieure"
+    },
+    "trim": {
+      "label": "Finition"
+    },
+    "drivetrain": {
+      "label": "Groupe Motopropulseur"
+    },
+    "zipCode": {
+      "label": "Code Postal"
+    },
+     "email": {
+      "label": "Courriel"
+    },
+     "phone": {
+      "label": "Téléphone"
+    },
+    "firstName": {
+      "label": "Prénom"
+    },
+    "lastName": {
+      "label": "Nom de Famille"
+    },
+    "submit": {
+      "label": "Soumettre"
+    },
+    "address": {
+      "label": "Adresse"
+    },
+    "city": {
+      "label": "Ville"
+    },
+    "province": {
+      "label": "Province"
+    },
+    "postalCode": {
+      "label": "Code Postal"
+    }
+  }
+}
