@@ -100,6 +100,13 @@ function App() {
                           <Route path="/coupons" element={<CouponManagement />} />
                           <Route path="/page-management" element={<PageManagement />} />
                           <Route path="/settings/*" element={<AdminSettings />} />
+                          
+                          {/* Admin as Dealer Routes */}
+                          <Route path="/dealer/dashboard" element={<DealershipOverview />} />
+                          <Route path="/dealer/quotes" element={<ActiveQuotes />} />
+                          <Route path="/dealer/analytics" element={<DealerAnalyticsPage />} />
+                          <Route path="/dealer/settings" element={<DealershipSettings />} />
+                          <Route path="/dealer/chat" element={<DealerChat />} />
                         </Routes>
                       </DashboardLayout>
                     </ProtectedRoute>

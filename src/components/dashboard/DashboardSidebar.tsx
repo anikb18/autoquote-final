@@ -13,7 +13,7 @@ import { useViewMode } from "./ViewModeContext";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
-  const { t } = useTranslation("admin");
+  const { t } = useTranslation(["common", "dealer", "admin"]);
   const { user } = useUser();
   const { viewMode, setViewMode } = useViewMode();
 
@@ -38,12 +38,16 @@ export function DashboardSidebar() {
   });
 
   const { adminItems, dealerItems, buyerItems } = getNavigationItems(role, unreadCount);
-  const items =
-    viewMode === "admin"
-      ? adminItems
-      : viewMode === "dealer"
-        ? dealerItems
-        : buyerItems;
+  
+  // Use viewMode to determine which items to show
+  const items = viewMode === "admin" 
+    ? adminItems 
+    : viewMode === "dealer" 
+      ? dealerItems.map(item => ({
+          ...item,
+          href: item.href.replace('/dealer/', '/admin/dealer/') // Modify dealer routes for admin view
+        }))
+      : buyerItems;
 
   return (
     <div className="flex grow flex-col bg-background">
@@ -51,7 +55,7 @@ export function DashboardSidebar() {
         <img
           className="h-8 w-auto"
           src="/logo/dark.png"
-          alt="AutoQuote24"
+          alt={t("common:appName")}
           style={{ width: '80%', height: 'auto' }}
         />
       </div>
@@ -81,7 +85,7 @@ export function DashboardSidebar() {
           to="/auth"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          {t("common.signOut")}
+          {t("common:signOut")}
         </Button>
       </div>
 

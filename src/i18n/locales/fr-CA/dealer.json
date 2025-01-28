@@ -74,5 +74,22 @@
         "label": "Acheteurs qualifiés"
       }
     }
+  },
+  "dashboard": {
+    "title": "Tableau de bord du concessionnaire",
+    "overview": "Aperçu",
+    "metrics": {
+      "activeQuotes": "Soumissions actives",
+      "wonBids": "Enchères gagnées",
+      "totalRevenue": "Revenu total",
+      "responseTime": "Temps de réponse moyen"
+    },
+    "navigation": {
+      "overview": "Aperçu",
+      "quotes": "Soumissions",
+      "analytics": "Analyses",
+      "settings": "Paramètres",
+      "chat": "Messagerie"
+    }
   }
 }

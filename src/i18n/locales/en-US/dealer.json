@@ -1,78 +1,19 @@
 {
-  "nav": {
-    "home": "Home",
-    "blog": "Blog",
-    "about": "About",
-    "contact": "Contact",
-    "signIn": "Sign In"
-  },
-  "hero": {
-    "title": "Get Pre-Qualified Leads Without The Bidding War",
-    "subtitle": "Join AutoQuote24's Exclusive Dealer Network - Limited Spots Available",
-    "urgency": "Only 3 dealer spots left in your area",
-    "cta": {
-      "demo": "Schedule Your Private Demo",
-      "signup": "Watch 2-Minute Demo Video"
-    }
-  },
-  "features": {
-    "title": "Why Choose AutoQuote24",
-    "subtitle": "Join the future of automotive sales with our innovative platform designed for modern dealerships",
-    "items": {
-      "trusted": {
-        "title": "Private Bidding System",
-        "description": "Compete fairly with our exclusive bidding platform that ensures better margins and transparent competition"
-      },
-      "time": {
-        "title": "Pre-Qualified Leads",
-        "description": "Focus on selling to credit-verified buyers who are ready to make a purchase"
-      },
-      "prices": {
-        "title": "Smart Management",
-        "description": "Save time and resources with our automated quote handling and response system"
-      },
-      "communication": {
-        "title": "24/7 Support",
-        "description": "Get expert assistance whenever you need it with our dedicated support team"
-      }
-    }
-  },
-  "benefits": {
-    "bidding": {
-      "title": "Private Bidding System",
-      "description": "Ensures fair competition and better margins"
-    },
-    "verification": {
-      "title": "Pre-Qualified Leads",
-      "description": "Credit-verified buyers ready to purchase"
-    },
-    "automation": {
-      "title": "Automated Management",
-      "description": "Save time with smart quote handling"
-    },
-    "support": {
-      "title": "Dedicated Support",
-      "description": "Expert assistance whenever you need it"
-    }
-  },
-  "trust": {
-    "title": "Trusted by Leading Dealerships",
+  "dashboard": {
+    "title": "Dealer Dashboard",
+    "overview": "Overview",
     "metrics": {
-      "network": {
-        "title": "Dealer Network",
-        "value": "200+",
-        "label": "Trusted Partners"
-      },
-      "success": {
-        "title": "Faster Closing",
-        "value": "35%",
-        "label": "Average Improvement"
-      },
-      "value": {
-        "title": "Monthly Leads",
-        "value": "1,000+",
-        "label": "Qualified Buyers"
-      }
+      "activeQuotes": "Active Quotes",
+      "wonBids": "Won Bids",
+      "totalRevenue": "Total Revenue",
+      "responseTime": "Average Response Time"
+    },
+    "navigation": {
+      "overview": "Overview",
+      "quotes": "Quotes",
+      "analytics": "Analytics",
+      "settings": "Settings",
+      "chat": "Chat"
     }
   }
 }
