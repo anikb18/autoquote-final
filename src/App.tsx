@@ -31,6 +31,10 @@ import DealerChat from "./pages/chat/DealerChat";
 import UserChat from "./pages/chat/UserChat";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminAnalytics from "./pages/admin/Analytics";
+import DealerAnalyticsPage from "./pages/DealerAnalyticsPage";
+import { useState } from "react"; // Import useState
+import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,14 +64,16 @@ const RoleBasedRedirect = () => {
 };
 
 function App() {
+  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">("admin"); // Initialize viewMode state
+
   return (
     <ThemeProvider defaultTheme="light">
       <QueryClientProvider client={queryClient}>
         <Router>
-          <Header />
-          <main className="min-h-screen">
-            <Routes>
-              <Route path="/" element={<Index />} />
+          <ViewModeContext.Provider value={{ viewMode, setViewMode }}> {/* Wrap Routes with ViewModeContext.Provider */}
+            <main className="min-h-screen">
+              <Routes>
+                <Route path="/" element={<><Header /><Index /></>} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
@@ -82,53 +88,44 @@ function App() {
                 }
               />
 
-              {/* Admin Dashboard Routes */}
-              <Route
-                path="/admin/*"
-                element={
-                  <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
-                    <DashboardLayout>
-                      <Routes>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/analytics" element={<AdminAnalytics />} />
-                        <Route path="/users" element={<UserManagement />} />
-                        <Route path="/blog" element={<BlogManagement />} />
-                        <Route
-                          path="/newsletter"
-                          element={<NewsletterManagement />}
-                        />
-                        <Route path="/coupons" element={<CouponManagement />} />
-                        <Route
-                          path="/page-management"
-                          element={<PageManagement />}
-                        />
-                        <Route path="/settings/*" element={<AdminSettings />} />
-                      </Routes>
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
+            {/* Admin Dashboard Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
+                  <DashboardLayout>
+                    <Routes>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/analytics" element={<AdminAnalytics />} />
+                      <Route path="/users" element={<UserManagement />} />
+                      <Route path="/blog" element={<BlogManagement />} />
+                      <Route path="/newsletter" element={<NewsletterManagement />} />
+                      <Route path="/coupons" element={<CouponManagement />} />
+                      <Route path="/page-management" element={<PageManagement />} />
+                      <Route path="/settings/*" element={<AdminSettings />} />
+                    </Routes>
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
 
               {/* Dealer Dashboard Routes */}
               <Route
-                path="/dealer/*"
-                element={
-                  <ProtectedRoute allowedRoles={["dealer"]}>
-                    <DashboardLayout>
-                      <Routes>
-                        <Route path="/dashboard" element={<DealershipOverview />} />
-                        <Route path="/quotes" element={<ActiveQuotes />} />
-                        <Route
-                          path="/settings"
-                          element={<DealershipSettings />}
-                        />
-                        <Route path="/chat" element={<DealerChat />} />
-                      </Routes>
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
-
+  path="/dealer/*"
+  element={
+    <ProtectedRoute allowedRoles={["dealer"]}>
+      <DashboardLayout>
+        <Routes>
+          <Route path="/dashboard" element={<DealershipOverview />} />
+          <Route path="/analytics" element={<DealerAnalyticsPage />} />
+          <Route path="/quotes" element={<ActiveQuotes />} />
+          <Route path="/settings" element={<DealershipSettings />} />
+          <Route path="/chat" element={<DealerChat />} />
+        </Routes>
+      </DashboardLayout>
+    </ProtectedRoute>
+  }
+/>
               {/* User Dashboard Routes */}
               <Route
                 path="/dashboard/*"
@@ -137,7 +134,7 @@ function App() {
                     <DashboardLayout>
                       <Routes>
                         <Route path="/my-quotes" element={<BuyerDashboard />} />
-                        <Route path="/my-chats" element={<UserChat />} />
+                        <Route path="/chat" element={<UserChat />} />
                         <Route path="/new-quote" element={<NewQuoteForm />} />
                         <Route
                           path="/settings/*"
@@ -172,9 +169,10 @@ function App() {
               />
             </Routes>
           </main>
-        </Router>
-      </QueryClientProvider>
-    </ThemeProvider>
+        </ViewModeContext.Provider>
+      </Router>
+    </QueryClientProvider>
+  </ThemeProvider>
   );
 }
 

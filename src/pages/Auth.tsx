@@ -40,18 +40,20 @@ const Auth = () => {
           } else if (roleData?.role === "dealer") {
             navigate("/dashboard/dealership");
           } else {
-            navigate("/dashboard/my-quotes");
+            navigate("/user-my-quotes");
           }
         }
       } catch (error) {
-        console.error("Session check error:", error);
+        console.error("Error checking session:", error);
       } finally {
         setIsChecking(false);
       }
     };
 
     checkSession();
+  }, []);
 
+  useEffect(() => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -86,7 +88,7 @@ const Auth = () => {
           } else if (roleData?.role === "dealer") {
             navigate("/dashboard/dealership");
           } else {
-            navigate("/dashboard/my-quotes");
+            navigate("/user-my-quotes");
           }
         } catch (error) {
           console.error("Sign in error:", error);

@@ -1,7 +1,7 @@
 import { useUserRole } from "@/hooks/use-user-role";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useContext, useState } from "react"; // Import useContext and useState
 import { supabase } from "@/integrations/supabase/client";
 import { NavigationItem } from "./sidebar/NavigationItem";
 import { SidebarFooter } from "./sidebar/SidebarFooter";
@@ -12,8 +12,8 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
+import { useContext } from "react"; // Import useContext
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
@@ -21,24 +21,11 @@ export function DashboardSidebar() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useUser();
-  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">(
-    role === "super_admin" || role === "admin" ? "admin" : role || "user"
-  );
+  const { viewMode, setViewMode } = useContext(ViewModeContext); // Use ViewModeContext
 
   const handleViewModeChange = (mode: "admin" | "dealer" | "user") => {
+    console.log("handleViewModeChange mode:", mode);
     setViewMode(mode);
-    // Navigate to the appropriate dashboard based on view mode
-    switch (mode) {
-      case "admin":
-        navigate("/admin/dashboard");
-        break;
-      case "dealer":
-        navigate("/dealer/dashboard");
-        break;
-      case "user":
-        navigate("/dashboard/my-quotes");
-        break;
-    }
   };
 
   const { data: unreadCount = 0 } = useQuery({
@@ -92,33 +79,12 @@ export function DashboardSidebar() {
   return (
     <div className="flex grow flex-col bg-background">
       <div className="flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <img 
-          className="h-8 w-auto" 
-          src="/logo/dark.png" 
-          alt="AutoQuote24" 
+        <img
+          className="h-8 w-auto"
+          src="/logo/dark.png"
+          alt="AutoQuote24"
+          style={{ width: '80%', height: 'auto' }}
         />
-        {(role === "admin" || role === "super_admin") && (
-          <RadioGroup
-            value={viewMode}
-            onValueChange={(value: "admin" | "dealer" | "user") =>
-              handleViewModeChange(value)
-            }
-            className="flex gap-2"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="admin" id="admin" />
-              <Label htmlFor="admin">Admin</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="dealer" id="dealer" />
-              <Label htmlFor="dealer">Dealer</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="user" id="user" />
-              <Label htmlFor="user">User</Label>
-            </div>
-          </RadioGroup>
-        )}
       </div>
 
       <nav className="flex flex-1 flex-col px-6">
@@ -141,12 +107,12 @@ export function DashboardSidebar() {
 
       <div className="px-6 py-4 border-t">
         <Button
-          variant="ghost"
+          plain
           className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
           onClick={handleSignOut}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          {t("common.signOut")}
+{t("common.signOut")}
         </Button>
       </div>
 
