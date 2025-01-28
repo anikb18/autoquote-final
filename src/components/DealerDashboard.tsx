@@ -9,11 +9,15 @@ import {
 } from "./dashboard/PerformanceChart";
 import { WelcomeHeader } from "./dashboard/dealer/WelcomeHeader";
 import { NotificationHandler } from "./dashboard/dealer/NotificationHandler";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const DealerDashboard = () => {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const { data: profile } = useQuery({
+  const { data: profile, isError } = useQuery({
     queryKey: ["dealer-profile"],
     queryFn: async () => {
       const {
@@ -27,7 +31,14 @@ const DealerDashboard = () => {
         .eq("id", user.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Error loading profile",
+          description: error.message,
+          variant: "destructive",
+        });
+        throw error;
+      }
       return data;
     },
   });
@@ -46,7 +57,14 @@ const DealerDashboard = () => {
         .eq("dealer_id", user.id)
         .order("period_start", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        toast({
+          title: "Error loading performance data",
+          description: error.message,
+          variant: "destructive",
+        });
+        throw error;
+      }
 
       return data.map((record) => ({
         period: new Date(record.period_start).toLocaleDateString("en-US", {
@@ -71,16 +89,33 @@ const DealerDashboard = () => {
       } = await supabase.auth.getUser();
       if (!user) return 0;
 
-      const { count } = await supabase
+      const { count, error } = await supabase
         .from("dealer_notifications")
         .select("*", { count: "exact", head: true })
         .eq("dealer_id", user.id)
         .eq("read", false);
 
+      if (error) {
+        toast({
+          title: "Error loading notifications",
+          description: error.message,
+          variant: "destructive",
+        });
+        throw error;
+      }
+
       setUnreadNotifications(count || 0);
       return count;
     },
   });
+
+  if (isError) {
+    return (
+      <div className="p-6">
+        <p className="text-red-500">Error loading dealer dashboard</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-8 macOS-style">
@@ -95,9 +130,21 @@ const DealerDashboard = () => {
 
       <DealerMetricsSection />
 
-      <DealerQuotesTable />
+      <div className="grid gap-6">
+        <div 
+          className="cursor-pointer" 
+          onClick={() => navigate("/dealer/quotes")}
+        >
+          <DealerQuotesTable />
+        </div>
 
-      <PerformanceChart data={performanceData || []} />
+        <div 
+          className="cursor-pointer" 
+          onClick={() => navigate("/dealer/analytics")}
+        >
+          <PerformanceChart data={performanceData || []} />
+        </div>
+      </div>
     </div>
   );
 };

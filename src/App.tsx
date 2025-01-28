@@ -34,10 +34,9 @@ import UserChat from "./pages/chat/UserChat";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminAnalytics from "./pages/admin/Analytics";
 import DealerAnalyticsPage from "./pages/DealerAnalyticsPage";
-import { Tolgee, DevTools, TolgeeProvider, FormatSimple } from "@tolgee/react";
-import { useState } from "react"; // Import useState
-import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
-
+import { useState } from "react";
+import { ViewModeContext } from "@/components/dashboard/ViewModeContext";
+import DealerDashboard from "./components/DealerDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,19 +66,19 @@ const RoleBasedRedirect = () => {
 };
 
 function App() {
-  const [viewMode, setViewMode] = useState<"light" | "dark">("light"); // State to manage view mode
+  const [viewMode, setViewMode] = useState<"light" | "dark">("light");
 
   return (
     <ThemeProvider defaultTheme={viewMode}>
       <QueryClientProvider client={queryClient}>
         <Router>
-            <main className="min-h-screen">
-              <Routes>
-                <Route path="/" element={<><Header /><Index /></>} />
+          <main className="min-h-screen">
+            <Routes>
+              <Route path="/" element={<><Header /><Index /></>} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dealership" element={<DealershipLanding />} />
               <Route path="/dealer-signup" element={<DealerSignup />} />
-              <Route path="/new-quote" element={<NewQuoteForm />} /> {/* Add new-quote route here */}
+              <Route path="/new-quote" element={<NewQuoteForm />} />
 
               {/* Role-based redirect */}
               <Route
@@ -102,15 +101,9 @@ function App() {
                         <Route path="/analytics" element={<AdminAnalytics />} />
                         <Route path="/users" element={<UserManagement />} />
                         <Route path="/blog" element={<BlogManagement />} />
-                        <Route
-                          path="/newsletter"
-                          element={<NewsletterManagement />}
-                        />
+                        <Route path="/newsletter" element={<NewsletterManagement />} />
                         <Route path="/coupons" element={<CouponManagement />} />
-                        <Route
-                          path="/page-management"
-                          element={<PageManagement />}
-                        />
+                        <Route path="/page-management" element={<PageManagement />} />
                         <Route path="/settings/*" element={<AdminSettings />} />
                       </Routes>
                     </DashboardLayout>
@@ -125,12 +118,10 @@ function App() {
                   <ProtectedRoute allowedRoles={["dealer"]}>
                     <DashboardLayout>
                       <Routes>
-                        <Route path="/dashboard" element={<DealershipOverview />} />
+                        <Route path="/dashboard" element={<DealerDashboard />} />
                         <Route path="/quotes" element={<ActiveQuotes />} />
-                        <Route
-                          path="/settings"
-                          element={<DealershipSettings />}
-                        />
+                        <Route path="/analytics" element={<DealerAnalyticsPage />} />
+                        <Route path="/settings" element={<DealershipSettings />} />
                         <Route path="/chat" element={<DealerChat />} />
                       </Routes>
                     </DashboardLayout>
@@ -177,9 +168,9 @@ function App() {
               />
             </Routes>
           </main>
-      </Router>
-    </QueryClientProvider>
-  </ThemeProvider>
+        </Router>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
