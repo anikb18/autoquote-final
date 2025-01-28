@@ -39,22 +39,6 @@ import { useState } from "react"; // Import useState
 import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
 
 
-const tolgee = Tolgee()
-  .use(DevTools())
-  .use(FormatSimple())
-  .init({
-    language: 'en',
-
-    // for development
-    apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
-    apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
-
-    // for production
-    staticData: {
-      ...
-    }
-  });
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -200,9 +184,3 @@ function App() {
 }
 
 export default App;
-<TolgeeProvider
-  tolgee={tolgee}
-  fallback="Loading..." // loading fallback
->
-  <App />
-</TolgeeProvider>
