@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./use-toast";
 import { useContext } from "react";
-import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Assuming you create this context
+import { ViewModeContext } from "@/components/dashboard/ViewModeContext";
 
 export const useUserRole = () => {
   const { toast } = useToast();
-  const viewMode = useContext(ViewModeContext); // Access viewMode from context
+  const { viewMode } = useContext(ViewModeContext);
 
   const {
     data: authData,
@@ -57,7 +57,7 @@ export const useUserRole = () => {
         // Default to 'user' role if no specific role is found
         let userRole = roleData?.role || "user";
 
-        // Override role based on viewMode
+        // Override role based on viewMode if it's set
         if (viewMode === "dealer") {
           userRole = "dealer";
         } else if (viewMode === "admin") {

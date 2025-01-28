@@ -5,4 +5,7 @@ interface ViewModeContextType {
   setViewMode: (mode: "admin" | "dealer" | "user") => void;
 }
 
-export const ViewModeContext = createContext<ViewModeContextType | undefined>(undefined);
+export const ViewModeContext = createContext<ViewModeContextType>({
+  viewMode: "user",
+  setViewMode: () => {},
+});

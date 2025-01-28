@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,7 +34,6 @@ import UserChat from "./pages/chat/UserChat";
 import { useUserRole } from "@/hooks/use-user-role";
 import AdminAnalytics from "./pages/admin/Analytics";
 import DealerAnalyticsPage from "./pages/DealerAnalyticsPage";
-import { useState } from "react";
 import { ViewModeContext } from "@/components/dashboard/ViewModeContext";
 import DealerDashboard from "./components/DealerDashboard";
 
@@ -66,111 +65,113 @@ const RoleBasedRedirect = () => {
 };
 
 function App() {
-  const [viewMode, setViewMode] = useState<"light" | "dark">("light");
+  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">("user");
 
   return (
-    <ThemeProvider defaultTheme={viewMode}>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <main className="min-h-screen">
-            <Routes>
-              <Route path="/" element={<><Header /><Index /></>} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dealership" element={<DealershipLanding />} />
-              <Route path="/dealer-signup" element={<DealerSignup />} />
-              <Route path="/new-quote" element={<NewQuoteForm />} />
+    <ViewModeContext.Provider value={{ viewMode, setViewMode }}>
+      <ThemeProvider defaultTheme="light">
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <main className="min-h-screen">
+              <Routes>
+                <Route path="/" element={<><Header /><Index /></>} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/dealership" element={<DealershipLanding />} />
+                <Route path="/dealer-signup" element={<DealerSignup />} />
+                <Route path="/new-quote" element={<NewQuoteForm />} />
 
-              {/* Role-based redirect */}
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <RoleBasedRedirect />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Role-based redirect */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <RoleBasedRedirect />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Admin Dashboard Routes */}
-              <Route
-                path="/admin/*"
-                element={
-                  <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
-                    <DashboardLayout>
-                      <Routes>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/analytics" element={<AdminAnalytics />} />
-                        <Route path="/users" element={<UserManagement />} />
-                        <Route path="/blog" element={<BlogManagement />} />
-                        <Route path="/newsletter" element={<NewsletterManagement />} />
-                        <Route path="/coupons" element={<CouponManagement />} />
-                        <Route path="/page-management" element={<PageManagement />} />
-                        <Route path="/settings/*" element={<AdminSettings />} />
-                      </Routes>
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
+                {/* Admin Dashboard Routes */}
+                <Route
+                  path="/admin/*"
+                  element={
+                    <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
+                      <DashboardLayout>
+                        <Routes>
+                          <Route path="/dashboard" element={<Dashboard />} />
+                          <Route path="/analytics" element={<AdminAnalytics />} />
+                          <Route path="/users" element={<UserManagement />} />
+                          <Route path="/blog" element={<BlogManagement />} />
+                          <Route path="/newsletter" element={<NewsletterManagement />} />
+                          <Route path="/coupons" element={<CouponManagement />} />
+                          <Route path="/page-management" element={<PageManagement />} />
+                          <Route path="/settings/*" element={<AdminSettings />} />
+                        </Routes>
+                      </DashboardLayout>
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Dealer Dashboard Routes */}
-              <Route
-                path="/dealer/*"
-                element={
-                  <ProtectedRoute allowedRoles={["dealer"]}>
-                    <DashboardLayout>
-                      <Routes>
-                        <Route path="/dashboard" element={<DealerDashboard />} />
-                        <Route path="/quotes" element={<ActiveQuotes />} />
-                        <Route path="/analytics" element={<DealerAnalyticsPage />} />
-                        <Route path="/settings" element={<DealershipSettings />} />
-                        <Route path="/chat" element={<DealerChat />} />
-                      </Routes>
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
+                {/* Dealer Dashboard Routes */}
+                <Route
+                  path="/dealer/*"
+                  element={
+                    <ProtectedRoute allowedRoles={["dealer"]}>
+                      <DashboardLayout>
+                        <Routes>
+                          <Route path="/dashboard" element={<DealerDashboard />} />
+                          <Route path="/quotes" element={<ActiveQuotes />} />
+                          <Route path="/analytics" element={<DealerAnalyticsPage />} />
+                          <Route path="/settings" element={<DealershipSettings />} />
+                          <Route path="/chat" element={<DealerChat />} />
+                        </Routes>
+                      </DashboardLayout>
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* User Dashboard Routes */}
-              <Route
-                path="/dashboard/*"
-                element={
-                  <ProtectedRoute>
-                    <DashboardLayout>
-                      <Routes>
-                        <Route path="/my-quotes" element={<BuyerDashboard />} />
-                        <Route path="/chat" element={<UserChat />} />
-                        <Route path="/settings/*" element={<ProfileSettings />} />
-                      </Routes>
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
+                {/* User Dashboard Routes */}
+                <Route
+                  path="/dashboard/*"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardLayout>
+                        <Routes>
+                          <Route path="/my-quotes" element={<BuyerDashboard />} />
+                          <Route path="/chat" element={<UserChat />} />
+                          <Route path="/settings/*" element={<ProfileSettings />} />
+                        </Routes>
+                      </DashboardLayout>
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/subscription"
-                element={
-                  <ProtectedRoute requireSubscription={false}>
-                    <DashboardLayout>
-                      <SubscriptionManagement />
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/subscription"
+                  element={
+                    <ProtectedRoute requireSubscription={false}>
+                      <DashboardLayout>
+                        <SubscriptionManagement />
+                      </DashboardLayout>
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/support"
-                element={
-                  <ProtectedRoute>
-                    <DashboardLayout>
-                      <Support />
-                    </DashboardLayout>
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
-        </Router>
-      </QueryClientProvider>
-    </ThemeProvider>
+                <Route
+                  path="/support"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardLayout>
+                        <Support />
+                      </DashboardLayout>
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </main>
+          </Router>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </ViewModeContext.Provider>
   );
 }
 
