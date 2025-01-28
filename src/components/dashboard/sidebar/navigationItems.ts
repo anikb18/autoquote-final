@@ -14,10 +14,10 @@ import {
   Car,
   Home,
   Users,
+  Lightbulb,
 } from "lucide-react";
 
 export const getNavigationItems = (role: string, unreadCount: number) => {
-
   const adminItems = [
     {
       title: "Dashboard",
@@ -68,6 +68,11 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       href: "/dealer/dashboard"
     },
     {
+      title: "Opportunities",
+      icon: Lightbulb,
+      href: "/dealer/opportunities"
+    },
+    {
       title: "Active Quotes",
       icon: DollarSign,
       href: "/dealer/quotes"
@@ -87,11 +92,6 @@ export const getNavigationItems = (role: string, unreadCount: number) => {
       icon: HelpCircle,
       href: "/support",
       badge: unreadCount > 0 ? unreadCount : undefined
-    },
-    {
-      title: "Settings",
-      icon: Settings,
-      href: "/dealer/settings"
     }
   ];
 

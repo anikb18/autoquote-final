@@ -15,5 +15,13 @@
       "settings": "Settings",
       "chat": "Chat"
     }
+  },
+  "opportunities": {
+    "title": "Opportunities",
+    "subtitle": "Discover available quote requests",
+    "submitQuote": "Submit Quote",
+    "expired": "Opportunity Expired",
+    "expiredDescription": "This opportunity is no longer available",
+    "noOpportunities": "No opportunities available at the moment"
   }
 }

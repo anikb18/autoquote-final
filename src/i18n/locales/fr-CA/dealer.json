@@ -91,5 +91,13 @@
       "settings": "Paramètres",
       "chat": "Messagerie"
     }
+  },
+  "opportunities": {
+    "title": "Opportunités",
+    "subtitle": "Découvrez les demandes de devis disponibles",
+    "submitQuote": "Soumettre un devis",
+    "expired": "Opportunité expirée",
+    "expiredDescription": "Cette opportunité n'est plus disponible",
+    "noOpportunities": "Aucune opportunité disponible pour le moment"
   }
 }
