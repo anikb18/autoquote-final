@@ -63,11 +63,11 @@ const RoleBasedRedirect = () => {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="light" storageKey="autoquote-theme">
       <QueryClientProvider client={queryClient}>
         <ViewModeProvider>
           <Router>
-            <main className="min-h-screen">
+            <main className="min-h-screen dark:bg-gray-900">
               <Routes>
                 <Route path="/" element={<><Header /><Index /></>} />
                 <Route path="/auth" element={<Auth />} />
@@ -101,12 +101,16 @@ function App() {
                           <Route path="/page-management" element={<PageManagement />} />
                           <Route path="/settings/*" element={<AdminSettings />} />
                           
-                          {/* Admin as Dealer Routes */}
-                          <Route path="/dealer/dashboard" element={<DealershipOverview />} />
-                          <Route path="/dealer/quotes" element={<ActiveQuotes />} />
-                          <Route path="/dealer/analytics" element={<DealerAnalyticsPage />} />
-                          <Route path="/dealer/settings" element={<DealershipSettings />} />
-                          <Route path="/dealer/chat" element={<DealerChat />} />
+                          {/* Admin as Dealer Routes - Allow admin to access dealer routes */}
+                          <Route path="/dealer/*" element={
+                            <Routes>
+                              <Route path="/dashboard" element={<DealershipOverview />} />
+                              <Route path="/quotes" element={<ActiveQuotes />} />
+                              <Route path="/analytics" element={<DealerAnalyticsPage />} />
+                              <Route path="/settings" element={<DealershipSettings />} />
+                              <Route path="/chat" element={<DealerChat />} />
+                            </Routes>
+                          } />
                         </Routes>
                       </DashboardLayout>
                     </ProtectedRoute>
