@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -26,6 +26,7 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
   const { role } = useUserRole();
   const { user } = useUser();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const getNavigationItems = () => {
     const commonItems = [
@@ -77,10 +78,9 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
                 variant="ghost"
                 className={cn(
                   "justify-start",
-                  window.location.pathname === item.href && "bg-muted",
+                  window.location.pathname === item.href && "bg-muted"
                 )}
-                asComponent={Link}
-                to={item.href}
+                onClick={() => navigate(item.href)}
               >
                 <item.icon className="mr-2 h-4 w-4" />
                 {item.name}
