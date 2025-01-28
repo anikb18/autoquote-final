@@ -1,11 +1,20 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
+
+type ViewMode = "admin" | "dealer" | "user";
 
 interface ViewModeContextType {
-  viewMode: "admin" | "dealer" | "user";
-  setViewMode: (mode: "admin" | "dealer" | "user") => void;
+  viewMode: ViewMode;
+  setViewMode: (mode: ViewMode) => void;
 }
 
-export const ViewModeContext = createContext<ViewModeContextType>({
-  viewMode: "user",
-  setViewMode: () => {},
-});
+const ViewModeContext = createContext<ViewModeContextType | undefined>(undefined);
+
+export function useViewMode() {
+  const context = useContext(ViewModeContext);
+  if (context === undefined) {
+    throw new Error('useViewMode must be used within a ViewModeProvider');
+  }
+  return context;
+}
+
+export { ViewModeContext, type ViewModeContextType };

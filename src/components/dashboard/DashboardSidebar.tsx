@@ -1,7 +1,6 @@
 import { useUserRole } from "@/hooks/use-user-role";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useState } from "react"; // Import useContext and useState
 import { supabase } from "@/integrations/supabase/client";
 import { NavigationItem } from "./sidebar/NavigationItem";
 import { SidebarFooter } from "./sidebar/SidebarFooter";
@@ -10,19 +9,13 @@ import { getNavigationItems } from "./sidebar/navigationItems";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/use-user";
-import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
-
+import { useViewMode } from "./ViewModeContext";
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
   const { t } = useTranslation("admin");
   const { user } = useUser();
-  const { viewMode, setViewMode } = useContext(ViewModeContext); // Use ViewModeContext
-
-  const handleViewModeChange = (mode: "admin" | "dealer" | "user") => {
-    console.log("handleViewModeChange mode:", mode);
-    setViewMode(mode);
-  };
+  const { viewMode, setViewMode } = useViewMode();
 
   const { data: unreadCount = 0 } = useQuery({
     queryKey: ["unread-support-messages"],
@@ -44,11 +37,7 @@ export function DashboardSidebar() {
     refetchInterval: 30000,
   });
 
-
-  const { adminItems, dealerItems, buyerItems } = getNavigationItems(
-    role,
-    unreadCount,
-  );
+  const { adminItems, dealerItems, buyerItems } = getNavigationItems(role, unreadCount);
   const items =
     viewMode === "admin"
       ? adminItems
@@ -92,7 +81,7 @@ export function DashboardSidebar() {
           to="/auth"
         >
           <LogOut className="mr-2 h-4 w-4" />
-{t("common.signOut")}
+          {t("common.signOut")}
         </Button>
       </div>
 

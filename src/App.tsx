@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { ThemeProvider } from "@/hooks/use-theme";
+import { ViewModeProvider } from "@/components/dashboard/ViewModeProvider";
+import { useUserRole } from "@/hooks/use-user-role";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
@@ -11,14 +12,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DealershipLanding from "./components/DealershipLanding";
 import DealerSignup from "./pages/DealerSignup";
 import NewQuoteForm from "./components/NewQuoteForm";
-import { ThemeProvider } from "@/hooks/use-theme";
-import Header from "./components/Header";
+import AdminAnalytics from "./pages/admin/Analytics";
+import DealerAnalyticsPage from "./pages/DealerAnalyticsPage";
+import { DashboardLayout } from "./components/layouts/DashboardLayout";
 import BuyerDashboard from "./components/BuyerDashboard";
 import { BlogManagement } from "./components/dashboard/BlogManagement";
 import { NewsletterManagement } from "./components/dashboard/NewsletterManagement";
 import { UserManagement } from "./components/dashboard/UserManagement";
 import AdminSettings from "./components/settings/AdminSettings";
-import { DashboardLayout } from "./components/layouts/DashboardLayout";
 import { DealershipOverview } from "./components/dealership/DealershipOverview";
 import { ActiveQuotes } from "./components/dealership/ActiveQuotes";
 import { DealershipSettings } from "./components/dealership/DealershipSettings";
@@ -31,11 +32,6 @@ import { ProfileSettings } from "./components/settings/ProfileSettings";
 import PageManagement from "./components/dashboard/PageManagement";
 import DealerChat from "./pages/chat/DealerChat";
 import UserChat from "./pages/chat/UserChat";
-import { useUserRole } from "@/hooks/use-user-role";
-import AdminAnalytics from "./pages/admin/Analytics";
-import DealerAnalyticsPage from "./pages/DealerAnalyticsPage";
-import { ViewModeContext } from "@/components/dashboard/ViewModeContext";
-import DealerDashboard from "./components/DealerDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,12 +61,10 @@ const RoleBasedRedirect = () => {
 };
 
 function App() {
-  const [viewMode, setViewMode] = useState<"admin" | "dealer" | "user">("user");
-
   return (
-    <ViewModeContext.Provider value={{ viewMode, setViewMode }}>
-      <ThemeProvider defaultTheme="light">
-        <QueryClientProvider client={queryClient}>
+    <ThemeProvider defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <ViewModeProvider>
           <Router>
             <main className="min-h-screen">
               <Routes>
@@ -169,9 +163,9 @@ function App() {
               </Routes>
             </main>
           </Router>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </ViewModeContext.Provider>
+        </ViewModeProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
