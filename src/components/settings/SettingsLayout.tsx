@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -78,12 +79,11 @@ export function SettingsLayout({ children }: SettingsLayoutProps) {
                   "justify-start",
                   window.location.pathname === item.href && "bg-muted",
                 )}
-                asChild
+                asComponent={Link}
+                to={item.href}
               >
-                <a href={item.href} className="flex items-center gap-x-2">
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </a>
+                <item.icon className="mr-2 h-4 w-4" />
+                {item.name}
               </Button>
             ))}
           </nav>
