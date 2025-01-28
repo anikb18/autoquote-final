@@ -132,7 +132,7 @@ function App() {
                       <DashboardLayout>
                         <Routes>
                           <Route path="/my-quotes" element={<BuyerDashboard />} />
-                          <Route path="/chat" element={<UserChat />} />
+                          <Route path="/chat/:quoteId" element={<UserChat />} />
                           <Route path="/settings/*" element={<ProfileSettings />} />
                         </Routes>
                       </DashboardLayout>
