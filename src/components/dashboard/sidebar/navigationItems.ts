@@ -1,13 +1,4 @@
-import {
-  Home,
-  Settings,
-  Users,
-  Building,
-  MessageSquare,
-  HeartHandshake,
-  AppWindow,
-  BarChart,
-} from "lucide-react";
+import { Home, Settings, Users, Building, MessageSquare, HeartHandshake, AppWindow, BarChart, BarChartBig } from "lucide-react";
 
 export const dealerNavigationItems = [
   {
