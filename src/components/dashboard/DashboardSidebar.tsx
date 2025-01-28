@@ -76,7 +76,7 @@ export function DashboardSidebar() {
 
       <div className="px-6 py-4 border-t">
         <Button
-          plain
+          variant="ghost"
           className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
           to="/auth"
         >

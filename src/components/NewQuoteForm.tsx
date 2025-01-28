@@ -345,7 +345,11 @@ const NewQuoteForm = () => {
 
             <div className="flex justify-between pt-4">
               {currentStep > 1 && (
-                <Button type="button" outline={true} onClick={handleBack}>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={handleBack}
+                >
                   {t("common.back")}
                 </Button>
               )}
