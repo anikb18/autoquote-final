@@ -32,6 +32,7 @@ import { ProfileSettings } from "./components/settings/ProfileSettings";
 import PageManagement from "./components/dashboard/PageManagement";
 import DealerChat from "./pages/chat/DealerChat";
 import UserChat from "./pages/chat/UserChat";
+import Header from "./components/Header";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -112,7 +113,7 @@ function App() {
                     <ProtectedRoute allowedRoles={["dealer"]}>
                       <DashboardLayout>
                         <Routes>
-                          <Route path="/dashboard" element={<DealerDashboard />} />
+                          <Route path="/dashboard" element={<DealershipOverview />} />
                           <Route path="/quotes" element={<ActiveQuotes />} />
                           <Route path="/analytics" element={<DealerAnalyticsPage />} />
                           <Route path="/settings" element={<DealershipSettings />} />
