@@ -66,8 +66,10 @@ const RoleBasedRedirect = () => {
 };
 
 function App() {
+  const [viewMode, setViewMode] = useState<"light" | "dark">("light"); // State to manage view mode
+
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme={viewMode}>
       <QueryClientProvider client={queryClient}>
         <Router>
           <ViewModeContext.Provider value={{ viewMode, setViewMode }}> {/* Wrap Routes with ViewModeContext.Provider */}

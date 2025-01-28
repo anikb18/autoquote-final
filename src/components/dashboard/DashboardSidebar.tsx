@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/hooks/use-user";
 import { ViewModeContext } from "@/components/dashboard/ViewModeContext"; // Import ViewModeContext
-import { useContext } from "react"; // Import useContext
+
 
 export function DashboardSidebar() {
   const { role } = useUserRole();
