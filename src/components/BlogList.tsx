@@ -103,7 +103,9 @@ const BlogList = () => {
 
   return (
     <div>
-      <Button onClick={() => setIsDialogOpen(true)}>Create New Blog</Button>
+      <Button variant="default" onClick={() => setIsDialogOpen(true)}>
+        Create New Blog
+      </Button>
       <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
         <DialogContent>
           <DialogHeader>
@@ -131,8 +133,12 @@ const BlogList = () => {
         {blogData?.map((blog) => (
           <li key={blog.id}>
             <h3>{blog.title}</h3>
-            <Button onClick={() => handleEdit(blog)}>Edit</Button>
-            <Button onClick={() => handleDelete(blog.id)}>Delete</Button>
+            <Button variant="outline" onClick={() => handleEdit(blog)}>
+              Edit
+            </Button>
+            <Button variant="destructive" onClick={() => handleDelete(blog.id)}>
+              Delete
+            </Button>
           </li>
         ))}
       </ul>
